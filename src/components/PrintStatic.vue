@@ -44,7 +44,7 @@
                             </header>
                     </div>
                     <body class="body">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, commodi nobis sit neque labore, temporibus officiis necessitatibus veritatis ea eum ratione esse perferendis inventore consequatur odit cum natus! Quidem nobis quis a ratione porro ullam nisi aut eveniet, sint temporibus mollitia. Veniam quisquam voluptatum explicabo sunt consectetur, placeat fugit veritatis enim est id sequi incidunt ducimus suscipit doloremque ipsa expedita itaque delectus quo natus eos! Perspiciatis, possimus ad. Tempora earum, modi quaerat debitis voluptas doloremque inventore blanditiis saepe aliquam aut veritatis consectetur voluptatibus. Explicabo consectetur molestiae fugiat eius nesciunt sunt doloribus obcaecati magni, laudantium, voluptas inventore! Debitis recusandae obcaecati cumque!</p>
+                        <p>lorem554</p>
 
                     </body>
                     <div class="fixedFooterCondition" v-if="settings.isFixedFooter == true">
@@ -52,16 +52,16 @@
                             {{customFooter}}
                             <br>
                             <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
-                                {{ settings.pageCounter }}
+                                {{ index }}
                             </div>
                         </footer>
                     </div>
                     <div v-else class="fixedFooterCondition">
-                        <footer>
+                        <footer class="break">
                             {{customFooter}}
                             <br>
                             <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
-                                {{ settings.pageCounter }}
+                                {{ index }}
                             </div>
                         </footer>
                         </div>
@@ -84,7 +84,6 @@ export default {
             dateToday: new Date().toLocaleDateString('fa-IR').replace(/([۰-۹])/g, token => String.fromCharCode(token.charCodeAt(0) - 1728)),
             timeToday: new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds(),
             settings: {
-                pageCounter: 1,
                 isPageCounter: true,
                 fileName: 'nikan.pdf',
                 pageCounterPosition: 'center',
@@ -156,6 +155,9 @@ export default {
 </script>
 
 <style>
+.break {
+    page-break-after: always;
+}
 .body {
     text-align: center;
 }
