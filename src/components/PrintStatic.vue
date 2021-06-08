@@ -8,31 +8,64 @@
                     <i @click="printForm()" class="fas fa-print"></i>
                 </div>
                 <div id="printForm">
-                    <header>
-                        <div class="header card-body">
-                            <div class="dateAndTimeToday">
-                                {{dateToday}}
-                                <br>
-                                {{timeToday}}
+                    <div class="mainLoop" v-for="index in settings.totalPages" :key="index"> 
+                    <div class="fixedHeaderCondition" v-if="settings.isFixedHeader == true">
+                          <header>
+                            <div class="header card-body">
+                                <div class="dateAndTimeToday">
+                                    {{dateToday}}
+                                    <br>
+                                    {{timeToday}}
+                                </div>
+                                <div class="customHeader">
+                                    Custom Header {{customHeader}}
+                                </div>
+                                <div class="logo">
+                                    <img :src="settings.logoURL" alt="Logo" height="42" width="42">
+                                </div>
                             </div>
-                            <div class="customHeader">
-                                Custom Header {{customHeader}}
-                            </div>
-                            <div class="logo">
-                                <img :src="settings.logoURL" alt="Logo" height="42" width="42">
-                            </div>
+                          </header>
                         </div>
-                    </header>
-                    <body>
+                    <div v-else class="fixedHeaderCondition">
+                            <header>
+                                <div class="header card-body">
+                                    <div class="dateAndTimeToday">
+                                        {{dateToday}}
+                                        <br>
+                                        {{timeToday}}
+                                    </div>
+                                    <div class="customHeader">
+                                        Custom Header {{customHeader}}
+                                    </div>
+                                    <div class="logo">
+                                        <img :src="settings.logoURL" alt="Logo" height="42" width="42">
+                                    </div>
+                                </div>
+                            </header>
+                    </div>
+                    <body class="body">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, commodi nobis sit neque labore, temporibus officiis necessitatibus veritatis ea eum ratione esse perferendis inventore consequatur odit cum natus! Quidem nobis quis a ratione porro ullam nisi aut eveniet, sint temporibus mollitia. Veniam quisquam voluptatum explicabo sunt consectetur, placeat fugit veritatis enim est id sequi incidunt ducimus suscipit doloremque ipsa expedita itaque delectus quo natus eos! Perspiciatis, possimus ad. Tempora earum, modi quaerat debitis voluptas doloremque inventore blanditiis saepe aliquam aut veritatis consectetur voluptatibus. Explicabo consectetur molestiae fugiat eius nesciunt sunt doloribus obcaecati magni, laudantium, voluptas inventore! Debitis recusandae obcaecati cumque!</p>
 
                     </body>
-                    <footer>
-                        {{customFooter}}
-                        <br>
-                        <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
-                            {{ settings.pageCounter }}
+                    <div class="fixedFooterCondition" v-if="settings.isFixedFooter == true">
+                        <footer>
+                            {{customFooter}}
+                            <br>
+                            <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
+                                {{ settings.pageCounter }}
+                            </div>
+                        </footer>
+                    </div>
+                    <div v-else class="fixedFooterCondition">
+                        <footer>
+                            {{customFooter}}
+                            <br>
+                            <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
+                                {{ settings.pageCounter }}
+                            </div>
+                        </footer>
                         </div>
-                    </footer>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,13 +89,15 @@ export default {
                 fileName: 'nikan.pdf',
                 pageCounterPosition: 'center',
                 isFixedHeader: true,
+                isFixedFooter: true,
                 isFixedDateAndTime: true,
                 orientation: 'portrait',
                 pageSize: 'a4',
                 customHeader: '',
                 customFooter: '',
                 logoURL: '',
-                R2L: 'rtl'
+                R2L: 'rtl',
+                totalPages: 10
             },
         }
     },
@@ -121,6 +156,9 @@ export default {
 </script>
 
 <style>
+.body {
+    text-align: center;
+}
 #printForm {
     border: 1px ridge black;
 }
