@@ -1,46 +1,47 @@
 <template>
     <div id="page" :dir="{ R2L }">
         <button id="myBtn" type="button" class="btn btn-sm btn-secondary">Preview</button>
-            <div id="myModal" class="modal card">
-                <div class="modal-content">
-                    <div class="card-header">
-                        <span class="close">&times;</span>
-                        <i @click="printForm()" class="fas fa-print"></i>
-                    </div>
-                    <div id="printForm">
-                        <header>
-                            <div class="header card-body">
-                                <div class="dateAndTimeToday">
-                                    {{dateToday}}
-                                    <br>
-                                    {{timeToday}}
-                                </div>
-                                <div class="customHeader">
-                                    Custom Header {{customHeader}}
-                                </div>
-                                <div>
-                                <img class="logo" :src="{ logoURL }" alt="Logo" height="42" width="42">
-                                </div>
+        <div id="myModal" class="modal card">
+            <div class="modal-content">
+                <div class="card-header">
+                    <span class="close">&times;</span>
+                    <i @click="printForm()" class="fas fa-print"></i>
+                </div>
+                <div id="printForm">
+                    <header>
+                        <div class="header card-body">
+                            <div class="dateAndTimeToday">
+                                {{dateToday}}
+                                <br>
+                                {{timeToday}}
                             </div>
-                        </header>
-                        <body>
+                            <div class="customHeader">
+                                Custom Header {{customHeader}}
+                            </div>
+                            <div class="logo">
+                                <img :src="{ logoURL }" alt="Logo" height="42" width="42">
+                            </div>
+                        </div>
+                    </header>
+                    <body>
 
-                        </body>
-                        <footer>
-                            {{customFooter}}
-                            <br>
-                            <div v-if="isPageCounter == true" :style="{ 'text-align': pageCounterPosition }">
-                                Page Counter
-                            </div>
-                            <div style='text-align:center;'>Page <span class="pageCounter"></span>/<span class="totalPages"></span></div>
-                        </footer>
-                    </div>
-            </div> <!--- Print Form --->
+                    </body>
+                    <footer>
+                        {{customFooter}}
+                        <br>
+                        <div v-if="isPageCounter == true" :style="{ 'text-align': pageCounterPosition }">
+                            Page Counter
+                        </div>
+                        <div style='text-align:center;'>Page <span class="pageCounter"></span>/<span class="totalPages"></span></div>
+                    </footer>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import html2pdf from 'html2pdf.js'
 export default {
     name: 'PrintStatic',
     props:{
@@ -53,7 +54,7 @@ export default {
             options: {
                 pageCounter: 1,
                 isPageCounter: true,
-                filename: 'nikan.pdf',
+                fileName: 'nikan.pdf',
                 pageCounterPosition: 'center',
                 isFixedHeader: true,
                 isFixedDateAndTime: true,
@@ -82,13 +83,13 @@ export default {
 
             let element = document.getElementById('printForm');
             let opt = {
-            margin:       1,
-            filename:     `${this.fileName}.pdf`,
+            margin:       0,
+            filename:     this.fileName,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: `${this.pageSize}`, orientation: `${this.orientation}`}
+            jsPDF:        { unit: 'in', format: this.pageSize, orientation: this.orientation}
             };
-            html2pdf().set(opt).form(element).save();
+            html2pdf().set(opt).from(element).save();
         },
         modalFunc() {
             var modal = document.getElementById("myModal");
@@ -136,9 +137,10 @@ export default {
     margin-top: -50px;
 }
 .logo {
-  margin-top: -50px;
+  margin-top: -25px;
   margin-left: 700px  
 }
+
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
