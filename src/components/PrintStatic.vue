@@ -1,5 +1,5 @@
 <template>
-    <div id="page" :dir="{ R2L }">
+    <div id="page" :dir="settings.R2L">
         <button id="myBtn" type="button" class="btn btn-sm btn-secondary">Preview</button>
         <div id="myModal" class="modal card">
             <div class="modal-content">
@@ -19,7 +19,7 @@
                                 Custom Header {{customHeader}}
                             </div>
                             <div class="logo">
-                                <img :src="{ logoURL }" alt="Logo" height="42" width="42">
+                                <img :src="settings.logoURL" alt="Logo" height="42" width="42">
                             </div>
                         </div>
                     </header>
@@ -29,10 +29,9 @@
                     <footer>
                         {{customFooter}}
                         <br>
-                        <div v-if="isPageCounter == true" :style="{ 'text-align': pageCounterPosition }">
-                            Page Counter
+                        <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
+                            {{ settings.pageCounter }}
                         </div>
-                        <div style='text-align:center;'>Page <span class="pageCounter"></span>/<span class="totalPages"></span></div>
                     </footer>
                 </div>
             </div>
@@ -51,7 +50,7 @@ export default {
         return {
             dateToday: new Date().toLocaleDateString('fa-IR').replace(/([۰-۹])/g, token => String.fromCharCode(token.charCodeAt(0) - 1728)),
             timeToday: new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds(),
-            options: {
+            settings: {
                 pageCounter: 1,
                 isPageCounter: true,
                 fileName: 'nikan.pdf',
@@ -69,7 +68,7 @@ export default {
     },
     watch : {
         options:function(val) {
-        this.options = val;
+        this.settings = val;
         },
     },
     mounted() {
@@ -134,11 +133,11 @@ export default {
     text-align: left;
 }
 .customHeader {
+    text-align: center;
     margin-top: -50px;
 }
 .logo {
-  margin-top: -25px;
-  margin-left: 700px  
+    text-align: right;
 }
 
 /* The Modal (background) */
