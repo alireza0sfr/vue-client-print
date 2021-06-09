@@ -16,12 +16,18 @@ print component:
             -Done fixed header at everypage or dynamic
             -Done Body
             -Done margin
+            -Done page break
+            -Done unit px
+            -preview button => convert2Canvas function
+            -getHeightfunc
+            -v bind div child style to getHeight value
+            -total height in px
+            -total pages
             -props => modal with checkboxes instead of props
-            -page break
-            -data array
+            -toast for processing...
             -slots
+            -data array
             -test
-            
 
 
     -Dynamic
