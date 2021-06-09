@@ -15,7 +15,12 @@ print component:
             -Done page counter loop
             -Done fixed header at everypage or dynamic
             -Done Body
+            -Done margin
+            -props => modal with checkboxes instead of props
             -page break
+            -data array
+            -slots
+            -test
             
 
 

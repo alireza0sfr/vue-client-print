@@ -96,7 +96,8 @@ export default {
                 customFooter: '',
                 logoURL: '',
                 R2L: 'rtl',
-                totalPages: 10
+                totalPages: 10,
+                margin: 0
             },
         }
     },
@@ -109,18 +110,15 @@ export default {
         this.modalFunc()
     },
     methods: {
-        increasePageCounter() {
-            this.pageCounter += 1
-        },
         printForm() {
 
             let element = document.getElementById('printForm');
             let opt = {
-            margin:       0,
-            filename:     this.fileName,
+            margin:       this.settings.margin,
+            filename:     this.settings.fileName,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'in', format: this.pageSize, orientation: this.orientation}
+            jsPDF:        { unit: 'in', format: this.settings.pageSize, orientation: this.settings.orientation}
             };
             html2pdf().set(opt).from(element).save();
         },
