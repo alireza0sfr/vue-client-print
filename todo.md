@@ -18,12 +18,14 @@ print component:
             -Done margin
             -Done page break
             -Done unit px
-            -preview button => convert2Canvas function
+            -Done preview button => convert2Canvas function
+            -remove the last child in convert 2 canvas
             -getHeightfunc
             -v bind div child style to getHeight value
             -total height in px
             -total pages
-            -props => modal with checkboxes instead of props
+            -props watch
+            -modal with checkboxes instead of props
             -toast for processing...
             -slots
             -data array
@@ -34,3 +36,11 @@ print component:
         """Takes the  data from the customer and customize the html page and then print it"""
 
         npm install bootstrap popper.js jquery --save-dev 
+
+TODO the func is working but has an empty canvas
+TODO search it has answer in stack and the print bug is canvas
+TODO it can print empty canvas tho
+
+html2canvas(document.getElementById('toBeConverted')).then(function(canvas) {
+            document.getElementById('converted').appendChild(canvas) 
+            }) 
