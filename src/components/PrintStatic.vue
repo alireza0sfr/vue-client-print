@@ -30,7 +30,13 @@
                 </div>
                 <div class="customHeader">Custom Header {{settings.customHeader}}</div>
                 <div class="logo">
-                  <img v-if="settings.logoURL != ''" :src="settings.logoURL" alt="Logo" height="40" width="40" />
+                  <img
+                    v-if="settings.logoURL != ''"
+                    :src="settings.logoURL"
+                    alt="Logo"
+                    height="40"
+                    width="40"
+                  />
                 </div>
               </div>
             </header>
@@ -181,7 +187,6 @@ export default {
         this.settings.margin -
         pageFooterSize -
         pageHeaderSize;
-      console.log(this.settings.totalHeightOfAPaper);
     },
 
     convert2Canvas() {

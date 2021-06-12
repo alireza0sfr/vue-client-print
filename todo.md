@@ -22,7 +22,7 @@ print component:
         -Done getHeightfunc
         -Done total height in px
         -Done total pages
-        -fixedfooteronpage1
+        -Done fixedfooteronpage1
         -v bind div child style to getHeight value
         -props watch
         -modal with checkboxes for users
