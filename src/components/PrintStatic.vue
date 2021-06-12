@@ -1,7 +1,7 @@
 <template>
     <div id="page" :dir="settings.R2L">
         <div v-show="true">
-            <p id="toBeConverted">to be inserted</p>
+            <p style="width: 600px;" id="toBeConverted">to be inserted</p>
         </div>
         <button @click="convert2Canvas()" id="myBtn-final" type="button" class="btn btn-sm btn-secondary">Preview Final</button>
             <div id="myModal-final" class="modal card">
@@ -46,7 +46,7 @@
                                         </div>
                                     </header>
                             </div>
-                            <body v-html="settings.canvas" class="converted">
+                            <body class="converted">
 
                             </body>
                             <div class="fixedFooterCondition" v-if="settings.isFixedFooter == true">
