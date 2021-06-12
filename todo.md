@@ -20,12 +20,12 @@ print component:
         -Done preview button => convert2Canvas function
         -Done remove the last child in convert 2 canvas
         -Done getHeightfunc
-        -total height in px
-        -total pages
+        -Done total height in px
+        -Done total pages
         -fixedfooteronpage1
         -v bind div child style to getHeight value
         -props watch
-        -modal with checkboxes instead of props
+        -modal with checkboxes for users
         -toast for processing...
         -slots
         -data array

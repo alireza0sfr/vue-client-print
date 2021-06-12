@@ -99,7 +99,10 @@ export default {
                 R2L: 'rtl',
                 totalPages: 10,
                 margin: 0,
-                canvas: ''
+                defaultSizeOfPaper: 0,
+                totalPagesHeight: 0,
+                totalHeightOfAPaper: 0,
+
             },
         }
     },
@@ -115,7 +118,8 @@ export default {
     },
     methods: {
         printForm() {
-
+            this.getHeight()
+            this.convert2Canvas()
             let element = document.getElementById('printForm');
             let opt = {
             margin:       this.settings.margin,
@@ -127,7 +131,80 @@ export default {
             };
             html2pdf().set(opt).from(element).save();
         },
-        modalFinalFunc() {
+        removeAllChildNodes(parent) {
+                while (parent.firstChild) {
+                    parent.removeChild(parent.firstChild);
+            }
+        },
+
+        cloneCanvas(oldCanvas) {
+
+            //create a new canvas
+            var newCanvas = document.createElement('canvas');
+            var context = newCanvas.getContext('2d');
+
+            //set dimensions
+            newCanvas.width = oldCanvas.width;
+            newCanvas.height = oldCanvas.height;
+
+            //apply the old canvas to the new one
+            context.drawImage(oldCanvas, 0, 0);
+
+            //return the new canvas
+            return newCanvas;
+        },
+        getHeight() {
+        let pageSizeDictionary = {
+            'landscape': {
+                'a3': 4981,
+                'a4': 3508,
+                'a5': 2480
+            },
+            'portrait': {
+                'a3': 3508,
+                'a4': 2480,
+                'a5': 1748
+            }
+        }
+        // Calculating the footer size in px
+
+        let footerPage1 = document.getElementsByClassName('MainFooter')[0]
+        let compStyles = window.getComputedStyle(footerPage1);
+        let page1FooterSize = parseInt(compStyles.getPropertyValue('line-height'))
+
+        // Calculating the header size in px
+
+        let headerPage1 = document.getElementsByClassName('MainHeader')[0]
+        compStyles = window.getComputedStyle(headerPage1);
+        let page1HeaderSize = parseInt(compStyles.getPropertyValue('line-height'))
+
+        this.settings.defaultSizeOfPaper = pageSizeDictionary[this.settings.orientation][this.settings.pageSize]
+        this.settings.totalHeightOfAPaper = this.settings.defaultSizeOfPaper - this.settings.margin - page1FooterSize - page1HeaderSize
+        console.log( this.settings.totalHeightOfAPaper)
+    },
+
+        convert2Canvas() {
+
+            // Removing the existing canvas
+
+            let convertedElement = document.getElementsByClassName('converted')
+            for (let index = 0; index < convertedElement.length; index++) {
+                
+                this.removeAllChildNodes(convertedElement[index]);
+                
+            }
+            
+            html2canvas(document.getElementById('toBeConverted')).then(canvas => {
+                this.settings.totalPagesHeight = canvas.height
+                this.settings.totalPages = Math.ceil(this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper)
+                for (let index = 0; index < convertedElement.length; index++) {
+                    let clnCanvas = this.cloneCanvas(canvas)
+                    this.settings.totalPagesHeight = canvas.height
+                    convertedElement[index].appendChild(clnCanvas)
+                }
+            })
+    },
+    modalFinalFunc() {
             var modal = document.getElementById("myModal-final");
 
             // Get the button that opens the modal
@@ -178,79 +255,7 @@ export default {
                 modal.style.display = "none";
             }
             }
-        },
-        removeAllChildNodes(parent) {
-                while (parent.firstChild) {
-                    parent.removeChild(parent.firstChild);
-            }
-        },
-
-        cloneCanvas(oldCanvas) {
-
-            //create a new canvas
-            var newCanvas = document.createElement('canvas');
-            var context = newCanvas.getContext('2d');
-
-            //set dimensions
-            newCanvas.width = oldCanvas.width;
-            newCanvas.height = oldCanvas.height;
-
-            //apply the old canvas to the new one
-            context.drawImage(oldCanvas, 0, 0);
-
-            //return the new canvas
-            return newCanvas;
-        },
-        getHeight() {
-        let pageSizeDictionary = {
-            'landscape': {
-                'a3': 4981,
-                'a4': 3508,
-                'a5': 2480
-            },
-            'portrait': {
-                'a3': 3508,
-                'a4': 2480,
-                'a5': 1748
-            }
         }
-        // Calculating the footer size in px
-
-        let footerPage1 = document.getElementsByClassName('MainFooter')[0]
-        let compStyles = window.getComputedStyle(footerPage1);
-        let page1FooterSize = parseInt(compStyles.getPropertyValue('line-height'))
-
-        // Calculating the header size in px
-
-        let headerPage1 = document.getElementsByClassName('MainHeader')[0]
-        compStyles = window.getComputedStyle(headerPage1);
-        let page1HeaderSize = parseInt(compStyles.getPropertyValue('line-height'))
-
-        let defaultSizeOfPaper = pageSizeDictionary[this.settings.orientation][this.settings.pageSize]
-        let totalHeight = defaultSizeOfPaper - this.settings.margin - page1FooterSize - page1HeaderSize
-        console.log(totalHeight)
-    },
-
-        convert2Canvas() {
-
-            // Removing the existing canvas
-
-            let convertedElement = document.getElementsByClassName('converted')
-            for (let index = 0; index < convertedElement.length; index++) {
-                
-                removeAllChildNodes(convertedElement[index]);
-                
-            }
-            
-            html2canvas(document.getElementById('toBeConverted')).then(canvas => {
-                for (let index = 0; index < convertedElement.length; index++) {
-                    let clnCanvas = cloneCanvas(canvas)
-                    this.settings.totalPagesHeight = canvas.height
-                    convertedElement[index].appendChild(clnCanvas)
-                }
-            })
-    },
-    
     }
 }
 </script>
