@@ -13,7 +13,7 @@
                     <div id="printForm">
                         <div class="mainLoop" v-for="index in settings.totalPages" :key="index"> 
                             <div class="fixedHeaderCondition" v-if="settings.isFixedHeader == true">
-                                <header>
+                                <header class="MainHeader">
                                     <div class="header card-body">
                                         <div class="dateAndTimeToday">
                                             {{dateToday}}
@@ -50,7 +50,7 @@
 
                             </body>
                             <div class="fixedFooterCondition" v-if="settings.isFixedFooter == true">
-                                <footer id="break">
+                                <footer class="MainFooter" id="break">
                                     {{settings.customFooter}}
                                     <br>
                                     <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
@@ -59,7 +59,7 @@
                                 </footer>
                             </div>
                             <div v-else class="fixedFooterCondition">
-                                <footer id="break">
+                                <footer class="MainFooter" id="break">
                                     <div v-if="settings.isPageCounter == true" :style="{ 'text-align': settings.pageCounterPosition }">
                                         {{ index }}
                                     </div>
@@ -110,7 +110,7 @@ export default {
     },
     mounted() {
         this.modalFinalFunc()
-        // this.modalRawFunc()
+        this.getHeight()
 
     },
     methods: {
@@ -179,13 +179,13 @@ export default {
             }
             }
         },
-        convert2Canvas() {
-            function removeAllChildNodes(parent) {
+        removeAllChildNodes(parent) {
                 while (parent.firstChild) {
                     parent.removeChild(parent.firstChild);
             }
-        }
-            function cloneCanvas(oldCanvas) {
+        },
+
+        cloneCanvas(oldCanvas) {
 
             //create a new canvas
             var newCanvas = document.createElement('canvas');
@@ -200,7 +200,38 @@ export default {
 
             //return the new canvas
             return newCanvas;
+        },
+        getHeight() {
+        let pageSizeDictionary = {
+            'landscape': {
+                'a3': 4981,
+                'a4': 3508,
+                'a5': 2480
+            },
+            'portrait': {
+                'a3': 3508,
+                'a4': 2480,
+                'a5': 1748
+            }
         }
+        // Calculating the footer size in px
+
+        let footerPage1 = document.getElementsByClassName('MainFooter')[0]
+        let compStyles = window.getComputedStyle(footerPage1);
+        let page1FooterSize = parseInt(compStyles.getPropertyValue('line-height'))
+
+        // Calculating the header size in px
+
+        let headerPage1 = document.getElementsByClassName('MainHeader')[0]
+        compStyles = window.getComputedStyle(headerPage1);
+        let page1HeaderSize = parseInt(compStyles.getPropertyValue('line-height'))
+
+        let defaultSizeOfPaper = pageSizeDictionary[this.settings.orientation][this.settings.pageSize]
+        let totalHeight = defaultSizeOfPaper - this.settings.margin - page1FooterSize - page1HeaderSize
+        console.log(totalHeight)
+    },
+
+        convert2Canvas() {
 
             // Removing the existing canvas
 
@@ -214,10 +245,12 @@ export default {
             html2canvas(document.getElementById('toBeConverted')).then(canvas => {
                 for (let index = 0; index < convertedElement.length; index++) {
                     let clnCanvas = cloneCanvas(canvas)
+                    this.settings.totalPagesHeight = canvas.height
                     convertedElement[index].appendChild(clnCanvas)
                 }
             })
     },
+    
     }
 }
 </script>
