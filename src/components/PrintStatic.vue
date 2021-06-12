@@ -17,49 +17,32 @@
       </div>
       <div id="printForm">
         <div class="mainLoop" v-for="index in settings.totalPages" :key="index">
-          <div class="fixedHeaderCondition" v-if="settings.isFixedHeader == true">
+          <div
+            class="fixedHeaderCondition"
+            v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 0"
+          >
             <header class="MainHeader">
               <div class="header card-body">
-                <div class="dateAndTimeToday">
+                <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
                   {{dateToday}}
                   <br />
                   {{timeToday}}
                 </div>
                 <div class="customHeader">Custom Header {{settings.customHeader}}</div>
                 <div class="logo">
-                  <img :src="settings.logoURL" alt="Logo" height="40" width="40" />
-                </div>
-              </div>
-            </header>
-          </div>
-          <div v-else class="fixedHeaderCondition">
-            <header>
-              <div class="header card-body">
-                <div class="dateAndTimeToday">
-                  {{dateToday}}
-                  <br />
-                  {{timeToday}}
-                </div>
-                <div class="customHeader">Custom Header {{settings.customHeader}}</div>
-                <div class="logo">
-                  <img :src="settings.logoURL" alt="Logo" height="42" width="42" />
+                  <img v-if="settings.logoURL != ''" :src="settings.logoURL" alt="Logo" height="40" width="40" />
                 </div>
               </div>
             </header>
           </div>
           <body class="converted"></body>
-          <div class="fixedFooterCondition" v-if="settings.isFixedFooter == true">
+          <div
+            class="fixedFooterCondition"
+            v-if="settings.hasFooter && settings.isFooterRepeatable || index == 0"
+          >
             <footer class="MainFooter" id="break">
               {{settings.customFooter}}
               <br />
-              <div
-                v-if="settings.isPageCounter == true"
-                :style="{ 'text-align': settings.pageCounterPosition }"
-              >{{ index }}</div>
-            </footer>
-          </div>
-          <div v-else class="fixedFooterCondition">
-            <footer class="MainFooter" id="break">
               <div
                 v-if="settings.isPageCounter == true"
                 :style="{ 'text-align': settings.pageCounterPosition }"
@@ -98,8 +81,10 @@ export default {
         isPageCounter: true,
         fileName: "nikan.pdf",
         pageCounterPosition: "center",
-        isFixedHeader: true,
-        isFixedFooter: true,
+        hasHeader: true,
+        hasFooter: true,
+        isFooterRepeatable: true,
+        isHeaderRepeatable: true,
         isFixedDateAndTime: true,
         orientation: "portrait",
         pageSize: "a4",
