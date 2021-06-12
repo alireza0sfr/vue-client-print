@@ -180,6 +180,11 @@ export default {
             }
         },
         convert2Canvas() {
+            function removeAllChildNodes(parent) {
+                while (parent.firstChild) {
+                    parent.removeChild(parent.firstChild);
+            }
+        }
             function cloneCanvas(oldCanvas) {
 
             //create a new canvas
@@ -196,11 +201,20 @@ export default {
             //return the new canvas
             return newCanvas;
         }
+
+            // Removing the existing canvas
+
+            let convertedElement = document.getElementsByClassName('converted')
+            for (let index = 0; index < convertedElement.length; index++) {
+                
+                removeAllChildNodes(convertedElement[index]);
+                
+            }
+            
             html2canvas(document.getElementById('toBeConverted')).then(canvas => {
-                let test = document.getElementsByClassName('converted')
-                for (let index = 0; index < test.length; index++) {
+                for (let index = 0; index < convertedElement.length; index++) {
                     let clnCanvas = cloneCanvas(canvas)
-                    test[index].appendChild(clnCanvas)
+                    convertedElement[index].appendChild(clnCanvas)
                 }
             })
     },
