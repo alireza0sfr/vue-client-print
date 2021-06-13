@@ -1,14 +1,55 @@
 <template>
 <div id="page" :dir="settings.R2L">
-  <div v-show="true">
-    <p style="width: 600px;" id="toBeConverted">to be inserted</p>
-  </div>
   <button
     @click="convert2Canvas()"
     id="myBtn-final"
     type="button"
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
+  <div v-show="true">
+    <p style="width: 1000px" id="toBeConverted">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th>
+              ستون ۱
+            </th>
+            <th>
+              ستون ۲ 
+            </th>
+            <th>
+              ستون ۳ 
+            </th>
+            <th>
+              ستون ۴
+            </th>
+            <th>
+              ستون ۵
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="index in 1000" :key="index">
+            <td>
+              {{index}}
+            </td>
+            <td>
+              ردیف تست
+            </td>
+            <td>
+              ردیف تست
+            </td>
+            <td>
+              ردیف تست
+            </td>
+            <td>
+              ردیف تست
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+  </div>
   <div id="myModal-final" class="modal card">
     <div class="modal-content">
       <div class="card-header">
@@ -41,7 +82,7 @@
               </div>
             </header>
           </div>
-          <body class="converted"></body>
+          <body :style="{'height': settings.totalHeightOfAPaper + 'px'}" class="converted"></body>
           <div
             class="fixedFooterCondition"
             v-if="settings.hasFooter && settings.isFooterRepeatable || index == 0"
@@ -173,12 +214,14 @@ export default {
       let footerPage = document.getElementsByClassName("MainFooter")[0];
       let compStyles = window.getComputedStyle(footerPage);
       let pageFooterSize = parseInt(compStyles.getPropertyValue("line-height"));
+      console.log("pagefootersize: ", pageFooterSize);
 
       // Calculating the header size in px
 
       let headerPage = document.getElementsByClassName("MainHeader")[0];
       compStyles = window.getComputedStyle(headerPage);
       let pageHeaderSize = parseInt(compStyles.getPropertyValue("line-height"));
+      console.log("pageheadersize: ", pageHeaderSize);
 
       this.settings.defaultSizeOfPaper =
         pageSizeDictionary[this.settings.orientation][this.settings.pageSize];
@@ -187,26 +230,38 @@ export default {
         this.settings.margin -
         pageFooterSize -
         pageHeaderSize;
+
+      console.log("defaultSizeOfPaper: ", this.settings.defaultSizeOfPaper);
+      console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
     },
 
     convert2Canvas() {
-      // Removing the existing canvas
-
-      let convertedElement = document.getElementsByClassName("converted");
-      for (let index = 0; index < convertedElement.length; index++) {
-        this.removeAllChildNodes(convertedElement[index]);
-      }
-
       html2canvas(document.getElementById("toBeConverted")).then((canvas) => {
         this.settings.totalPagesHeight = canvas.height;
+        console.log("totalPagesHeight", this.settings.totalPagesHeight);
         this.settings.totalPages = Math.ceil(
           this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
         );
-        for (let index = 0; index < convertedElement.length; index++) {
-          let clnCanvas = this.cloneCanvas(canvas);
-          this.settings.totalPagesHeight = canvas.height;
-          convertedElement[index].appendChild(clnCanvas);
-        }
+
+        // Removing the existing canvas
+        let convertedElement = document.getElementsByClassName("converted");
+
+        this.$nextTick(() => {
+          for (let index = 0; index < convertedElement.length; index++) {
+            this.removeAllChildNodes(convertedElement[index]);
+          }
+
+          console.log("totalPages", this.settings.totalPages);
+          console.log("elements", convertedElement);
+          console.log("element0", convertedElement[0]);
+          console.log("element1", convertedElement[1]);
+          console.log("element2", convertedElement[2]);
+          console.log("elements length", convertedElement.length);
+          for (let index = 0; index < convertedElement.length; index++) {
+            let clnCanvas = this.cloneCanvas(canvas);
+            convertedElement[index].appendChild(clnCanvas);
+          }
+        });
       });
     },
     modalFinalFunc() {
@@ -271,9 +326,10 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 }
-.body {
+.converted {
   text-align: center;
   flex-grow: 2;
+  overflow: hidden;
 }
 #printForm {
   border: 1px ridge black;
@@ -344,5 +400,8 @@ export default {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+table td, table th {
+  border: 1px black solid;
 }
 </style>
