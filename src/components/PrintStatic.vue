@@ -148,15 +148,13 @@ export default {
   },
   methods: {
     printForm() {
-      this.getHeight();
-      this.convert2Canvas();
       let element = document.getElementById("printForm");
       let opt = {
         margin: this.settings.margin,
         filename: this.settings.fileName,
         pagebreak: { mode: "avoid-all", after: "#break" },
-        image: { type: "jpeg", quality: 0.98 },
-        // html2canvas: { scale: 1},
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: { scale: 4},
         jsPDF: {
           unit: "px",
           format: this.settings.pageSize,
@@ -217,7 +215,6 @@ export default {
         pageSizeDictionary[this.settings.orientation][this.settings.pageSize];
       this.settings.totalHeightOfAPaper =
         this.settings.defaultSizeOfPaper -
-        this.settings.margin -
         pageFooterSize -
         pageHeaderSize;
 
