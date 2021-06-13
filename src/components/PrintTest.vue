@@ -158,8 +158,6 @@ export default {
   },
   methods: {
     printForm() {
-      this.getHeight();
-      this.convert2Canvas();
       let element = document.getElementById("printForm");
       let opt = {
         margin: this.settings.margin,

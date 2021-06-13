@@ -7,7 +7,7 @@
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
   <div v-show="true">
-    <div style="width: 1489px" id="toBeConverted">
+    <div style="width: 8.26in; margin-right: 550px" id="toBeConverted">
       <table style="width: 100%">
         <thead>
           <tr>
@@ -154,7 +154,7 @@ export default {
         filename: this.settings.fileName,
         pagebreak: { mode: "avoid-all", after: "#break" },
         image: { type: "jpeg", quality: 1 },
-        html2canvas: { scale: 4},
+        html2canvas: {dpi: 300, width: 1430, height: this.settings.totalHeightOfAPaper },
         jsPDF: {
           unit: "px",
           format: this.settings.pageSize,
@@ -214,9 +214,7 @@ export default {
       this.settings.defaultSizeOfPaper =
         pageSizeDictionary[this.settings.orientation][this.settings.pageSize];
       this.settings.totalHeightOfAPaper =
-        this.settings.defaultSizeOfPaper -
-        pageFooterSize -
-        pageHeaderSize;
+        this.settings.defaultSizeOfPaper - pageFooterSize - pageHeaderSize;
 
       this.settings.marginTop = -this.settings.totalHeightOfAPaper;
 
@@ -249,8 +247,8 @@ export default {
           console.log("elements length", convertedElement.length);
           for (let index = 0; index < convertedElement.length; index++) {
             let clnCanvas = this.cloneCanvas(canvas);
-            clnCanvas.style.marginTop = (index) * this.settings.marginTop + 'px';
-            
+            clnCanvas.style.marginTop = index * this.settings.marginTop + "px";
+
             convertedElement[index].appendChild(clnCanvas);
           }
         });
@@ -361,7 +359,7 @@ export default {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 825px; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
@@ -398,9 +396,10 @@ table th {
   border-bottom: 1px black solid;
 }
 .converted canvas {
-  width: 1489px;
+  width: 8.26in;
   margin-top: 24px;
   margin-bottom: 24px;
+  /* margin-right: 950px; */
 }
 .MainFooter {
   margin-top: 7px;

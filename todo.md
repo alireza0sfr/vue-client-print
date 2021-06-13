@@ -23,7 +23,9 @@ print component:
         -Done total height in px
         -Done total pages
         -Done fixedfooteronpage1
-        -v bind div child style to getHeight value
+        -Done v bind div child style to getHeight value
+        -default unit to in
+        
         -props watch
         -modal with checkboxes for users
         -toast for processing...
