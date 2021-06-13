@@ -7,48 +7,28 @@
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
   <div v-show="true">
-    <p style="width: 1000px" id="toBeConverted">
+    <div style="width: 1489px" id="toBeConverted">
       <table style="width: 100%">
         <thead>
           <tr>
-            <th>
-              ستون ۱
-            </th>
-            <th>
-              ستون ۲ 
-            </th>
-            <th>
-              ستون ۳ 
-            </th>
-            <th>
-              ستون ۴
-            </th>
-            <th>
-              ستون ۵
-            </th>
+            <th>ستون ۱</th>
+            <th>ستون ۲</th>
+            <th>ستون ۳</th>
+            <th>ستون ۴</th>
+            <th>ستون ۵</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="index in 1000" :key="index">
-            <td>
-              {{index}}
-            </td>
-            <td>
-              ردیف تست
-            </td>
-            <td>
-              ردیف تست
-            </td>
-            <td>
-              ردیف تست
-            </td>
-            <td>
-              ردیف تست
-            </td>
+          <tr v-for="index in 100" :key="index">
+            <td>{{index}}</td>
+            <td>ردیف تست</td>
+            <td>ردیف تست</td>
+            <td>ردیف تست</td>
+            <td>ردیف تست</td>
           </tr>
         </tbody>
       </table>
-    </p>
+    </div>
   </div>
   <div id="myModal-final" class="modal card">
     <div class="modal-content">
@@ -57,12 +37,17 @@
         <i @click="printForm()" class="fas fa-print"></i>
       </div>
       <div id="printForm">
-        <div class="mainLoop" v-for="index in settings.totalPages" :key="index">
+        <div
+          style="border: 1px solid black; border-bottom: 1px solid black"
+          class="mainLoop"
+          v-for="index in settings.totalPages"
+          :key="index"
+        >
           <div
             class="fixedHeaderCondition"
-            v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 0"
+            v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
           >
-            <header class="MainHeader">
+            <header style="height: 60px" class="MainHeader">
               <div class="header card-body">
                 <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
                   {{dateToday}}
@@ -82,10 +67,14 @@
               </div>
             </header>
           </div>
-          <body :style="{'height': settings.totalHeightOfAPaper + 'px'}" class="converted"></body>
+          <body
+            :style="{
+          'height': settings.totalHeightOfAPaper + 'px'}"
+            class="converted"
+          ></body>
           <div
             class="fixedFooterCondition"
-            v-if="settings.hasFooter && settings.isFooterRepeatable || index == 0"
+            v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
           >
             <footer class="MainFooter" id="break">
               {{settings.customFooter}}
@@ -144,6 +133,7 @@ export default {
         defaultSizeOfPaper: 0,
         totalPagesHeight: 0,
         totalHeightOfAPaper: 0,
+        marginTop: 0,
       },
     };
   },
@@ -166,7 +156,7 @@ export default {
         filename: this.settings.fileName,
         pagebreak: { mode: "avoid-all", after: "#break" },
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
+        // html2canvas: { scale: 1},
         jsPDF: {
           unit: "px",
           format: this.settings.pageSize,
@@ -231,8 +221,11 @@ export default {
         pageFooterSize -
         pageHeaderSize;
 
+      this.settings.marginTop = -this.settings.totalHeightOfAPaper;
+
       console.log("defaultSizeOfPaper: ", this.settings.defaultSizeOfPaper);
       console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
+      console.log("marginTop: ", this.settings.marginTop);
     },
 
     convert2Canvas() {
@@ -259,6 +252,8 @@ export default {
           console.log("elements length", convertedElement.length);
           for (let index = 0; index < convertedElement.length; index++) {
             let clnCanvas = this.cloneCanvas(canvas);
+            clnCanvas.style.marginTop = (index) * this.settings.marginTop + 'px';
+            
             convertedElement[index].appendChild(clnCanvas);
           }
         });
@@ -369,7 +364,6 @@ export default {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
 }
 
@@ -401,7 +395,18 @@ export default {
   text-decoration: none;
   cursor: pointer;
 }
-table td, table th {
+table td,
+table th {
   border: 1px black solid;
+  border-bottom: 1px black solid;
+}
+.converted canvas {
+  width: 1489px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.MainFooter {
+  margin-top: 7px;
+  margin-bottom: 14px;
 }
 </style>
