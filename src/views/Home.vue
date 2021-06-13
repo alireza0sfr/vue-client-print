@@ -3,16 +3,17 @@
     <div>
       <h1>Hello</h1>
     </div>
-    <PrintStatic />
+    <PrintTest />
   </div>
 </template>
 
 <script>
-import PrintStatic from '../components/PrintStatic.vue'
+// import PrintStatic from '../components/PrintStatic.vue'
+import PrintTest from '../components/PrintTest.vue'
 export default {
   name: 'Home',
   components: {
-    PrintStatic
+    PrintTest
   }
 }
 </script>
