@@ -7,7 +7,8 @@
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
   <div v-show="true">
-    <div style="width: 8.26in; margin-right: 550px" id="toBeConverted">
+    <div :style="{'height': settings.totalHeightOfAPaper + 'in',
+    'width': settings.defaultWidthOfPaper + 'in'}" id="toBeConverted">
       <table style="width: 100%">
         <thead>
           <tr>
@@ -38,10 +39,12 @@
       </div>
       <div id="printForm">
         <div
-          style="border: 1px solid black; border-bottom: 1px solid black"
           class="mainLoop"
           v-for="index in settings.totalPages"
           :key="index"
+          :style="{'width': settings.totalWidthOfAPaper + 'in',
+          'height': settings.totalHeightOfAPaper + 'in',
+          'border': '1px solid black', 'border-bottom': '1px solid black'}"
         >
           <div
             class="fixedHeaderCondition"
@@ -130,10 +133,41 @@ export default {
         R2L: "rtl",
         totalPages: 1,
         margin: 0,
-        defaultSizeOfPaper: 0,
+        defaultHeightOfPaper: 0,
+        defaultWidthOfPaper: 0,
         totalPagesHeight: 0,
         totalHeightOfAPaper: 0,
         marginTop: 0,
+        pageSizeDictionary: {
+          landscape: {
+            a3: {
+              width: 16.5,
+              height: 11.7,
+            },
+            a4: {
+              width: 11.7,
+              height: 8.26,
+            },
+            a5: {
+              width: 8.3,
+              height: 5.8,
+            },
+          },
+          portrait: {
+            a3: {
+              width: 11.7,
+              height: 16.5,
+            },
+            a4: {
+              width: 8.26,
+              height: 11.7,
+            },
+            a5: {
+              width: 5.8,
+              height: 8.3,
+            },
+          },
+        },
       },
     };
   },
@@ -154,9 +188,13 @@ export default {
         filename: this.settings.fileName,
         pagebreak: { mode: "avoid-all", after: "#break" },
         image: { type: "jpeg", quality: 1 },
-        html2canvas: {dpi: 300, width: 1430, height: this.settings.totalHeightOfAPaper },
+        html2canvas: {
+          dpi: 300,
+          width: this.settings.defaultWidthOfPaper,
+          height: this.settings.totalHeightOfAPaper,
+        },
         jsPDF: {
-          unit: "px",
+          unit: "in",
           format: this.settings.pageSize,
           orientation: this.settings.orientation,
         },
@@ -184,48 +222,53 @@ export default {
       //return the new canvas
       return newCanvas;
     },
+    convert2Inches(Pixels) {
+      return Pixels / 96;
+    },
     getHeight() {
-      let pageSizeDictionary = {
-        landscape: {
-          a3: 4981,
-          a4: 3508,
-          a5: 2480,
-        },
-        portrait: {
-          a3: 3508,
-          a4: 2480,
-          a5: 1748,
-        },
-      };
-      // Calculating the footer size in px
+      // Calculating the footer size in in
 
       let footerPage = document.getElementsByClassName("MainFooter")[0];
       let compStyles = window.getComputedStyle(footerPage);
-      let pageFooterSize = parseInt(compStyles.getPropertyValue("line-height"));
+      let pageFooterSize = this.convert2Inches(
+        parseInt(compStyles.getPropertyValue("line-height"))
+      );
       console.log("pagefootersize: ", pageFooterSize);
 
       // Calculating the header size in px
 
       let headerPage = document.getElementsByClassName("MainHeader")[0];
       compStyles = window.getComputedStyle(headerPage);
-      let pageHeaderSize = parseInt(compStyles.getPropertyValue("line-height"));
+      let pageHeaderSize = this.convert2Inches(
+        parseInt(compStyles.getPropertyValue("line-height"))
+      );
       console.log("pageheadersize: ", pageHeaderSize);
 
-      this.settings.defaultSizeOfPaper =
-        pageSizeDictionary[this.settings.orientation][this.settings.pageSize];
+      this.settings.defaultHeightOfPaper =
+        this.settings.pageSizeDictionary[this.settings.orientation][
+          this.settings.pageSize
+        ]["height"];
       this.settings.totalHeightOfAPaper =
-        this.settings.defaultSizeOfPaper - pageFooterSize - pageHeaderSize;
+        this.settings.defaultHeightOfPaper - pageFooterSize - pageHeaderSize;
+
+      this.settings.defaultWidthOfPaper =
+        this.settings.pageSizeDictionary[this.settings.orientation][
+          this.settings.pageSize
+        ]["width"];
 
       this.settings.marginTop = -this.settings.totalHeightOfAPaper;
 
-      console.log("defaultSizeOfPaper: ", this.settings.defaultSizeOfPaper);
+      console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
+      console.log("defaultHeightOfPaper: ", this.settings.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
       console.log("marginTop: ", this.settings.marginTop);
     },
 
     convert2Canvas() {
       html2canvas(document.getElementById("toBeConverted")).then((canvas) => {
-        this.settings.totalPagesHeight = canvas.height;
+        this.settings.totalPagesHeight = this.convert2Inches(canvas.height);
+        this.settings.totalPagesHeight =
+          this.settings.totalPagesHeight.toFixed(2);
         console.log("totalPagesHeight", this.settings.totalPagesHeight);
         this.settings.totalPages = Math.ceil(
           this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
@@ -243,11 +286,10 @@ export default {
           console.log("elements", convertedElement);
           console.log("element0", convertedElement[0]);
           console.log("element1", convertedElement[1]);
-          console.log("element2", convertedElement[2]);
           console.log("elements length", convertedElement.length);
           for (let index = 0; index < convertedElement.length; index++) {
             let clnCanvas = this.cloneCanvas(canvas);
-            clnCanvas.style.marginTop = index * this.settings.marginTop + "px";
+            clnCanvas.style.marginTop = index * this.settings.marginTop + "in";
 
             convertedElement[index].appendChild(clnCanvas);
           }
@@ -396,7 +438,6 @@ table th {
   border-bottom: 1px black solid;
 }
 .converted canvas {
-  width: 8.26in;
   margin-top: 24px;
   margin-bottom: 24px;
   /* margin-right: 950px; */
