@@ -7,8 +7,10 @@
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
   <div v-show="true">
-    <div :style="{'height': settings.totalHeightOfAPaper + 'in',
-    'width': settings.defaultWidthOfPaper + 'in'}" id="toBeConverted">
+    <div
+      :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px', 'margin-left': '200px'}"
+      id="toBeConverted"
+    >
       <table style="width: 100%">
         <thead>
           <tr>
@@ -39,12 +41,10 @@
       </div>
       <div id="printForm">
         <div
+          :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in'}"
           class="mainLoop"
           v-for="index in settings.totalPages"
           :key="index"
-          :style="{'width': settings.totalWidthOfAPaper + 'in',
-          'height': settings.totalHeightOfAPaper + 'in',
-          'border': '1px solid black', 'border-bottom': '1px solid black'}"
         >
           <div
             class="fixedHeaderCondition"
@@ -72,7 +72,7 @@
           </div>
           <body
             :style="{
-          'height': settings.totalHeightOfAPaper + 'px'}"
+          'height': settings.totalHeightOfAPaper + 'in'}"
             class="converted"
           ></body>
           <div
@@ -188,13 +188,9 @@ export default {
         filename: this.settings.fileName,
         pagebreak: { mode: "avoid-all", after: "#break" },
         image: { type: "jpeg", quality: 1 },
-        html2canvas: {
-          dpi: 300,
-          width: this.settings.defaultWidthOfPaper,
-          height: this.settings.totalHeightOfAPaper,
-        },
+        html2canvas: { dpi: 300, width: 1430 },
         jsPDF: {
-          unit: "in",
+          unit: "px",
           format: this.settings.pageSize,
           orientation: this.settings.orientation,
         },
@@ -222,11 +218,11 @@ export default {
       //return the new canvas
       return newCanvas;
     },
-    convert2Inches(Pixels) {
-      return Pixels / 96;
+    convert2Inches(pixels) {
+      return pixels / 96;
     },
     getHeight() {
-      // Calculating the footer size in in
+      // Calculating the footer size in inches
 
       let footerPage = document.getElementsByClassName("MainFooter")[0];
       let compStyles = window.getComputedStyle(footerPage);
@@ -235,7 +231,7 @@ export default {
       );
       console.log("pagefootersize: ", pageFooterSize);
 
-      // Calculating the header size in px
+      // Calculating the header size in inches
 
       let headerPage = document.getElementsByClassName("MainHeader")[0];
       compStyles = window.getComputedStyle(headerPage);
@@ -273,6 +269,7 @@ export default {
         this.settings.totalPages = Math.ceil(
           this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
         );
+        console.log("totalPages", this.settings.totalPages);
 
         // Removing the existing canvas
         let convertedElement = document.getElementsByClassName("converted");
@@ -280,12 +277,9 @@ export default {
         this.$nextTick(() => {
           for (let index = 0; index < convertedElement.length; index++) {
             this.removeAllChildNodes(convertedElement[index]);
+            console.log(`element${index}`, convertedElement[index]);
           }
 
-          console.log("totalPages", this.settings.totalPages);
-          console.log("elements", convertedElement);
-          console.log("element0", convertedElement[0]);
-          console.log("element1", convertedElement[1]);
           console.log("elements length", convertedElement.length);
           for (let index = 0; index < convertedElement.length; index++) {
             let clnCanvas = this.cloneCanvas(canvas);
@@ -438,6 +432,7 @@ table th {
   border-bottom: 1px black solid;
 }
 .converted canvas {
+  width: 8.26in;
   margin-top: 24px;
   margin-bottom: 24px;
   /* margin-right: 950px; */
