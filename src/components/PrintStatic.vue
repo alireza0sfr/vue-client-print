@@ -131,13 +131,13 @@ export default {
         customFooter: "",
         logoURL: "",
         R2L: "rtl",
-        totalPages: 1,
+        totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
         margin: 0,
-        defaultHeightOfPaper: 0,
-        defaultWidthOfPaper: 0,
-        totalPagesHeight: 0,
-        totalHeightOfAPaper: 0,
-        marginTop: 0,
+        defaultHeightOfPaper: 0, // Standard Height of the chosen paper in inch
+        defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
+        totalPagesHeight: 0, // The total size of the given div to be printed in inch
+        totalHeightOfAPaper: 0, // Useable height for body tag
+        marginTop: 0, // computed marginTop for canvas positioning
         pageSizeDictionary: {
           landscape: {
             a3: {
@@ -197,11 +197,20 @@ export default {
       };
       html2pdf().set(opt).from(element).save();
     },
+
+    /**
+     * Removes all the previous children from the parent
+     */
+
     removeAllChildNodes(parent) {
       while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
       }
     },
+
+    /**
+     * Clone the given canvas with the same sizes
+     */
 
     cloneCanvas(oldCanvas) {
       //create a new canvas
@@ -218,12 +227,21 @@ export default {
       //return the new canvas
       return newCanvas;
     },
+
+    /**
+     * converted given pixel to inch
+     */
+
     convert2Inches(pixels) {
       return pixels / 96;
     },
-    getHeight() {
-      // Calculating the footer size in inches
 
+    /**
+     * Calculate the Sizes based upon the selected page orientation and format
+     */
+
+    calculateSizes() {
+      // Calculating the footer size in inches
       let footerPage = document.getElementsByClassName("MainFooter")[0];
       let compStyles = window.getComputedStyle(footerPage);
       let pageFooterSize = this.convert2Inches(
@@ -232,7 +250,6 @@ export default {
       console.log("pagefootersize: ", pageFooterSize);
 
       // Calculating the header size in inches
-
       let headerPage = document.getElementsByClassName("MainHeader")[0];
       compStyles = window.getComputedStyle(headerPage);
       let pageHeaderSize = this.convert2Inches(
@@ -240,6 +257,7 @@ export default {
       );
       console.log("pageheadersize: ", pageHeaderSize);
 
+      // Gettings the default sizes from the base dic
       this.settings.defaultHeightOfPaper =
         this.settings.pageSizeDictionary[this.settings.orientation][
           this.settings.pageSize
@@ -252,6 +270,8 @@ export default {
           this.settings.pageSize
         ]["width"];
 
+      // set the marginTop to opposite of the height to push every page up
+
       this.settings.marginTop = -this.settings.totalHeightOfAPaper;
 
       console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
@@ -260,36 +280,52 @@ export default {
       console.log("marginTop: ", this.settings.marginTop);
     },
 
+    /**
+     * Converts the given html to canvas and append it to the body tag
+     */
+
     convert2Canvas() {
       html2canvas(document.getElementById("toBeConverted")).then((canvas) => {
         this.settings.totalPagesHeight = this.convert2Inches(canvas.height);
         this.settings.totalPagesHeight =
           this.settings.totalPagesHeight.toFixed(2);
         console.log("totalPagesHeight", this.settings.totalPagesHeight);
+
         this.settings.totalPages = Math.ceil(
           this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
         );
         console.log("totalPages", this.settings.totalPages);
 
-        // Removing the existing canvas
+        // Element that children will be appended to
         let convertedElement = document.getElementsByClassName("converted");
 
+        // Waits till the base template is generated and then appends the children
         this.$nextTick(() => {
           for (let index = 0; index < convertedElement.length; index++) {
+
+            // Removing the existing canvas
             this.removeAllChildNodes(convertedElement[index]);
-            console.log(`element${index}`, convertedElement[index]);
           }
 
-          console.log("elements length", convertedElement.length);
           for (let index = 0; index < convertedElement.length; index++) {
             let clnCanvas = this.cloneCanvas(canvas);
+
+            // Adding the marginTop to the canvas for the positioning of the body tag
             clnCanvas.style.marginTop = index * this.settings.marginTop + "in";
 
             convertedElement[index].appendChild(clnCanvas);
           }
+          console.log(
+            `Successfully appended ${convertedElement.length} children`
+          );
         });
       });
     },
+
+    /**
+     * JS functions for the modal
+     */
+
     modalFinalFunc() {
       var modal = document.getElementById("myModal-final");
 
