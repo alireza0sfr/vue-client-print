@@ -24,8 +24,11 @@ print component:
         -Done total pages
         -Done fixedfooteronpage1
         -Done v bind div child style to getHeight value
-        -default unit to in
+        -Done default unit to in
         
+        -print Bug
+        
+
         -props watch
         -modal with checkboxes for users
         -toast for processing...

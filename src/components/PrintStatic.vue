@@ -178,7 +178,7 @@ export default {
   },
   mounted() {
     this.modalFinalFunc();
-    this.getHeight();
+    this.calculateSizes();
   },
   methods: {
     printForm() {
@@ -272,7 +272,7 @@ export default {
 
       // set the marginTop to opposite of the height to push every page up
 
-      this.settings.marginTop = -this.settings.totalHeightOfAPaper;
+      this.settings.marginTop = -this.settings.totalHeightOfAPaper + 1;
 
       console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
       console.log("defaultHeightOfPaper: ", this.settings.defaultHeightOfPaper);
@@ -302,7 +302,6 @@ export default {
         // Waits till the base template is generated and then appends the children
         this.$nextTick(() => {
           for (let index = 0; index < convertedElement.length; index++) {
-
             // Removing the existing canvas
             this.removeAllChildNodes(convertedElement[index]);
           }
