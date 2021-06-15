@@ -1,37 +1,31 @@
 <template>
 <div id="page" :dir="settings.R2L">
-  <button
-    @click="convert2Canvas()"
-    id="myBtn-final"
-    type="button"
-    class="btn btn-sm btn-secondary"
-  >Preview Final</button>
-  <div v-show="true">
-    <div
-      :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px', 'margin-left': '200px'}"
-      id="toBeConverted"
-    >
-      <table style="width: 100%">
-        <thead>
-          <tr>
-            <th>ستون ۱</th>
-            <th>ستون ۲</th>
-            <th>ستون ۳</th>
-            <th>ستون ۴</th>
-            <th>ستون ۵</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="index in 100" :key="index">
-            <td>{{index}}</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <button id="myBtn-final" type="button" class="btn btn-sm btn-secondary">Preview Final</button>
+
+  <div
+    :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px', 'margin-left': '200px'}"
+    id="toBeConverted"
+  >
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th>ستون ۱</th>
+          <th>ستون ۲</th>
+          <th>ستون ۳</th>
+          <th>ستون ۴</th>
+          <th>ستون ۵</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="index in 100" :key="index">
+          <td>{{index}}</td>
+          <td>ردیف تست</td>
+          <td>ردیف تست</td>
+          <td>ردیف تست</td>
+          <td>ردیف تست</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div id="myModal-final" class="modal card">
     <div class="modal-content">
@@ -43,7 +37,7 @@
         <div
           :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in'}"
           class="mainLoop"
-          v-for="index in settings.totalPages"
+          v-for="index in 20"
           :key="index"
         >
           <div
@@ -186,9 +180,8 @@ export default {
       let opt = {
         margin: this.settings.margin,
         filename: this.settings.fileName,
-        pagebreak: { mode: "avoid-all", after: "#break" },
         image: { type: "jpeg", quality: 1 },
-        html2canvas: { dpi: 300, width: 1430 },
+        html2canvas: { dpi: 300, width: 1430},
         jsPDF: {
           unit: "px",
           format: this.settings.pageSize,
@@ -234,6 +227,14 @@ export default {
 
     convert2Inches(pixels) {
       return pixels / 96;
+    },
+
+    /**
+     * converted given inch to pixel
+     */
+
+    convert2Pixels(inches) {
+      return inches * 96;
     },
 
     /**
@@ -311,6 +312,11 @@ export default {
 
             // Adding the marginTop to the canvas for the positioning of the body tag
             clnCanvas.style.marginTop = index * this.settings.marginTop + "in";
+
+            // Adding the calculated height and width of the body to cln canvas
+            clnCanvas.style.height = this.settings.totalHeightOfAPaper
+            clnCanvas.style.width = this.settings.defaultWidthOfPaper
+
 
             convertedElement[index].appendChild(clnCanvas);
           }
