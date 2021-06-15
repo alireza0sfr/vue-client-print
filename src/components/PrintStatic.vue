@@ -1,6 +1,6 @@
 <template>
 <div id="page" :dir="settings.R2L">
-  <button id="myBtn-final" type="button" class="btn btn-sm btn-secondary">Preview Final</button>
+  <button @click="convert2Canvas()" id="myBtn-final" type="button" class="btn btn-sm btn-secondary">Preview Final</button>
 
   <div
     :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px', 'margin-left': '200px'}"
@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="index in 72" :key="index">
+        <tr v-for="index in 100" :key="index">
           <td>{{index}}</td>
           <td>ردیف تست</td>
           <td>ردیف تست</td>
@@ -37,7 +37,7 @@
         <div
           :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in'}"
           class="mainLoop"
-          v-for="index in 4"
+          v-for="index in settings.totalPages"
           :key="index"
         >
           <div
@@ -69,7 +69,6 @@
           'height': settings.totalHeightOfAPaper + 'in'}"
             class="converted"
           >
-            <p>asdafsDFkbjsd</p>
           </body>
           <div
             class="fixedFooterCondition"
