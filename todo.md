@@ -25,10 +25,12 @@ print component:
         -Done fixedfooteronpage1
         -Done v bind div child style to getHeight value
         -Done default unit to in
+        -Done test jspdf in a branch and use addPage functionallity to break the page 
 
-        -test jspdf in a branch and use addPage functionallity to break the page 
         
         -fix the page break bug
+
+        -call calculateSize method from the v-for
 
         -print Bug
 
@@ -39,16 +41,5 @@ print component:
         -data array
         -test
 
-
     -Dynamic
         """Takes the  data from the customer and customize the html page and then print it"""
-
-        npm install bootstrap popper.js jquery --save-dev 
-
-TODO the func is working but has an empty canvas
-TODO search it has answer in stack and the print bug is canvas
-TODO it can print empty canvas tho
-
-html2canvas(document.getElementById('toBeConverted')).then(function(canvas) {
-            document.getElementById('converted').appendChild(canvas) 
-            }) 

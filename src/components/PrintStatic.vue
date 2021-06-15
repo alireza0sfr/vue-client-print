@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="index in 100" :key="index">
+        <tr v-for="index in 72" :key="index">
           <td>{{index}}</td>
           <td>ردیف تست</td>
           <td>ردیف تست</td>
@@ -37,7 +37,7 @@
         <div
           :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in'}"
           class="mainLoop"
-          v-for="index in 20"
+          v-for="index in 4"
           :key="index"
         >
           <div
@@ -68,12 +68,14 @@
             :style="{
           'height': settings.totalHeightOfAPaper + 'in'}"
             class="converted"
-          ></body>
+          >
+            <p>asdafsDFkbjsd</p>
+          </body>
           <div
             class="fixedFooterCondition"
             v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
           >
-            <footer class="MainFooter" id="break">
+            <footer class="MainFooter break html2pdf__page-break">
               {{settings.customFooter}}
               <br />
               <div
@@ -181,12 +183,11 @@ export default {
         margin: this.settings.margin,
         filename: this.settings.fileName,
         image: { type: "jpeg", quality: 1 },
-        html2canvas: { dpi: 300, width: 1430},
+        html2canvas: { dpi: 300, width: 1430 },
         jsPDF: {
           unit: "px",
           format: this.settings.pageSize,
           orientation: this.settings.orientation,
-          
         },
       };
       html2pdf().set(opt).from(element).save();
@@ -315,9 +316,8 @@ export default {
             clnCanvas.style.marginTop = index * this.settings.marginTop + "in";
 
             // Adding the calculated height and width of the body to cln canvas
-            clnCanvas.style.height = this.settings.totalHeightOfAPaper
-            clnCanvas.style.width = this.settings.defaultWidthOfPaper
-
+            clnCanvas.style.height = this.settings.totalHeightOfAPaper;
+            clnCanvas.style.width = this.settings.defaultWidthOfPaper;
 
             convertedElement[index].appendChild(clnCanvas);
           }
