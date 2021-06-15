@@ -25,9 +25,12 @@ print component:
         -Done fixedfooteronpage1
         -Done v bind div child style to getHeight value
         -Done default unit to in
+
+        -test jspdf in a branch and use addPage functionallity to break the page 
         
+        -fix the page break bug
+
         -print Bug
-        
 
         -props watch
         -modal with checkboxes for users

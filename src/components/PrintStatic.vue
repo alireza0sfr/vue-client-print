@@ -186,6 +186,7 @@ export default {
           unit: "px",
           format: this.settings.pageSize,
           orientation: this.settings.orientation,
+          
         },
       };
       html2pdf().set(opt).from(element).save();
