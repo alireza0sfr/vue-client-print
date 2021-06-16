@@ -26,13 +26,12 @@ print component:
         -Done v bind div child style to getHeight value
         -Done default unit to in
         -Done test jspdf in a branch and use addPage functionallity to break the page 
+        -Done fix the page break bug
 
-        
-        -fix the page break bug
+        -backgound-position-y yAxis
+        -print Bug => replace issue 19 code with printform
 
-        -call calculateSize method from the v-for
-
-        -print Bug
+        -fixed line-height 
 
         -props watch
         -modal with checkboxes for users

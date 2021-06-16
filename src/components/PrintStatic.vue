@@ -1,31 +1,37 @@
 <template>
 <div id="page" :dir="settings.R2L">
-  <button @click="convert2Canvas()" id="myBtn-final" type="button" class="btn btn-sm btn-secondary">Preview Final</button>
-
-  <div
-    :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px', 'margin-left': '200px'}"
-    id="toBeConverted"
-  >
-    <table style="width: 100%">
-      <thead>
-        <tr>
-          <th>ستون ۱</th>
-          <th>ستون ۲</th>
-          <th>ستون ۳</th>
-          <th>ستون ۴</th>
-          <th>ستون ۵</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="index in 100" :key="index">
-          <td>{{index}}</td>
-          <td>ردیف تست</td>
-          <td>ردیف تست</td>
-          <td>ردیف تست</td>
-          <td>ردیف تست</td>
-        </tr>
-      </tbody>
-    </table>
+  <button
+    @click="convert2Image()"
+    id="myBtn-final"
+    type="button"
+    class="btn btn-sm btn-secondary"
+  >Preview Final</button>
+  <div>
+    <div
+      :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px'}"
+      id="toBeConverted"
+    >
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th>ستون ۱</th>
+            <th>ستون ۲</th>
+            <th>ستون ۳</th>
+            <th>ستون ۴</th>
+            <th>ستون ۵</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="index in 100" :key="index">
+            <td>{{index}}</td>
+            <td>ردیف تست</td>
+            <td>ردیف تست</td>
+            <td>ردیف تست</td>
+            <td>ردیف تست</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div id="myModal-final" class="modal card">
     <div class="modal-content">
@@ -44,7 +50,7 @@
             class="fixedHeaderCondition"
             v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
           >
-            <header style="height: 60px" class="MainHeader">
+            <header style="height: 60px" class="mainHeader">
               <div class="header card-body">
                 <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
                   {{dateToday}}
@@ -68,13 +74,12 @@
             :style="{
           'height': settings.totalHeightOfAPaper + 'in'}"
             class="converted"
-          >
-          </body>
+          ></body>
           <div
             class="fixedFooterCondition"
             v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
           >
-            <footer class="MainFooter break html2pdf__page-break">
+            <footer class="mainFooter break html2pdf__page-break">
               {{settings.customFooter}}
               <br />
               <div
@@ -91,6 +96,7 @@
 </template>
 
 <script>
+import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 import html2canvas from "html2canvas";
 export default {
@@ -132,7 +138,7 @@ export default {
         defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 0, // Useable height for body tag
-        marginTop: 0, // computed marginTop for canvas positioning
+        yAxis: 0, // computed yAxis for image positioning
         pageSizeDictionary: {
           landscape: {
             a3: {
@@ -172,13 +178,13 @@ export default {
     },
   },
   mounted() {
-    console.log('=======Nikan is Live=======')
+    console.log("=======Nikan is Live=======");
     this.modalFinalFunc();
     this.calculateSizes();
   },
   methods: {
     printForm() {
-      console.log('=======Printing.....=======')
+      console.log("=======Printing.....=======");
       let element = document.getElementById("printForm");
       let opt = {
         margin: this.settings.margin,
@@ -192,7 +198,7 @@ export default {
         },
       };
       html2pdf().set(opt).from(element).save();
-      console.log('=======Done=======')
+      console.log("=======Done=======");
     },
 
     /**
@@ -203,26 +209,6 @@ export default {
       while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
       }
-    },
-
-    /**
-     * Clone the given canvas with the same sizes
-     */
-
-    cloneCanvas(oldCanvas) {
-      //create a new canvas
-      var newCanvas = document.createElement("canvas");
-      var context = newCanvas.getContext("2d");
-
-      //set dimensions
-      newCanvas.width = oldCanvas.width;
-      newCanvas.height = oldCanvas.height;
-
-      //apply the old canvas to the new one
-      context.drawImage(oldCanvas, 0, 0);
-
-      //return the new canvas
-      return newCanvas;
     },
 
     /**
@@ -246,20 +232,20 @@ export default {
      */
 
     calculateSizes() {
-      console.log('=======Calculating Sizes=======')
+      console.log("=======Calculating Sizes=======");
       // Calculating the footer size in inches
-      let footerPage = document.getElementsByClassName("MainFooter")[0];
+      let footerPage = document.getElementsByClassName("mainFooter")[0];
       let compStyles = window.getComputedStyle(footerPage);
       let pageFooterSize = this.convert2Inches(
         parseInt(compStyles.getPropertyValue("line-height"))
       );
-      console.log("pagefootersize: ", pageFooterSize);
+      console.log("pageFooterSize: ", pageFooterSize);
 
       // Calculating the header size in inches
-      let headerPage = document.getElementsByClassName("MainHeader")[0];
+      let headerPage = document.getElementsByClassName("mainHeader")[0];
       compStyles = window.getComputedStyle(headerPage);
       let pageHeaderSize = this.convert2Inches(
-        parseInt(compStyles.getPropertyValue("line-height"))
+        parseInt(compStyles.getPropertyValue("height"))
       );
       console.log("pageheadersize: ", pageHeaderSize);
 
@@ -276,60 +262,57 @@ export default {
           this.settings.pageSize
         ]["width"];
 
-      // set the marginTop to opposite of the height to push every page up
+      // set the yAxis to opposite of the height to push every page up
 
-      this.settings.marginTop = -this.settings.totalHeightOfAPaper + 1;
+      this.settings.yAxis = -this.settings.totalHeightOfAPaper + 1;
 
       console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
       console.log("defaultHeightOfPaper: ", this.settings.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
-      console.log("marginTop: ", this.settings.marginTop);
+      console.log("yAxis: ", this.settings.yAxis);
     },
 
     /**
-     * Converts the given html to canvas and append it to the body tag
+     * Converts the given html to Image and append it to the body tag
      */
 
-    convert2Canvas() {
-      console.log('=======Converting 2 Canvas=======')
-      html2canvas(document.getElementById("toBeConverted")).then((canvas) => {
-        this.settings.totalPagesHeight = this.convert2Inches(canvas.height);
-        this.settings.totalPagesHeight =
-          this.settings.totalPagesHeight.toFixed(2);
-        console.log("totalPagesHeight", this.settings.totalPagesHeight);
-
-        this.settings.totalPages = Math.ceil(
-          this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
-        );
-        console.log("totalPages", this.settings.totalPages);
-
-        // Element that children will be appended to
-        let convertedElement = document.getElementsByClassName("converted");
-
-        // Waits till the base template is generated and then appends the children
-        this.$nextTick(() => {
-          for (let index = 0; index < convertedElement.length; index++) {
-            // Removing the existing canvas
-            this.removeAllChildNodes(convertedElement[index]);
-          }
-
-          for (let index = 0; index < convertedElement.length; index++) {
-            let clnCanvas = this.cloneCanvas(canvas);
-
-            // Adding the marginTop to the canvas for the positioning of the body tag
-            clnCanvas.style.marginTop = index * this.settings.marginTop + "in";
-
-            // Adding the calculated height and width of the body to cln canvas
-            clnCanvas.style.height = this.settings.totalHeightOfAPaper;
-            clnCanvas.style.width = this.settings.defaultWidthOfPaper;
-
-            convertedElement[index].appendChild(clnCanvas);
-          }
-          console.log(
-            `Successfully appended ${convertedElement.length} children`
+    convert2Image() {
+      console.log("=======Converting 2 Image=======");
+      domtoimage
+        .toPng(document.getElementById("toBeConverted"))
+        .then((imgBase64) => {
+          let compStyles = window.getComputedStyle(
+            document.getElementById("toBeConverted")
           );
+          let imgHeight = compStyles.getPropertyValue("height");
+
+          this.settings.totalPagesHeight = this.convert2Inches(
+            parseInt(imgHeight)
+          );
+          this.settings.totalPagesHeight =
+            this.settings.totalPagesHeight.toFixed(2);
+          console.log("totalPagesHeight", this.settings.totalPagesHeight);
+
+          this.settings.totalPages = Math.ceil(
+            this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
+          );
+          console.log("totalPages", this.settings.totalPages);
+
+          // Element that children will be appended to
+          let convertedElement = document.getElementsByClassName("converted");
+
+          // Waits till the base template is generated and then appends the children
+          this.$nextTick(() => {
+            for (let index = 0; index < convertedElement.length; index++) {
+              // Removing the existing canvas
+              this.removeAllChildNodes(convertedElement[index]);
+            }
+            for (let index = 0; index < convertedElement.length; index++) {
+              convertedElement[index].style.backgroundPosition = `0pos ${this.settings.yAxis}pos`
+              convertedElement[index].style.backgroundImage = `url(${imgBase64})`;
+            }
+          });
         });
-      });
     },
 
     /**
@@ -477,13 +460,13 @@ table th {
   border: 1px black solid;
   border-bottom: 1px black solid;
 }
-.converted canvas {
+.converted img {
   width: 8.26in;
   margin-top: 24px;
   margin-bottom: 24px;
   /* margin-right: 950px; */
 }
-.MainFooter {
+.mainFooter {
   margin-top: 7px;
   margin-bottom: 14px;
 }
