@@ -172,11 +172,13 @@ export default {
     },
   },
   mounted() {
+    console.log('=======Nikan is Live=======')
     this.modalFinalFunc();
     this.calculateSizes();
   },
   methods: {
     printForm() {
+      console.log('=======Printing.....=======')
       let element = document.getElementById("printForm");
       let opt = {
         margin: this.settings.margin,
@@ -190,6 +192,7 @@ export default {
         },
       };
       html2pdf().set(opt).from(element).save();
+      console.log('=======Done=======')
     },
 
     /**
@@ -243,6 +246,7 @@ export default {
      */
 
     calculateSizes() {
+      console.log('=======Calculating Sizes=======')
       // Calculating the footer size in inches
       let footerPage = document.getElementsByClassName("MainFooter")[0];
       let compStyles = window.getComputedStyle(footerPage);
@@ -287,6 +291,7 @@ export default {
      */
 
     convert2Canvas() {
+      console.log('=======Converting 2 Canvas=======')
       html2canvas(document.getElementById("toBeConverted")).then((canvas) => {
         this.settings.totalPagesHeight = this.convert2Inches(canvas.height);
         this.settings.totalPagesHeight =
