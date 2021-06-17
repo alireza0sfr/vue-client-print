@@ -30,8 +30,9 @@ print component:
         -Donebackgound-position-y yAxis
 
         -print Bug => replace issue 19 code with printform
-
-        -fixed line-height 
+        -extra page at the beginning
+        -extra table at the end
+        -fix line-height of the footer
 
         -props watch
         -modal with checkboxes for users

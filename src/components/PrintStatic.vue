@@ -1,14 +1,14 @@
 <template>
 <div id="page" :dir="settings.R2L">
   <button
-    @click="convert2Image()"
     id="myBtn-final"
+    @click="convert2Image()"
     type="button"
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
   <div>
     <div
-      :style="{'width': settings.defaultWidthOfPaper + 'in', 'margin-right': '200px'}"
+      :style="{'width': locals.defaultWidthOfPaper + 'in', 'margin-right': '200px'}"
       id="toBeConverted"
     >
       <table style="width: 100%">
@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="index in 100" :key="index">
+          <tr v-for="index in 1000" :key="index">
             <td>{{index}}</td>
             <td>ردیف تست</td>
             <td>ردیف تست</td>
@@ -41,52 +41,54 @@
       </div>
       <div id="printForm">
         <div
-          :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in'}"
+          :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': locals.defaultHeightOfPaper + 'in'}"
           class="mainLoop"
-          v-for="index in settings.totalPages"
+          v-for="index in locals.totalPages"
           :key="index"
         >
-          <div
-            class="fixedHeaderCondition"
-            v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
-          >
-            <header style="height: 60px" class="mainHeader">
-              <div class="header card-body">
-                <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
-                  {{dateToday}}
-                  <br />
-                  {{timeToday}}
+          <div class="pages">
+            <div
+              class="fixedHeaderCondition"
+              v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
+            >
+              <header style="height: 60px" class="mainHeader">
+                <div class="header card-body">
+                  <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
+                    {{dateToday}}
+                    <br />
+                    {{timeToday}}
+                  </div>
+                  <div class="customHeader">Custom Header {{settings.customHeader}}</div>
+                  <div class="logo">
+                    <img
+                      v-if="settings.logoURL != ''"
+                      :src="settings.logoURL"
+                      alt="Logo"
+                      height="40"
+                      width="40"
+                    />
+                  </div>
                 </div>
-                <div class="customHeader">Custom Header {{settings.customHeader}}</div>
-                <div class="logo">
-                  <img
-                    v-if="settings.logoURL != ''"
-                    :src="settings.logoURL"
-                    alt="Logo"
-                    height="40"
-                    width="40"
-                  />
-                </div>
-              </div>
-            </header>
-          </div>
-          <body
-            :style="{
-          'height': settings.totalHeightOfAPaper + 'in'}"
-            class="converted"
-          ></body>
-          <div
-            class="fixedFooterCondition"
-            v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
-          >
-            <footer class="mainFooter break html2pdf__page-break">
-              {{settings.customFooter}}
-              <br />
-              <div
-                v-if="settings.isPageCounter == true"
-                :style="{ 'text-align': settings.pageCounterPosition }"
-              >{{ index }}</div>
-            </footer>
+              </header>
+            </div>
+            <body
+              :style="{'background-image': `url(${locals.base64})`,
+            'height': locals.totalHeightOfAPaper + 'in',
+            'background-position': `0in ${(index - 1) * locals.yAxis}in` }"
+            ></body>
+            <div
+              class="fixedFooterCondition"
+              v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
+            >
+              <footer class="mainFooter break html2pdf__page-break">
+                {{settings.customFooter}}
+                <br />
+                <div
+                  v-if="settings.isPageCounter == true"
+                  :style="{ 'text-align': settings.pageCounterPosition }"
+                >{{ index }}</div>
+              </footer>
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +100,6 @@
 <script>
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
-import html2canvas from "html2canvas";
 export default {
   name: "PrintStatic",
   props: {
@@ -117,28 +118,7 @@ export default {
         new Date().getMinutes() +
         ":" +
         new Date().getSeconds(),
-      settings: {
-        isPageCounter: true,
-        fileName: "nikan.pdf",
-        pageCounterPosition: "center",
-        hasHeader: true,
-        hasFooter: true,
-        isFooterRepeatable: true,
-        isHeaderRepeatable: true,
-        isFixedDateAndTime: true,
-        orientation: "portrait",
-        pageSize: "a4",
-        customHeader: "",
-        customFooter: "",
-        logoURL: "",
-        R2L: "rtl",
-        totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
-        margin: 0,
-        defaultHeightOfPaper: 0, // Standard Height of the chosen paper in inch
-        defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
-        totalPagesHeight: 0, // The total size of the given div to be printed in inch
-        totalHeightOfAPaper: 0, // Useable height for body tag
-        yAxis: 0, // computed yAxis for image positioning
+      locals: {
         pageSizeDictionary: {
           landscape: {
             a3: {
@@ -169,6 +149,30 @@ export default {
             },
           },
         },
+        totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
+        defaultHeightOfPaper: 0, // Standard Height of the chosen paper in inch
+        defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
+        totalPagesHeight: 0, // The total size of the given div to be printed in inch
+        totalHeightOfAPaper: 0, // Useable height for body tag
+        yAxis: 0, // computed yAxis for image positioning
+        base64: "",
+      },
+      settings: {
+        isPageCounter: true,
+        fileName: "nikan.pdf",
+        pageCounterPosition: "center",
+        hasHeader: true,
+        hasFooter: true,
+        isFooterRepeatable: true,
+        isHeaderRepeatable: true,
+        isFixedDateAndTime: true,
+        orientation: "portrait",
+        pageSize: "a4",
+        customHeader: "",
+        customFooter: "",
+        logoURL: "",
+        R2L: "rtl",
+        margin: 0,
       },
     };
   },
@@ -185,7 +189,7 @@ export default {
   methods: {
     printForm() {
       console.log("=======Printing.....=======");
-      let element = document.getElementById("printForm");
+      let pages = document.getElementsByClassName("pages");
       let opt = {
         margin: this.settings.margin,
         filename: this.settings.fileName,
@@ -197,7 +201,33 @@ export default {
           orientation: this.settings.orientation,
         },
       };
-      html2pdf().set(opt).from(element).save();
+      var worker = html2pdf().set(opt).from(pages[0]).toPdf();
+      pages.forEach(function (page) {
+        worker = worker
+          .get("pdf")
+          .then(function (pdf) {
+            pdf.addPage();
+          })
+          .from(page)
+          .toContainer()
+          .toCanvas()
+          .toPdf();
+      });
+      worker = worker.save();
+
+      // var worker = html2pdf().set(opt).from(pages[0]).toPdf();
+      // for (let page = 1; page < pages.length; page++) {
+      //   worker = worker
+      //     .get("pdf")
+      //     .then(function (pdf) {
+      //       pdf.addPage();
+      //     })
+      //     .from(page)
+      //     .toContainer()
+      //     .toCanvas()
+      //     .toPdf();
+      // }
+      // worker = worker.save();
       console.log("=======Done=======");
     },
 
@@ -250,26 +280,26 @@ export default {
       console.log("pageheadersize: ", pageHeaderSize);
 
       // Gettings the default sizes from the base dic
-      this.settings.defaultHeightOfPaper =
-        this.settings.pageSizeDictionary[this.settings.orientation][
+      this.locals.defaultHeightOfPaper =
+        this.locals.pageSizeDictionary[this.settings.orientation][
           this.settings.pageSize
         ]["height"];
-      this.settings.totalHeightOfAPaper =
-        this.settings.defaultHeightOfPaper - pageFooterSize - pageHeaderSize;
+      this.locals.totalHeightOfAPaper =
+        this.locals.defaultHeightOfPaper - pageHeaderSize - pageHeaderSize;
 
-      this.settings.defaultWidthOfPaper =
-        this.settings.pageSizeDictionary[this.settings.orientation][
+      this.locals.defaultWidthOfPaper =
+        this.locals.pageSizeDictionary[this.settings.orientation][
           this.settings.pageSize
         ]["width"];
 
       // set the yAxis to opposite of the height to push every page up
 
-      this.settings.yAxis = -this.settings.totalHeightOfAPaper + 1;
+      this.locals.yAxis = -this.locals.totalHeightOfAPaper;
 
-      console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
-      console.log("defaultHeightOfPaper: ", this.settings.defaultHeightOfPaper);
-      console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
-      console.log("yAxis: ", this.settings.yAxis);
+      console.log("defaultWidthOfPaper: ", this.locals.defaultWidthOfPaper);
+      console.log("defaultHeightOfPaper: ", this.locals.defaultHeightOfPaper);
+      console.log("totalHeightOfAPaper: ", this.locals.totalHeightOfAPaper);
+      console.log("yAxis: ", this.locals.yAxis);
     },
 
     /**
@@ -281,22 +311,23 @@ export default {
       domtoimage
         .toPng(document.getElementById("toBeConverted"))
         .then((imgBase64) => {
+          this.locals.base64 = imgBase64;
           let compStyles = window.getComputedStyle(
             document.getElementById("toBeConverted")
           );
           let imgHeight = compStyles.getPropertyValue("height");
 
-          this.settings.totalPagesHeight = this.convert2Inches(
+          this.locals.totalPagesHeight = this.convert2Inches(
             parseInt(imgHeight)
           );
-          this.settings.totalPagesHeight =
-            this.settings.totalPagesHeight.toFixed(2);
-          console.log("totalPagesHeight", this.settings.totalPagesHeight);
+          this.locals.totalPagesHeight =
+            this.locals.totalPagesHeight.toFixed(2);
+          console.log("totalPagesHeight", this.locals.totalPagesHeight);
 
-          this.settings.totalPages = Math.ceil(
-            this.settings.totalPagesHeight / this.settings.totalHeightOfAPaper
+          this.locals.totalPages = Math.ceil(
+            this.locals.totalPagesHeight / this.locals.totalHeightOfAPaper
           );
-          console.log("totalPages", this.settings.totalPages);
+          console.log("totalPages", this.locals.totalPages);
 
           // Element that children will be appended to
           let convertedElement = document.getElementsByClassName("converted");
@@ -307,10 +338,11 @@ export default {
               // Removing the existing canvas
               this.removeAllChildNodes(convertedElement[index]);
             }
-            for (let index = 0; index < convertedElement.length; index++) {
-              convertedElement[index].style.backgroundPosition = `0in ${index * this.settings.yAxis}in`
-              convertedElement[index].style.backgroundImage = `url(${imgBase64})`;
-            }
+            // for (let index = 0; index < convertedElement.length; index++) {
+            //   convertedElement[index].style.backgroundPosition = `0in ${
+            //     index * this.locals.yAxis
+            //   }in`;
+            // }
           });
         });
     },
