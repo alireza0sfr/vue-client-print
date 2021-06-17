@@ -27,8 +27,8 @@ print component:
         -Done default unit to in
         -Done test jspdf in a branch and use addPage functionallity to break the page 
         -Done fix the page break bug
+        -Donebackgound-position-y yAxis
 
-        -backgound-position-y yAxis
         -print Bug => replace issue 19 code with printform
 
         -fixed line-height 

@@ -308,7 +308,7 @@ export default {
               this.removeAllChildNodes(convertedElement[index]);
             }
             for (let index = 0; index < convertedElement.length; index++) {
-              convertedElement[index].style.backgroundPosition = `0pos ${this.settings.yAxis}pos`
+              convertedElement[index].style.backgroundPosition = `0in ${index * this.settings.yAxis}in`
               convertedElement[index].style.backgroundImage = `url(${imgBase64})`;
             }
           });
