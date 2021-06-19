@@ -28,8 +28,9 @@ print component:
         -Done test jspdf in a branch and use addPage functionallity to break the page 
         -Done fix the page break bug
         -Donebackgound-position-y yAxis
-
-        -print Bug => replace issue 19 code with printform
+        -Doneprint Bug => replace issue 19 code with printform
+        
+        -save image in /tmp and then load it => image is blurry
         -extra page at the beginning
         -extra table at the end
         -fix line-height of the footer
@@ -43,3 +44,8 @@ print component:
 
     -Dynamic
         """Takes the  data from the customer and customize the html page and then print it"""
+        
+
+:style="{'background-image': locals.base64,
+            'height': locals.totalHeightOfAPaper + 'in',
+            'background-position': `0in ${(index - 1) * locals.yAxis}in` }"

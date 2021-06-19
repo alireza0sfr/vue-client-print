@@ -1,8 +1,8 @@
 <template>
 <div id="page" :dir="settings.R2L">
   <button
-    id="myBtn-final"
     @click="convert2Image()"
+    id="myBtn-final"
     type="button"
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="index in 1000" :key="index">
+          <tr v-for="index in 2000" :key="index">
             <td>{{index}}</td>
             <td>ردیف تست</td>
             <td>ردیف تست</td>
@@ -71,11 +71,7 @@
                 </div>
               </header>
             </div>
-            <body
-              :style="{'background-image': `url(${locals.base64})`,
-            'height': locals.totalHeightOfAPaper + 'in',
-            'background-position': `0in ${(index - 1) * locals.yAxis}in` }"
-            ></body>
+            <body class="converted" :style="{'height': locals.totalHeightOfAPaper + 'in'}"></body>
             <div
               class="fixedFooterCondition"
               v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
@@ -155,7 +151,7 @@ export default {
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 0, // Useable height for body tag
         yAxis: 0, // computed yAxis for image positioning
-        base64: "",
+        base64: "../1.png",
       },
       settings: {
         isPageCounter: true,
@@ -215,19 +211,6 @@ export default {
       });
       worker = worker.save();
 
-      // var worker = html2pdf().set(opt).from(pages[0]).toPdf();
-      // for (let page = 1; page < pages.length; page++) {
-      //   worker = worker
-      //     .get("pdf")
-      //     .then(function (pdf) {
-      //       pdf.addPage();
-      //     })
-      //     .from(page)
-      //     .toContainer()
-      //     .toCanvas()
-      //     .toPdf();
-      // }
-      // worker = worker.save();
       console.log("=======Done=======");
     },
 
@@ -303,48 +286,86 @@ export default {
     },
 
     /**
+     * Converting given base64 to canvas
+     */
+
+    canvasMaker(imgBase64, sy) {
+      let img = new Image();
+      let canvas = document.createElement("canvas");
+      canvas.height = this.convert2Pixels(this.locals.totalHeightOfAPaper);
+      canvas.width = this.convert2Pixels(this.locals.defaultWidthOfPaper);
+      let context = canvas.getContext("2d");
+      img.src = imgBase64;
+      img.onload = () => {
+        context.drawImage(
+          img,
+          0,
+          sy,
+          this.convert2Pixels(this.locals.defaultWidthOfPaper),
+          this.convert2Pixels(this.locals.totalHeightOfAPaper),
+          0,
+          0,
+          this.convert2Pixels(this.locals.defaultWidthOfPaper),
+          this.convert2Pixels(this.locals.totalHeightOfAPaper)
+        );
+      };
+      return canvas;
+    },
+
+    /**
      * Converts the given html to Image and append it to the body tag
      */
 
     convert2Image() {
       console.log("=======Converting 2 Image=======");
-      domtoimage
-        .toPng(document.getElementById("toBeConverted"))
-        .then((imgBase64) => {
-          this.locals.base64 = imgBase64;
-          let compStyles = window.getComputedStyle(
-            document.getElementById("toBeConverted")
+      domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
+        this.locals.base64 = res;
+
+        // var fs = require('fs');
+        // imgBase64 = imgBase64.replace(/^data:image\/png;base64,/, "");
+
+        // fs.writeFile("out.png", imgBase64, "base64", function (err) {
+        //   console.log(err);
+        // });
+
+        // var link = document.createElement("a");
+        // link.href = imgBase64;
+        // link.download = "test.jpeg";
+        // link.click();
+        let compStyles = window.getComputedStyle(
+          document.getElementById("toBeConverted")
+        );
+        let imgHeight = compStyles.getPropertyValue("height");
+
+        this.locals.totalPagesHeight = this.convert2Inches(parseInt(imgHeight));
+        this.locals.totalPagesHeight = this.locals.totalPagesHeight.toFixed(2);
+        console.log("totalPagesHeight", this.locals.totalPagesHeight);
+
+        this.locals.totalPages = Math.ceil(
+          this.locals.totalPagesHeight / this.locals.totalHeightOfAPaper
+        );
+        console.log("totalPages", this.locals.totalPages);
+
+        // Element that children will be appended to
+        let convertedElement = document.getElementsByClassName("converted");
+
+        // Waits till the base template is generated and then appends the children
+        this.$nextTick(() => {
+          for (let index = 0; index < convertedElement.length; index++) {
+            // Removing the existing canvas
+            this.removeAllChildNodes(convertedElement[index]);
+          }
+          for (let index = 0; index < convertedElement.length; index++) {
+            let computedSy =
+              index * this.convert2Pixels(this.locals.totalHeightOfAPaper);
+            let result = this.canvasMaker(this.locals.base64, computedSy);
+            convertedElement[index].appendChild(result);
+          }
+          console.log(
+            `successfully appended ${convertedElement.length} Childs`
           );
-          let imgHeight = compStyles.getPropertyValue("height");
-
-          this.locals.totalPagesHeight = this.convert2Inches(
-            parseInt(imgHeight)
-          );
-          this.locals.totalPagesHeight =
-            this.locals.totalPagesHeight.toFixed(2);
-          console.log("totalPagesHeight", this.locals.totalPagesHeight);
-
-          this.locals.totalPages = Math.ceil(
-            this.locals.totalPagesHeight / this.locals.totalHeightOfAPaper
-          );
-          console.log("totalPages", this.locals.totalPages);
-
-          // Element that children will be appended to
-          let convertedElement = document.getElementsByClassName("converted");
-
-          // Waits till the base template is generated and then appends the children
-          this.$nextTick(() => {
-            for (let index = 0; index < convertedElement.length; index++) {
-              // Removing the existing canvas
-              this.removeAllChildNodes(convertedElement[index]);
-            }
-            // for (let index = 0; index < convertedElement.length; index++) {
-            //   convertedElement[index].style.backgroundPosition = `0in ${
-            //     index * this.locals.yAxis
-            //   }in`;
-            // }
-          });
         });
+      });
     },
 
     /**
