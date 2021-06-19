@@ -6,84 +6,100 @@
     type="button"
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
-  <div>
-    <div
-      :style="{'width': locals.defaultWidthOfPaper + 'in', 'margin-right': '200px'}"
-      id="toBeConverted"
-    >
-      <table style="width: 100%">
-        <thead>
-          <tr>
-            <th>ستون ۱</th>
-            <th>ستون ۲</th>
-            <th>ستون ۳</th>
-            <th>ستون ۴</th>
-            <th>ستون ۵</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="index in 100" :key="index">
-            <td>{{index}}</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="wrapper">
+    <div class="section1">
+      <h1>Test</h1>
     </div>
-  </div>
-  <div id="myModal-final" class="modal card">
-    <div class="modal-content">
-      <div class="card-header">
-        <span class="close-final">&times;</span>
-        <i @click="printForm()" class="fas fa-print"></i>
+    <div class="section2">
+      <div class="headerSection2">
+        <p>Lorem ipsum dolor sit amet.</p>
       </div>
-      <div id="printForm">
-        <div
-          :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': locals.defaultHeightOfPaper + 'in'}"
-          class="mainLoop"
-          v-for="index in locals.totalPages"
-          :key="index"
-        >
-          <div class="pages">
-            <div
-              class="fixedHeaderCondition"
-              v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
-            >
-              <header style="height: 60px" class="mainHeader">
-                <div class="header card-body">
-                  <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
-                    {{dateToday}}
-                    <br />
-                    {{timeToday}}
+      <div class="bodySection2">
+        <p>Lorem ipsum dolor sit amet.</p>
+      </div>
+      <div class="footerSection2">
+        <p>Lorem ipsum dolor sit amet.</p>
+      </div>
+    </div>
+    <div class="section3">
+      <div
+        :style="{'width': locals.defaultWidthOfPaper + 'in', 'margin-right': '200px'}"
+        id="toBeConverted"
+      >
+        <table style="width: 100%">
+          <thead>
+            <tr>
+              <th>ستون ۱</th>
+              <th>ستون ۲</th>
+              <th>ستون ۳</th>
+              <th>ستون ۴</th>
+              <th>ستون ۵</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="index in 100" :key="index">
+              <td>{{index}}</td>
+              <td>ردیف تست</td>
+              <td>ردیف تست</td>
+              <td>ردیف تست</td>
+              <td>ردیف تست</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="myModal-final" class="modal card">
+      <div class="modal-content">
+        <div class="card-header">
+          <span class="close-final">&times;</span>
+          <i @click="printForm()" class="fas fa-print"></i>
+        </div>
+        <div id="printForm">
+          <div
+            :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': locals.defaultHeightOfPaper + 'in'}"
+            class="mainLoop"
+            v-for="index in locals.totalPages"
+            :key="index"
+          >
+            <div class="pages">
+              <div
+                class="fixedHeaderCondition"
+                v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
+              >
+                <header style="height: 60px" class="mainHeader">
+                  <div class="header card-body">
+                    <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
+                      {{dateToday}}
+                      <br />
+                      {{timeToday}}
+                    </div>
+                    <div class="customHeader">Custom Header {{settings.customHeader}}</div>
+                    <div class="logo">
+                      <img
+                        v-if="settings.logoURL != ''"
+                        :src="settings.logoURL"
+                        alt="Logo"
+                        height="40"
+                        width="40"
+                      />
+                    </div>
                   </div>
-                  <div class="customHeader">Custom Header {{settings.customHeader}}</div>
-                  <div class="logo">
-                    <img
-                      v-if="settings.logoURL != ''"
-                      :src="settings.logoURL"
-                      alt="Logo"
-                      height="40"
-                      width="40"
-                    />
-                  </div>
-                </div>
-              </header>
-            </div>
-            <body class="converted" :style="{'height': locals.totalHeightOfAPaper + 'in'}"></body>
-            <div
-              class="fixedFooterCondition"
-              v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
-            >
-              <footer class="mainFooter break html2pdf__page-break">
-                {{settings.customFooter}}
-                <br />
-                <div
-                  v-if="settings.isPageCounter == true"
-                  :style="{ 'text-align': settings.pageCounterPosition }"
-                >{{ index }}</div>
-              </footer>
+                </header>
+              </div>
+              <body class="converted" :style="{'height': locals.totalHeightOfAPaper + 'in'}"></body>
+              <div
+                class="fixedFooterCondition"
+                v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
+              >
+                <footer class="mainFooter break html2pdf__page-break">
+                  {{settings.customFooter}}
+                  <br />
+                  <div
+                    v-if="settings.isPageCounter == true"
+                    :style="{ 'text-align': settings.pageCounterPosition }"
+                  >{{ index }}</div>
+                </footer>
+              </div>
             </div>
           </div>
         </div>
@@ -507,5 +523,28 @@ table th {
 .mainFooter {
   margin-top: 7px;
   margin-bottom: 14px;
+}
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.section1 {
+  width: 33%;
+}
+.section2 {
+  width: 33%;
+  border: 1px black ridge;
+}
+.headerSection2 {
+  border: 1px black ridge;
+  height: 33%;
+}
+.bodySection2 {
+  border: 1px black ridge;
+  height: 33%;
+}
+.footerSection2 {
+  border: 1px black ridge;
+  height: 33%;
 }
 </style>
