@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="index in 2000" :key="index">
+          <tr v-for="index in 100" :key="index">
             <td>{{index}}</td>
             <td>ردیف تست</td>
             <td>ردیف تست</td>
@@ -150,8 +150,7 @@ export default {
         defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 0, // Useable height for body tag
-        yAxis: 0, // computed yAxis for image positioning
-        base64: "../1.png",
+
       },
       settings: {
         isPageCounter: true,
@@ -225,7 +224,7 @@ export default {
     },
 
     /**
-     * converted given pixel to inch
+     * converts given pixel to inch
      */
 
     convert2Inches(pixels) {
@@ -233,7 +232,7 @@ export default {
     },
 
     /**
-     * converted given inch to pixel
+     * converts given inch to pixel
      */
 
     convert2Pixels(inches) {
@@ -241,7 +240,7 @@ export default {
     },
 
     /**
-     * Calculate the Sizes based upon the selected page orientation and format
+     * Calculate the sizes based upon the selected page orientation and format
      */
 
     calculateSizes() {
@@ -275,18 +274,13 @@ export default {
           this.settings.pageSize
         ]["width"];
 
-      // set the yAxis to opposite of the height to push every page up
-
-      this.locals.yAxis = -this.locals.totalHeightOfAPaper;
-
       console.log("defaultWidthOfPaper: ", this.locals.defaultWidthOfPaper);
       console.log("defaultHeightOfPaper: ", this.locals.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.locals.totalHeightOfAPaper);
-      console.log("yAxis: ", this.locals.yAxis);
     },
 
     /**
-     * Converting given base64 to canvas
+     * Converts given base64 to canvas
      */
 
     canvasMaker(imgBase64, sy) {
@@ -319,19 +313,7 @@ export default {
     convert2Image() {
       console.log("=======Converting 2 Image=======");
       domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
-        this.locals.base64 = res;
 
-        // var fs = require('fs');
-        // imgBase64 = imgBase64.replace(/^data:image\/png;base64,/, "");
-
-        // fs.writeFile("out.png", imgBase64, "base64", function (err) {
-        //   console.log(err);
-        // });
-
-        // var link = document.createElement("a");
-        // link.href = imgBase64;
-        // link.download = "test.jpeg";
-        // link.click();
         let compStyles = window.getComputedStyle(
           document.getElementById("toBeConverted")
         );
@@ -358,7 +340,7 @@ export default {
           for (let index = 0; index < convertedElement.length; index++) {
             let computedSy =
               index * this.convert2Pixels(this.locals.totalHeightOfAPaper);
-            let result = this.canvasMaker(this.locals.base64, computedSy);
+            let result = this.canvasMaker(res, computedSy);
             convertedElement[index].appendChild(result);
           }
           console.log(
