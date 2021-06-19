@@ -44,8 +44,3 @@ print component:
 
     -Dynamic
         """Takes the  data from the customer and customize the html page and then print it"""
-        
-
-:style="{'background-image': locals.base64,
-            'height': locals.totalHeightOfAPaper + 'in',
-            'background-position': `0in ${(index - 1) * locals.yAxis}in` }"

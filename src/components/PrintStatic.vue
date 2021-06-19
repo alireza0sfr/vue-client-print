@@ -150,7 +150,6 @@ export default {
         defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 0, // Useable height for body tag
-
       },
       settings: {
         isPageCounter: true,
@@ -197,11 +196,16 @@ export default {
         },
       };
       var worker = html2pdf().set(opt).from(pages[0]).toPdf();
+      let n = 0;
       pages.forEach(function (page) {
+        console.log();
         worker = worker
           .get("pdf")
           .then(function (pdf) {
-            pdf.addPage();
+            if (n != 0) {
+              pdf.addPage();
+            }
+            n += 1;
           })
           .from(page)
           .toContainer()
@@ -313,7 +317,6 @@ export default {
     convert2Image() {
       console.log("=======Converting 2 Image=======");
       domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
-
         let compStyles = window.getComputedStyle(
           document.getElementById("toBeConverted")
         );
