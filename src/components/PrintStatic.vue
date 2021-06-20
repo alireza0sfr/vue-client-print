@@ -29,7 +29,7 @@
         id="footerSection2"
         class="resizableFooter"
       >
-        <p>Lorem ipsum dolor sit amet.</p>
+        <p class="firstChild">Lorem ipsum dolor sit amet.</p>
       </div>
     </div>
     <div class="section3">
@@ -459,7 +459,7 @@ export default {
       var resizer = document.createElement("div");
       resizer.className = "resizer";
       resizer.style.height = "10px";
-      footerSection.appendChild(resizer);
+      footerSection.insertBefore(resizer, document.getElementsByClassName('firstChild')[0])
       resizer.addEventListener("mousedown", initDrag, false);
 
       var startY, startHeight;
