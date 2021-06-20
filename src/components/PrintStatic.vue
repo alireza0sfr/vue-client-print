@@ -466,16 +466,19 @@ export default {
 
       function initDrag(e) {
         startY = e.clientY;
+        console.log('starty', startY)
         startHeight = parseInt(
           document.defaultView.getComputedStyle(footerSection).height,
           10
         );
+        console.log('startheight', startHeight)
         document.documentElement.addEventListener("mousemove", doDrag, false);
         document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
 
       function doDrag(e) {
-        footerSection.style.height = startHeight + e.clientY - startY + "px";
+        footerSection.style.height = startHeight - e.clientY + startY + "px";
+        console.log('clienty', e.clientY)
       }
 
       function stopDrag(e) {
