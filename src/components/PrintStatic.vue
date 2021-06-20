@@ -14,13 +14,21 @@
       :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
       class="section2"
     >
-      <div :style="{'height': locals.pageHeaderSize + 'in'}" id="headerSection2">
+      <div
+        :style="{'height': locals.pageHeaderSize + 'in'}"
+        id="headerSection2"
+        class="resizableHeader"
+      >
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
-      <div :style="{'height': locals.totalHeightOfAPaper + 'in'}" class="bodySection2">
+      <div id="bodySection2">
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
-      <div :style="{'height': locals.pageFooterSize + 'in'}" class="footerSection2">
+      <div
+        :style="{'height': locals.pageFooterSize + 'in'}"
+        id="footerSection2"
+        class="resizableFooter"
+      >
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
     </div>
@@ -110,6 +118,7 @@
 </template>
 
 <script>
+import interact from "interactjs";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 export default {
@@ -364,7 +373,7 @@ export default {
             convertedElement[index].appendChild(result);
           }
           console.log(
-            `successfully appended ${convertedElement.length} Childs`
+            `successfully appended ${convertedElement.length} Children`
           );
         });
       });
@@ -406,35 +415,87 @@ export default {
      */
 
     borderDragFunc() {
-      const BORDER_SIZE = 4;
-      const panel = document.getElementById("headerSection2");
+      var footerSection = document.getElementsByClassName("resizableHeader")[0]; // element to make resizable
 
-      let m_pos;
-      function resize(e) {
-        const dy = m_pos - e.y;
-        m_pos = e.y;
-        panel.style.height =
-          parseInt(getComputedStyle(panel, "").height) + dy + "px";
+      var resizer = document.createElement("div");
+      resizer.className = "resizer";
+      resizer.style.height = "10px";
+      footerSection.appendChild(resizer);
+      resizer.addEventListener("mousedown", initDrag, false);
+
+      var startY, startHeight;
+
+      function initDrag(e) {
+        startY = e.clientY;
+        startHeight = parseInt(
+          document.defaultView.getComputedStyle(footerSection).height,
+          10
+        );
+        document.documentElement.addEventListener("mousemove", doDrag, false);
+        document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
 
-      panel.addEventListener(
-        "mousedown",
-        function (e) {
-          if (e.offsetY < BORDER_SIZE) {
-            m_pos = e.y;
-            document.addEventListener("mousemove", resize, false);
-          }
-        },
-        false
-      );
+      function doDrag(e) {
+        footerSection.style.height = startHeight + e.clientY - startY + "px";
+      }
 
-      document.addEventListener(
-        "mouseup",
-        function () {
-          document.removeEventListener("mousemove", resize, false);
+      function stopDrag(e) {
+        document.documentElement.removeEventListener(
+          "mousemove",
+          doDrag,
+          false
+        );
+        document.documentElement.removeEventListener(
+          "mouseup",
+          stopDrag,
+          false
+        );
+      }
+    },
+    borderDrag() {
+      interact(".resizableFooter").resizable({
+        modifiers: [
+          interact.modifiers.restrictSize({
+            min: { height: 10 },
+          }),
+        ],
+        edges: { top: true },
+        listeners: {
+          move: function (event) {
+            let { x, y } = event.target.dataset;
+
+            x = (parseFloat(x) || 0) + event.deltaRect.left;
+            y = (parseFloat(y) || 0) + event.deltaRect.top;
+
+            Object.assign(event.target.style, {
+              width: `${event.rect.width}px`,
+              height: `${event.rect.height}px`,
+              transform: `translate(${x}px, ${y}px)`,
+            });
+
+            Object.assign(event.target.dataset, { x, y });
+          },
         },
-        false
-      );
+      });
+      interact(".resizableHeader").resizable({
+        edges: { bottom: true },
+        listeners: {
+          move: function (event) {
+            let { x, y } = event.target.dataset;
+
+            x = (parseFloat(x) || 0) + event.deltaRect.left;
+            y = (parseFloat(y) || 0) + event.deltaRect.top;
+
+            Object.assign(event.target.style, {
+              width: `${event.rect.width}px`,
+              height: `${event.rect.height}px`,
+              transform: `translate(${x}px, ${y}px)`,
+            });
+
+            Object.assign(event.target.dataset, { x, y });
+          },
+        },
+      });
     },
     modalRawFunc() {
       var modal = document.getElementById("myModal-raw");
@@ -569,12 +630,35 @@ table th {
   width: max-content;
 }
 .section2 {
+  overflow: hidden;
   border: 1px black ridge;
+  display: flex;
+  flex-direction: column;
 }
 #headerSection2 {
   border-bottom: 1px black ridge;
 }
-.bodySection2 {
-  border-bottom: 1px black ridge;
+#bodySection2 {
+  flex-grow: 2;
+}
+.resizableHeader {
+  touch-action: none;
+  user-select: none;
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+}
+.resizableFooter {
+  border-top: 1px ridge black;
+  color: black;
+  touch-action: none;
+  user-select: none;
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+}
+.resizer:hover {
+  cursor: n-resize;
+}
+.resizer:active {
+  cursor: n-resize;
 }
 </style>
