@@ -8,24 +8,24 @@
   >Preview Final</button>
   <div class="wrapper">
     <div class="section1">
-      <h1>Test</h1>
+      <h1>Lorem ipsum dolor sit amet.</h1>
     </div>
-    <div class="section2">
-      <div class="headerSection2">
+    <div
+      :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
+      class="section2"
+    >
+      <div :style="{'height': locals.pageHeaderSize + 'in'}" id="headerSection2">
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
-      <div class="bodySection2">
+      <div :style="{'height': locals.totalHeightOfAPaper + 'in'}" class="bodySection2">
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
-      <div class="footerSection2">
+      <div :style="{'height': locals.pageFooterSize + 'in'}" class="footerSection2">
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
     </div>
     <div class="section3">
-      <div
-        :style="{'width': locals.defaultWidthOfPaper + 'in', 'margin-right': '200px'}"
-        id="toBeConverted"
-      >
+      <div :style="{'width': locals.defaultWidthOfPaper + 'in'}" id="toBeConverted">
         <table style="width: 100%">
           <thead>
             <tr>
@@ -193,6 +193,7 @@ export default {
   },
   mounted() {
     console.log("=======Nikan is Live=======");
+    this.borderDragFunc();
     this.modalFinalFunc();
     this.calculateSizes();
   },
@@ -399,6 +400,42 @@ export default {
         }
       };
     },
+
+    /**
+     * Adjust the borders height by dragging
+     */
+
+    borderDragFunc() {
+      const BORDER_SIZE = 4;
+      const panel = document.getElementById("headerSection2");
+
+      let m_pos;
+      function resize(e) {
+        const dy = m_pos - e.y;
+        m_pos = e.y;
+        panel.style.height =
+          parseInt(getComputedStyle(panel, "").height) + dy + "px";
+      }
+
+      panel.addEventListener(
+        "mousedown",
+        function (e) {
+          if (e.offsetY < BORDER_SIZE) {
+            m_pos = e.y;
+            document.addEventListener("mousemove", resize, false);
+          }
+        },
+        false
+      );
+
+      document.addEventListener(
+        "mouseup",
+        function () {
+          document.removeEventListener("mousemove", resize, false);
+        },
+        false
+      );
+    },
     modalRawFunc() {
       var modal = document.getElementById("myModal-raw");
 
@@ -528,23 +565,16 @@ table th {
   display: flex;
   flex-direction: row;
 }
-.section1 {
-  width: 33%;
+#page {
+  width: max-content;
 }
 .section2 {
-  width: 33%;
   border: 1px black ridge;
 }
-.headerSection2 {
-  border: 1px black ridge;
-  height: 33%;
+#headerSection2 {
+  border-bottom: 1px black ridge;
 }
 .bodySection2 {
-  border: 1px black ridge;
-  height: 33%;
-}
-.footerSection2 {
-  border: 1px black ridge;
-  height: 33%;
+  border-bottom: 1px black ridge;
 }
 </style>

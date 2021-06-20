@@ -27,12 +27,17 @@ print component:
         -Done default unit to in
         -Done test jspdf in a branch and use addPage functionallity to break the page 
         -Done fix the page break bug
-        -Donebackgound-position-y yAxis
-        -Doneprint Bug => replace issue 19 code with printform
+        -Done backgound-position-y yAxis
+        -Done print Bug => replace issue 19 code with printform
+        -Done extra page at the beginning
+        -Done set the width to page width and have scroll
         
-        -save image in /tmp and then load it => image is blurry
-        -extra page at the beginning
-        -extra table at the end
+
+        -contol div height with mouse
+        -page 1 footer size
+        -other pages footer size
+        -page 1 header size
+        -other pages header size
         -fix line-height of the footer
 
         -props watch
