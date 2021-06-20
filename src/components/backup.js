@@ -79,3 +79,4 @@ footerborderDragFunc() {
         false
       );
     }
+}

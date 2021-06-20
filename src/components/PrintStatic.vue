@@ -202,7 +202,8 @@ export default {
   },
   mounted() {
     console.log("=======Nikan is Live=======");
-    this.borderDragFunc();
+    this.headerBorderDragFunc();
+    this.footerBorderDragFunc();
     this.modalFinalFunc();
     this.calculateSizes();
   },
@@ -414,8 +415,46 @@ export default {
      * Adjust the borders height by dragging
      */
 
-    borderDragFunc() {
-      var footerSection = document.getElementsByClassName("resizableHeader")[0]; // element to make resizable
+    headerBorderDragFunc() {
+      var headerSection = document.getElementsByClassName("resizableHeader")[0]; // element to make resizable
+
+      var resizer = document.createElement("div");
+      resizer.className = "resizer";
+      resizer.style.height = "10px";
+      headerSection.appendChild(resizer);
+      resizer.addEventListener("mousedown", initDrag, false);
+
+      var startY, startHeight;
+
+      function initDrag(e) {
+        startY = e.clientY;
+        startHeight = parseInt(
+          document.defaultView.getComputedStyle(headerSection).height,
+          10
+        );
+        document.documentElement.addEventListener("mousemove", doDrag, false);
+        document.documentElement.addEventListener("mouseup", stopDrag, false);
+      }
+
+      function doDrag(e) {
+        headerSection.style.height = startHeight + e.clientY - startY + "px";
+      }
+
+      function stopDrag(e) {
+        document.documentElement.removeEventListener(
+          "mousemove",
+          doDrag,
+          false
+        );
+        document.documentElement.removeEventListener(
+          "mouseup",
+          stopDrag,
+          false
+        );
+      }
+    },
+    footerBorderDragFunc() {
+      var footerSection = document.getElementsByClassName("resizableFooter")[0]; // element to make resizable
 
       var resizer = document.createElement("div");
       resizer.className = "resizer";
