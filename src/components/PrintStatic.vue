@@ -1,10 +1,12 @@
 <template>
 <div id="page" :dir="settings.R2L">
+  <!--Buttons-->
+
   <button
     @click="convert2Image()"
     id="myBtn-final"
     type="button"
-    class="btn btn-sm btn-secondary"
+    class="btn btn-sm btn-primary"
   >Preview Final</button>
   <button
     v-if="locals.settingsModalShow == false"
@@ -16,33 +18,146 @@
     @click="calculateSizes()"
     class="btn btn-sm btn-success"
   >Done</button>
+
+  <!-- Main Wrapper and Sections-->
+
   <div class="wrapper">
-    <div v-if="locals.settingsModalShow" class="section1">
-      <h1>Lorem ipsum dolor sit amet.</h1>
+    <!-- Section 1 (Slidebar) -->
+    <div v-if="locals.settingsModalShow" class="section1 container-fluid">
+      <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+          <div
+            class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+          >
+            <a
+              href="/"
+              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            >
+              <span class="fs-5 d-none d-sm-inline">Menu</span>
+            </a>
+            <ul
+              class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+              id="menu"
+            >
+              <li class="nav-item">
+                <a href="#" class="nav-link align-middle px-0">
+                  <i class="fs-4 bi-house"></i>
+                  <span class="ms-1 d-none d-sm-inline">Home</span>
+                </a>
+              </li>
+              <li>
+                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-speedometer2"></i>
+                  <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                </a>
+                <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Item</span> 1
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Item</span> 2
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-table"></i>
+                  <span class="ms-1 d-none d-sm-inline">Orders</span>
+                </a>
+              </li>
+              <li>
+                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-bootstrap"></i>
+                  <span class="ms-1 d-none d-sm-inline">Bootstrap</span>
+                </a>
+                <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Item</span> 1
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Item</span> 2
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-grid"></i>
+                  <span class="ms-1 d-none d-sm-inline">Products</span>
+                </a>
+                <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Product</span> 1
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Product</span> 2
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Product</span> 3
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">Product</span> 4
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span class="ms-1 d-none d-sm-inline">Customers</span>
+                </a>
+              </li>
+            </ul>
+            <hr />
+          </div>
+        </div>
+
+        <!-- Section 2 (Paper clone)-->
+
+        <div>
+          <div
+            v-if="locals.settingsModalShow"
+            :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
+            class="section2"
+          >
+            <div
+              :style="{'height': locals.pageHeaderSize + 'in'}"
+              id="headerSection2"
+              class="resizableHeader"
+            >
+              <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div id="bodySection2">
+              <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div
+              :style="{'height': locals.pageFooterSize + 'in'}"
+              id="footerSection2"
+              class="resizableFooter"
+            >
+              <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div
-      v-if="locals.settingsModalShow"
-      :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
-      class="section2"
-    >
-      <div
-        :style="{'height': locals.pageHeaderSize + 'in'}"
-        id="headerSection2"
-        class="resizableHeader"
-      >
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
-      <div id="bodySection2">
-        <p>Lorem ipsum dolor sit amet.</p>
-      </div>
-      <div
-        :style="{'height': locals.pageFooterSize + 'in'}"
-        id="footerSection2"
-        class="resizableFooter"
-      >
-        <p class="firstChild">Lorem ipsum dolor sit amet.</p>
-      </div>
-    </div>
+
+    <!-- Section 3 (DATA)-->
+
     <div class="section3">
       <div :style="{'width': locals.defaultWidthOfPaper + 'in'}" id="toBeConverted">
         <table style="width: 100%">
@@ -67,11 +182,15 @@
         </table>
       </div>
     </div>
+
+    <!-- Preview Modal-->
+
     <div id="myModal-final" class="modal card">
       <div class="modal-content">
         <div class="card-header">
           <span class="close-final">&times;</span>
           <i @click="printForm()" class="fas fa-print"></i>
+          <i @click="locals.settingsModalShow = true" class="fas fa-edit"></i>
         </div>
         <div id="printForm">
           <div
@@ -129,7 +248,6 @@
 </template>
 
 <script>
-import interact from "interactjs";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 export default {
@@ -525,7 +643,7 @@ export default {
       var headerSection = document.getElementsByClassName("resizableHeader")[0]; // element to make resizable
 
       var resizer = document.createElement("div");
-      resizer.className = "resizer";
+      resizer.className = "resizerHeader resizer";
       resizer.style.height = "10px";
       headerSection.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
@@ -568,12 +686,9 @@ export default {
       var footerSection = document.getElementsByClassName("resizableFooter")[0]; // element to make resizable
 
       var resizer = document.createElement("div");
-      resizer.className = "resizer";
+      resizer.className = "resizerFooter resizer";
       resizer.style.height = "10px";
-      footerSection.insertBefore(
-        resizer,
-        document.getElementsByClassName("firstChild")[0]
-      );
+      footerSection.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
 
       var startY, startHeight;
@@ -743,5 +858,20 @@ table th {
 }
 .resizer:active {
   cursor: n-resize;
+}
+.section1 {
+  border: 1px black ridge;
+}
+.resizerHeader {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.resizerFooter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
 }
 </style>
