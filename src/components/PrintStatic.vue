@@ -2,23 +2,9 @@
 <div id="page" :dir="settings.R2L">
   <!--Buttons-->
 
-  <button
-    @click="convert2Image()"
-    id="myBtn-final"
-    type="button"
-    class="btn btn-sm btn-primary"
-  >Preview Final</button>
-  <button
-    v-if="locals.settingsModalShow == false"
-    @click="settingsInitFunc()"
-    class="btn btn-sm btn-dark"
-  >Settings</button>
-  <button
-    v-if="locals.settingsModalShow"
-    @click="calculateSizes()"
-    class="btn btn-sm btn-success"
-  >Done</button>
-
+  <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
+  <i v-if="locals.settingsModalShow == false" @click="settingsInitFunc()" class="fas fa-2x fa-cog"></i>
+  <i v-if="locals.settingsModalShow" @click="calculateSizes()" class="fas fa-2x fa-check-circle"></i>
   <!-- Main Wrapper and Sections-->
 
   <div class="wrapper">
@@ -189,8 +175,8 @@
       <div class="modal-content">
         <div class="card-header">
           <span class="close-final">&times;</span>
-          <i @click="printForm()" class="fas fa-print"></i>
-          <i @click="locals.settingsModalShow = true" class="fas fa-edit"></i>
+          <i @click="printForm()" class="fas fa-2x fa-file-pdf"></i>
+          <i @click="locals.settingsModalShow = true" class="fas fa-2x fa-edit"></i>
         </div>
         <div id="printForm">
           <div
@@ -431,30 +417,8 @@ export default {
      * Exports all the data to a single json
      */
 
-    importFromJson(Json) {
-      // Header Section
-      this.settings.customHeader = Json["header"]["customHeader"];
-      this.settings.isFixedDateAndTime = Json["header"]["isFixedDateAndTime"];
-      this.settings.isHeaderRepeatable = Json["header"]["isHeaderRepeatable"];
-      this.settings.logoURL = Json["header"]["logoURL"];
-      this.settings.pageHeaderSize = Json["header"]["height"];
-      document.getElementById("headerSection2").style.margin =
-        Json["header"]["styles"]["margin"];
-
-      // Footer Section
-      this.settings.customFooter = Json["footer"]["customFooter"];
-      this.settings.isPageCounter = Json["footer"]["isPageCounter"];
-      this.settings.pageCounterPosition = Json["footer"]["pageCounterPosition"];
-      this.settings.isFooterRepeatable = Json["footer"]["isFooterRepeatable"];
-      this.settings.pageFooterSize = Json["footer"]["height"];
-      document.getElementById("footerSection2").style.margin =
-        Json["footer"]["styles"]["margin"];
-
-      // Settings Section
-      this.settings.customFooter = Json["footer"]["customFooter"];
-      this.settings.isPageCounter = Json["footer"]["isPageCounter"];
-      this.settings.pageCounterPosition = Json["footer"]["pageCounterPosition"];
-      this.settings.isFooterRepeatable = Json["footer"]["isFooterRepeatable"];
+    importFromJson(json) {
+      Object.assign(this.settings, json);
     },
 
     /**
@@ -873,5 +837,8 @@ table th {
   top: 0;
   right: 0;
   left: 0;
+}
+.fas:hover {
+  cursor: pointer;
 }
 </style>
