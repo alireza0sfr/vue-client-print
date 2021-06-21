@@ -6,11 +6,22 @@
     type="button"
     class="btn btn-sm btn-secondary"
   >Preview Final</button>
+  <button
+    v-if="locals.settingsModalShow == false"
+    @click="settingsInitFunc()"
+    class="btn btn-sm btn-dark"
+  >Settings</button>
+  <button
+    v-if="locals.settingsModalShow"
+    @click="calculateSizes()"
+    class="btn btn-sm btn-success"
+  >Done</button>
   <div class="wrapper">
-    <div class="section1">
+    <div v-if="locals.settingsModalShow" class="section1">
       <h1>Lorem ipsum dolor sit amet.</h1>
     </div>
     <div
+      v-if="locals.settingsModalShow"
       :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
       class="section2"
     >
@@ -175,6 +186,7 @@ export default {
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 0, // Useable height for body tag
+        settingsModalShow: false,
       },
       settings: {
         isPageCounter: true,
@@ -202,9 +214,6 @@ export default {
   },
   mounted() {
     console.log("=======Nikan is Live=======");
-    this.calculateSizes();
-    this.headerBorderDragFunc();
-    this.footerBorderDragFunc();
     this.modalFinalFunc();
   },
   methods: {
@@ -309,8 +318,20 @@ export default {
       console.log("defaultHeightOfPaper: ", this.locals.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.locals.totalHeightOfAPaper);
 
-      // Showing section 3
-      this.locals.section3Show = !this.locals.section3Show;
+      // Closing the edit modal
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+    },
+
+    /**
+     * Initializing settings
+     */
+
+    settingsInitFunc() {
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+      setTimeout(() => {
+        this.headerBorderDragFunc();
+        this.footerBorderDragFunc();
+      }, 100);
     },
 
     /**
@@ -345,6 +366,12 @@ export default {
      */
 
     convert2Image() {
+      // Calculating the default sizes then previewing
+      this.calculateSizes();
+
+      // Closing the modal
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+
       console.log("=======Converting 2 Image=======");
       domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
         let compStyles = window.getComputedStyle(
@@ -496,77 +523,6 @@ export default {
           false
         );
       }
-    },
-    borderDrag() {
-      interact(".resizableFooter").resizable({
-        modifiers: [
-          interact.modifiers.restrictSize({
-            min: { height: 10 },
-          }),
-        ],
-        edges: { top: true },
-        listeners: {
-          move: function (event) {
-            let { x, y } = event.target.dataset;
-
-            x = (parseFloat(x) || 0) + event.deltaRect.left;
-            y = (parseFloat(y) || 0) + event.deltaRect.top;
-
-            Object.assign(event.target.style, {
-              width: `${event.rect.width}px`,
-              height: `${event.rect.height}px`,
-              transform: `translate(${x}px, ${y}px)`,
-            });
-
-            Object.assign(event.target.dataset, { x, y });
-          },
-        },
-      });
-      interact(".resizableHeader").resizable({
-        edges: { bottom: true },
-        listeners: {
-          move: function (event) {
-            let { x, y } = event.target.dataset;
-
-            x = (parseFloat(x) || 0) + event.deltaRect.left;
-            y = (parseFloat(y) || 0) + event.deltaRect.top;
-
-            Object.assign(event.target.style, {
-              width: `${event.rect.width}px`,
-              height: `${event.rect.height}px`,
-              transform: `translate(${x}px, ${y}px)`,
-            });
-
-            Object.assign(event.target.dataset, { x, y });
-          },
-        },
-      });
-    },
-    modalRawFunc() {
-      var modal = document.getElementById("myModal-raw");
-
-      // Get the button that opens the modal
-      var btn = document.getElementById("myBtn-raw");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close-raw")[0];
-
-      // When the user clicks on the button, open the modal
-      btn.onclick = function () {
-        modal.style.display = "block";
-      };
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function () {
-        modal.style.display = "none";
-      };
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      };
     },
   },
 };
