@@ -171,8 +171,8 @@ export default {
           },
         },
         totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
-        defaultHeightOfPaper: 0, // Standard Height of the chosen paper in inch
-        defaultWidthOfPaper: 0, // Standard Width of the chosen paper in inch
+        defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
+        defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 0, // Useable height for body tag
       },
@@ -202,10 +202,10 @@ export default {
   },
   mounted() {
     console.log("=======Nikan is Live=======");
+    this.calculateSizes();
     this.headerBorderDragFunc();
     this.footerBorderDragFunc();
     this.modalFinalFunc();
-    this.calculateSizes();
   },
   methods: {
     printForm() {
@@ -308,6 +308,9 @@ export default {
       console.log("defaultWidthOfPaper: ", this.locals.defaultWidthOfPaper);
       console.log("defaultHeightOfPaper: ", this.locals.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.locals.totalHeightOfAPaper);
+
+      // Showing section 3
+      this.locals.section3Show = !this.locals.section3Show;
     },
 
     /**
@@ -459,26 +462,26 @@ export default {
       var resizer = document.createElement("div");
       resizer.className = "resizer";
       resizer.style.height = "10px";
-      footerSection.insertBefore(resizer, document.getElementsByClassName('firstChild')[0])
+      footerSection.insertBefore(
+        resizer,
+        document.getElementsByClassName("firstChild")[0]
+      );
       resizer.addEventListener("mousedown", initDrag, false);
 
       var startY, startHeight;
 
       function initDrag(e) {
         startY = e.clientY;
-        console.log('starty', startY)
         startHeight = parseInt(
           document.defaultView.getComputedStyle(footerSection).height,
           10
         );
-        console.log('startheight', startHeight)
         document.documentElement.addEventListener("mousemove", doDrag, false);
         document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
 
       function doDrag(e) {
         footerSection.style.height = startHeight - e.clientY + startY + "px";
-        console.log('clienty', e.clientY)
       }
 
       function stopDrag(e) {
@@ -677,20 +680,21 @@ table th {
   display: flex;
   flex-direction: column;
 }
-#headerSection2 {
-  border-bottom: 1px black ridge;
-}
+
 #bodySection2 {
   flex-grow: 2;
 }
 .resizableHeader {
+  border-bottom: 1px #aaa ridge;
+  position: relative;
   touch-action: none;
   user-select: none;
   /* This makes things *much* easier */
   box-sizing: border-box;
 }
 .resizableFooter {
-  border-top: 1px ridge black;
+  border-top: 1px ridge #aaa;
+  position: relative;
   color: black;
   touch-action: none;
   user-select: none;
