@@ -185,8 +185,10 @@ export default {
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
-        totalHeightOfAPaper: 10.40, // Useable height for body tag
+        totalHeightOfAPaper: 10.4, // Useable height for body tag
         settingsModalShow: false,
+        pageHeaderSize: 0.5,
+        pageFooterSize: 0.5,
       },
       settings: {
         isPageCounter: true,
@@ -215,6 +217,7 @@ export default {
   mounted() {
     console.log("=======Nikan is Live=======");
     this.modalFinalFunc();
+    this.export2Json();
   },
   methods: {
     printForm() {
@@ -272,6 +275,71 @@ export default {
     },
 
     /**
+     * Exports all the data to a single json
+     */
+
+    export2Json() {
+      let tmp = {
+        header: {
+          customHeader: this.settings.customHeader,
+          isFixedDateAndTime: this.settings.isFixedDateAndTime,
+          isHeaderRepeatable: this.settings.isHeaderRepeatable,
+          logoURL: this.settings.logoURL,
+          height: this.locals.pageHeaderSize,
+          styles: {
+            margin: "0px",
+          },
+        },
+        footer: {
+          customFooter: this.settings.customFooter,
+          isPageCounter: this.settings.isPageCounter,
+          pageCounterPosition: this.settings.pageCounterPosition,
+          isFooterRepeatable: this.settings.isFooterRepeatable,
+          height: this.locals.pageFooterSize,
+          styles: {
+            margin: "0px",
+          },
+        },
+        settings: {
+          orientation: this.settings.orientation,
+          pageSize: this.settings.pageSize,
+          R2L: this.settings.R2L,
+        },
+      };
+      return tmp;
+    },
+
+    /**
+     * Exports all the data to a single json
+     */
+
+    importFromJson(Json) {
+      // Header Section
+      this.settings.customHeader = Json["header"]["customHeader"];
+      this.settings.isFixedDateAndTime = Json["header"]["isFixedDateAndTime"];
+      this.settings.isHeaderRepeatable = Json["header"]["isHeaderRepeatable"];
+      this.settings.logoURL = Json["header"]["logoURL"];
+      this.settings.pageHeaderSize = Json["header"]["height"];
+      document.getElementById("headerSection2").style.margin =
+        Json["header"]["styles"]["margin"];
+
+      // Footer Section
+      this.settings.customFooter = Json["footer"]["customFooter"];
+      this.settings.isPageCounter = Json["footer"]["isPageCounter"];
+      this.settings.pageCounterPosition = Json["footer"]["pageCounterPosition"];
+      this.settings.isFooterRepeatable = Json["footer"]["isFooterRepeatable"];
+      this.settings.pageFooterSize = Json["footer"]["height"];
+      document.getElementById("footerSection2").style.margin =
+        Json["footer"]["styles"]["margin"];
+
+      // Settings Section
+      this.settings.customFooter = Json["footer"]["customFooter"];
+      this.settings.isPageCounter = Json["footer"]["isPageCounter"];
+      this.settings.pageCounterPosition = Json["footer"]["pageCounterPosition"];
+      this.settings.isFooterRepeatable = Json["footer"]["isFooterRepeatable"];
+    },
+
+    /**
      * converts given inch to pixel
      */
 
@@ -286,20 +354,20 @@ export default {
     calculateSizes() {
       console.log("=======Calculating Sizes=======");
       // Subtracting this value to make the pages more accurate
-      const errorValue = 0.20
-      
+      const errorValue = 0.2;
+
       // Calculating the footer size in inches
-      let footerPage = document.getElementById('footerSection2')
+      let footerPage = document.getElementById("footerSection2");
       let pageFooterSize = this.convert2Inches(
         parseInt(footerPage.offsetHeight)
       );
+      this.locals.pageFooterSize = pageFooterSize;
       console.log("pageFooterSize: ", pageFooterSize);
 
       // Calculating the header size in inches
-      let headerPage = document.getElementById('headerSection2')
-      let pageHeaderSize = this.convert2Inches(
-        headerPage.offsetHeight
-      );
+      let headerPage = document.getElementById("headerSection2");
+      let pageHeaderSize = this.convert2Inches(headerPage.offsetHeight);
+      this.locals.pageFooterSize = pageFooterSize;
       console.log("pageheadersize: ", pageHeaderSize);
 
       // Gettings the default sizes from the base dic
@@ -308,7 +376,10 @@ export default {
           this.settings.pageSize
         ]["height"];
       this.locals.totalHeightOfAPaper =
-        this.locals.defaultHeightOfPaper - pageFooterSize - pageHeaderSize - errorValue;
+        this.locals.defaultHeightOfPaper -
+        pageFooterSize -
+        pageHeaderSize -
+        errorValue;
 
       this.locals.defaultWidthOfPaper =
         this.locals.pageSizeDictionary[this.settings.orientation][
@@ -321,10 +392,13 @@ export default {
 
       // Closing the edit modal
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
+
+      // Making a json out of whole avaiable data
+      this.export2Json();
     },
 
     /**
-     * Initializing settings
+     * Initializing dragging settings
      */
 
     settingsInitFunc() {
@@ -397,6 +471,8 @@ export default {
             // Removing the existing canvas
             this.removeAllChildNodes(convertedElement[index]);
           }
+
+          // Appening the results to parents
           for (let index = 0; index < convertedElement.length; index++) {
             let computedSy =
               index * this.convert2Pixels(this.locals.totalHeightOfAPaper);
@@ -483,6 +559,11 @@ export default {
         );
       }
     },
+
+    /**
+     * Adjust the borders height by dragging
+     */
+
     footerBorderDragFunc() {
       var footerSection = document.getElementsByClassName("resizableFooter")[0]; // element to make resizable
 
