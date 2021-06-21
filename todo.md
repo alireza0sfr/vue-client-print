@@ -30,14 +30,14 @@ print component:
     -Done extra page at the beginning
     -Done set the width to page width and have scroll
     -Done contol div height with mouse
+    -Done element size won't change if 2 divs hit
+    -Done fix line-height of the footer
     
     -Add position relative
-    -element size won't change if 2 divs hit
     -page 1 footer size
     -other pages footer size
     -page 1 header size
     -other pages header size
-    -fix line-height of the footer
 
     -props watch
     -modal with checkboxes for users

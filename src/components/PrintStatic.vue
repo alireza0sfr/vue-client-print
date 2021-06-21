@@ -185,7 +185,7 @@ export default {
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
-        totalHeightOfAPaper: 0, // Useable height for body tag
+        totalHeightOfAPaper: 10.40, // Useable height for body tag
         settingsModalShow: false,
       },
       settings: {
@@ -268,7 +268,7 @@ export default {
      */
 
     convert2Inches(pixels) {
-      return pixels / 96;
+      return (pixels / 96).toFixed(2);
     },
 
     /**
@@ -276,7 +276,7 @@ export default {
      */
 
     convert2Pixels(inches) {
-      return inches * 96;
+      return (inches * 96).toFixed(2);
     },
 
     /**
@@ -285,19 +285,20 @@ export default {
 
     calculateSizes() {
       console.log("=======Calculating Sizes=======");
+      // Subtracting this value to make the pages more accurate
+      const errorValue = 0.20
+      
       // Calculating the footer size in inches
-      let footerPage = document.getElementsByClassName("mainFooter")[0];
-      let compStyles = window.getComputedStyle(footerPage);
+      let footerPage = document.getElementById('footerSection2')
       let pageFooterSize = this.convert2Inches(
-        parseInt(compStyles.getPropertyValue("line-height"))
+        parseInt(footerPage.offsetHeight)
       );
       console.log("pageFooterSize: ", pageFooterSize);
 
       // Calculating the header size in inches
-      let headerPage = document.getElementsByClassName("mainHeader")[0];
-      compStyles = window.getComputedStyle(headerPage);
+      let headerPage = document.getElementById('headerSection2')
       let pageHeaderSize = this.convert2Inches(
-        parseInt(compStyles.getPropertyValue("height"))
+        headerPage.offsetHeight
       );
       console.log("pageheadersize: ", pageHeaderSize);
 
@@ -307,7 +308,7 @@ export default {
           this.settings.pageSize
         ]["height"];
       this.locals.totalHeightOfAPaper =
-        this.locals.defaultHeightOfPaper - pageHeaderSize - pageHeaderSize;
+        this.locals.defaultHeightOfPaper - pageFooterSize - pageHeaderSize - errorValue;
 
       this.locals.defaultWidthOfPaper =
         this.locals.pageSizeDictionary[this.settings.orientation][
@@ -367,10 +368,10 @@ export default {
 
     convert2Image() {
       // Calculating the default sizes then previewing
-      this.calculateSizes();
+      // this.calculateSizes();
 
       // Closing the modal
-      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+      // this.locals.settingsModalShow = !this.locals.settingsModalShow;
 
       console.log("=======Converting 2 Image=======");
       domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
@@ -380,7 +381,6 @@ export default {
         let imgHeight = compStyles.getPropertyValue("height");
 
         this.locals.totalPagesHeight = this.convert2Inches(parseInt(imgHeight));
-        this.locals.totalPagesHeight = this.locals.totalPagesHeight.toFixed(2);
         console.log("totalPagesHeight", this.locals.totalPagesHeight);
 
         this.locals.totalPages = Math.ceil(
