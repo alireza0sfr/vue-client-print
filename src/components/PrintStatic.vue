@@ -176,7 +176,7 @@
         <div class="card-header">
           <span class="close-final">&times;</span>
           <i @click="printForm()" class="fas fa-2x fa-file-pdf"></i>
-          <i @click="locals.settingsModalShow = true" class="fas fa-2x fa-edit"></i>
+          <i @click="edit()" class="fas fa-2x fa-edit"></i>
         </div>
         <div id="printForm">
           <div
@@ -684,6 +684,11 @@ export default {
         );
       }
     },
+    edit() {
+      let modal = document.getElementById("myModal-final")
+      modal.style.display = 'none';
+      this.locals.settingsModalShow = !this.locals.settingsModalShow
+    }
   },
 };
 </script>
