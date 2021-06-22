@@ -607,7 +607,7 @@ export default {
 
     headerBorderDragFunc() {
       var headerSection = document.getElementsByClassName("section header")[0]; // element to make resizable
-    
+
       var resizer = document.createElement("div");
       resizer.className = "resizer";
       resizer.style.height = "10px";
@@ -627,7 +627,6 @@ export default {
       }
 
       function doDrag(e) {
-        console.log('asdas');
         headerSection.style.height = startHeight + e.clientY - startY + "px";
       }
 
@@ -705,11 +704,12 @@ export default {
     elementHeader() {
       // Making the div resizeable
       let n = 0;
-      let headerSection = document.getElementsByClassName("element")[0];
+      let element = document.getElementsByClassName("element")[0];
       var resizer = document.createElement("div");
       resizer.className = "resizer";
-      headerSection.appendChild(resizer);
+      element.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
+      element.addEventListener("mousedown", atClick, false);
 
       var startX, startY, startWidth, startHeight;
 
@@ -717,11 +717,11 @@ export default {
         startX = e.clientX;
         startY = e.clientY;
         startWidth = parseInt(
-          document.defaultView.getComputedStyle(headerSection).width,
+          document.defaultView.getComputedStyle(element).width,
           10
         );
         startHeight = parseInt(
-          document.defaultView.getComputedStyle(headerSection).height,
+          document.defaultView.getComputedStyle(element).height,
           10
         );
         document.documentElement.addEventListener("mousemove", doDrag, false);
@@ -729,8 +729,8 @@ export default {
       }
 
       function doDrag(e) {
-        headerSection.style.width = startWidth + e.clientX - startX + "px";
-        headerSection.style.height = startHeight + e.clientY - startY + "px";
+        element.style.width = startWidth + e.clientX - startX + "px";
+        element.style.height = startHeight + e.clientY - startY + "px";
       }
 
       function stopDrag(e) {
@@ -745,24 +745,22 @@ export default {
           false
         );
       }
-      // function hoverEditHeader() {
-      //   let textInput = document.getElementById("inputFieldHeader");
-      //   textInput.className = "inputFieldOn";
-      //   headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
-      // }
-      // function HoverEditHeaderOff() {
-      //   let textInput = document.getElementById("inputFieldHeader");
-      //   textInput.className = "inputFieldOff";
-      // }
+
+      // borders and resizer on selected
+      function atClick() {
+        let element = document.getElementsByClassName("element")[0];
+        element.className = "element selected";
+      }
     },
     elementFooter() {
       // Making the the div resizeable
       let n = 0;
-      let footerSection = document.getElementsByClassName("element")[1];
+      let element = document.getElementsByClassName("element")[1];
       var resizer = document.createElement("div");
       resizer.className = "resizer";
-      footerSection.appendChild(resizer);
+      element.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
+      element.addEventListener("mousedown", atClick, false);
 
       var startX, startY, startWidth, startHeight;
 
@@ -770,11 +768,11 @@ export default {
         startX = e.clientX;
         startY = e.clientY;
         startWidth = parseInt(
-          document.defaultView.getComputedStyle(footerSection).width,
+          document.defaultView.getComputedStyle(element).width,
           10
         );
         startHeight = parseInt(
-          document.defaultView.getComputedStyle(footerSection).height,
+          document.defaultView.getComputedStyle(element).height,
           10
         );
         document.documentElement.addEventListener("mousemove", doDrag, false);
@@ -782,8 +780,8 @@ export default {
       }
 
       function doDrag(e) {
-        footerSection.style.width = startWidth + e.clientX - startX + "px";
-        footerSection.style.height = startHeight + e.clientY - startY + "px";
+        element.style.width = startWidth + e.clientX - startX + "px";
+        element.style.height = startHeight + e.clientY - startY + "px";
       }
 
       function stopDrag(e) {
@@ -798,16 +796,11 @@ export default {
           false
         );
       }
-      // function hoverEditFooter() {
-      //   console.log("hover");
-      //   let textInput = document.getElementById("inputFieldFooter");
-      //   textInput.className = "inputFieldOn";
-      //   footerSection.addEventListener("mouseleave", HoverEditFooterOff, false);
-      // }
-      // function HoverEditFooterOff() {
-      //   let textInput = document.getElementById("inputFieldFooter");
-      //   textInput.className = "inputFieldOff";
-      // }
+      // borders and resizer on selected
+      function atClick() {
+        let element = document.getElementsByClassName("element")[1];
+        element.className = "element selected";
+      }
     },
   },
 };
@@ -938,8 +931,9 @@ table th {
   right: 0;
   left: 0;
 }
-.section .resizer:hover, .section .resizer:active {
-  cursor: n-resize;  
+.section .resizer:hover,
+.section .resizer:active {
+  cursor: n-resize;
 }
 .section.header .resizer {
   bottom: 0;
@@ -947,26 +941,27 @@ table th {
 .section.footer .resizer {
   top: 0;
 }
-.section.header{
+.section.header {
   border-bottom: 1px #aaa solid;
 }
-.section.footer{
+.section.footer {
   border-top: 1px #aaa solid;
 }
-.element .resizer {
-  border-top: none!important;
+.element.selected .resizer {
+  border-top: none !important;
   position: absolute;
   bottom: 0;
-  top: auto!important;
+  top: auto !important;
   right: -3px;
   left: auto;
   width: 16px;
   height: 16px;
   background-size: cover;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAxBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjA0MDgxNTZEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjA0MDgxNTVEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9IjFEMTE1RDY1RUU3RTA0MDA4QTM0QThEMTBFQjcxQjVDIiBzdFJlZjpkb2N1bWVudElEPSIxRDExNUQ2NUVFN0UwNDAwOEEzNEE4RDEwRUI3MUI1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pi4XKu0AAACWUExURVhYWI2NjZubm46Ojvv7+wQEBPz8/E5OTk1NTQMDA1lZWQEBAVdXV4yMjO3t7cTExBcXF7q6uoKCgpKSkv7+/tPT0/b29p+fn11dXYuLi1JSUsPDw35+flxcXBMTE0dHR4CAgOjo6Ofn58XFxVtbW+Li4p6enmVlZeHh4SUlJezs7CQkJAgICAICAv39/f///wAAAP///+M2NPIAAAAydFJOU/////////////////////////////////////////////////////////////////8ADVCY7wAAANlJREFUeNps0ucSgkAMBODYUFGsYO+94S3v/3KGwB3gHT8cZr7JZidCifNRk2tCbpnieXKSqqGLC7klxtYjp7RAX8cu1eA0FptYYvgsFpkZi/Qem4o09UciMuOthhUq0pptYEx/DfxceliSK63DbzdFlbS+zHQA1JXZJRftm7R60VAuWqSlkpPMUDlNU2lP24iQK20mNSqtswbJYBdweZbSDTJ5jYAD8RcSl26QzbDgTBudFu7Nng9LlNDjjYX8P2oNzKVbGKAVpQ2Pdy+/yDhQ+gMd8u9PgAEARXlsB1h8RU4AAAAASUVORK5CYII=)
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAxBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjA0MDgxNTZEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjA0MDgxNTVEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9IjFEMTE1RDY1RUU3RTA0MDA4QTM0QThEMTBFQjcxQjVDIiBzdFJlZjpkb2N1bWVudElEPSIxRDExNUQ2NUVFN0UwNDAwOEEzNEE4RDEwRUI3MUI1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pi4XKu0AAACWUExURVhYWI2NjZubm46Ojvv7+wQEBPz8/E5OTk1NTQMDA1lZWQEBAVdXV4yMjO3t7cTExBcXF7q6uoKCgpKSkv7+/tPT0/b29p+fn11dXYuLi1JSUsPDw35+flxcXBMTE0dHR4CAgOjo6Ofn58XFxVtbW+Li4p6enmVlZeHh4SUlJezs7CQkJAgICAICAv39/f///wAAAP///+M2NPIAAAAydFJOU/////////////////////////////////////////////////////////////////8ADVCY7wAAANlJREFUeNps0ucSgkAMBODYUFGsYO+94S3v/3KGwB3gHT8cZr7JZidCifNRk2tCbpnieXKSqqGLC7klxtYjp7RAX8cu1eA0FptYYvgsFpkZi/Qem4o09UciMuOthhUq0pptYEx/DfxceliSK63DbzdFlbS+zHQA1JXZJRftm7R60VAuWqSlkpPMUDlNU2lP24iQK20mNSqtswbJYBdweZbSDTJ5jYAD8RcSl26QzbDgTBudFu7Nng9LlNDjjYX8P2oNzKVbGKAVpQ2Pdy+/yDhQ+gMd8u9PgAEARXlsB1h8RU4AAAAASUVORK5CYII=);
 }
 
-.element .resizer:hover, .element .resizer:active {
+.element .resizer:hover,
+.element .resizer:active {
   cursor: nwse-resize;
 }
 
@@ -979,9 +974,18 @@ table th {
 }
 
 .element {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+}
+.element.selected {
+  width: 100%;
   border: 1px #aaa dashed;
   border-radius: 4px;
-  position: absolute;
-  width: 60%;
+}
+.element:hover {
+  width: 100%;
+  border: 1px #aaa dashed;
+  border-radius: 4px;
 }
 </style>
