@@ -125,17 +125,17 @@
               id="headerSection2"
               class="resizableHeader"
             >
-              <p class="textInput">Lorem ipsum dolor sit amet.</p>
+              <p class="textInput">Header</p>
             </div>
             <div id="bodySection2">
-              <p>Lorem ipsum dolor sit amet.</p>
+              <p>Body</p>
             </div>
             <div
               :style="{'height': locals.pageFooterSize + 'in'}"
               id="footerSection2"
               class="resizableFooter"
             >
-              <p>Lorem ipsum dolor sit amet.</p>
+              <p class="textInput">Footer</p>
             </div>
           </div>
         </div>
@@ -291,8 +291,8 @@ export default {
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         settingsModalShow: false,
-        pageHeaderSize: 0.5,
-        pageFooterSize: 0.5,
+        pageHeaderSize: 0.6,
+        pageFooterSize: 0.6,
       },
       settings: {
         isPageCounter: true,
@@ -702,30 +702,33 @@ export default {
 
     textInput() {
       let n = 0;
-      let section = document.getElementsByClassName("textInput")[0];
-      section.addEventListener("mousedown", initEdit, false);
-      document.documentElement.addEventListener("keyup", stopEdit, false);
-
-      function initEdit() {
+      let headerSection = document.getElementsByClassName("textInput")[0];
+      headerSection.addEventListener("mousedown", initEditHeader, false);
+      function initEditHeader() {
         if (n < 1) {
-          section.removeChild(section.firstChild);
+          headerSection.removeChild(headerSection.firstChild);
           let inputField = document.createElement("TEXTAREA");
-          inputField.className = 'inputField'
+          inputField.className = "inputField";
           inputField.setAttribute("type", "text");
           inputField.setAttribute("placeholder", "Type Your Header");
-          section.appendChild(inputField);
-          inputField.style.width = '100%'
-          inputField.style.height = '100%'
-          inputField.style.border = "2px dotted #aaa";
-          inputField.style.borderRadius = "20px";
-          inputField.style.textAlign = 'center'
+          headerSection.appendChild(inputField);
           n += 1;
         }
       }
-      function stopEdit() {
-        let inputField = document.getElementsByClassName('inputField')[0]
-        inputField.style.border = "0px";
-        inputField.style.borderRadius = "0px";
+      let i = 0
+      let footerSection = document.getElementsByClassName("textInput")[1];
+      console.log(footerSection);
+      footerSection.addEventListener("mousedown", initEditFooter, false);
+      function initEditFooter() {
+        if (i < 1) {
+          footerSection.removeChild(footerSection.firstChild);
+          let inputField = document.createElement("TEXTAREA");
+          inputField.className = "inputField";
+          inputField.setAttribute("type", "text");
+          inputField.setAttribute("placeholder", "Type Your Header");
+          footerSection.appendChild(inputField);
+          i += 1;
+        }
       }
     },
   },
@@ -884,5 +887,12 @@ table th {
 }
 .fas:hover {
   cursor: pointer;
+}
+.inputField {
+  width: 60%;
+  height: 100%;
+  border: 2px #aaa dotted;
+  border-radius: 20px;
+  text-align: center;
 }
 </style>
