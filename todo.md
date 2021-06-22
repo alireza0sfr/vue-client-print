@@ -51,3 +51,34 @@ print component:
     -slots
     -data array
     -test
+
+    textInputHeader() {
+      // Making the text area at click
+      let n = 0;
+      let headerSection = document.getElementsByClassName("textInput")[0];
+      headerSection.addEventListener("mousedown", initEditHeader, false);
+
+      function initEditHeader() {
+        if (n < 1) {
+          headerSection.removeChild(headerSection.firstChild);
+          let inputField = document.createElement("TEXTAREA");
+          inputField.className = "inputField";
+          inputField.setAttribute("type", "text");
+          inputField.setAttribute("placeholder", "Type Your Header");
+          headerSection.appendChild(inputField);
+          headerSection.addEventListener("mouseenter", hoverEditHeader, false);
+          n += 1;
+        }
+      }
+      function hoverEditHeader() {
+        console.log('hover');
+        let textInput = document.getElementsByClassName("inputField");
+        textInput.className = "inputFieldOn";
+        headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
+      }
+      function HoverEditHeaderOff() {
+        console.log('hoveroff');
+        let textInput = document.getElementsByClassName("inputField");
+        textInput.className = "inputFieldOff";
+      }
+    

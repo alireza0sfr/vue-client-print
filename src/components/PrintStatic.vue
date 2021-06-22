@@ -488,7 +488,8 @@ export default {
       setTimeout(() => {
         this.headerBorderDragFunc();
         this.footerBorderDragFunc();
-        this.textInput();
+        this.textInputHeader();
+        this.textInputFooter();
       }, 100);
     },
 
@@ -700,35 +701,64 @@ export default {
      * Editing the text in paper clone
      */
 
-    textInput() {
+    textInputHeader() {
+      // Making the text area at click
       let n = 0;
       let headerSection = document.getElementsByClassName("textInput")[0];
       headerSection.addEventListener("mousedown", initEditHeader, false);
+
       function initEditHeader() {
         if (n < 1) {
           headerSection.removeChild(headerSection.firstChild);
           let inputField = document.createElement("TEXTAREA");
-          inputField.className = "inputField";
+          inputField.id = "inputField";
           inputField.setAttribute("type", "text");
           inputField.setAttribute("placeholder", "Type Your Header");
           headerSection.appendChild(inputField);
+          headerSection.addEventListener("mouseenter", hoverEditHeader, false);
           n += 1;
         }
+
+        // active border on hover
       }
-      let i = 0
+      function hoverEditHeader() {
+        console.log("hover");
+        let textInput = document.getElementById("inputField");
+        textInput.className = "inputFieldOn";
+        headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
+      }
+      function HoverEditHeaderOff() {
+        console.log("hoveroff");
+        let textInput = document.getElementById("inputField");
+        textInput.className = "inputFieldOff";
+      }
+    },
+    textInputFooter() {
+      // Making the text area at click
+      let i = 0;
       let footerSection = document.getElementsByClassName("textInput")[1];
-      console.log(footerSection);
       footerSection.addEventListener("mousedown", initEditFooter, false);
       function initEditFooter() {
         if (i < 1) {
           footerSection.removeChild(footerSection.firstChild);
           let inputField = document.createElement("TEXTAREA");
-          inputField.className = "inputField";
+          inputField.id = "inputFieldFooter";
           inputField.setAttribute("type", "text");
           inputField.setAttribute("placeholder", "Type Your Header");
           footerSection.appendChild(inputField);
+          footerSection.addEventListener("mouseenter", hoverEditFooter, false);
           i += 1;
         }
+      }
+      function hoverEditFooter() {
+        console.log("hover");
+        let textInput = document.getElementById("inputFieldFooter");
+        textInput.className = "inputFieldOn";
+        footerSection.addEventListener("mouseleave", HoverEditFooterOff, false);
+      }
+      function HoverEditFooterOff() {
+        let textInput = document.getElementById("inputFieldFooter");
+        textInput.className = "inputFieldOff";
       }
     },
   },
@@ -888,11 +918,16 @@ table th {
 .fas:hover {
   cursor: pointer;
 }
-.inputField {
-  width: 60%;
+.inputFieldOff {
   height: 100%;
-  border: 2px #aaa dotted;
-  border-radius: 20px;
   text-align: center;
+  width: 60%;
+  border-radius: 0px;
+  border: 0px;
+}
+.inputFieldOn {
+  height: 100%;
+  text-align: center;
+  width: 60%;
 }
 </style>
