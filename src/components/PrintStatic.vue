@@ -125,7 +125,7 @@
               id="headerSection2"
               class="resizableHeader"
             >
-              <p>Lorem ipsum dolor sit amet.</p>
+              <p class="textInput">Lorem ipsum dolor sit amet.</p>
             </div>
             <div id="bodySection2">
               <p>Lorem ipsum dolor sit amet.</p>
@@ -321,7 +321,6 @@ export default {
   mounted() {
     console.log("=======Nikan is Live=======");
     this.modalFinalFunc();
-    this.export2Json();
   },
   methods: {
     printForm() {
@@ -410,6 +409,7 @@ export default {
           R2L: this.settings.R2L,
         },
       };
+      console.log("json:", tmp);
       return tmp;
     },
 
@@ -488,6 +488,7 @@ export default {
       setTimeout(() => {
         this.headerBorderDragFunc();
         this.footerBorderDragFunc();
+        this.textInput();
       }, 100);
     },
 
@@ -684,11 +685,49 @@ export default {
         );
       }
     },
+
+    /**
+     *  Triggering edit
+     */
+
     edit() {
-      let modal = document.getElementById("myModal-final")
-      modal.style.display = 'none';
-      this.locals.settingsModalShow = !this.locals.settingsModalShow
-    }
+      let modal = document.getElementById("myModal-final");
+      modal.style.display = "none";
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+    },
+
+    /**
+     * Editing the text in paper clone
+     */
+
+    textInput() {
+      let n = 0;
+      let section = document.getElementsByClassName("textInput")[0];
+      section.addEventListener("mousedown", initEdit, false);
+      document.documentElement.addEventListener("keyup", stopEdit, false);
+
+      function initEdit() {
+        if (n < 1) {
+          section.removeChild(section.firstChild);
+          let inputField = document.createElement("TEXTAREA");
+          inputField.className = 'inputField'
+          inputField.setAttribute("type", "text");
+          inputField.setAttribute("placeholder", "Type Your Header");
+          section.appendChild(inputField);
+          inputField.style.width = '100%'
+          inputField.style.height = '100%'
+          inputField.style.border = "2px dotted #aaa";
+          inputField.style.borderRadius = "20px";
+          inputField.style.textAlign = 'center'
+          n += 1;
+        }
+      }
+      function stopEdit() {
+        let inputField = document.getElementsByClassName('inputField')[0]
+        inputField.style.border = "0px";
+        inputField.style.borderRadius = "0px";
+      }
+    },
   },
 };
 </script>

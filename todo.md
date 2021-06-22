@@ -32,8 +32,14 @@ print component:
     -Done contol div height with mouse
     -Done element size won't change if 2 divs hit
     -Done fix line-height of the footer
+    -Done Add position relative
     
-    -Add position relative
+
+    -ability to write in text inputs
+    -add drag ability to text inputs
+
+
+
     -page 1 footer size
     -other pages footer size
     -page 1 header size

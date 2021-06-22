@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <div>
-      <h1>Hello</h1>
     </div>
     <PrintStatic />
   </div>
