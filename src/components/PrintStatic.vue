@@ -125,17 +125,17 @@
               id="headerSection2"
               class="resizableHeader"
             >
-              <p class="textInput">Header</p>
+              <div class="textInput">Header</div>
             </div>
             <div id="bodySection2">
-              <p>Body</p>
+              <div>Body</div>
             </div>
             <div
               :style="{'height': locals.pageFooterSize + 'in'}"
               id="footerSection2"
               class="resizableFooter"
             >
-              <p class="textInput">Footer</p>
+              <div class="textInput">Footer</div>
             </div>
           </div>
         </div>
@@ -705,31 +705,53 @@ export default {
       // Making the text area at click
       let n = 0;
       let headerSection = document.getElementsByClassName("textInput")[0];
-      headerSection.addEventListener("mousedown", initEditHeader, false);
+      var resizer = document.createElement("div");
+      resizer.className = "resizerTextInput resizerHeader";
+      resizer.style.height = "10px";
+      headerSection.appendChild(resizer);
+      resizer.addEventListener("mousedown", initDrag, false);
 
-      function initEditHeader() {
-        if (n < 1) {
-          headerSection.removeChild(headerSection.firstChild);
-          let inputField = document.createElement("TEXTAREA");
-          inputField.id = "inputField";
-          inputField.setAttribute("type", "text");
-          inputField.setAttribute("placeholder", "Type Your Header");
-          headerSection.appendChild(inputField);
-          headerSection.addEventListener("mouseenter", hoverEditHeader, false);
-          n += 1;
-        }
+      var startX, startY, startWidth, startHeight;
 
-        // active border on hover
+      function initDrag(e) {
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = parseInt(
+          document.defaultView.getComputedStyle(headerSection).width,
+          10
+        );
+        startHeight = parseInt(
+          document.defaultView.getComputedStyle(headerSection).height,
+          10
+        );
+        document.documentElement.addEventListener("mousemove", doDrag, false);
+        document.documentElement.addEventListener("mouseup", stopDrag, false);
+      }
+
+      function doDrag(e) {
+        headerSection.style.width = startWidth - e.clientX + startX + "px";
+        headerSection.style.height = startHeight + e.clientY - startY + "px";
+      }
+
+      function stopDrag(e) {
+        document.documentElement.removeEventListener(
+          "mousemove",
+          doDrag,
+          false
+        );
+        document.documentElement.removeEventListener(
+          "mouseup",
+          stopDrag,
+          false
+        );
       }
       function hoverEditHeader() {
-        console.log("hover");
-        let textInput = document.getElementById("inputField");
+        let textInput = document.getElementById("inputFieldHeader");
         textInput.className = "inputFieldOn";
         headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
       }
       function HoverEditHeaderOff() {
-        console.log("hoveroff");
-        let textInput = document.getElementById("inputField");
+        let textInput = document.getElementById("inputFieldHeader");
         textInput.className = "inputFieldOff";
       }
     },
@@ -929,5 +951,22 @@ table th {
   height: 100%;
   text-align: center;
   width: 60%;
+}
+.textInput {
+  border: 1px black dotted;
+  border-radius: 20px;
+  position: relative;
+}
+.resizerTextInput {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.resizerTextInput:hover {
+  cursor: move;
+}
+.resizerTextInput:active {
+  cursor: move;
 }
 </style>
