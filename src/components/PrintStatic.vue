@@ -8,8 +8,8 @@
   <!-- Main Wrapper and Sections-->
 
   <div class="wrapper">
-    <!-- Section 1 (Slidebar) -->
-    <div v-if="locals.settingsModalShow" class="section1 container-fluid">
+    <!-- Section 1 (Template Builder) -->
+    <div v-if="locals.settingsModalShow" class="template-builder container-fluid">
       <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
           <div
@@ -112,30 +112,30 @@
           </div>
         </div>
 
-        <!-- Section 2 (Paper clone)-->
+        <!-- Section 2 (Template)-->
 
         <div>
           <div
             v-if="locals.settingsModalShow"
             :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
-            class="section2"
+            class="template"
           >
             <div
               :style="{'height': locals.pageHeaderSize + 'in'}"
-              id="headerSection2"
-              class="resizableHeader"
+              id="headertemplate"
+              class="section header"
             >
-              <div class="textInput">Header</div>
+              <div class="element">Header</div>
             </div>
-            <div id="bodySection2">
+            <div id="bodytemplate">
               <div>Body</div>
             </div>
             <div
               :style="{'height': locals.pageFooterSize + 'in'}"
-              id="footerSection2"
-              class="resizableFooter"
+              id="footertemplate"
+              class="section footer"
             >
-              <div class="textInput">Footer</div>
+              <div class="element">Footer</div>
             </div>
           </div>
         </div>
@@ -439,7 +439,7 @@ export default {
       const errorValue = 0.2;
 
       // Calculating the footer size in inches
-      let footerPage = document.getElementById("footerSection2");
+      let footerPage = document.getElementById("footertemplate");
       let pageFooterSize = this.convert2Inches(
         parseInt(footerPage.offsetHeight)
       );
@@ -447,7 +447,7 @@ export default {
       console.log("pageFooterSize: ", pageFooterSize);
 
       // Calculating the header size in inches
-      let headerPage = document.getElementById("headerSection2");
+      let headerPage = document.getElementById("headertemplate");
       let pageHeaderSize = this.convert2Inches(headerPage.offsetHeight);
       this.locals.pageFooterSize = pageFooterSize;
       console.log("pageheadersize: ", pageHeaderSize);
@@ -488,8 +488,8 @@ export default {
       setTimeout(() => {
         this.headerBorderDragFunc();
         this.footerBorderDragFunc();
-        this.textInputHeader();
-        this.textInputFooter();
+        this.elementHeader();
+        this.elementFooter();
       }, 100);
     },
 
@@ -606,10 +606,10 @@ export default {
      */
 
     headerBorderDragFunc() {
-      var headerSection = document.getElementsByClassName("resizableHeader")[0]; // element to make resizable
-
+      var headerSection = document.getElementsByClassName("section header")[0]; // element to make resizable
+    
       var resizer = document.createElement("div");
-      resizer.className = "resizerHeader resizer";
+      resizer.className = "resizer";
       resizer.style.height = "10px";
       headerSection.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
@@ -627,6 +627,7 @@ export default {
       }
 
       function doDrag(e) {
+        console.log('asdas');
         headerSection.style.height = startHeight + e.clientY - startY + "px";
       }
 
@@ -649,10 +650,10 @@ export default {
      */
 
     footerBorderDragFunc() {
-      var footerSection = document.getElementsByClassName("resizableFooter")[0]; // element to make resizable
+      var footerSection = document.getElementsByClassName("section footer")[0]; // element to make resizable
 
       var resizer = document.createElement("div");
-      resizer.className = "resizerFooter resizer";
+      resizer.className = "resizer";
       resizer.style.height = "10px";
       footerSection.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
@@ -701,13 +702,12 @@ export default {
      * Editing the text in paper clone
      */
 
-    textInputHeader() {
-      // Making the text area at click
+    elementHeader() {
+      // Making the div resizeable
       let n = 0;
-      let headerSection = document.getElementsByClassName("textInput")[0];
+      let headerSection = document.getElementsByClassName("element")[0];
       var resizer = document.createElement("div");
-      resizer.className = "resizerTextInput resizerHeader";
-      resizer.style.height = "10px";
+      resizer.className = "resizer";
       headerSection.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
 
@@ -729,7 +729,7 @@ export default {
       }
 
       function doDrag(e) {
-        headerSection.style.width = startWidth - e.clientX + startX + "px";
+        headerSection.style.width = startWidth + e.clientX - startX + "px";
         headerSection.style.height = startHeight + e.clientY - startY + "px";
       }
 
@@ -745,43 +745,69 @@ export default {
           false
         );
       }
-      function hoverEditHeader() {
-        let textInput = document.getElementById("inputFieldHeader");
-        textInput.className = "inputFieldOn";
-        headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
-      }
-      function HoverEditHeaderOff() {
-        let textInput = document.getElementById("inputFieldHeader");
-        textInput.className = "inputFieldOff";
-      }
+      // function hoverEditHeader() {
+      //   let textInput = document.getElementById("inputFieldHeader");
+      //   textInput.className = "inputFieldOn";
+      //   headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
+      // }
+      // function HoverEditHeaderOff() {
+      //   let textInput = document.getElementById("inputFieldHeader");
+      //   textInput.className = "inputFieldOff";
+      // }
     },
-    textInputFooter() {
-      // Making the text area at click
-      let i = 0;
-      let footerSection = document.getElementsByClassName("textInput")[1];
-      footerSection.addEventListener("mousedown", initEditFooter, false);
-      function initEditFooter() {
-        if (i < 1) {
-          footerSection.removeChild(footerSection.firstChild);
-          let inputField = document.createElement("TEXTAREA");
-          inputField.id = "inputFieldFooter";
-          inputField.setAttribute("type", "text");
-          inputField.setAttribute("placeholder", "Type Your Header");
-          footerSection.appendChild(inputField);
-          footerSection.addEventListener("mouseenter", hoverEditFooter, false);
-          i += 1;
-        }
+    elementFooter() {
+      // Making the the div resizeable
+      let n = 0;
+      let footerSection = document.getElementsByClassName("element")[1];
+      var resizer = document.createElement("div");
+      resizer.className = "resizer";
+      footerSection.appendChild(resizer);
+      resizer.addEventListener("mousedown", initDrag, false);
+
+      var startX, startY, startWidth, startHeight;
+
+      function initDrag(e) {
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = parseInt(
+          document.defaultView.getComputedStyle(footerSection).width,
+          10
+        );
+        startHeight = parseInt(
+          document.defaultView.getComputedStyle(footerSection).height,
+          10
+        );
+        document.documentElement.addEventListener("mousemove", doDrag, false);
+        document.documentElement.addEventListener("mouseup", stopDrag, false);
       }
-      function hoverEditFooter() {
-        console.log("hover");
-        let textInput = document.getElementById("inputFieldFooter");
-        textInput.className = "inputFieldOn";
-        footerSection.addEventListener("mouseleave", HoverEditFooterOff, false);
+
+      function doDrag(e) {
+        footerSection.style.width = startWidth + e.clientX - startX + "px";
+        footerSection.style.height = startHeight + e.clientY - startY + "px";
       }
-      function HoverEditFooterOff() {
-        let textInput = document.getElementById("inputFieldFooter");
-        textInput.className = "inputFieldOff";
+
+      function stopDrag(e) {
+        document.documentElement.removeEventListener(
+          "mousemove",
+          doDrag,
+          false
+        );
+        document.documentElement.removeEventListener(
+          "mouseup",
+          stopDrag,
+          false
+        );
       }
+      // function hoverEditFooter() {
+      //   console.log("hover");
+      //   let textInput = document.getElementById("inputFieldFooter");
+      //   textInput.className = "inputFieldOn";
+      //   footerSection.addEventListener("mouseleave", HoverEditFooterOff, false);
+      // }
+      // function HoverEditFooterOff() {
+      //   let textInput = document.getElementById("inputFieldFooter");
+      //   textInput.className = "inputFieldOff";
+      // }
     },
   },
 };
@@ -889,84 +915,73 @@ table th {
 #page {
   width: max-content;
 }
-.section2 {
+.template {
   overflow: hidden;
   border: 1px black ridge;
   display: flex;
   flex-direction: column;
 }
 
-#bodySection2 {
+#bodytemplate {
   flex-grow: 2;
 }
-.resizableHeader {
-  border-bottom: 1px #aaa ridge;
+.section {
   position: relative;
   touch-action: none;
   user-select: none;
   /* This makes things *much* easier */
   box-sizing: border-box;
+  direction: ltr;
 }
-.resizableFooter {
-  border-top: 1px ridge #aaa;
-  position: relative;
-  color: black;
-  touch-action: none;
-  user-select: none;
-  /* This makes things *much* easier */
-  box-sizing: border-box;
+.section .resizer {
+  position: absolute;
+  right: 0;
+  left: 0;
 }
-.resizer:hover {
-  cursor: n-resize;
+.section .resizer:hover, .section .resizer:active {
+  cursor: n-resize;  
 }
-.resizer:active {
-  cursor: n-resize;
+.section.header .resizer {
+  bottom: 0;
 }
-.section1 {
-  border: 1px black ridge;
+.section.footer .resizer {
+  top: 0;
 }
-.resizerHeader {
+.section.header{
+  border-bottom: 1px #aaa solid;
+}
+.section.footer{
+  border-top: 1px #aaa solid;
+}
+.element .resizer {
+  border-top: none!important;
   position: absolute;
   bottom: 0;
-  right: 0;
-  left: 0;
+  top: auto!important;
+  right: -3px;
+  left: auto;
+  width: 16px;
+  height: 16px;
+  background-size: cover;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAxBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjA0MDgxNTZEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjA0MDgxNTVEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9IjFEMTE1RDY1RUU3RTA0MDA4QTM0QThEMTBFQjcxQjVDIiBzdFJlZjpkb2N1bWVudElEPSIxRDExNUQ2NUVFN0UwNDAwOEEzNEE4RDEwRUI3MUI1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pi4XKu0AAACWUExURVhYWI2NjZubm46Ojvv7+wQEBPz8/E5OTk1NTQMDA1lZWQEBAVdXV4yMjO3t7cTExBcXF7q6uoKCgpKSkv7+/tPT0/b29p+fn11dXYuLi1JSUsPDw35+flxcXBMTE0dHR4CAgOjo6Ofn58XFxVtbW+Li4p6enmVlZeHh4SUlJezs7CQkJAgICAICAv39/f///wAAAP///+M2NPIAAAAydFJOU/////////////////////////////////////////////////////////////////8ADVCY7wAAANlJREFUeNps0ucSgkAMBODYUFGsYO+94S3v/3KGwB3gHT8cZr7JZidCifNRk2tCbpnieXKSqqGLC7klxtYjp7RAX8cu1eA0FptYYvgsFpkZi/Qem4o09UciMuOthhUq0pptYEx/DfxceliSK63DbzdFlbS+zHQA1JXZJRftm7R60VAuWqSlkpPMUDlNU2lP24iQK20mNSqtswbJYBdweZbSDTJ5jYAD8RcSl26QzbDgTBudFu7Nng9LlNDjjYX8P2oNzKVbGKAVpQ2Pdy+/yDhQ+gMd8u9PgAEARXlsB1h8RU4AAAAASUVORK5CYII=)
 }
-.resizerFooter {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
+
+.element .resizer:hover, .element .resizer:active {
+  cursor: nwse-resize;
 }
+
+.template-builder {
+  border: 1px #aaa ridge;
+}
+
 .fas:hover {
   cursor: pointer;
 }
-.inputFieldOff {
-  height: 100%;
-  text-align: center;
-  width: 60%;
-  border-radius: 0px;
-  border: 0px;
-}
-.inputFieldOn {
-  height: 100%;
-  text-align: center;
-  width: 60%;
-}
-.textInput {
-  border: 1px black dotted;
-  border-radius: 20px;
-  position: relative;
-}
-.resizerTextInput {
+
+.element {
+  border: 1px #aaa dashed;
+  border-radius: 4px;
   position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
-.resizerTextInput:hover {
-  cursor: move;
-}
-.resizerTextInput:active {
-  cursor: move;
+  width: 60%;
 }
 </style>
