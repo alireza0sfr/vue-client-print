@@ -38,6 +38,11 @@ print component:
     
     -dragging and resizeing at the same time
 
+
+    -save settings data to json and import from it 
+
+
+
     -page 1 footer size
     -other pages footer size
     -page 1 header size

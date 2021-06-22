@@ -439,7 +439,7 @@ export default {
       const errorValue = 0.2;
 
       // Calculating the footer size in inches
-      let footerPage = document.getElementById("footertemplate");
+      let footerPage = document.getElementsByClassName("section")[1];
       let pageFooterSize = this.convert2Inches(
         parseInt(footerPage.offsetHeight)
       );
@@ -447,10 +447,10 @@ export default {
       console.log("pageFooterSize: ", pageFooterSize);
 
       // Calculating the header size in inches
-      let headerPage = document.getElementById("headertemplate");
+      let headerPage = document.getElementsByClassName("section")[0];
       let pageHeaderSize = this.convert2Inches(headerPage.offsetHeight);
-      this.locals.pageFooterSize = pageFooterSize;
-      console.log("pageheadersize: ", pageHeaderSize);
+      this.locals.pageHeaderSize = pageHeaderSize;
+      console.log("pageHeadersize: ", pageHeaderSize);
 
       // Gettings the default sizes from the base dic
       this.locals.defaultHeightOfPaper =
