@@ -33,12 +33,10 @@ print component:
     -Done element size won't change if 2 divs hit
     -Done fix line-height of the footer
     -Done Add position relative
+    -Done ability to write in text inputs
+    -Done add drag ability to text inputs
     
-
-    -ability to write in text inputs
-    -add drag ability to text inputs
-
-
+    -dragging and resizeing at the same time
 
     -page 1 footer size
     -other pages footer size
@@ -51,34 +49,3 @@ print component:
     -slots
     -data array
     -test
-
-    textInputHeader() {
-      // Making the text area at click
-      let n = 0;
-      let headerSection = document.getElementsByClassName("textInput")[0];
-      headerSection.addEventListener("mousedown", initEditHeader, false);
-
-      function initEditHeader() {
-        if (n < 1) {
-          headerSection.removeChild(headerSection.firstChild);
-          let inputField = document.createElement("TEXTAREA");
-          inputField.className = "inputField";
-          inputField.setAttribute("type", "text");
-          inputField.setAttribute("placeholder", "Type Your Header");
-          headerSection.appendChild(inputField);
-          headerSection.addEventListener("mouseenter", hoverEditHeader, false);
-          n += 1;
-        }
-      }
-      function hoverEditHeader() {
-        console.log('hover');
-        let textInput = document.getElementsByClassName("inputField");
-        textInput.className = "inputFieldOn";
-        headerSection.addEventListener("mouseleave", HoverEditHeaderOff, false);
-      }
-      function HoverEditHeaderOff() {
-        console.log('hoveroff');
-        let textInput = document.getElementsByClassName("inputField");
-        textInput.className = "inputFieldOff";
-      }
-    

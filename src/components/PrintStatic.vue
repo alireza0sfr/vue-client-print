@@ -602,7 +602,7 @@ export default {
     },
 
     /**
-     * Adjust the borders height by dragging
+     * Adjust the section's height by dragging
      */
 
     headerBorderDragFunc() {
@@ -645,7 +645,7 @@ export default {
     },
 
     /**
-     * Adjust the borders height by dragging
+     * Adjust the section's height by dragging
      */
 
     footerBorderDragFunc() {
@@ -703,13 +703,13 @@ export default {
 
     elementHeader() {
       // Making the div resizeable
-      let n = 0;
       let element = document.getElementsByClassName("element")[0];
       var resizer = document.createElement("div");
       resizer.className = "resizer";
       element.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
-      element.addEventListener("mousedown", atClick, false);
+      element.addEventListener("click", atClick, false);
+      element.addEventListener("mousedown", dragElement, false);
 
       var startX, startY, startWidth, startHeight;
 
@@ -746,15 +746,57 @@ export default {
         );
       }
 
-      // borders and resizer on selected
+      // borders and resizer preview on selected
       function atClick() {
         let element = document.getElementsByClassName("element")[0];
         element.className = "element selected";
       }
+
+      // Making elements draggable
+
+      function dragElement() {
+        let elmnt = document.getElementsByClassName("element")[0];
+        var pos1 = 0,
+          pos2 = 0,
+          pos3 = 0,
+          pos4 = 0;
+
+        // move the DIV from anywhere inside the DIV:
+          elmnt.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // get the mouse cursor position at startup:
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          // call a function whenever the cursor moves:
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+          elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+        }
+
+        function closeDragElement() {
+          // stop moving when mouse button is released:
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
+      }
     },
     elementFooter() {
       // Making the the div resizeable
-      let n = 0;
       let element = document.getElementsByClassName("element")[1];
       var resizer = document.createElement("div");
       resizer.className = "resizer";
@@ -796,10 +838,53 @@ export default {
           false
         );
       }
-      // borders and resizer on selected
+      // borders and resizer preview on selected
       function atClick() {
         let element = document.getElementsByClassName("element")[1];
         element.className = "element selected";
+      }
+      // Making elements draggable
+      dragElement(document.getElementsByClassName("element")[1]);
+
+      function dragElement() {
+        let elmnt = document.getElementsByClassName('element')[1];
+        var pos1 = 0,
+          pos2 = 0,
+          pos3 = 0,
+          pos4 = 0;
+
+        // move the DIV from anywhere inside the DIV:
+        elmnt.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // get the mouse cursor position at startup:
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          // call a function whenever the cursor moves:
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+          elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+        }
+
+        function closeDragElement() {
+          // stop moving when mouse button is released:
+          document.onmouseup = null;
+          document.onmousemove = null;
+        }
       }
     },
   },
@@ -987,5 +1072,9 @@ table th {
   width: 100%;
   border: 1px #aaa dashed;
   border-radius: 4px;
+  cursor: move;
+}
+.element:active {
+  cursor: grabbing;
 }
 </style>
