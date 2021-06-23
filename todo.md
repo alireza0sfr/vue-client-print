@@ -38,7 +38,7 @@ print component:
     
     -dragging and resizeing at the same time
 
-
+    -add custom header styles and save data to i
     -save settings data to json and import from it 
 
 
@@ -54,3 +54,6 @@ print component:
     -slots
     -data array
     -test
+
+
+    

@@ -135,6 +135,7 @@
               id="footertemplate"
               class="section footer"
             >
+            <component :is="'textelement'" />
               <div class="element">Footer</div>
             </div>
           </div>
@@ -234,12 +235,16 @@
 </template>
 
 <script>
+import TextElement from './elements/TextElement.vue'
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 export default {
   name: "PrintStatic",
   props: {
     options: Object,
+  },
+  components: {
+    'textelement': TextElement
   },
   data() {
     return {
@@ -315,7 +320,7 @@ export default {
   },
   watch: {
     options: function (val) {
-      this.settings = val;
+      Object.assign(this.settings, val);
     },
   },
   mounted() {
@@ -714,18 +719,20 @@ export default {
       var startX, startY, startWidth, startHeight;
 
       function initDrag(e) {
-        startX = e.clientX;
-        startY = e.clientY;
-        startWidth = parseInt(
-          document.defaultView.getComputedStyle(element).width,
-          10
-        );
-        startHeight = parseInt(
-          document.defaultView.getComputedStyle(element).height,
-          10
-        );
-        document.documentElement.addEventListener("mousemove", doDrag, false);
-        document.documentElement.addEventListener("mouseup", stopDrag, false);
+        if (e.target.className === "resizer") {
+          startX = e.clientX;
+          startY = e.clientY;
+          startWidth = parseInt(
+            document.defaultView.getComputedStyle(element).width,
+            10
+          );
+          startHeight = parseInt(
+            document.defaultView.getComputedStyle(element).height,
+            10
+          );
+          document.documentElement.addEventListener("mousemove", doDrag, false);
+          document.documentElement.addEventListener("mouseup", stopDrag, false);
+        }
       }
 
       function doDrag(e) {
@@ -748,6 +755,11 @@ export default {
 
       // borders and resizer preview on selected
       function atClick() {
+        let selectedElements = document.getElementsByClassName("element selected");
+        console.log(selectedElements);
+        for (let index = 0; index < selectedElements.length; index++) {
+          selectedElements[index].className = "element";
+        }
         let element = document.getElementsByClassName("element")[0];
         element.className = "element selected";
       }
@@ -762,36 +774,38 @@ export default {
           pos4 = 0;
 
         // move the DIV from anywhere inside the DIV:
-          elmnt.onmousedown = dragMouseDown;
+        elmnt.onmousedown = dragMouseDown;
 
         function dragMouseDown(e) {
-          e = e || window.event;
-          e.preventDefault();
-          // get the mouse cursor position at startup:
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          document.onmouseup = closeDragElement;
-          // call a function whenever the cursor moves:
-          document.onmousemove = elementDrag;
-        }
+          if (e.target.className === "element" || e.target.className === 'element selected') {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+          }
 
-        function elementDrag(e) {
-          e = e || window.event;
-          e.preventDefault();
-          // calculate the new cursor position:
-          pos1 = pos3 - e.clientX;
-          pos2 = pos4 - e.clientY;
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          // set the element's new position:
-          elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-          elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-        }
+          function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+            elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+          }
 
-        function closeDragElement() {
-          // stop moving when mouse button is released:
-          document.onmouseup = null;
-          document.onmousemove = null;
+          function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+          }
         }
       }
     },
@@ -803,24 +817,26 @@ export default {
       element.appendChild(resizer);
       resizer.addEventListener("mousedown", initDrag, false);
       element.addEventListener("mousedown", atClick, false);
+      element.addEventListener("mousedown", dragElement, false);
 
       var startX, startY, startWidth, startHeight;
 
       function initDrag(e) {
-        startX = e.clientX;
-        startY = e.clientY;
-        startWidth = parseInt(
-          document.defaultView.getComputedStyle(element).width,
-          10
-        );
-        startHeight = parseInt(
-          document.defaultView.getComputedStyle(element).height,
-          10
-        );
-        document.documentElement.addEventListener("mousemove", doDrag, false);
-        document.documentElement.addEventListener("mouseup", stopDrag, false);
+        if (e.target.className === "resizer") {
+          startX = e.clientX;
+          startY = e.clientY;
+          startWidth = parseInt(
+            document.defaultView.getComputedStyle(element).width,
+            10
+          );
+          startHeight = parseInt(
+            document.defaultView.getComputedStyle(element).height,
+            10
+          );
+          document.documentElement.addEventListener("mousemove", doDrag, false);
+          document.documentElement.addEventListener("mouseup", stopDrag, false);
+        }
       }
-
       function doDrag(e) {
         element.style.width = startWidth + e.clientX - startX + "px";
         element.style.height = startHeight + e.clientY - startY + "px";
@@ -840,14 +856,16 @@ export default {
       }
       // borders and resizer preview on selected
       function atClick() {
+        let selectedElements = document.getElementsByClassName("element");
+        for (let index = 0; index < selectedElements.length; index++) {
+          selectedElements[index].className = "element";
+        }
         let element = document.getElementsByClassName("element")[1];
         element.className = "element selected";
       }
       // Making elements draggable
-      dragElement(document.getElementsByClassName("element")[1]);
-
       function dragElement() {
-        let elmnt = document.getElementsByClassName('element')[1];
+        let elmnt = document.getElementsByClassName("element")[1];
         var pos1 = 0,
           pos2 = 0,
           pos3 = 0,
@@ -857,33 +875,35 @@ export default {
         elmnt.onmousedown = dragMouseDown;
 
         function dragMouseDown(e) {
-          e = e || window.event;
-          e.preventDefault();
-          // get the mouse cursor position at startup:
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          document.onmouseup = closeDragElement;
-          // call a function whenever the cursor moves:
-          document.onmousemove = elementDrag;
-        }
+          if (e.target.className === "element" || e.target.className === 'element selected') {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+          }
 
-        function elementDrag(e) {
-          e = e || window.event;
-          e.preventDefault();
-          // calculate the new cursor position:
-          pos1 = pos3 - e.clientX;
-          pos2 = pos4 - e.clientY;
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          // set the element's new position:
-          elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-          elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-        }
+          function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+            elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+          }
 
-        function closeDragElement() {
-          // stop moving when mouse button is released:
-          document.onmouseup = null;
-          document.onmousemove = null;
+          function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+          }
         }
       }
     },
