@@ -1,9 +1,10 @@
 <template>
-  <div class="element text" :style="settings.styles">{{settings.text}}</div>
+  <div ref="element" :class="locals.classType + ' element'" :style="settings.styles">{{settings.text}}</div>
 </template>
 
 <script>
-import defaultStyles from './styles/default-styles.js'
+import defaultStyles from './js/default-styles.js'
+import elementUtilities from './js/element-utilities.js'
 export default {
   name: "TextElement",
   props: {
@@ -17,19 +18,33 @@ export default {
       },
     },
   },
+  mounted() {
+    this.Initialize(this.$refs.element, this.locals.classType)
+  },
   watch: {
     options: function (val) {
-      Object.assign(this.settings, val);
+      console.log(val);
+      this.settings = Object.assign(this.settings, val);
     },
   },
   data() {
     return {
+      locals: {
+        classType: 'text'
+      },
         settings: {
             text: "Enter Your Text",
             styles: defaultStyles
         }
     };
   },
+  methods: {
+    Initialize(element, classType) {
+      elementUtilities.resizable(element)
+      elementUtilities.dragable(element, classType)
+      elementUtilities.Click(element, classType)
+    }
+  }
 };
 </script>
 

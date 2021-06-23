@@ -125,7 +125,7 @@
               id="headertemplate"
               class="section header"
             >
-              <div class="element">Header</div>
+              <component v-for="element in settings.headerElements" :key="element" :is="element.type" :options="element.options" />
             </div>
             <div id="bodytemplate">
               <div>Body</div>
@@ -134,10 +134,7 @@
               :style="{'height': locals.pageFooterSize + 'in'}"
               id="footertemplate"
               class="section footer"
-            >
-            <component :is="'textelement'" />
-              <div class="element">Footer</div>
-            </div>
+            ></div>
           </div>
         </div>
       </div>
@@ -220,7 +217,7 @@
                   {{settings.customFooter}}
                   <br />
                   <div
-                    v-if="settings.isPageCounter == true"
+                    v-if="settings.hasPageCounter == true"
                     :style="{ 'text-align': settings.pageCounterPosition }"
                   >{{ index }}</div>
                 </footer>
@@ -235,7 +232,8 @@
 </template>
 
 <script>
-import TextElement from './elements/TextElement.vue'
+import TextElement from "./elements/TextElement.vue";
+import DateTime from "./elements/DateTime.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 export default {
@@ -244,21 +242,11 @@ export default {
     options: Object,
   },
   components: {
-    'textelement': TextElement
+    textelement: TextElement,
+    datetime: DateTime,
   },
   data() {
     return {
-      dateToday: new Date()
-        .toLocaleDateString("fa-IR")
-        .replace(/([۰-۹])/g, (token) =>
-          String.fromCharCode(token.charCodeAt(0) - 1728)
-        ),
-      timeToday:
-        new Date().getHours() +
-        ":" +
-        new Date().getMinutes() +
-        ":" +
-        new Date().getSeconds(),
       locals: {
         pageSizeDictionary: {
           landscape: {
@@ -300,7 +288,7 @@ export default {
         pageFooterSize: 0.6,
       },
       settings: {
-        isPageCounter: true,
+        hasPageCounter: true,
         fileName: "nikan.pdf",
         pageCounterPosition: "center",
         hasHeader: true,
@@ -315,6 +303,34 @@ export default {
         logoURL: "",
         R2L: "rtl",
         margin: 0,
+        headerElements: [
+          {
+            type: "textelement",
+            options: {
+              text: "Header Default Text 1",
+              styles: {
+                left: "0",
+              },
+            },
+          },
+          {
+            type: "textelement",
+            options: {
+              text: "Header Default Text 2",
+              styles: {
+                left: "150px",
+              },
+            },
+          },
+          {
+            type: "datetime",
+            options: {
+              styles: {
+                left: "300px",
+              },
+            },
+          },
+        ],
       },
     };
   },
@@ -400,7 +416,7 @@ export default {
         },
         footer: {
           customFooter: this.settings.customFooter,
-          isPageCounter: this.settings.isPageCounter,
+          hasPageCounter: this.settings.hasPageCounter,
           pageCounterPosition: this.settings.pageCounterPosition,
           isFooterRepeatable: this.settings.isFooterRepeatable,
           height: this.locals.pageFooterSize,
@@ -493,8 +509,6 @@ export default {
       setTimeout(() => {
         this.headerBorderDragFunc();
         this.footerBorderDragFunc();
-        this.elementHeader();
-        this.elementFooter();
       }, 100);
     },
 
@@ -700,212 +714,6 @@ export default {
       let modal = document.getElementById("myModal-final");
       modal.style.display = "none";
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
-    },
-
-    /**
-     * Editing the text in paper clone
-     */
-
-    elementHeader() {
-      // Making the div resizeable
-      let element = document.getElementsByClassName("element")[0];
-      var resizer = document.createElement("div");
-      resizer.className = "resizer";
-      element.appendChild(resizer);
-      resizer.addEventListener("mousedown", initDrag, false);
-      element.addEventListener("click", atClick, false);
-      element.addEventListener("mousedown", dragElement, false);
-
-      var startX, startY, startWidth, startHeight;
-
-      function initDrag(e) {
-        if (e.target.className === "resizer") {
-          startX = e.clientX;
-          startY = e.clientY;
-          startWidth = parseInt(
-            document.defaultView.getComputedStyle(element).width,
-            10
-          );
-          startHeight = parseInt(
-            document.defaultView.getComputedStyle(element).height,
-            10
-          );
-          document.documentElement.addEventListener("mousemove", doDrag, false);
-          document.documentElement.addEventListener("mouseup", stopDrag, false);
-        }
-      }
-
-      function doDrag(e) {
-        element.style.width = startWidth + e.clientX - startX + "px";
-        element.style.height = startHeight + e.clientY - startY + "px";
-      }
-
-      function stopDrag(e) {
-        document.documentElement.removeEventListener(
-          "mousemove",
-          doDrag,
-          false
-        );
-        document.documentElement.removeEventListener(
-          "mouseup",
-          stopDrag,
-          false
-        );
-      }
-
-      // borders and resizer preview on selected
-      function atClick() {
-        let selectedElements = document.getElementsByClassName("element selected");
-        console.log(selectedElements);
-        for (let index = 0; index < selectedElements.length; index++) {
-          selectedElements[index].className = "element";
-        }
-        let element = document.getElementsByClassName("element")[0];
-        element.className = "element selected";
-      }
-
-      // Making elements draggable
-
-      function dragElement() {
-        let elmnt = document.getElementsByClassName("element")[0];
-        var pos1 = 0,
-          pos2 = 0,
-          pos3 = 0,
-          pos4 = 0;
-
-        // move the DIV from anywhere inside the DIV:
-        elmnt.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-          if (e.target.className === "element" || e.target.className === 'element selected') {
-            e = e || window.event;
-            e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-          }
-
-          function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // set the element's new position:
-            elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-            elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-          }
-
-          function closeDragElement() {
-            // stop moving when mouse button is released:
-            document.onmouseup = null;
-            document.onmousemove = null;
-          }
-        }
-      }
-    },
-    elementFooter() {
-      // Making the the div resizeable
-      let element = document.getElementsByClassName("element")[1];
-      var resizer = document.createElement("div");
-      resizer.className = "resizer";
-      element.appendChild(resizer);
-      resizer.addEventListener("mousedown", initDrag, false);
-      element.addEventListener("mousedown", atClick, false);
-      element.addEventListener("mousedown", dragElement, false);
-
-      var startX, startY, startWidth, startHeight;
-
-      function initDrag(e) {
-        if (e.target.className === "resizer") {
-          startX = e.clientX;
-          startY = e.clientY;
-          startWidth = parseInt(
-            document.defaultView.getComputedStyle(element).width,
-            10
-          );
-          startHeight = parseInt(
-            document.defaultView.getComputedStyle(element).height,
-            10
-          );
-          document.documentElement.addEventListener("mousemove", doDrag, false);
-          document.documentElement.addEventListener("mouseup", stopDrag, false);
-        }
-      }
-      function doDrag(e) {
-        element.style.width = startWidth + e.clientX - startX + "px";
-        element.style.height = startHeight + e.clientY - startY + "px";
-      }
-
-      function stopDrag(e) {
-        document.documentElement.removeEventListener(
-          "mousemove",
-          doDrag,
-          false
-        );
-        document.documentElement.removeEventListener(
-          "mouseup",
-          stopDrag,
-          false
-        );
-      }
-      // borders and resizer preview on selected
-      function atClick() {
-        let selectedElements = document.getElementsByClassName("element");
-        for (let index = 0; index < selectedElements.length; index++) {
-          selectedElements[index].className = "element";
-        }
-        let element = document.getElementsByClassName("element")[1];
-        element.className = "element selected";
-      }
-      // Making elements draggable
-      function dragElement() {
-        let elmnt = document.getElementsByClassName("element")[1];
-        var pos1 = 0,
-          pos2 = 0,
-          pos3 = 0,
-          pos4 = 0;
-
-        // move the DIV from anywhere inside the DIV:
-        elmnt.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-          if (e.target.className === "element" || e.target.className === 'element selected') {
-            e = e || window.event;
-            e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-          }
-
-          function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // set the element's new position:
-            elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-            elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-          }
-
-          function closeDragElement() {
-            // stop moving when mouse button is released:
-            document.onmouseup = null;
-            document.onmousemove = null;
-          }
-        }
-      }
     },
   },
 };
