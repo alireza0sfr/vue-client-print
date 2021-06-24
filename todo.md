@@ -35,10 +35,10 @@ print component:
     -Done Add position relative
     -Done ability to write in text inputs
     -Done add drag ability to text inputs
+    -Done dragging and resizeing at the same time
     
-    -dragging and resizeing at the same time
 
-    -add custom header styles and save data to i
+    -add custom header styles and save data to it
     -save settings data to json and import from it 
 
 

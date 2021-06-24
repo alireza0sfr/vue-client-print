@@ -34,17 +34,17 @@
               <li>
                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                   <i class="fs-4 bi-speedometer2"></i>
-                  <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                  <span class="ms-1 d-none d-sm-inline">Elemenets</span>
                 </a>
                 <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                   <li class="w-100">
                     <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Item</span> 1
+                      <span @click="createElement('textelement')" class="d-none d-sm-inline">Text Box</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Item</span> 2
+                      <span @click="createElement('datetime')" class="d-none d-sm-inline">Date And Time</span>
                     </a>
                   </li>
                 </ul>
@@ -181,7 +181,7 @@
         <div class="card-header">
           <span class="close-final">&times;</span>
           <i @click="printForm()" class="fas fa-2x fa-file-pdf"></i>
-          <i @click="edit()" class="fas fa-2x fa-edit"></i>
+          <i @click="editWhileInPreview()" class="fas fa-2x fa-edit"></i>
         </div>
         <div id="printForm">
           <div
@@ -243,6 +243,7 @@ import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
+import elementUtilities from './elements/js/element-utilities';
 export default {
   name: "PrintStatic",
   props: {
@@ -501,7 +502,7 @@ export default {
       console.log("defaultHeightOfPaper: ", this.locals.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.locals.totalHeightOfAPaper);
 
-      // Closing the edit modal
+      // Closing the editWhileInPreview modal
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
 
       // Making a json out of whole avaiable data
@@ -715,10 +716,10 @@ export default {
     },
 
     /**
-     *  Triggering edit
+     *  Triggering editWhileInPreview
      */
 
-    edit() {
+    editWhileInPreview() {
       let modal = document.getElementById("myModal-final");
       modal.style.display = "none";
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
@@ -738,6 +739,12 @@ export default {
     clickedOnElement() {
       this.locals.isClicked = true;
     },
+    createElement(classType) {
+      let tmp = {
+        type: classType
+      }
+      this.settings.headerElements.push(tmp)
+    }
   },
 };
 </script>
@@ -912,7 +919,8 @@ table th {
 .element {
   text-align: center;
   position: absolute;
-  width: 100%;
+  width: 100px;
+  overflow: hidden;
 }
 .element.selected {
   width: 100%;

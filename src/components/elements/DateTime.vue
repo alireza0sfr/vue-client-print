@@ -1,5 +1,10 @@
 <template>
-  <div @click="this.$emit('clickedOnElement')" ref="element" :class="locals.classType + ' element'" :style="settings.styles">{{dateToday}} &nbsp; {{timeToday}}</div>
+  <div
+    @click="this.$emit('clickedOnElement')"
+    ref="element"
+    :class="locals.classType + ' element'"
+    :style="settings.styles"
+  >{{dateToday}} &nbsp; {{timeToday}}</div>
 </template>
 
 <script>
@@ -15,7 +20,7 @@ export default {
     },
   },
   mounted() {
-    this.Initialize(this.$refs.element, this.locals.classType)
+    this.Initialize(this.$refs.element, this.locals.classType);
   },
   watch: {
     options: function (val) {
@@ -24,26 +29,24 @@ export default {
   },
   data() {
     return {
+      dateToday: new Date()
+        .toLocaleDateString("fa-IR")
+        .replace(/([۰-۹])/g, (token) =>
+          String.fromCharCode(token.charCodeAt(0) - 1728)
+        ),
+      timeToday:
+        new Date().getHours() +
+        ":" +
+        new Date().getMinutes() +
+        ":" +
+        new Date().getSeconds(),
       locals: {
-        classType: 'datetime'
+        classType: "datetime",
       },
       settings: {
         styles: defaultStyles,
       },
     };
-  },
-  computed: {
-    dateToday: new Date()
-      .toLocaleDateString("fa-IR")
-      .replace(/([۰-۹])/g, (token) =>
-        String.fromCharCode(token.charCodeAt(0) - 1728)
-      ),
-    timeToday:
-      new Date().getHours() +
-      ":" +
-      new Date().getMinutes() +
-      ":" +
-      new Date().getSeconds(),
   },
   methods: {
     Initialize(element, classType) {
