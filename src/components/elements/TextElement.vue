@@ -9,23 +9,24 @@ export default {
   name: "TextElement",
   props: {
     options: {
-      text: {
-        default: '',
-        type: String,
-      },
-      styles: {
-        type: Array,
-      },
+      type: Object,
+      default: []
     },
   },
   mounted() {
     this.Initialize(this.$refs.element, this.locals.classType)
   },
   watch: {
-    options: function (val) {
-      console.log(val);
-      this.settings = Object.assign(this.settings, val);
-    },
+    options: {
+      immediate: true,
+      handler(val){
+        let tmp = this.options.styles
+        Object.assign(this.settings, val)
+        this.settings.styles = tmp
+        Object.assign(this.settings.styles, val.styles)
+        
+      }
+    }
   },
   data() {
     return {

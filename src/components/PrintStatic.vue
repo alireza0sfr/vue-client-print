@@ -25,86 +25,28 @@
               class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
               id="menu"
             >
-              <li class="nav-item">
-                <a href="#" class="nav-link align-middle px-0">
-                  <i class="fs-4 bi-house"></i>
-                  <span class="ms-1 d-none d-sm-inline">Home</span>
-                </a>
-              </li>
               <li>
-                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-speedometer2"></i>
-                  <span class="ms-1 d-none d-sm-inline">Elemenets</span>
-                </a>
-                <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" class="nav-link px-0">
-                      <span @click="createElement('textelement')" class="d-none d-sm-inline">Text Box</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link px-0">
-                      <span @click="createElement('datetime')" class="d-none d-sm-inline">Date And Time</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="#" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-table"></i>
-                  <span class="ms-1 d-none d-sm-inline">Orders</span>
-                </a>
-              </li>
-              <li>
-                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-bootstrap"></i>
-                  <span class="ms-1 d-none d-sm-inline">Bootstrap</span>
-                </a>
-                <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Item</span> 1
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Item</span> 2
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-grid"></i>
-                  <span class="ms-1 d-none d-sm-inline">Products</span>
-                </a>
-                <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Product</span> 1
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Product</span> 2
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Product</span> 3
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Product</span> 4
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="#" class="nav-link px-0 align-middle">
+                <a class="nav-link px-0 align-middle">
                   <i class="fs-4 bi-people"></i>
-                  <span class="ms-1 d-none d-sm-inline">Customers</span>
+                  <span @click="createElement('textelement')" class="ms-1 d-none d-sm-inline">Text Box</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span @click="createElement('datetime')" class="ms-1 d-none d-sm-inline">Date & Time</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span class="ms-1 d-none d-sm-inline">Page Counter</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span class="ms-1 d-none d-sm-inline">Logo</span>
                 </a>
               </li>
             </ul>
@@ -243,7 +185,6 @@ import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
-import elementUtilities from './elements/js/element-utilities';
 export default {
   name: "PrintStatic",
   props: {
@@ -344,9 +285,12 @@ export default {
     };
   },
   watch: {
-    options: function (val) {
-      Object.assign(this.settings, val);
-    },
+    options: {
+      immediate: true,
+      handler(val){
+        Object.assign(this.settings, val)
+      }
+    }
   },
   mounted() {
     console.log("=======Nikan is Live=======");
@@ -470,8 +414,7 @@ export default {
 
       // Calculating the footer size in inches
       let footerPage = document.getElementsByClassName("section")[1];
-      let pageFooterSize = this.convert2Inches(
-        parseInt(footerPage.offsetHeight)
+      let pageFooterSize = this.convert2Inches(footerPage.offsetHeight
       );
       this.locals.pageFooterSize = pageFooterSize;
       console.log("pageFooterSize: ", pageFooterSize);
@@ -923,12 +866,12 @@ table th {
   overflow: hidden;
 }
 .element.selected {
-  width: 100%;
+  width: 100px;
   border: 1px #aaa dashed;
   border-radius: 4px;
 }
 .element:hover {
-  width: 100%;
+  width: 100px;
   border: 1px #aaa dashed;
   border-radius: 4px;
   cursor: move;
