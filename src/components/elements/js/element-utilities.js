@@ -53,16 +53,13 @@ function resizable(element) {
 function click(element, classType) {
     element.addEventListener("mousedown", onClick, false);
     function onClick() {
-        // Deselecting already sleceted element
-        // if (element.className.indexOf('selected') !== -1 && element.className.indexOf('resizer') !== -1) {
-        //     element.className = classType + ' element'
-        // }
         let selectedElements = document.getElementsByClassName('element selected');
         for (let index = 0; index < selectedElements.length; index++) {
             selectedElements[index].className = classType + " element";
         }
         element.className = classType + " element selected";
     }
+
 }
 
 /**

@@ -119,13 +119,20 @@
             v-if="locals.settingsModalShow"
             :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
             class="template"
+            @click="deSelectAll"
           >
             <div
               :style="{'height': locals.pageHeaderSize + 'in'}"
               id="headertemplate"
               class="section header"
             >
-              <component v-for="element in settings.headerElements" :key="element" :is="element.type" :options="element.options" />
+              <component
+                v-for="element in settings.headerElements"
+                :key="element"
+                :is="element.type"
+                :options="element.options"
+                @clickedOnElement="clickedOnElement()"
+              />
             </div>
             <div id="bodytemplate">
               <div>Body</div>
@@ -286,6 +293,7 @@ export default {
         settingsModalShow: false,
         pageHeaderSize: 0.6,
         pageFooterSize: 0.6,
+        isClicked: false,
       },
       settings: {
         hasPageCounter: true,
@@ -714,6 +722,21 @@ export default {
       let modal = document.getElementById("myModal-final");
       modal.style.display = "none";
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
+    },
+    deSelectAll() {
+      if (this.locals.isClicked) {
+        this.locals.isClicked = false;
+        return;
+      }
+
+      let selectedElements =
+        document.getElementsByClassName("element selected");
+      for (let index = 0; index < selectedElements.length; index++) {
+        selectedElements[index].classList.remove("selected");
+      }
+    },
+    clickedOnElement() {
+      this.locals.isClicked = true;
     },
   },
 };

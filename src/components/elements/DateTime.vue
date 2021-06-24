@@ -1,5 +1,5 @@
 <template>
-  <div ref="element" :class="locals.classType + ' element'" :style="settings.styles">{{dateToday}} &nbsp; {{timeToday}}</div>
+  <div @click="this.$emit('clickedOnElement')" ref="element" :class="locals.classType + ' element'" :style="settings.styles">{{dateToday}} &nbsp; {{timeToday}}</div>
 </template>
 
 <script>

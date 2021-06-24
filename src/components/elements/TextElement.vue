@@ -1,5 +1,5 @@
 <template>
-  <div ref="element" :class="locals.classType + ' element'" :style="settings.styles">{{settings.text}}</div>
+  <div ref="element" @click="this.$emit('clickedOnElement')" :class="locals.classType + ' element'" :style="settings.styles">{{settings.text}}</div>
 </template>
 
 <script>
@@ -42,7 +42,7 @@ export default {
     Initialize(element, classType) {
       elementUtilities.resizable(element)
       elementUtilities.dragable(element, classType)
-      elementUtilities.click(element, classType)
+      elementUtilities.click(element, classType);
     }
   }
 };
