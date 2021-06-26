@@ -28,16 +28,16 @@
             </a>
             <ul
               class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-              id="menu"
+              id="printConfigsMenu"
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <label for="exampleFormControlSelect1">Page Size</label>
+                  <label for="pageSizeControl">Page Size</label>
                 </a>
                 <select
                   v-model="settings.pageSize"
                   class="mb-4 form-control"
-                  id="exampleFormControlSelect1"
+                  id="pageSizeControl"
                 >
                   <option>a3</option>
                   <option>a4</option>
@@ -46,29 +46,16 @@
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <label for="exampleFormControlSelect1">Page Oreintation</label>
+                  <label for="pageOrientiationsControl">Page Oreintation</label>
                 </a>
                 <select
                   v-model="settings.orientation"
                   class="mb-4 form-control"
-                  id="exampleFormControlSelect1"
+                  id="pageOrientiationsControl"
                 >
                   <option>portrait</option>
                   <option>landscape</option>
                 </select>
-              </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Page Counter</label>
-                    <input
-                      class="mb-4 form-check-input"
-                      type="checkbox"
-                      v-model="settings.hasPageCounter"
-                      id="flexCheckDefault"
-                    />
-                  </div>
-                </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
@@ -88,12 +75,25 @@
               <li>
                 <a class="nav-link px-0 align-middle">
                   <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Repeatable Header</label>
+                    <label class="form-check-label" for="pageCounterControl">Page Counter</label>
+                    <input
+                      class="mb-4 form-check-input"
+                      type="checkbox"
+                      v-model="settings.hasPageCounter"
+                      id="pageCounterControl"
+                    />
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <div class="form-check">
+                    <label class="form-check-label" for="repeatableHeaderControl">Repeatable Header</label>
                     <input
                       class="mb-4 form-check-input"
                       type="checkbox"
                       v-model="settings.isHeaderRepeatable"
-                      id="flexCheckDefault"
+                      id="repeatableHeaderControl"
                     />
                   </div>
                 </a>
@@ -101,12 +101,12 @@
               <li>
                 <a class="nav-link px-0 align-middle">
                   <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Repeatable Footer</label>
+                    <label class="form-check-label" for="repeatableFooterControl">Repeatable Footer</label>
                     <input
                       class="mb-4 form-check-input"
                       type="checkbox"
                       v-model="settings.isFooterRepeatable"
-                      id="flexCheckDefault"
+                      id="repeatableFooterControl"
                     />
                   </div>
                 </a>
@@ -114,12 +114,12 @@
               <li>
                 <a class="nav-link px-0 align-middle">
                   <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault">Repeatable Date and Time</label>
+                    <label class="form-check-label" for="repeatableDateTimeControl">Repeatable Date and Time</label>
                     <input
                       class="mb-4 form-check-input"
                       type="checkbox"
                       v-model="settings.isFixedDateAndTime"
-                      id="flexCheckDefault"
+                      id="repeatableDateTimeControl"
                     />
                   </div>
                 </a>
@@ -132,23 +132,23 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="exampleRadios"
-                    id="exampleRadios1"
+                    name="pageDirections"
+                    id="pageDirections"
                     value="rtl"
                     v-model="settings.pageDirections"
                   />
-                  <label class="form-check-label" for="exampleRadios1">Right To Left</label>
+                  <label class="form-check-label" for="pageDirections">Right To Left</label>
                 </div>
                 <div class="form-check">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="exampleRadios"
-                    id="exampleRadios2"
+                    name="pageDirections"
+                    id="pageDirections2"
                     value="ltr"
                     v-model="settings.pageDirections"
                   />
-                  <label class="form-check-label" for="exampleRadios2">Left To Right</label>
+                  <label class="form-check-label" for="pageDirections2">Left To Right</label>
                 </div>
               </li>
             </ul>
@@ -159,11 +159,10 @@
             </a>
             <ul
               class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-              id="menu"
+              id="elementsMenu"
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span
                     @click="createElement('textelement')"
                     class="ms-1 d-none d-sm-inline"
@@ -172,7 +171,6 @@
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span
                     @click="createElement('datetime')"
                     class="ms-1 d-none d-sm-inline"
@@ -181,13 +179,11 @@
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span class="ms-1 d-none d-sm-inline">Page Counter</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span class="ms-1 d-none d-sm-inline">Image</span>
                 </a>
               </li>
@@ -199,11 +195,10 @@
             </a>
             <ul
               class="nav nav-pills flex-column mt-20 mb-0 align-items-center align-items-sm-start"
-              id="menu"
+              id="elementConfigsMenu"
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span
                     @click="createElement('textelement')"
                     class="ms-1 d-none d-sm-inline"
@@ -212,7 +207,6 @@
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span
                     @click="createElement('datetime')"
                     class="ms-1 d-none d-sm-inline"
@@ -221,13 +215,11 @@
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span class="ms-1 d-none d-sm-inline">Page Counter</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-people"></i>
                   <span class="ms-1 d-none d-sm-inline">Image</span>
                 </a>
               </li>
@@ -239,7 +231,7 @@
             </a>
             <ul
               class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-              id="menu"
+              id="elementStylesMenu"
             >
               <li>
                 <a class="nav-link px-0 align-middle">
@@ -280,22 +272,22 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="exampleRadios"
-                    id="exampleRadios1"
-                    value="option1"
+                    name="elementDirections"
+                    id="elementDirections"
+                    value="rtl"
                     checked
                   />
-                  <label class="form-check-label" for="exampleRadios1">Right To Left</label>
+                  <label class="form-check-label" for="elementDirections">Right To Left</label>
                 </div>
                 <div class="form-check">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="exampleRadios"
-                    id="exampleRadios2"
-                    value="option2"
+                    name="elementDirections"
+                    id="elementDirections2"
+                    value="ltr"
                   />
-                  <label class="form-check-label" for="exampleRadios2">Left To Right</label>
+                  <label class="form-check-label" for="elementDirections2">Left To Right</label>
                 </div>
               </li>
               <li>
@@ -964,6 +956,7 @@ export default {
       };
       this.settings.headerElements.push(tmp);
     },
+    test() {},
   },
 };
 </script>
