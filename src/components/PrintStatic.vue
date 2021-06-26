@@ -162,7 +162,11 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Text Box</span>
+                  <span
+                    draggable="true"
+                    @dragstart="this.locals.classType = 'textelement'"
+                    class="ms-1 d-none d-sm-inline"
+                  >Text Box</span>
                 </a>
               </li>
               <li>
@@ -327,11 +331,13 @@
           >
             <div
               :style="{'height': locals.pageHeaderSize + 'in'}"
-              id="headertemplate"
+              id="headerTemplate"
               class="section header"
+              @dragenter="this.locals.parent = 'header'"
+              @dragleave="this.locals.parent = ''"
             >
               <component
-                v-for="element in settings.headerElements"
+                v-for="element in elements.headerElements"
                 :key="element"
                 :is="element.type"
                 :options="element.options"
@@ -343,9 +349,20 @@
             </div>
             <div
               :style="{'height': locals.pageFooterSize + 'in'}"
-              id="footertemplate"
+              id="footerTemplate"
               class="section footer"
-            ></div>
+              dragenter="this.locals.parent = 'footer'"
+              @dragleave="this.locals.parent = ''"
+              @dragend="createElement()"
+            >
+              <component
+                v-for="element in elements.headerElements"
+                :key="element"
+                :is="element.type"
+                :options="element.options"
+                @clickedOnElement="clickedOnElement()"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -499,6 +516,8 @@ export default {
         pageHeaderSize: 0.6,
         pageFooterSize: 0.6,
         isClicked: false,
+        parent: "",
+        classType: '',
       },
       settings: {
         hasPageCounter: true,
@@ -516,6 +535,8 @@ export default {
         logoURL: "",
         pageDirections: "rtl",
         margin: 0,
+      },
+      elements: {
         headerElements: [
           {
             type: "textelement",
@@ -530,6 +551,34 @@ export default {
             type: "textelement",
             options: {
               text: "Header Default Text 2",
+              styles: {
+                left: "150px",
+              },
+            },
+          },
+          {
+            type: "datetime",
+            options: {
+              styles: {
+                left: "300px",
+              },
+            },
+          },
+        ],
+        footerElements: [
+          {
+            type: "textelement",
+            options: {
+              text: "Footer Default Text 1",
+              styles: {
+                left: "0",
+              },
+            },
+          },
+          {
+            type: "textelement",
+            options: {
+              text: "Footer Default Text 2",
               styles: {
                 left: "150px",
               },
@@ -929,6 +978,10 @@ export default {
       modal.style.display = "none";
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
     },
+
+    /**
+     * Deselect all selected eleemnts by clicking on the blank page
+     */
     deSelectAll() {
       if (this.locals.isClicked) {
         this.locals.isClicked = false;
@@ -941,27 +994,32 @@ export default {
         selectedElements[index].classList.remove("selected");
       }
     },
+
+    /**
+     * Set the status of a clicked element
+     */
     clickedOnElement() {
       this.locals.isClicked = true;
     },
-    createElement(classType) {
+
+    createElement() {
+      let parent = this.locals.parent;
+      let classType = this.locals.classType
       let tmp = {
         type: classType,
+        options: {
+          text: "Drag Done",
+          styles: {
+            left: "450px",
+          },
+        },
       };
-      this.settings.headerElements.push(tmp);
-    },
-    findTheParentDiv(element) {
-      let headerSize = this.convert2Pixels(this.locals.pageHeaderSize);
-      let bodySize = this.convert2Pixels(this.locals.totalHeightOfAPaper);
-      element.addEventListener("mouseup", findPosition, false);
-      function findPosition(e) {
-        if (headerSize - e.pageY >= 0) {
-          return "header";
-        } else if (bodySize - e.pageY >= 0) {
-          return "body";
-        }
-        return "footer";
+      if (parent.includes("header")) {
+        this.elements.headerElements.push(tmp);
+      } else if (parent.includes("footer")) {
+        this.elements.footerElements.push(tmp);
       }
+      return;
     },
   },
 };

@@ -36,10 +36,18 @@ print component:
     -Done ability to write in text inputs
     -Done add drag ability to text inputs
     -Done dragging and resizeing at the same time
+    -Done save settings data to json and import from it 
     
 
+
+    -not dropped at the first time => dragend kar nmikone
+    -watch element is not working
+    -arrow function =>  ba drag haye jadid hal mishe 
+
+
+
+
     -add custom header styles and save data to it
-    -save settings data to json and import from it 
 
 
 
