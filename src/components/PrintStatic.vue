@@ -162,7 +162,7 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span @click="test()" class="ms-1 d-none d-sm-inline">Text Box</span>
+                  <span class="ms-1 d-none d-sm-inline">Text Box</span>
                 </a>
               </li>
               <li>
@@ -950,24 +950,17 @@ export default {
       };
       this.settings.headerElements.push(tmp);
     },
-    test() {
+    findTheParentDiv(element) {
       let headerSize = this.convert2Pixels(this.locals.pageHeaderSize);
       let bodySize = this.convert2Pixels(this.locals.totalHeightOfAPaper);
-      let elementPos;
-      console.log(headerSize);
-      console.log(bodySize);
-      let element = document.getElementsByClassName("datetime")[0];
-      element.addEventListener("mouseup", pos, false);
-      function pos(e) {
-        console.log(e.pageY);
+      element.addEventListener("mouseup", findPosition, false);
+      function findPosition(e) {
         if (headerSize - e.pageY >= 0) {
-          elementPos = "header";
+          return "header";
         } else if (bodySize - e.pageY >= 0) {
-          elementPos = "body";
-        } else {
-          elementPos = "footer";
+          return "body";
         }
-          console.log(elementPos);
+        return "footer";
       }
     },
   },
