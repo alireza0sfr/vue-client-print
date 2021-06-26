@@ -34,11 +34,7 @@
                 <a class="nav-link px-0 align-middle">
                   <label for="pageSizeControl">Page Size</label>
                 </a>
-                <select
-                  v-model="settings.pageSize"
-                  class="mb-4 form-control"
-                  id="pageSizeControl"
-                >
+                <select v-model="settings.pageSize" class="mb-4 form-control" id="pageSizeControl">
                   <option>a3</option>
                   <option>a4</option>
                   <option>a5</option>
@@ -114,7 +110,10 @@
               <li>
                 <a class="nav-link px-0 align-middle">
                   <div class="form-check">
-                    <label class="form-check-label" for="repeatableDateTimeControl">Repeatable Date and Time</label>
+                    <label
+                      class="form-check-label"
+                      for="repeatableDateTimeControl"
+                    >Repeatable Date and Time</label>
                     <input
                       class="mb-4 form-check-input"
                       type="checkbox"
@@ -163,10 +162,7 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span
-                    @click="createElement('textelement')"
-                    class="ms-1 d-none d-sm-inline"
-                  >Text Box</span>
+                  <span @click="test()" class="ms-1 d-none d-sm-inline">Text Box</span>
                 </a>
               </li>
               <li>
@@ -235,10 +231,7 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span
-                    @click="createElement('textelement')"
-                    class="ms-1 d-none d-sm-inline"
-                  >:Margin</span>
+                  <span class="ms-1 d-none d-sm-inline">:Margin</span>
                 </a>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend"></div>
@@ -454,6 +447,7 @@ import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
+import elementUtilities from "./elements/js/element-utilities";
 export default {
   name: "PrintStatic",
   props: {
@@ -956,7 +950,26 @@ export default {
       };
       this.settings.headerElements.push(tmp);
     },
-    test() {},
+    test() {
+      let headerSize = this.convert2Pixels(this.locals.pageHeaderSize);
+      let bodySize = this.convert2Pixels(this.locals.totalHeightOfAPaper);
+      let elementPos;
+      console.log(headerSize);
+      console.log(bodySize);
+      let element = document.getElementsByClassName("datetime")[0];
+      element.addEventListener("mouseup", pos, false);
+      function pos(e) {
+        console.log(e.pageY);
+        if (headerSize - e.pageY >= 0) {
+          elementPos = "header";
+        } else if (bodySize - e.pageY >= 0) {
+          elementPos = "body";
+        } else {
+          elementPos = "footer";
+        }
+          console.log(elementPos);
+      }
+    },
   },
 };
 </script>
