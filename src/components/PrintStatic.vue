@@ -1,5 +1,5 @@
 <template>
-<div id="page" :dir="settings.R2L">
+<div id="page" :dir="settings.pageDirections">
   <!--Buttons-->
 
   <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
@@ -11,30 +11,172 @@
     <!-- Section 1 (Template Builder) -->
     <div v-if="locals.settingsModalShow" class="template-builder container-fluid">
       <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+        <div
+          :style="{'height': locals.defaultHeightOfPaper + 'in',
+        'overflow': 'hidden',
+        'overflow-y': 'scroll',
+        'width': '20%'}"
+          class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark"
+        >
           <div
-            class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+            class="d-flex flex-column align-items-center text-align-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
           >
             <a
-              href="/"
               class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
             >
-              <span class="fs-5 d-none d-sm-inline">Menu</span>
+              <span class="fs-5 d-none d-sm-inline">Print Configs</span>
             </a>
             <ul
-              class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+              class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
+              id="menu"
+            >
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <label for="exampleFormControlSelect1">Page Size</label>
+                </a>
+                <select
+                  v-model="settings.pageSize"
+                  class="mb-4 form-control"
+                  id="exampleFormControlSelect1"
+                >
+                  <option>a3</option>
+                  <option>a4</option>
+                  <option>a5</option>
+                </select>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <label for="exampleFormControlSelect1">Page Oreintation</label>
+                </a>
+                <select
+                  v-model="settings.orientation"
+                  class="mb-4 form-control"
+                  id="exampleFormControlSelect1"
+                >
+                  <option>portrait</option>
+                  <option>landscape</option>
+                </select>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <div class="form-check">
+                    <label class="form-check-label" for="flexCheckDefault">Page Counter</label>
+                    <input
+                      class="mb-4 form-check-input"
+                      type="checkbox"
+                      v-model="settings.hasPageCounter"
+                      id="flexCheckDefault"
+                    />
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span class="mb-4 ms-1 d-none d-sm-inline">:File Name</span>
+                </a>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend"></div>
+                  <input
+                    type="text"
+                    v-model="settings.fileName"
+                    class="form-control"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <div class="form-check">
+                    <label class="form-check-label" for="flexCheckDefault">Repeatable Header</label>
+                    <input
+                      class="mb-4 form-check-input"
+                      type="checkbox"
+                      v-model="settings.isHeaderRepeatable"
+                      id="flexCheckDefault"
+                    />
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <div class="form-check">
+                    <label class="form-check-label" for="flexCheckDefault">Repeatable Footer</label>
+                    <input
+                      class="mb-4 form-check-input"
+                      type="checkbox"
+                      v-model="settings.isFooterRepeatable"
+                      id="flexCheckDefault"
+                    />
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <div class="form-check">
+                    <label class="form-check-label" for="flexCheckDefault">Repeatable Date and Time</label>
+                    <input
+                      class="mb-4 form-check-input"
+                      type="checkbox"
+                      v-model="settings.isFixedDateAndTime"
+                      id="flexCheckDefault"
+                    />
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span class="ms-1 d-none d-sm-inline">:Directions</span>
+                </a>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="exampleRadios"
+                    id="exampleRadios1"
+                    value="rtl"
+                    v-model="settings.pageDirections"
+                  />
+                  <label class="form-check-label" for="exampleRadios1">Right To Left</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="exampleRadios"
+                    id="exampleRadios2"
+                    value="ltr"
+                    v-model="settings.pageDirections"
+                  />
+                  <label class="form-check-label" for="exampleRadios2">Left To Right</label>
+                </div>
+              </li>
+            </ul>
+            <a
+              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            >
+              <span class="fs-5 mt-4 d-none d-sm-inline">Elements</span>
+            </a>
+            <ul
+              class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
               id="menu"
             >
               <li>
                 <a class="nav-link px-0 align-middle">
                   <i class="fs-4 bi-people"></i>
-                  <span @click="createElement('textelement')" class="ms-1 d-none d-sm-inline">Text Box</span>
+                  <span
+                    @click="createElement('textelement')"
+                    class="ms-1 d-none d-sm-inline"
+                  >Text Box</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
                   <i class="fs-4 bi-people"></i>
-                  <span @click="createElement('datetime')" class="ms-1 d-none d-sm-inline">Date & Time</span>
+                  <span
+                    @click="createElement('datetime')"
+                    class="ms-1 d-none d-sm-inline"
+                  >Date & Time</span>
                 </a>
               </li>
               <li>
@@ -46,8 +188,143 @@
               <li>
                 <a class="nav-link px-0 align-middle">
                   <i class="fs-4 bi-people"></i>
-                  <span class="ms-1 d-none d-sm-inline">Logo</span>
+                  <span class="ms-1 d-none d-sm-inline">Image</span>
                 </a>
+              </li>
+            </ul>
+            <a
+              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            >
+              <span class="fs-5 mt-4 d-none d-sm-inline">Element Configs</span>
+            </a>
+            <ul
+              class="nav nav-pills flex-column mt-20 mb-0 align-items-center align-items-sm-start"
+              id="menu"
+            >
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span
+                    @click="createElement('textelement')"
+                    class="ms-1 d-none d-sm-inline"
+                  >Text Box</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span
+                    @click="createElement('datetime')"
+                    class="ms-1 d-none d-sm-inline"
+                  >Date & Time</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span class="ms-1 d-none d-sm-inline">Page Counter</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-people"></i>
+                  <span class="ms-1 d-none d-sm-inline">Image</span>
+                </a>
+              </li>
+            </ul>
+            <a
+              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            >
+              <span class="fs-5 mt-4 d-none d-sm-inline">Styles</span>
+            </a>
+            <ul
+              class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
+              id="menu"
+            >
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span
+                    @click="createElement('textelement')"
+                    class="ms-1 d-none d-sm-inline"
+                  >:Margin</span>
+                </a>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend"></div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span @click="createElement('datetime')" class="ms-1 d-none d-sm-inline">:Color</span>
+                </a>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend"></div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span class="ms-1 d-none d-sm-inline">:Directions</span>
+                </a>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="exampleRadios"
+                    id="exampleRadios1"
+                    value="option1"
+                    checked
+                  />
+                  <label class="form-check-label" for="exampleRadios1">Right To Left</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="exampleRadios"
+                    id="exampleRadios2"
+                    value="option2"
+                  />
+                  <label class="form-check-label" for="exampleRadios2">Left To Right</label>
+                </div>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span class="ms-1 d-none d-sm-inline">:Font Size</span>
+                </a>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend"></div>
+                  <input
+                    type="number"
+                    class="form-control"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
+              </li>
+              <li>
+                <a class="nav-link px-0 align-middle">
+                  <span class="ms-1 d-none d-sm-inline">:Border</span>
+                </a>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend"></div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
               </li>
             </ul>
             <hr />
@@ -239,7 +516,7 @@ export default {
       },
       settings: {
         hasPageCounter: true,
-        fileName: "nikan.pdf",
+        fileName: "nikan",
         pageCounterPosition: "center",
         hasHeader: true,
         hasFooter: true,
@@ -251,7 +528,7 @@ export default {
         customHeader: "",
         customFooter: "",
         logoURL: "",
-        R2L: "rtl",
+        pageDirections: "rtl",
         margin: 0,
         headerElements: [
           {
@@ -287,10 +564,10 @@ export default {
   watch: {
     options: {
       immediate: true,
-      handler(val){
-        Object.assign(this.settings, val)
-      }
-    }
+      handler(val) {
+        Object.assign(this.settings, val);
+      },
+    },
   },
   mounted() {
     console.log("=======Nikan is Live=======");
@@ -302,7 +579,7 @@ export default {
       let pages = document.getElementsByClassName("pages");
       let opt = {
         margin: this.settings.margin,
-        filename: this.settings.fileName,
+        filename: this.settings.fileName + ".pdf",
         image: { type: "jpeg", quality: 1 },
         html2canvas: { dpi: 300, width: 1430 },
         jsPDF: {
@@ -380,7 +657,7 @@ export default {
         settings: {
           orientation: this.settings.orientation,
           pageSize: this.settings.pageSize,
-          R2L: this.settings.R2L,
+          pageDirections: this.settings.pageDirections,
         },
       };
       console.log("json:", tmp);
@@ -414,8 +691,7 @@ export default {
 
       // Calculating the footer size in inches
       let footerPage = document.getElementsByClassName("section")[1];
-      let pageFooterSize = this.convert2Inches(footerPage.offsetHeight
-      );
+      let pageFooterSize = this.convert2Inches(footerPage.offsetHeight);
       this.locals.pageFooterSize = pageFooterSize;
       console.log("pageFooterSize: ", pageFooterSize);
 
@@ -684,10 +960,10 @@ export default {
     },
     createElement(classType) {
       let tmp = {
-        type: classType
-      }
-      this.settings.headerElements.push(tmp)
-    }
+        type: classType,
+      };
+      this.settings.headerElements.push(tmp);
+    },
   },
 };
 </script>
