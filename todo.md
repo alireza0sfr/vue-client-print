@@ -41,8 +41,8 @@ print component:
     -Done replace the array func
     -Done fix the eventlistenner and drag bug
     -Done Fix the watch bug on elements
+    -Done Fix the page refresh at every add
 
-    -Fix the page refresh at every add
 
 
     -page 1 footer size

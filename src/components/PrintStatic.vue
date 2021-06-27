@@ -324,7 +324,7 @@
             @click="deSelectAll"
           >
             <div
-              :style="{'height': locals.pageHeaderSize + 'in'}"
+              :style="{'min-height': locals.pageHeaderSize + 'in'}"
               id="headerTemplate"
               class="section header"
               ref="headerTemplate"
@@ -344,7 +344,7 @@
               <div>Body</div>
             </div>
             <div
-              :style="{'height': locals.pageFooterSize + 'in'}"
+              :style="{'min-height': locals.pageFooterSize + 'in'}"
               id="footerTemplate"
               class="section footer"
               ref="footerTemplate"
