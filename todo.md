@@ -36,11 +36,13 @@ print component:
     -Done ability to write in text inputs
     -Done add drag ability to text inputs
     -Done dragging and resizeing at the same time
-    
+    -Done add custom header styles and save data to it
+    -Done save settings data to json and import from it 
+    -Done replace the array func
+    -Done fix the eventlistenner and drag bug
 
-    -add custom header styles and save data to it
-    -save settings data to json and import from it 
-
+    -Fix the page refresh at every add
+    -Fix the watch bug on elements
 
 
     -page 1 footer size

@@ -1,4 +1,4 @@
-<template>
+    <template>
 <div id="page" :dir="settings.pageDirections">
   <!--Buttons-->
 
@@ -67,19 +67,6 @@
                     aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
-              </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <div class="form-check">
-                    <label class="form-check-label" for="pageCounterControl">Page Counter</label>
-                    <input
-                      class="mb-4 form-check-input"
-                      type="checkbox"
-                      v-model="settings.hasPageCounter"
-                      id="pageCounterControl"
-                    />
-                  </div>
-                </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
@@ -162,25 +149,42 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Text Box</span>
+                  <span
+                    draggable="true"
+                    @dragstart="startDraggingElement('textelement')"
+                    @dragend="finishedDraggingElement()"
+                    class="ms-1 d-none d-sm-inline"
+                  >Text Box</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
                   <span
-                    @click="createElement('datetime')"
                     class="ms-1 d-none d-sm-inline"
+                    draggable="true"
+                    @dragstart="startDraggingElement('datetime')"
+                    @dragend="finishedDraggingElement()"
                   >Date & Time</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Page Counter</span>
+                  <span
+                    class="ms-1 d-none d-sm-inline"
+                    draggable="true"
+                    @dragstart="startDraggingElement('pagecounter')"
+                    @dragend="finishedDraggingElement()"
+                  >Page Counter</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Image</span>
+                  <span
+                    class="ms-1 d-none d-sm-inline"
+                    draggable="true"
+                    @dragstart="startDraggingElement('imageelement')"
+                    @dragend="finishedDraggingElement()"
+                  >Image</span>
                 </a>
               </li>
             </ul>
@@ -195,18 +199,12 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span
-                    @click="createElement('textelement')"
-                    class="ms-1 d-none d-sm-inline"
-                  >Text Box</span>
+                  <span class="ms-1 d-none d-sm-inline">Text Box</span>
                 </a>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span
-                    @click="createElement('datetime')"
-                    class="ms-1 d-none d-sm-inline"
-                  >Date & Time</span>
+                  <span class="ms-1 d-none d-sm-inline">Date & Time</span>
                 </a>
               </li>
               <li>
@@ -245,7 +243,7 @@
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span @click="createElement('datetime')" class="ms-1 d-none d-sm-inline">:Color</span>
+                  <span class="ms-1 d-none d-sm-inline">:Color</span>
                 </a>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend"></div>
@@ -327,25 +325,41 @@
           >
             <div
               :style="{'height': locals.pageHeaderSize + 'in'}"
-              id="headertemplate"
+              id="headerTemplate"
               class="section header"
+              ref="headerTemplate"
+              @drop="droppedEleemntOnHeader()"
+              @dragenter.prevent
+              @dragover.prevent
             >
               <component
-                v-for="element in settings.headerElements"
+                v-for="element in elements.headerElements"
                 :key="element"
                 :is="element.type"
                 :options="element.options"
                 @clickedOnElement="clickedOnElement()"
               />
             </div>
-            <div id="bodytemplate">
+            <div id="bodyTemplate">
               <div>Body</div>
             </div>
             <div
               :style="{'height': locals.pageFooterSize + 'in'}"
-              id="footertemplate"
+              id="footerTemplate"
               class="section footer"
-            ></div>
+              ref="footerTemplate"
+              @drop="droppedEleemntOnFooter()"
+              @dragenter.prevent
+              @dragover.prevent
+            >
+              <component
+                v-for="element in elements.footerElements"
+                :key="element"
+                :is="element.type"
+                :options="element.options"
+                @clickedOnElement="clickedOnElement()"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -499,6 +513,8 @@ export default {
         pageHeaderSize: 0.6,
         pageFooterSize: 0.6,
         isClicked: false,
+        parent: "",
+        classType: "",
       },
       settings: {
         hasPageCounter: true,
@@ -516,6 +532,8 @@ export default {
         logoURL: "",
         pageDirections: "rtl",
         margin: 0,
+      },
+      elements: {
         headerElements: [
           {
             type: "textelement",
@@ -530,6 +548,34 @@ export default {
             type: "textelement",
             options: {
               text: "Header Default Text 2",
+              styles: {
+                left: "150px",
+              },
+            },
+          },
+          {
+            type: "datetime",
+            options: {
+              styles: {
+                left: "300px",
+              },
+            },
+          },
+        ],
+        footerElements: [
+          {
+            type: "textelement",
+            options: {
+              text: "Footer Default Text 1",
+              styles: {
+                left: "0",
+              },
+            },
+          },
+          {
+            type: "textelement",
+            options: {
+              text: "Footer Default Text 2",
               styles: {
                 left: "150px",
               },
@@ -944,24 +990,44 @@ export default {
     clickedOnElement() {
       this.locals.isClicked = true;
     },
-    createElement(classType) {
+    createElement(parent) {
+      let classType = this.locals.classType;
       let tmp = {
         type: classType,
+        options: {
+          styles: {
+            left: "350px",
+          },
+        },
       };
-      this.settings.headerElements.push(tmp);
-    },
-    findTheParentDiv(element) {
-      let headerSize = this.convert2Pixels(this.locals.pageHeaderSize);
-      let bodySize = this.convert2Pixels(this.locals.totalHeightOfAPaper);
-      element.addEventListener("mouseup", findPosition, false);
-      function findPosition(e) {
-        if (headerSize - e.pageY >= 0) {
-          return "header";
-        } else if (bodySize - e.pageY >= 0) {
-          return "body";
-        }
-        return "footer";
+      if (parent.includes("header")) {
+        this.elements.headerElements.push(tmp);
+      } else if (parent.includes("footer")) {
+        this.elements.footerElements.push(tmp);
       }
+      this.locals.classType = "";
+      return;
+    },
+    startDraggingElement(classType) {
+      this.locals.classType = classType;
+      let headerSection = this.$refs.headerTemplate;
+      headerSection.className = headerSection.className + " dragged";
+      let footerSection = this.$refs.footerTemplate;
+      footerSection.className = footerSection.className + " dragged";
+    },
+    droppedEleemntOnHeader() {
+      let parent = "header";
+      this.createElement(parent);
+    },
+    droppedEleemntOnFooter() {
+      let parent = "footer";
+      this.createElement(parent);
+    },
+    finishedDraggingElement() {
+      let headerSection = this.$refs.headerTemplate;
+      headerSection.classList.remove("dragged");
+      let footerSection = this.$refs.footerTemplate;
+      footerSection.classList.remove("dragged");
     },
   },
 };
@@ -1076,7 +1142,7 @@ table th {
   flex-direction: column;
 }
 
-#bodytemplate {
+#bodyTemplate {
   flex-grow: 2;
 }
 .section {
@@ -1107,6 +1173,12 @@ table th {
 }
 .section.footer {
   border-top: 1px #aaa solid;
+}
+.section.header.dragged {
+  border: 5px #aaa dashed;
+}
+.section.footer.dragged {
+  border: 5px #aaa dashed;
 }
 .element.selected .resizer {
   border-top: none !important;
