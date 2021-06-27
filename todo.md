@@ -40,9 +40,9 @@ print component:
     -Done save settings data to json and import from it 
     -Done replace the array func
     -Done fix the eventlistenner and drag bug
+    -Done Fix the watch bug on elements
 
     -Fix the page refresh at every add
-    -Fix the watch bug on elements
 
 
     -page 1 footer size

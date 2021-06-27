@@ -21,14 +21,9 @@ export default {
       immediate: true,
       handler(val){
         let tmp = this.options.styles
-        console.log('tmp', tmp);
         Object.assign(this.settings, val)
-        console.log('settings', this.settings);
-        console.log('val', val);
         this.settings.styles = tmp
         Object.assign(this.settings.styles, val.styles)
-        console.log('settings style', this.settings.styles);
-        
       }
     }
   },
