@@ -56,3 +56,13 @@ print component:
     -slots
     -data array
     -test
+
+    margin: '0px',
+          color: 'black',
+          direction: 'rtl',
+          fontSize: '14',
+          border: '0px',
+          type: "",
+          text: '',
+          options: '',
+          styles: ''

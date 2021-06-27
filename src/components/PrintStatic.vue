@@ -15,7 +15,7 @@
           :style="{'height': locals.defaultHeightOfPaper + 'in',
         'overflow': 'hidden',
         'overflow-y': 'scroll',
-        'width': '20%'}"
+        'width': '25%'}"
           class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark"
         >
           <div
@@ -229,17 +229,13 @@
             >
               <li>
                 <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">:Margin</span>
+                  <label for="elementTextAlignControl">Text Align</label>
                 </a>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend"></div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    aria-label="Small"
-                    aria-describedby="inputGroup-sizing-sm"
-                  />
-                </div>
+                <select v-model="locals.selectedElement.options.styles.textAlign" class="mb-4 form-control" id="elementTextAlignControl">
+                  <option>right</option>
+                  <option>center</option>
+                  <option>left</option>
+                </select>
               </li>
               <li>
                 <a class="nav-link px-0 align-middle">
@@ -250,6 +246,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    v-model="locals.selectedElement.options.styles.color"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
@@ -262,11 +259,11 @@
                 <div class="form-check">
                   <input
                     class="form-check-input"
+                    v-model="locals.selectedElement.options.styles.direction"
                     type="radio"
                     name="elementDirections"
                     id="elementDirections"
                     value="rtl"
-                    checked
                   />
                   <label class="form-check-label" for="elementDirections">Right To Left</label>
                 </div>
@@ -277,6 +274,7 @@
                     name="elementDirections"
                     id="elementDirections2"
                     value="ltr"
+                    v-model="locals.selectedElement.options.styles.direction"
                   />
                   <label class="form-check-label" for="elementDirections2">Left To Right</label>
                 </div>
@@ -288,8 +286,9 @@
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend"></div>
                   <input
-                    type="number"
+                    type="text"
                     class="form-control"
+                    v-model="locals.selectedElement.options.styles.fontSize"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
@@ -304,6 +303,7 @@
                   <input
                     type="text"
                     class="form-control"
+                    v-model="locals.selectedElement.options.styles.border"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
@@ -337,6 +337,7 @@
                 :key="element"
                 :is="element.type"
                 :options="element.options"
+                @click="element2ToolbarBind(element)"
                 @clickedOnElement="clickedOnElement()"
               />
             </div>
@@ -357,6 +358,7 @@
                 :key="element"
                 :is="element.type"
                 :options="element.options"
+                @click="element2ToolbarBind(element)"
                 @clickedOnElement="clickedOnElement()"
               />
             </div>
@@ -515,6 +517,12 @@ export default {
         isClicked: false,
         parent: "",
         classType: "",
+        selectedElement: {
+          type: {},
+          options: {
+            styles: {},
+          },
+        },
       },
       settings: {
         hasPageCounter: true,
@@ -540,7 +548,7 @@ export default {
             options: {
               text: "Header Default Text 1",
               styles: {
-                left: "0",
+                color: "red",
               },
             },
           },
@@ -548,16 +556,14 @@ export default {
             type: "textelement",
             options: {
               text: "Header Default Text 2",
-              styles: {
-                left: "150px",
-              },
+              styles: {},
             },
           },
           {
             type: "datetime",
             options: {
               styles: {
-                left: "300px",
+                margin: "0px",
               },
             },
           },
@@ -567,26 +573,20 @@ export default {
             type: "textelement",
             options: {
               text: "Footer Default Text 1",
-              styles: {
-                left: "0",
-              },
+              styles: {},
             },
           },
           {
             type: "textelement",
             options: {
               text: "Footer Default Text 2",
-              styles: {
-                left: "150px",
-              },
+              styles: {},
             },
           },
           {
             type: "datetime",
             options: {
-              styles: {
-                left: "300px",
-              },
+              styles: {},
             },
           },
         ],
@@ -995,9 +995,7 @@ export default {
       let tmp = {
         type: classType,
         options: {
-          styles: {
-            left: "350px",
-          },
+          styles: {},
         },
       };
       if (parent.includes("header")) {
@@ -1028,6 +1026,9 @@ export default {
       headerSection.classList.remove("dragged");
       let footerSection = this.$refs.footerTemplate;
       footerSection.classList.remove("dragged");
+    },
+    element2ToolbarBind(element) {
+      this.locals.selectedElement = element;
     },
   },
 };
