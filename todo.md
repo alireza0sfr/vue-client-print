@@ -56,6 +56,3 @@ print component:
     -slots
     -data array
     -test
-
-
-    
