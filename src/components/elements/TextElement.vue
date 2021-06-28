@@ -16,7 +16,7 @@ export default {
   name: "TextElement",
   props: {
     options: {
-      text: "",
+      text: '',
       styles: {
         type: Array,
       },
