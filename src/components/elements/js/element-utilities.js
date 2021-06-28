@@ -59,9 +59,7 @@ function click(element, classType) {
             selectedElements[index].className = classType + " element";
         }
         if (element.lastChild.className != 'resizer') {
-            var resizer = document.createElement("div");
-            resizer.className = "resizer";
-            element.appendChild(resizer);
+            resizable(element)
         }
         element.className = classType + " element selected";
     }
