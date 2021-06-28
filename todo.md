@@ -45,6 +45,13 @@ print component:
 
 
 
+    -agar p nazari bra element resizer remove mishe vaqti test avaz mishe
+    -agar p bzari ta vaqti text avaz nashe drag kar nmikone
+    -bind true ya flase budan hasDate kar nmikone
+
+
+
+
     -page 1 footer size
     -other pages footer size
     -page 1 header size
@@ -69,5 +76,7 @@ print component:
           
 
 
-          rgb(246 246 246)
-         
+         background-color: rgb(232, 235, 240);
+    color: #484848;
+    border-bottom: 3px solid #084298;
+    padding: 9px;

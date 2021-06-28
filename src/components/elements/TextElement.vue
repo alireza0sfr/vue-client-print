@@ -14,6 +14,7 @@ export default {
   name: "TextElement",
   props: {
     options: {
+      text: '',
       styles: {
         type: Array,
       },
@@ -25,6 +26,7 @@ export default {
   watch: {
     options: {
       immediate: true,
+      deep: true,
       handler(val) {
         let tmp = this.options.styles;
         Object.assign(this.settings, val);

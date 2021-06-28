@@ -1,10 +1,26 @@
 <template>
   <div
+    v-if="settings.hasDate == true && settings.hasTime == false"
+    @click="this.$emit('clickedOnElement')"
+    ref="element"
+    :class="locals.classType + ' element'"
+    :style="settings.styles"
+  >{{dateToday}}</div>
+  <div
+    v-else-if="settings.hasTime == true && settings.hasDate == false"
+    @click="this.$emit('clickedOnElement')"
+    ref="element"
+    :class="locals.classType + ' element'"
+    :style="settings.styles"
+  >&nbsp; {{timeToday}}</div>
+  <div
+    v-else-if="settings.hasDate && settings.hasTime == true"
     @click="this.$emit('clickedOnElement')"
     ref="element"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >{{dateToday}} &nbsp; {{timeToday}}</div>
+
 </template>
 
 <script>
@@ -26,10 +42,13 @@ export default {
     options: {
       immediate: true,
       handler(val) {
+        console.log("val", val);
+        console.log("settings:", this.settings);
         let tmp = this.options.styles;
         Object.assign(this.settings, val);
         this.settings.styles = tmp;
         Object.assign(this.settings.styles, val.styles);
+        console.log("settings2: ", this.settings);
       },
     },
   },
@@ -50,6 +69,8 @@ export default {
         classType: "datetime",
       },
       settings: {
+        hasDate: true,
+        hasTime: true,
         styles: defaultStyles,
       },
     };
