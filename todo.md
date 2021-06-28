@@ -42,7 +42,9 @@ print component:
     -Done fix the eventlistenner and drag bug
     -Done Fix the watch bug on elements
     -Done Fix the page refresh at every add
+    -Done resizer gets removed after editing the text in div
 
+    -bind true ya flase budan hasDate kar nmikone
 
 
     -page 1 footer size
@@ -56,18 +58,3 @@ print component:
     -slots
     -data array
     -test
-
-    margin: '0px',
-          color: 'black',
-          direction: 'rtl',
-          fontSize: '14',
-          border: '0px',
-          type: "",
-          text: '',
-          options: '',
-          styles: ''
-          
-
-
-          rgb(246 246 246)
-         

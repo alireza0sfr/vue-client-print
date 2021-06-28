@@ -24,10 +24,7 @@
         'border-left': '1px ridge black'}"
           class="col-auto col-md-3 col-xl-2 bg-white shadow"
         >
-          <div
-            style="background-color: #E8EBF0; color: black; border: 1px solid rgb(246 246 246); padding: 9px;"
-            class="text-decoration-none mb-3"
-          >
+          <div class="text-decoration-none mb-3 toolbar header">
             <span class="fs-5">تنظیمات پرینت</span>
           </div>
           <div
@@ -107,22 +104,7 @@
                 </div>
               </li>
               <li style="width:100%" class="d-flex">
-                <label
-                  style="width: 40%;"
-                  class="form-check-label p-2"
-                  for="repeatableDateTimeControl"
-                >تکرار ساعت و تاریخ</label>
-                <div style="width:20%" class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    v-model="settings.isFixedDateAndTime"
-                    id="repeatableDateTimeControl"
-                  />
-                </div>
-              </li>
-              <li style="width:100%" class="d-flex">
-                <span style="width: 40%;" class="d-none d-sm-inline p-2">مکان نوشته</span>
+                <span style="width: 40%;" class="d-none d-sm-inline p-2">جهت صفحه</span>
                 <div style="width:22%" class="form-check">
                   <input
                     class="form-check-input"
@@ -147,10 +129,7 @@
                 </div>
               </li>
             </ul>
-            <div
-              style="background-color: #E8EBF0; color: black; border: 1px solid rgb(246 246 246); padding: 9px;"
-              class="text-decoration-none mb-3"
-            >
+            <div class="text-decoration-none mb-3 toolbar header">
               <span class="fs-5">المنت ها</span>
             </div>
             <ul class="nav nav-pills d-flex flex-row" id="elementsMenu">
@@ -160,7 +139,10 @@
                   @dragstart="startDraggingElement('textelement')"
                   @dragend="finishedDraggingElement()"
                   class="d-none d-sm-inline"
-                ><img src="./elements/images/text.png"></span>
+                >
+                  <img src="./elements/images/text.png" />
+                  <div class="element-title">متن</div>
+                </span>
               </li>
               <li style="width:50%; margin: 10px 0;">
                 <span
@@ -168,7 +150,10 @@
                   draggable="true"
                   @dragstart="startDraggingElement('datetime')"
                   @dragend="finishedDraggingElement()"
-                ><img src="./elements/images/timetable.png"></span>
+                >
+                  <img src="./elements/images/timetable.png" />
+                  <div class="element-title">تاریخ و ساعت</div>
+                </span>
               </li>
               <li style="width:50%; margin: 10px 0;">
                 <span
@@ -176,7 +161,10 @@
                   draggable="true"
                   @dragstart="startDraggingElement('pagecounter')"
                   @dragend="finishedDraggingElement()"
-                ><img src="./elements/images/pages.png"></span>
+                >
+                  <img src="./elements/images/pages.png" />
+                  <div class="element-title">شماره صفحه</div>
+                </span>
               </li>
               <li style="width:50%; margin: 10px 0;">
                 <span
@@ -184,44 +172,63 @@
                   draggable="true"
                   @dragstart="startDraggingElement('imageelement')"
                   @dragend="finishedDraggingElement()"
-                ><img src="./elements/images/image.png"></span>
+                >
+                  <img src="./elements/images/image.png" />
+                  <div class="element-title">عکس</div>
+                </span>
               </li>
             </ul>
-            <div
-              style="background-color: #E8EBF0; color: black; border: 1px solid rgb(246 246 246); padding: 9px;"
-              class="text-decoration-none mb-3"
-            >
+            <div class="text-decoration-none mb-3 toolbar header">
               <span class="fs-5">تنظیمات المنت ها</span>
             </div>
             <ul
               class="nav nav-pills flex-column align-items-start align-items-sm-start"
               id="elementConfigsMenu"
             >
-              <li>
-                <a class="nav-link align-start">
-                  <span class="d-none d-sm-inline">Text Box</span>
-                </a>
+              <li
+                v-if="locals.selectedElement.type == 'textelement'"
+                style="width:100%"
+                class="d-flex"
+              >
+                <span style="width: 38%;" class="p-2">متن</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
+                  <input
+                    type="text"
+                    style="height: 80%; margin-left: 2px"
+                    v-model="locals.selectedElement.options.text"
+                    class="flex-grow-2 form-control mb-3"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
               </li>
-              <li>
-                <a class="nav-link align-start">
-                  <span class="d-none d-sm-inline">Date & Time</span>
-                </a>
+              <li style="width:100%" class="d-flex" v-if="locals.selectedElement.type == 'datetime'">
+                <label style="width: 40%;" class="form-check-label p-2" for="hasDateControl">تاریخ</label>
+                {{locals.selectedElement.options.hasDate}}
+                {{locals.selectedElement.options.hasTime}}
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="locals.selectedElement.options.hasDate"
+                    id="hasDateControl"
+                  />
+                </div>
               </li>
-              <li>
-                <a class="nav-link align-middle">
-                  <span class="d-none d-sm-inline">Page Counter</span>
-                </a>
-              </li>
-              <li>
-                <a class="nav-link align-middle">
-                  <span class="d-none d-sm-inline">Image</span>
-                </a>
+              <li style="width:100%" class="d-flex" v-if="locals.selectedElement.type == 'datetime'">
+                <label style="width: 40%;" class="form-check-label p-2" for="hasTimeControl">ساعت</label>
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="locals.selectedElement.options.hasTime"
+                    id="hasTimeControl"
+                  />
+                </div>
               </li>
             </ul>
-            <div
-              style="background-color: #E8EBF0; color: black border: 1px solid rgb(246 246 246); padding: 9px;"
-              class="text-decoration-none mb-3"
-            >
+            <div class="text-decoration-none mb-3 toolbar header">
               <span class="fs-5">استایل المنت ها</span>
             </div>
             <ul
@@ -271,7 +278,7 @@
                 </div>
               </li>
               <li style="width:100%" class="d-flex">
-                <span style="width: 40%;" class="p-2">باکس متن</span>
+                <span style="width: 40%;" class="p-2">حاشیه متن</span>
                 <div style="width:10%"></div>
                 <div style="width:50%;" class="input-group input-group-sm">
                   <input
@@ -290,23 +297,23 @@
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="pageDirections"
-                    id="pageDirections"
+                    name="elementDirections"
+                    id="elementDirections"
                     value="rtl"
                     v-model="locals.selectedElement.options.styles.direction"
                   />
-                  <label class="form-check-label" for="pageDirections">راست</label>
+                  <label class="form-check-label" for="elementDirections">راست</label>
                 </div>
                 <div style="width:22%; margin-right:10px" class="form-check">
                   <input
                     class="form-check-input"
                     type="radio"
-                    name="pageDirections"
-                    id="pageDirections2"
+                    name="elementDirections"
+                    id="elementDirections2"
                     value="ltr"
                     v-model="locals.selectedElement.options.styles.direction"
                   />
-                  <label class="form-check-label" for="pageDirections2">چپ</label>
+                  <label class="form-check-label" for="elementDirections2">چپ</label>
                 </div>
               </li>
             </ul>
@@ -533,9 +540,9 @@ export default {
         pageCounterPosition: "center",
         hasHeader: true,
         hasFooter: true,
+        isFixedDateAndTime: true,
         isFooterRepeatable: true,
         isHeaderRepeatable: true,
-        isFixedDateAndTime: true,
         orientation: "portrait",
         pageSize: "a4",
         customHeader: "",
@@ -550,26 +557,20 @@ export default {
             type: "textelement",
             options: {
               text: "Header Default Text 1",
-              styles: {
-                left: '100px'
-              },
+              styles: {},
             },
           },
           {
             type: "textelement",
             options: {
               text: "Header Default Text 2",
-              styles: {
-                left: '200px'
-              },
+              styles: {},
             },
           },
           {
             type: "datetime",
             options: {
-              styles: {
-                left: '300px'
-              },
+              styles: {},
             },
           },
         ],
@@ -578,26 +579,20 @@ export default {
             type: "textelement",
             options: {
               text: "Footer Default Text 1",
-              styles: {
-                left: '100px'
-              },
+              styles: {},
             },
           },
           {
             type: "textelement",
             options: {
               text: "Footer Default Text 2",
-              styles: {
-                left: '200px'
-              },
+              styles: {},
             },
           },
           {
             type: "datetime",
             options: {
-              styles: {
-                left: '300px'
-              },
+              styles: {},
             },
           },
         ],
@@ -991,7 +986,6 @@ export default {
         this.locals.isClicked = false;
         return;
       }
-
       let selectedElements =
         document.getElementsByClassName("element selected");
       for (let index = 0; index < selectedElements.length; index++) {
@@ -1046,6 +1040,12 @@ export default {
 </script>
 
 <style>
+.toolbar.header {
+  background-color: rgb(232, 235, 240);
+  color: #484848;
+  border-bottom: 3px solid #084298;
+  padding: 9px;
+}
 shadow {
   box-shadow: -3px 4px 9px 0px #ddd;
 }
@@ -1242,6 +1242,8 @@ table th {
   position: absolute;
   width: 100px;
   overflow: hidden;
+  min-height: 20px;
+  min-width: 20px;
 }
 .element.selected {
   width: 100px;

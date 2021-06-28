@@ -57,6 +57,9 @@ function click(element, classType) {
         for (let index = 0; index < selectedElements.length; index++) {
             selectedElements[index].className = classType + " element";
         }
+        if (element.lastChild.className != 'resizer') {
+            resizable(element)
+        }
         element.className = classType + " element selected";
     }
 

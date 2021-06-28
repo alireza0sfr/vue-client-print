@@ -1,10 +1,12 @@
 <template>
-  <div
-    ref="element"
-    @click="this.$emit('clickedOnElement')"
-    :class="locals.classType + ' element'"
-    :style="settings.styles"
-  >{{settings.text}}</div>
+  <div>
+    <p
+      ref="element"
+      @click="this.$emit('clickedOnElement')"
+      :class="locals.classType + ' element'"
+      :style="settings.styles"
+    >{{settings.text}}</p>
+  </div>
 </template>
 
 <script>
@@ -14,6 +16,7 @@ export default {
   name: "TextElement",
   props: {
     options: {
+      text: "",
       styles: {
         type: Array,
       },
@@ -25,6 +28,7 @@ export default {
   watch: {
     options: {
       immediate: true,
+      deep: true,
       handler(val) {
         let tmp = this.options.styles;
         Object.assign(this.settings, val);
