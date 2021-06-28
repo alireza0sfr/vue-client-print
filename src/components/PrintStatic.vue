@@ -1,4 +1,4 @@
-    <template>
+<template>
 <div id="page" :dir="settings.pageDirections">
   <!--Buttons-->
 
@@ -9,112 +9,121 @@
 
   <div class="wrapper">
     <!-- Section 1 (Template Builder) -->
-    <div v-if="locals.settingsModalShow" class="template-builder container-fluid">
+    <div
+      v-if="locals.settingsModalShow"
+      :style="{'height': locals.defaultHeightOfPaper + 'in'}"
+      class="template-builder container-fluid"
+    >
       <div class="row flex-nowrap">
         <div
           :style="{'height': locals.defaultHeightOfPaper + 'in',
         'overflow': 'hidden',
+        'width': '27%',
+        'padding':'0px',
         'overflow-y': 'scroll',
-        'width': '25%'}"
-          class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark"
+        'border-left': '1px ridge black'}"
+          class="col-auto col-md-3 col-xl-2 bg-white shadow"
         >
           <div
-            class="d-flex flex-column align-items-center text-align-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+            style="background-color: #E8EBF0; color: black; border: 1px solid rgb(246 246 246); padding: 9px;"
+            class="text-decoration-none mb-3"
           >
-            <a
-              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-            >
-              <span class="fs-5 d-none d-sm-inline">Print Configs</span>
-            </a>
-            <ul
-              class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-              id="printConfigsMenu"
-            >
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <label for="pageSizeControl">Page Size</label>
-                </a>
-                <select v-model="settings.pageSize" class="mb-4 form-control" id="pageSizeControl">
+            <span class="fs-5">تنظیمات پرینت</span>
+          </div>
+          <div
+            style="color: black;"
+            class="d-flex flex-column text-align-start justify-content-start min-vh-100"
+          >
+            <ul class="nav nav-pills flex-column align-items-start" id="printConfigsMenu">
+              <li style="width:100%" class="d-flex">
+                <label style="width: 40%;" class="p-2" for="pageSizeControl">نوع صفحه</label>
+                <div style="width:10%"></div>
+                <select
+                  style="height:25%; width:50%; margin-left: 8px"
+                  class="flex-grow-2 form-control mb-3"
+                  v-model="settings.pageSize"
+                  id="pageSizeControl"
+                >
                   <option>a3</option>
                   <option>a4</option>
                   <option>a5</option>
                 </select>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <label for="pageOrientiationsControl">Page Oreintation</label>
-                </a>
+              <li style="width:100%" class="d-flex">
+                <label style="width: 40%;" class="p-2" for="pageOrientiationsControl">حالت صفحه</label>
+                <div style="width:10%"></div>
                 <select
+                  style="height:25%; width:50%; margin-left: 8px"
+                  class="flex-grow-2 form-control mb-3"
                   v-model="settings.orientation"
-                  class="mb-4 form-control"
                   id="pageOrientiationsControl"
                 >
                   <option>portrait</option>
                   <option>landscape</option>
                 </select>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="mb-4 ms-1 d-none d-sm-inline">:File Name</span>
-                </a>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend"></div>
+              <li style="width:100%" class="d-flex">
+                <span style="width: 38%;" class="p-2">اسم فایل</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
                   <input
                     type="text"
+                    style="height: 80%; margin-left: 2px"
                     v-model="settings.fileName"
-                    class="form-control"
+                    class="flex-grow-2 form-control mb-3"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <div class="form-check">
-                    <label class="form-check-label" for="repeatableHeaderControl">Repeatable Header</label>
-                    <input
-                      class="mb-4 form-check-input"
-                      type="checkbox"
-                      v-model="settings.isHeaderRepeatable"
-                      id="repeatableHeaderControl"
-                    />
-                  </div>
-                </a>
+              <li style="width:100%" class="d-flex">
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2"
+                  for="repeatableHeaderControl"
+                >تکرار هدر</label>
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="settings.isHeaderRepeatable"
+                    id="repeatableHeaderControl"
+                  />
+                </div>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <div class="form-check">
-                    <label class="form-check-label" for="repeatableFooterControl">Repeatable Footer</label>
-                    <input
-                      class="mb-4 form-check-input"
-                      type="checkbox"
-                      v-model="settings.isFooterRepeatable"
-                      id="repeatableFooterControl"
-                    />
-                  </div>
-                </a>
+              <li style="width:100%" class="d-flex">
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2"
+                  for="repeatableFooterControl"
+                >تکرار فوتر</label>
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="settings.isFooterRepeatable"
+                    id="repeatableFooterControl"
+                  />
+                </div>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <div class="form-check">
-                    <label
-                      class="form-check-label"
-                      for="repeatableDateTimeControl"
-                    >Repeatable Date and Time</label>
-                    <input
-                      class="mb-4 form-check-input"
-                      type="checkbox"
-                      v-model="settings.isFixedDateAndTime"
-                      id="repeatableDateTimeControl"
-                    />
-                  </div>
-                </a>
+              <li style="width:100%" class="d-flex">
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2"
+                  for="repeatableDateTimeControl"
+                >تکرار ساعت و تاریخ</label>
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="settings.isFixedDateAndTime"
+                    id="repeatableDateTimeControl"
+                  />
+                </div>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">:Directions</span>
-                </a>
-                <div class="form-check">
+              <li style="width:100%" class="d-flex">
+                <span style="width: 40%;" class="d-none d-sm-inline p-2">مکان نوشته</span>
+                <div style="width:22%" class="form-check">
                   <input
                     class="form-check-input"
                     type="radio"
@@ -123,9 +132,9 @@
                     value="rtl"
                     v-model="settings.pageDirections"
                   />
-                  <label class="form-check-label" for="pageDirections">Right To Left</label>
+                  <label class="form-check-label" for="pageDirections">راست</label>
                 </div>
-                <div class="form-check">
+                <div style="width:22%; margin-right:10px" class="form-check">
                   <input
                     class="form-check-input"
                     type="radio"
@@ -134,179 +143,170 @@
                     value="ltr"
                     v-model="settings.pageDirections"
                   />
-                  <label class="form-check-label" for="pageDirections2">Left To Right</label>
+                  <label class="form-check-label" for="pageDirections2">چپ</label>
                 </div>
               </li>
             </ul>
-            <a
-              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            <div
+              style="background-color: #E8EBF0; color: black; border: 1px solid rgb(246 246 246); padding: 9px;"
+              class="text-decoration-none mb-3"
             >
-              <span class="fs-5 mt-4 d-none d-sm-inline">Elements</span>
-            </a>
-            <ul
-              class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-              id="elementsMenu"
-            >
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span
-                    draggable="true"
-                    @dragstart="startDraggingElement('textelement')"
-                    @dragend="finishedDraggingElement()"
-                    class="ms-1 d-none d-sm-inline"
-                  >Text Box</span>
-                </a>
+              <span class="fs-5">المنت ها</span>
+            </div>
+            <ul class="nav nav-pills d-flex flex-row" id="elementsMenu">
+              <li style="width:50%; margin: 10px 0;">
+                <span
+                  draggable="true"
+                  @dragstart="startDraggingElement('textelement')"
+                  @dragend="finishedDraggingElement()"
+                  class="d-none d-sm-inline"
+                ><img src="./elements/images/text.png"></span>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span
-                    class="ms-1 d-none d-sm-inline"
-                    draggable="true"
-                    @dragstart="startDraggingElement('datetime')"
-                    @dragend="finishedDraggingElement()"
-                  >Date & Time</span>
-                </a>
+              <li style="width:50%; margin: 10px 0;">
+                <span
+                  class="d-none d-sm-inline"
+                  draggable="true"
+                  @dragstart="startDraggingElement('datetime')"
+                  @dragend="finishedDraggingElement()"
+                ><img src="./elements/images/timetable.png"></span>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span
-                    class="ms-1 d-none d-sm-inline"
-                    draggable="true"
-                    @dragstart="startDraggingElement('pagecounter')"
-                    @dragend="finishedDraggingElement()"
-                  >Page Counter</span>
-                </a>
+              <li style="width:50%; margin: 10px 0;">
+                <span
+                  class="d-none d-sm-inline"
+                  draggable="true"
+                  @dragstart="startDraggingElement('pagecounter')"
+                  @dragend="finishedDraggingElement()"
+                ><img src="./elements/images/pages.png"></span>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span
-                    class="ms-1 d-none d-sm-inline"
-                    draggable="true"
-                    @dragstart="startDraggingElement('imageelement')"
-                    @dragend="finishedDraggingElement()"
-                  >Image</span>
-                </a>
+              <li style="width:50%; margin: 10px 0;">
+                <span
+                  class="d-none d-sm-inline"
+                  draggable="true"
+                  @dragstart="startDraggingElement('imageelement')"
+                  @dragend="finishedDraggingElement()"
+                ><img src="./elements/images/image.png"></span>
               </li>
             </ul>
-            <a
-              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            <div
+              style="background-color: #E8EBF0; color: black; border: 1px solid rgb(246 246 246); padding: 9px;"
+              class="text-decoration-none mb-3"
             >
-              <span class="fs-5 mt-4 d-none d-sm-inline">Element Configs</span>
-            </a>
+              <span class="fs-5">تنظیمات المنت ها</span>
+            </div>
             <ul
-              class="nav nav-pills flex-column mt-20 mb-0 align-items-center align-items-sm-start"
+              class="nav nav-pills flex-column align-items-start align-items-sm-start"
               id="elementConfigsMenu"
             >
               <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Text Box</span>
+                <a class="nav-link align-start">
+                  <span class="d-none d-sm-inline">Text Box</span>
                 </a>
               </li>
               <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Date & Time</span>
+                <a class="nav-link align-start">
+                  <span class="d-none d-sm-inline">Date & Time</span>
                 </a>
               </li>
               <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Page Counter</span>
+                <a class="nav-link align-middle">
+                  <span class="d-none d-sm-inline">Page Counter</span>
                 </a>
               </li>
               <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">Image</span>
+                <a class="nav-link align-middle">
+                  <span class="d-none d-sm-inline">Image</span>
                 </a>
               </li>
             </ul>
-            <a
-              class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+            <div
+              style="background-color: #E8EBF0; color: black border: 1px solid rgb(246 246 246); padding: 9px;"
+              class="text-decoration-none mb-3"
             >
-              <span class="fs-5 mt-4 d-none d-sm-inline">Styles</span>
-            </a>
+              <span class="fs-5">استایل المنت ها</span>
+            </div>
             <ul
-              class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
+              class="nav nav-pills flex-column align-items-center align-items-sm-start"
               id="elementStylesMenu"
             >
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <label for="elementTextAlignControl">Text Align</label>
-                </a>
-                <select v-model="locals.selectedElement.options.styles.textAlign" class="mb-4 form-control" id="elementTextAlignControl">
+              <li style="width:100%" class="d-flex">
+                <label style="width: 43%;" class="p-2" for="elementTextAlignControl">مکان نوشته</label>
+                <div style="width:10%"></div>
+                <select
+                  v-model="locals.selectedElement.options.styles.textAlign"
+                  style="height:25%; width:50%; margin-left: 8px"
+                  class="flex-grow-2 form-control mb-3"
+                  id="elementTextAlignControl"
+                >
                   <option>right</option>
                   <option>center</option>
                   <option>left</option>
                 </select>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">:Color</span>
-                </a>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend"></div>
+              <li style="width:100%" class="d-flex">
+                <span style="width: 40%;" class="p-2">رنگ نوشته</span>
+                <div style="width:10%"></div>
+                <div style="width:50%" class="input-group input-group-sm">
                   <input
-                    type="text"
-                    class="form-control"
+                    type="color"
+                    class="flex-grow-2 form-control mb-3"
+                    style="height: 80%; margin-left: 8px"
                     v-model="locals.selectedElement.options.styles.color"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">:Directions</span>
-                </a>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    v-model="locals.selectedElement.options.styles.direction"
-                    type="radio"
-                    name="elementDirections"
-                    id="elementDirections"
-                    value="rtl"
-                  />
-                  <label class="form-check-label" for="elementDirections">Right To Left</label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="elementDirections"
-                    id="elementDirections2"
-                    value="ltr"
-                    v-model="locals.selectedElement.options.styles.direction"
-                  />
-                  <label class="form-check-label" for="elementDirections2">Left To Right</label>
-                </div>
-              </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">:Font Size</span>
-                </a>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend"></div>
+              <li style="width:100%" class="d-flex">
+                <span style="width: 40%;" class="p-2">اندازه فونت</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
                   <input
                     type="text"
-                    class="form-control"
+                    class="flex-grow-2 form-control mb-3"
+                    style="height: 80%; margin-left: 8px"
                     v-model="locals.selectedElement.options.styles.fontSize"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
               </li>
-              <li>
-                <a class="nav-link px-0 align-middle">
-                  <span class="ms-1 d-none d-sm-inline">:Border</span>
-                </a>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend"></div>
+              <li style="width:100%" class="d-flex">
+                <span style="width: 40%;" class="p-2">باکس متن</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
                   <input
                     type="text"
-                    class="form-control"
+                    class="flex-grow-2 form-control mb-3"
+                    style="height: 80%; margin-left: 8px"
                     v-model="locals.selectedElement.options.styles.border"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
+                </div>
+              </li>
+              <li style="width:100%" class="d-flex">
+                <span style="width: 40%;" class="d-none d-sm-inline p-2">مکان نوشته</span>
+                <div style="width:22%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="pageDirections"
+                    id="pageDirections"
+                    value="rtl"
+                    v-model="locals.selectedElement.options.styles.direction"
+                  />
+                  <label class="form-check-label" for="pageDirections">راست</label>
+                </div>
+                <div style="width:22%; margin-right:10px" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="pageDirections"
+                    id="pageDirections2"
+                    value="ltr"
+                    v-model="locals.selectedElement.options.styles.direction"
+                  />
+                  <label class="form-check-label" for="pageDirections2">چپ</label>
                 </div>
               </li>
             </ul>
@@ -319,7 +319,8 @@
         <div>
           <div
             v-if="locals.settingsModalShow"
-            :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in'}"
+            :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in',
+            'background-color': '#F1F5F8'}"
             class="template"
             @click="deSelectAll"
           >
@@ -548,7 +549,7 @@ export default {
             options: {
               text: "Header Default Text 1",
               styles: {
-                color: "red",
+                left: '100px'
               },
             },
           },
@@ -556,14 +557,16 @@ export default {
             type: "textelement",
             options: {
               text: "Header Default Text 2",
-              styles: {},
+              styles: {
+                left: '200px'
+              },
             },
           },
           {
             type: "datetime",
             options: {
               styles: {
-                margin: "0px",
+                left: '300px'
               },
             },
           },
@@ -573,20 +576,26 @@ export default {
             type: "textelement",
             options: {
               text: "Footer Default Text 1",
-              styles: {},
+              styles: {
+                left: '100px'
+              },
             },
           },
           {
             type: "textelement",
             options: {
               text: "Footer Default Text 2",
-              styles: {},
+              styles: {
+                left: '200px'
+              },
             },
           },
           {
             type: "datetime",
             options: {
-              styles: {},
+              styles: {
+                left: '300px'
+              },
             },
           },
         ],
@@ -1035,6 +1044,25 @@ export default {
 </script>
 
 <style>
+shadow {
+  box-shadow: -3px 4px 9px 0px #ddd;
+}
+input {
+  text-align: center;
+  text-align-last: center;
+}
+select {
+  text-align: center;
+  text-align-last: center;
+  /* webkit*/
+}
+option {
+  text-align: left;
+  /* reset to left*/
+}
+ul {
+  padding: 0px !important;
+}
 .mainLoop {
   display: flex;
   flex-direction: column;

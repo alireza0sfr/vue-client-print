@@ -66,3 +66,8 @@ print component:
           text: '',
           options: '',
           styles: ''
+          
+
+
+          rgb(246 246 246)
+         
