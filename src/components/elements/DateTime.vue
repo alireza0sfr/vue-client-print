@@ -1,26 +1,25 @@
 <template>
   <div
-    v-if="settings.hasDate == true && settings.hasTime == false"
+    v-if="settings.configs.hasDate == true && settings.configs.hasTime == false"
     @click="this.$emit('clickedOnElement')"
     ref="element"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >{{dateToday}}</div>
   <div
-    v-else-if="settings.hasTime == true && settings.hasDate == false"
+    v-else-if="settings.configs.hasTime == true && settings.configs.hasDate == false"
     @click="this.$emit('clickedOnElement')"
     ref="element"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >&nbsp; {{timeToday}}</div>
   <div
-    v-else-if="settings.hasDate && settings.hasTime == true"
+    v-else-if="settings.configs.hasDate && settings.configs.hasTime == true"
     @click="this.$emit('clickedOnElement')"
     ref="element"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >{{dateToday}} &nbsp; {{timeToday}}</div>
-
 </template>
 
 <script>
@@ -30,9 +29,7 @@ export default {
   name: "DateTime",
   props: {
     options: {
-      styles: {
-        type: Array,
-      },
+      type: Object,
     },
   },
   mounted() {
@@ -69,8 +66,10 @@ export default {
         classType: "datetime",
       },
       settings: {
-        hasDate: true,
-        hasTime: true,
+        configs: {
+          hasDate: true,
+          hasTime: true,
+        },
         styles: defaultStyles,
       },
     };

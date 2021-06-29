@@ -53,7 +53,6 @@ function resizable(element) {
 function click(element, classType) {
     element.addEventListener("mousedown", onClick, false);
     function onClick() {
-        console.log(element.lastChild);
         let selectedElements = document.getElementsByClassName('element selected');
         for (let index = 0; index < selectedElements.length; index++) {
             selectedElements[index].className = classType + " element";

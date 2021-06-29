@@ -203,10 +203,9 @@
                   />
                 </div>
               </li>
+                {{locals.selectedElement.options}}
               <li style="width:100%" class="d-flex" v-if="locals.selectedElement.type == 'datetime'">
                 <label style="width: 40%;" class="form-check-label p-2" for="hasDateControl">تاریخ</label>
-                {{locals.selectedElement.options.hasDate}}
-                {{locals.selectedElement.options.hasTime}}
                 <div style="width:20%" class="form-check">
                   <input
                     class="form-check-input"
@@ -530,6 +529,7 @@ export default {
         selectedElement: {
           type: {},
           options: {
+            configs: {},
             styles: {},
           },
         },
