@@ -38,6 +38,7 @@ export default {
   watch: {
     options: {
       immediate: true,
+      deep: true,
       handler(val) {
         console.log("val", val);
         console.log("settings:", this.settings);

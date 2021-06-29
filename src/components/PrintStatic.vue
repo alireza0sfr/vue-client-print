@@ -196,15 +196,19 @@
                   <input
                     type="text"
                     style="height: 80%; margin-left: 2px"
-                    v-model="locals.selectedElement.options.text"
+                    v-model="locals.selectedElement.options.configs.text"
                     class="flex-grow-2 form-control mb-3"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
               </li>
-                {{locals.selectedElement.options}}
-              <li style="width:100%" class="d-flex" v-if="locals.selectedElement.type == 'datetime'">
+              {{locals.selectedElement.options}}
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'datetime'"
+              >
                 <label style="width: 40%;" class="form-check-label p-2" for="hasDateControl">تاریخ</label>
                 <div style="width:20%" class="form-check">
                   <input
@@ -215,7 +219,11 @@
                   />
                 </div>
               </li>
-              <li style="width:100%" class="d-flex" v-if="locals.selectedElement.type == 'datetime'">
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'datetime'"
+              >
                 <label style="width: 40%;" class="form-check-label p-2" for="hasTimeControl">ساعت</label>
                 <div style="width:20%" class="form-check">
                   <input
@@ -556,14 +564,18 @@ export default {
           {
             type: "textelement",
             options: {
-              text: "Header Default Text 1",
+              configs: {
+                text: "Header Default Text 1",
+              },
               styles: {},
             },
           },
           {
             type: "textelement",
             options: {
-              text: "Header Default Text 2",
+              configs: {
+                text: "Header Default Text 2",
+              },
               styles: {},
             },
           },
@@ -578,14 +590,18 @@ export default {
           {
             type: "textelement",
             options: {
-              text: "Footer Default Text 1",
+              configs: {
+                text: "Footer Default Text 1",
+              },
               styles: {},
             },
           },
           {
             type: "textelement",
             options: {
-              text: "Footer Default Text 2",
+              configs: {
+                text: "Footer Default Text 1",
+              },
               styles: {},
             },
           },
