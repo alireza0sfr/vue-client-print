@@ -44,22 +44,18 @@ export default {
         Object.assign(this.settings, val);
         this.settings.styles = tmp;
         Object.assign(this.settings.styles, val.styles);
+        if (this.settings.configs.persianDate == true) {
+          this.persianDate();
+        } else {
+          this.adDate();
+        }
       },
     },
   },
   data() {
     return {
-      dateToday: new Date()
-        .toLocaleDateString("fa-IR")
-        .replace(/([۰-۹])/g, (token) =>
-          String.fromCharCode(token.charCodeAt(0) - 1728)
-        ),
-      timeToday:
-        new Date().getHours() +
-        ":" +
-        new Date().getMinutes() +
-        ":" +
-        new Date().getSeconds(),
+      dateToday: "",
+      timeToday: "",
       locals: {
         classType: "datetime",
       },
@@ -67,6 +63,7 @@ export default {
         configs: {
           hasDate: true,
           hasTime: true,
+          persianDate: true,
         },
         styles: defaultStyles,
       },
@@ -85,6 +82,34 @@ export default {
     clickedOnElement() {
       this.$emit("clickedOnElement");
       this.Initialize(this.$refs.element, this.locals.classType);
+    },
+    persianDate() {
+      let today = new Date().toLocaleDateString("fa-IR");
+      this.dateToday = today;
+      this.timeToday = this.toPersianNumbers(this.timeNow());
+    },
+    adDate() {
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, "0");
+      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = today.getFullYear();
+
+      this.dateToday = yyyy + "/" + dd + "/" + mm;
+      this.timeToday = this.timeNow();
+    },
+    timeNow() {
+      return (
+        new Date().getHours() +
+        ":" +
+        new Date().getMinutes() +
+        ":" +
+        new Date().getSeconds()
+      );
+    },
+    toPersianNumbers(n) {
+      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+
+      return n.toString().replace(/\d/g, (x) => farsiDigits[x]);
     },
   },
 };

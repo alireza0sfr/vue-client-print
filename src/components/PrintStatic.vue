@@ -233,6 +233,21 @@
                   />
                 </div>
               </li>
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'datetime'"
+              >
+                <label style="width: 40%;" class="form-check-label p-2" for="persiaDateControl">تاریخ شمسی</label>
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="locals.selectedElement.options.configs.persianDate"
+                    id="persiaDateControl"
+                  />
+                </div>
+              </li>
             </ul>
             <div class="text-decoration-none mb-3 toolbar header">
               <span class="fs-5">استایل المنت ها</span>
@@ -584,6 +599,7 @@ export default {
               configs: {
                 hasDate: true,
                 hasTime: true,
+                persianDate: true,
               },
               styles: {},
             },
@@ -614,6 +630,7 @@ export default {
               configs: {
                 hasDate: true,
                 hasTime: true,
+                persianDate: true,
               },
               styles: {},
             },
@@ -1033,7 +1050,7 @@ export default {
         tmp = {
           type: classType,
           options: {
-            configs: { hasDate: true, hasTime: true },
+            configs: { hasDate: true, hasTime: true, persianDate: true },
             styles: {},
           },
         };
