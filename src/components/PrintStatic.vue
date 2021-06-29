@@ -203,7 +203,7 @@
                   />
                 </div>
               </li>
-              {{locals.selectedElement.options}}
+              {{locals.selectedElement}}
               <li
                 style="width:100%"
                 class="d-flex"
@@ -1016,6 +1016,7 @@ export default {
       let tmp = {
         type: classType,
         options: {
+          configs: { text: "Enter Your Text" },
           styles: {},
         },
       };

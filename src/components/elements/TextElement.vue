@@ -15,12 +15,7 @@ import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "TextElement",
   props: {
-    options: {
-      text: "",
-      styles: {
-        type: Array,
-      },
-    },
+    options: Object
   },
   mounted() {
     this.Initialize(this.$refs.element, this.locals.classType);
