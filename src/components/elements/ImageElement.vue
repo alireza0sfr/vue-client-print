@@ -40,7 +40,7 @@ export default {
       },
       settings: {
         configs: {
-          imageSrc: "./elements/images/logo.png",
+          imageSrc: '/src/components/elements/images/logo.png',
         },
         styles: defaultStyles,
       },

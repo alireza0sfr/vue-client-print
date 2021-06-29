@@ -254,6 +254,21 @@
               <li
                 style="width:100%"
                 class="d-flex"
+                v-if="locals.selectedElement.type == 'pagecounter'"
+              >
+                <label style="width: 40%;" class="form-check-label p-2" for="persianNumbersControl">اعداد فارسی</label>
+                <div style="width:20%" class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="locals.selectedElement.options.configs.persianNumbers"
+                    id="persianNumbersControl"
+                  />
+                </div>
+              </li>
+              <li
+                style="width:100%"
+                class="d-flex"
                 v-if="locals.selectedElement.type == 'imageelement'"
               >
                 <label style="width: 38%;" class="p-2" for="imageFileControl">فایل تضویر</label>
@@ -527,7 +542,7 @@ export default {
     textelement: TextElement,
     datetime: DateTime,
     pagecounter: PageCounter,
-    imageelement: ImageElement
+    imageelement: ImageElement,
   },
   data() {
     return {
@@ -1083,7 +1098,7 @@ export default {
         tmp = {
           type: classType,
           options: {
-            configs: { counter: 1 },
+            configs: { counter: 1, persianNumbers: true, },
             styles: {},
           },
         };

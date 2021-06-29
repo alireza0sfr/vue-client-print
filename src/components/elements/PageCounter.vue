@@ -29,6 +29,11 @@ export default {
         Object.assign(this.settings, val);
         this.settings.styles = tmp;
         Object.assign(this.settings.styles, val.styles);
+        if (this.settings.configs.persianNumbers == true) {
+          this.settings.configs.counter = this.toPersianNumbers(this.settings.configs.counter);
+        } else {
+          this.settings.configs.counter = 1
+        }
       },
     },
   },
@@ -40,6 +45,7 @@ export default {
       settings: {
         configs: {
           counter: 1,
+          persianNumbers: true,
         },
         styles: defaultStyles,
       },
@@ -50,6 +56,11 @@ export default {
       elementUtilities.resizable(element);
       elementUtilities.dragable(element, classType);
       elementUtilities.click(element, classType);
+    },
+    toPersianNumbers(n) {
+      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+
+      return n.toString().replace(/\d/g, (x) => farsiDigits[x]);
     },
   },
 };
