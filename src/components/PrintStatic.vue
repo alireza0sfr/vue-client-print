@@ -583,8 +583,8 @@ export default {
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         settingsModalShow: false,
-        pageHeaderSize: 0.6,
-        pageFooterSize: 0.6,
+        pageHeaderSize: '',
+        pageFooterSize: '',
         isClicked: false,
         parent: "",
         classType: "",

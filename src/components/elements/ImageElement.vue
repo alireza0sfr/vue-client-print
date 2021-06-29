@@ -6,6 +6,9 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
       :src="settings.configs.imageSrc"
+      alt="Image"
+      width="40"
+      height="40"
     />
   </div>
 </template>
@@ -40,7 +43,7 @@ export default {
       },
       settings: {
         configs: {
-          imageSrc: '/src/components/elements/images/logo.png',
+          imageSrc: "./images/logo.png",
         },
         styles: defaultStyles,
       },

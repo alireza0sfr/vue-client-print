@@ -58,6 +58,7 @@ function click(element, classType) {
             selectedElements[index].className = classType + " element";
         }
         if (element.lastChild.className != 'resizer') {
+            console.log(element);
             resizable(element) // So that the removed resizer from the new element gets replaced
         }
         element.className = classType + " element selected";
