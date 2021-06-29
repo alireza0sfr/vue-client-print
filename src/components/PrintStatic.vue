@@ -1107,6 +1107,13 @@ export default {
         this.locals.isClicked = false;
         return;
       }
+      this.locals.selectedElement = {
+          type: {},
+          options: {
+            configs: {},
+            styles: {},
+          },
+        }
       let selectedElements =
         document.getElementsByClassName("element selected");
       for (let index = 0; index < selectedElements.length; index++) {
