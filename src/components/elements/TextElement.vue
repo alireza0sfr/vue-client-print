@@ -15,7 +15,7 @@ import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "TextElement",
   props: {
-    options: Object
+    options: Object,
   },
   mounted() {
     this.Initialize(this.$refs.element, this.locals.classType);
@@ -25,10 +25,8 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
-        console.log('val,', val);
         let tmp = this.options.styles;
         Object.assign(this.settings, val);
-        console.log('settings', this.settings);
         this.settings.styles = tmp;
         Object.assign(this.settings.styles, val.styles);
       },

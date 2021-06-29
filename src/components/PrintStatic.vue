@@ -203,7 +203,6 @@
                   />
                 </div>
               </li>
-              {{locals.selectedElement}}
               <li
                 style="width:100%"
                 class="d-flex"
@@ -214,7 +213,7 @@
                   <input
                     class="form-check-input"
                     type="checkbox"
-                    v-model="locals.selectedElement.options.hasDate"
+                    v-model="locals.selectedElement.options.configs.hasDate"
                     id="hasDateControl"
                   />
                 </div>
@@ -229,7 +228,7 @@
                   <input
                     class="form-check-input"
                     type="checkbox"
-                    v-model="locals.selectedElement.options.hasTime"
+                    v-model="locals.selectedElement.options.configs.hasTime"
                     id="hasTimeControl"
                   />
                 </div>
@@ -582,6 +581,10 @@ export default {
           {
             type: "datetime",
             options: {
+              configs: {
+                hasDate: true,
+                hasTime: true,
+              },
               styles: {},
             },
           },
@@ -608,6 +611,10 @@ export default {
           {
             type: "datetime",
             options: {
+              configs: {
+                hasDate: true,
+                hasTime: true,
+              },
               styles: {},
             },
           },
@@ -1013,13 +1020,24 @@ export default {
     },
     createElement(parent) {
       let classType = this.locals.classType;
-      let tmp = {
-        type: classType,
-        options: {
-          configs: { text: "Enter Your Text" },
-          styles: {},
-        },
-      };
+      let tmp;
+      if (classType == "textelement") {
+        tmp = {
+          type: classType,
+          options: {
+            configs: { text: "Enter Your Text" },
+            styles: {},
+          },
+        };
+      } else if (classType == "datetime") {
+        tmp = {
+          type: classType,
+          options: {
+            configs: { hasDate: true, hasTime: true },
+            styles: {},
+          },
+        };
+      }
       if (parent.includes("header")) {
         this.elements.headerElements.push(tmp);
       } else if (parent.includes("footer")) {
