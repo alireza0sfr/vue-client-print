@@ -256,7 +256,11 @@
                 class="d-flex"
                 v-if="locals.selectedElement.type == 'pagecounter'"
               >
-                <label style="width: 40%;" class="form-check-label p-2" for="persianNumbersControl">اعداد فارسی</label>
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2"
+                  for="persianNumbersControl"
+                >اعداد فارسی</label>
                 <div style="width:20%" class="form-check">
                   <input
                     class="form-check-input"
@@ -271,16 +275,53 @@
                 class="d-flex"
                 v-if="locals.selectedElement.type == 'imageelement'"
               >
-                <label style="width: 38%;" class="p-2" for="imageFileControl">فایل تضویر</label>
+                <label style="width: 38%;" class="p-2" for="imageFileControl">فایل تصویر</label>
                 <div style="width:10%"></div>
                 <div style="width:50%;" class="input-group input-group-sm">
                   <input
                     type="file"
+                    @change="onFileChange()"
                     style="margin-left: 2px"
                     class="flex-grow-2 form-control mb-3"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
                     id="imageFileControl"
+                  />
+                </div>
+              </li>
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'imageelement'"
+              >
+                <span style="width: 40%;" class="p-2">طول</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
+                  <input
+                    type="text"
+                    class="flex-grow-2 form-control mb-3"
+                    style="height: 80%; margin-left: 8px"
+                    v-model="locals.selectedElement.options.styles.height"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                  />
+                </div>
+              </li>
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'imageelement'"
+              >
+                <span style="width: 40%;" class="p-2">عرض</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
+                  <input
+                    type="text"
+                    class="flex-grow-2 form-control mb-3"
+                    style="height: 80%; margin-left: 8px"
+                    v-model="locals.selectedElement.options.styles.width"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
               </li>
@@ -583,8 +624,8 @@ export default {
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         settingsModalShow: false,
-        pageHeaderSize: '',
-        pageFooterSize: '',
+        pageHeaderSize: "",
+        pageFooterSize: "",
         isClicked: false,
         parent: "",
         classType: "",
@@ -1098,7 +1139,7 @@ export default {
         tmp = {
           type: classType,
           options: {
-            configs: { counter: 1, persianNumbers: true, },
+            configs: { counter: 1, persianNumbers: true },
             styles: {},
           },
         };
@@ -1106,7 +1147,7 @@ export default {
         tmp = {
           type: classType,
           options: {
-            configs: { imageSrc: "./elements/images/logo.png" },
+            configs: { imageSrc: require("./elements/images/logo.png") },
             styles: {},
           },
         };
@@ -1142,6 +1183,20 @@ export default {
     },
     element2ToolbarBind(element) {
       this.locals.selectedElement = element;
+    },
+    onFileChange() {
+      let image = document.getElementById("imageFileControl").files[0];
+      this.toBase64(image).then((res) => {
+        this.locals.selectedElement.options.configs.imageSrc = res
+      })
+    },
+    toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
     },
   },
 };

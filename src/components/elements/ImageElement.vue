@@ -2,13 +2,11 @@
   <div>
     <img
       ref="element"
-      @click="this.$emit('clickedOnElement')"
+      @click="this.clickedOnElement(this.$refs.element)"
       :class="locals.classType + ' element'"
       :style="settings.styles"
       :src="settings.configs.imageSrc"
       alt="Image"
-      width="40"
-      height="40"
     />
   </div>
 </template>
@@ -43,7 +41,7 @@ export default {
       },
       settings: {
         configs: {
-          imageSrc: "./images/logo.png",
+          imageSrc: require('./images/logo.png'),
         },
         styles: defaultStyles,
       },
@@ -54,6 +52,12 @@ export default {
       elementUtilities.resizable(element);
       elementUtilities.dragable(element, classType);
       elementUtilities.click(element, classType);
+    },
+    clickedOnElement(element) {
+      this.$emit("clickedOnElement");
+      if (element.lastChild.className != "resizer") {
+        this.Initialize(element, this.locals.classType);
+      }
     },
   },
 };
