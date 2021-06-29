@@ -2,21 +2,21 @@
   <div
     v-if="settings.configs.hasDate == true && settings.configs.hasTime == false"
     ref="element"
-    @click="this.clickedOnElement()"
+    @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >{{dateToday}}</div>
   <div
     v-else-if="settings.configs.hasTime == true && settings.configs.hasDate == false"
     ref="element"
-    @click="this.clickedOnElement()"
+    @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >&nbsp; {{timeToday}}</div>
   <div
     v-else-if="settings.configs.hasDate && settings.configs.hasTime == true"
     ref="element"
-    @click="this.clickedOnElement()"
+    @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >{{dateToday}} &nbsp; {{timeToday}}</div>
@@ -79,10 +79,10 @@ export default {
     /**
      * Emmiting clicked on element and adding all the eventlistenners to the new element again
      */
-    clickedOnElement() {
+    clickedOnElement(element) {
       this.$emit("clickedOnElement");
       if (element.lastChild.className != "resizer") {
-        this.Initialize(this.$refs.element, this.locals.classType);
+        this.Initialize(element, this.locals.classType);
       }
     },
     persianDate() {

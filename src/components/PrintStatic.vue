@@ -1,7 +1,6 @@
 <template>
 <div id="page" :dir="settings.pageDirections">
   <!--Buttons-->
-
   <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
   <i v-if="locals.settingsModalShow == false" @click="settingsInitFunc()" class="fas fa-2x fa-cog"></i>
   <i v-if="locals.settingsModalShow" @click="calculateSizes()" class="fas fa-2x fa-check-circle"></i>
@@ -257,16 +256,16 @@
                 class="d-flex"
                 v-if="locals.selectedElement.type == 'imageelement'"
               >
-                <span style="width: 38%;" class="p-2">فایل تضویر</span>
+                <label style="width: 38%;" class="p-2" for="imageFileControl">فایل تضویر</label>
                 <div style="width:10%"></div>
                 <div style="width:50%;" class="input-group input-group-sm">
                   <input
-                    type="text"
-                    style="height: 80%; margin-left: 2px"
-                    v-model="locals.selectedElement.option.configs.imageURL"
+                    type="file"
+                    style="margin-left: 2px"
                     class="flex-grow-2 form-control mb-3"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-sm"
+                    id="imageFileControl"
                   />
                 </div>
               </li>
@@ -518,6 +517,7 @@ import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 import elementUtilities from "./elements/js/element-utilities";
 import PageCounter from "./elements/PageCounter.vue";
+import ImageElement from "./elements/ImageElement.vue";
 export default {
   name: "PrintStatic",
   props: {
@@ -527,6 +527,7 @@ export default {
     textelement: TextElement,
     datetime: DateTime,
     pagecounter: PageCounter,
+    imageelement: ImageElement
   },
   data() {
     return {
@@ -1090,7 +1091,7 @@ export default {
         tmp = {
           type: classType,
           options: {
-            configs: { imageURL: "" },
+            configs: { imageSrc: "./elements/images/logo.png" },
             styles: {},
           },
         };

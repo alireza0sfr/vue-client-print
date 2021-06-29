@@ -5,8 +5,8 @@
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
-      :src="settings.configs.imageURL"
-    >
+      :src="settings.configs.imageSrc"
+    />
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
       },
       settings: {
         configs: {
-          imageURL: '',
+          imageSrc: "./elements/images/logo.png",
         },
         styles: defaultStyles,
       },
