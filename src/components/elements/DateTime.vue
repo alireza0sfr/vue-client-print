@@ -81,7 +81,9 @@ export default {
      */
     clickedOnElement() {
       this.$emit("clickedOnElement");
-      this.Initialize(this.$refs.element, this.locals.classType);
+      if (element.lastChild.className != "resizer") {
+        this.Initialize(this.$refs.element, this.locals.classType);
+      }
     },
     persianDate() {
       let today = new Date().toLocaleDateString("fa-IR");

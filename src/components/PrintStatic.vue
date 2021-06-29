@@ -238,13 +238,35 @@
                 class="d-flex"
                 v-if="locals.selectedElement.type == 'datetime'"
               >
-                <label style="width: 40%;" class="form-check-label p-2" for="persiaDateControl">تاریخ شمسی</label>
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2"
+                  for="persiaDateControl"
+                >تاریخ شمسی</label>
                 <div style="width:20%" class="form-check">
                   <input
                     class="form-check-input"
                     type="checkbox"
                     v-model="locals.selectedElement.options.configs.persianDate"
                     id="persiaDateControl"
+                  />
+                </div>
+              </li>
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'imageelement'"
+              >
+                <span style="width: 38%;" class="p-2">فایل تضویر</span>
+                <div style="width:10%"></div>
+                <div style="width:50%;" class="input-group input-group-sm">
+                  <input
+                    type="text"
+                    style="height: 80%; margin-left: 2px"
+                    v-model="locals.selectedElement.option.configs.imageURL"
+                    class="flex-grow-2 form-control mb-3"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
               </li>
@@ -495,6 +517,7 @@ import DateTime from "./elements/DateTime.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 import elementUtilities from "./elements/js/element-utilities";
+import PageCounter from "./elements/PageCounter.vue";
 export default {
   name: "PrintStatic",
   props: {
@@ -503,6 +526,7 @@ export default {
   components: {
     textelement: TextElement,
     datetime: DateTime,
+    pagecounter: PageCounter,
   },
   data() {
     return {
@@ -1051,6 +1075,22 @@ export default {
           type: classType,
           options: {
             configs: { hasDate: true, hasTime: true, persianDate: true },
+            styles: {},
+          },
+        };
+      } else if (classType == "pagecounter") {
+        tmp = {
+          type: classType,
+          options: {
+            configs: { counter: 1 },
+            styles: {},
+          },
+        };
+      } else if (classType == "imageelement") {
+        tmp = {
+          type: classType,
+          options: {
+            configs: { imageURL: "" },
             styles: {},
           },
         };
