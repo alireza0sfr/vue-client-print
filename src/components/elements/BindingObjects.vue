@@ -5,8 +5,10 @@
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
-    >{{settings.configs.text}}</div>
-    <div ref="resizer" class="resizer"></div>
+    >
+      {{settings.configs.field}}
+      <div ref="resizer" class="resizer"></div>
+    </div>
   </div>
 </template>
 
@@ -19,7 +21,11 @@ export default {
     options: Object,
   },
   mounted() {
-    this.Initialize(this.$refs.element, this.$refs.resizer, this.locals.classType);
+    this.Initialize(
+      this.$refs.element,
+      this.$refs.resizer,
+      this.locals.classType
+    );
   },
   watch: {
     options: {
@@ -40,7 +46,7 @@ export default {
       },
       settings: {
         configs: {
-          text: "داده اتصالی",
+          field: "داده اتصالی",
           bindingObjects: {
             code: 124164,
             date: "2021/30/6",

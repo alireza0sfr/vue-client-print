@@ -346,7 +346,7 @@
                 <select
                   style="height:25%; width:50%; margin-left: 8px"
                   class="flex-grow-2 form-control mb-3"
-                  v-model="locals.selectedElement.options.configs.text"
+                  v-model="locals.selectedElement.options.configs.field"
                   id="bindingObjectsControl"
                 >
                   <option
@@ -1194,7 +1194,7 @@ export default {
           type: classType,
           options: {
             configs: {
-              text: "داده اتصالی",
+              field: "داده اتصالی",
               bindingObjects: {
                 code: 124164,
                 date: "2021/30/6",
