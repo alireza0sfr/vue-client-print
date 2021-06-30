@@ -3,7 +3,7 @@
   <!--Buttons-->
   <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
   <i v-if="locals.settingsModalShow == false" @click="settingsInitFunc()" class="fas fa-2x fa-cog"></i>
-  <i v-if="locals.settingsModalShow" @click="calculateSizes()" class="fas fa-2x fa-check-circle"></i>
+  <i v-if="locals.settingsModalShow" @click="export2Json()" class="fas fa-2x fa-check-circle"></i>
   <!-- Main Wrapper and Sections-->
 
   <div class="wrapper">
@@ -38,6 +38,7 @@
                   style="height:25%; width:50%; margin-left: 8px"
                   class="flex-grow-2 form-control mb-3"
                   v-model="settings.pageSize"
+                  @change="this.calculateSizes()"
                   id="pageSizeControl"
                 >
                   <option>a3</option>
@@ -176,7 +177,7 @@
                   <div class="element-title">عکس</div>
                 </span>
               </li>
-              <li style="width:100%; margin: 10px 0;">
+              <li style="width:50%; margin: 10px 0;">
                 <span
                   draggable="true"
                   @dragstart="startDraggingElement('bindingobjects')"
@@ -184,7 +185,7 @@
                   class="d-none d-sm-inline"
                 >
                   <img src="./elements/images/binding.png" />
-                  <div class="element-title">داده اتصالی</div>
+                  <div class="element-title">اتصال داده</div>
                 </span>
               </li>
             </ul>
@@ -406,7 +407,7 @@
                 </div>
               </li>
               <li style="width:100%" class="d-flex">
-                <span style="width: 40%;" class="p-2">حاشیه متن</span>
+                <span style="width: 40%;" class="p-2">حاشیه</span>
                 <div style="width:10%"></div>
                 <div style="width:50%;" class="input-group input-group-sm">
                   <input
@@ -661,9 +662,13 @@ export default {
         parent: "",
         classType: "",
         selectedElement: {
-          id: 0,
+          positions: {
+            x: 0,
+            y: 0,
+          },
           type: {},
           options: {
+            id: 0,
             configs: {},
             styles: {},
           },
@@ -764,26 +769,18 @@ export default {
      */
 
     export2Json() {
+      this.calculateSizes(); // Calculate the requires sizes to export
+
       let tmp = {
         header: {
-          customHeader: this.settings.customHeader,
-          isFixedDateAndTime: this.settings.isFixedDateAndTime,
           isHeaderRepeatable: this.settings.isHeaderRepeatable,
-          logoURL: this.settings.logoURL,
           height: this.locals.pageHeaderSize,
-          styles: {
-            margin: "0px",
-          },
+          headerElements: this.elements.headerElements,
         },
         footer: {
-          customFooter: this.settings.customFooter,
-          hasPageCounter: this.settings.hasPageCounter,
-          pageCounterPosition: this.settings.pageCounterPosition,
           isFooterRepeatable: this.settings.isFooterRepeatable,
           height: this.locals.pageFooterSize,
-          styles: {
-            margin: "0px",
-          },
+          footerElements: this.elements.footerElements,
         },
         settings: {
           orientation: this.settings.orientation,
@@ -791,6 +788,10 @@ export default {
           pageDirections: this.settings.pageDirections,
         },
       };
+
+      // Closing the editWhileInPreview modal
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+
       console.log("json:", tmp);
       return tmp;
     },
@@ -820,18 +821,6 @@ export default {
       // Subtracting this value to make the pages more accurate
       const errorValue = 0.2;
 
-      // Calculating the footer size in inches
-      let footerPage = document.getElementsByClassName("section")[1];
-      let pageFooterSize = this.convert2Inches(footerPage.offsetHeight);
-      this.locals.pageFooterSize = pageFooterSize;
-      console.log("pageFooterSize: ", pageFooterSize);
-
-      // Calculating the header size in inches
-      let headerPage = document.getElementsByClassName("section")[0];
-      let pageHeaderSize = this.convert2Inches(headerPage.offsetHeight);
-      this.locals.pageHeaderSize = pageHeaderSize;
-      console.log("pageHeadersize: ", pageHeaderSize);
-
       // Gettings the default sizes from the base dic
       this.locals.defaultHeightOfPaper =
         this.locals.pageSizeDictionary[this.settings.orientation][
@@ -839,8 +828,8 @@ export default {
         ]["height"];
       this.locals.totalHeightOfAPaper =
         this.locals.defaultHeightOfPaper -
-        pageFooterSize -
-        pageHeaderSize -
+        this.locals.pageFooterSize -
+        this.locals.pageHeaderSize -
         errorValue;
 
       this.locals.defaultWidthOfPaper =
@@ -851,12 +840,6 @@ export default {
       console.log("defaultWidthOfPaper: ", this.locals.defaultWidthOfPaper);
       console.log("defaultHeightOfPaper: ", this.locals.defaultHeightOfPaper);
       console.log("totalHeightOfAPaper: ", this.locals.totalHeightOfAPaper);
-
-      // Closing the editWhileInPreview modal
-      this.locals.settingsModalShow = !this.locals.settingsModalShow;
-
-      // Making a json out of whole avaiable data
-      this.export2Json();
     },
 
     /**
@@ -994,6 +977,8 @@ export default {
 
       var startY, startHeight;
 
+      let that = this; // Storing this value to that to be able to use it inside a function
+
       function initDrag(e) {
         startY = e.clientY;
         startHeight = parseInt(
@@ -1005,7 +990,9 @@ export default {
       }
 
       function doDrag(e) {
-        headerSection.style.height = startHeight + e.clientY - startY + "px";
+        that.locals.pageHeaderSize = that.convert2Inches(
+          startHeight + e.clientY - startY
+        );
       }
 
       function stopDrag(e) {
@@ -1037,6 +1024,8 @@ export default {
 
       var startY, startHeight;
 
+      let that = this; // Storing this value to that to be able to use it inside a function
+
       function initDrag(e) {
         startY = e.clientY;
         startHeight = parseInt(
@@ -1048,7 +1037,9 @@ export default {
       }
 
       function doDrag(e) {
-        footerSection.style.height = startHeight - e.clientY + startY + "px";
+        that.locals.pageFooterSize = that.convert2Inches(
+          startHeight - e.clientY + startY
+        );
       }
 
       function stopDrag(e) {
@@ -1106,45 +1097,49 @@ export default {
       let tmp;
       if (classType == "textelement") {
         tmp = {
-          id: this.idGenerator(5),
+          positions: {
+            x: 0,
+            y: 0,
+          },
           type: classType,
           options: {
+            id: this.idGenerator(5),
             configs: { text: "Enter Your Text" },
             styles: {},
           },
         };
       } else if (classType == "datetime") {
         tmp = {
-          id: this.idGenerator(5),
           type: classType,
           options: {
+            id: this.idGenerator(5),
             configs: { hasDate: true, hasTime: true, persianDate: true },
             styles: {},
           },
         };
       } else if (classType == "pagecounter") {
         tmp = {
-          id: this.idGenerator(5),
           type: classType,
           options: {
+            id: this.idGenerator(5),
             configs: { counter: 1, persianNumbers: true },
             styles: {},
           },
         };
       } else if (classType == "imageelement") {
         tmp = {
-          id: this.idGenerator(5),
           type: classType,
           options: {
+            id: this.idGenerator(5),
             configs: { imageSrc: require("./elements/images/logo.png") },
             styles: {},
           },
         };
       } else if (classType == "bindingobjects") {
         tmp = {
-          id: this.idGenerator(5),
           type: classType,
           options: {
+            id: this.idGenerator(5),
             configs: {
               field: "داده اتصالی",
               bindingObjects: {
@@ -1224,7 +1219,7 @@ export default {
       let headerElements = this.elements.headerElements;
       let footerElements = this.elements.footerElements;
       document.addEventListener("keydown", deleteElement, false);
-      document.removeEventListener('keyup', deleteElement, false)
+      document.removeEventListener("keyup", deleteElement, false);
 
       function deleteElement(e) {
         if (e.code == "Delete") {
@@ -1242,6 +1237,20 @@ export default {
         console.log(headerElements);
         console.log(footerElements);
       }
+    },
+    getCoordinates(id) {
+      let tmp = document.getElementById(id);
+      let compStyle = getComputedStyle(tmp);
+      let top = compStyle.getPropertyValue("top");
+      let left = compStyle.getPropertyValue("left");
+      let height = compStyle.getPropertyValue("height");
+      let width = compStyle.getPropertyValue("width");
+      return {
+        top: top,
+        left: left,
+        height: height,
+        width: width,
+      };
     },
   },
 };
