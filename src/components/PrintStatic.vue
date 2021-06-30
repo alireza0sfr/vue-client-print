@@ -38,7 +38,7 @@
                   style="height:25%; width:50%; margin-left: 8px"
                   class="flex-grow-2 form-control mb-3"
                   v-model="settings.pageSize"
-                  @change="this.calculateSizes()"
+                  @change="calculateSizes()"
                   id="pageSizeControl"
                 >
                   <option>a3</option>
@@ -662,10 +662,6 @@ export default {
         parent: "",
         classType: "",
         selectedElement: {
-          positions: {
-            x: 0,
-            y: 0,
-          },
           type: {},
           options: {
             id: 0,
@@ -769,7 +765,30 @@ export default {
      */
 
     export2Json() {
-      this.calculateSizes(); // Calculate the requires sizes to export
+      // this.calculateSizes(); // Calculate the requires sizes to export
+
+      // Syncing headerElements with the user chagnes
+      let headerElements = this.elements.headerElements;
+      let footerElements = this.elements.footerElements;
+
+      for (let index = 0; index < headerElements.length; index++) {
+        let computedStyles = this.getCoordinates(
+          headerElements[index].options.id
+        );
+        let elementStyles = headerElements[index].options.styles;
+        Object.assign(elementStyles, computedStyles);
+      }
+
+      for (let index = 0; index < footerElements.length; index++) {
+        let computedStyles = this.getCoordinates(
+          footerElements[index].options.id
+        );
+        let elementStyles = footerElements[index].options.styles;
+        Object.assign(elementStyles, computedStyles);
+      }
+
+      console.log(headerElements);
+      console.log(footerElements);
 
       let tmp = {
         header: {
@@ -886,12 +905,6 @@ export default {
      */
 
     convert2Image() {
-      // Calculating the default sizes then previewing
-      // this.calculateSizes();
-
-      // Closing the modal
-      // this.locals.settingsModalShow = !this.locals.settingsModalShow;
-
       console.log("=======Converting 2 Image=======");
       domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
         let compStyles = window.getComputedStyle(
@@ -1097,10 +1110,6 @@ export default {
       let tmp;
       if (classType == "textelement") {
         tmp = {
-          positions: {
-            x: 0,
-            y: 0,
-          },
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1182,7 +1191,7 @@ export default {
     },
     element2ToolbarBind(element) {
       this.locals.selectedElement = element;
-      this.deletingElementOnPressingDeleteKeyy();
+      this.deletingElementOnPressingDeleteKey();
     },
     onFileChange() {
       let image = document.getElementById("imageFileControl").files[0];
@@ -1214,8 +1223,8 @@ export default {
 
     /** Adds an event listenner on delete button and then removes the element */
 
-    deletingElementOnPressingDeleteKeyy() {
-      let id = this.locals.selectedElement.id;
+    deletingElementOnPressingDeleteKey() {
+      let id = this.locals.selectedElement.options.id;
       let headerElements = this.elements.headerElements;
       let footerElements = this.elements.footerElements;
       document.addEventListener("keydown", deleteElement, false);
@@ -1224,18 +1233,16 @@ export default {
       function deleteElement(e) {
         if (e.code == "Delete") {
           for (let index = 0; index < headerElements.length; index++) {
-            if (headerElements[index].id == id) {
+            if (headerElements[index].options.id == id) {
               headerElements.pop(headerElements[index]);
             }
           }
           for (let index = 0; index < footerElements.length; index++) {
-            if (footerElements[index].id == id) {
+            if (footerElements[index].options.id == id) {
               footerElements.pop(footerElements[index]);
             }
           }
         }
-        console.log(headerElements);
-        console.log(footerElements);
       }
     },
     getCoordinates(id) {

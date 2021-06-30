@@ -1,6 +1,7 @@
 <template>
   <div>
     <img
+      :id="settings.id"
       ref="element"
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"

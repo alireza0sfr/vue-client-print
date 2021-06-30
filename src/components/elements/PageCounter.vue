@@ -1,6 +1,7 @@
 <template>
   <div>
     <div
+      :id="settings.id"
       ref="element"
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
@@ -19,7 +20,11 @@ export default {
     options: Object,
   },
   mounted() {
-    this.Initialize(this.$refs.element, this.$refs.resizer, this.locals.classType);
+    this.Initialize(
+      this.$refs.element,
+      this.$refs.resizer,
+      this.locals.classType
+    );
   },
   watch: {
     options: {

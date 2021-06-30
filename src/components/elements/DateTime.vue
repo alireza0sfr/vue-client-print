@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="settings.configs.hasDate == true && settings.configs.hasTime == false"
+    :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
@@ -11,6 +12,7 @@
   </div>
   <div
     v-else-if="settings.configs.hasTime == true && settings.configs.hasDate == false"
+    :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
@@ -21,6 +23,7 @@
   </div>
   <div
     v-else-if="settings.configs.hasDate && settings.configs.hasTime == true"
+    :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
