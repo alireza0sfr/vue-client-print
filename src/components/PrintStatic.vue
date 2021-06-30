@@ -50,6 +50,7 @@
                 <label style="width: 40%;" class="p-2" for="pageOrientiationsControl">حالت صفحه</label>
                 <div style="width:10%"></div>
                 <select
+                  @change="calculateSizes()"
                   style="height:25%; width:50%; margin-left: 8px"
                   class="flex-grow-2 form-control mb-3"
                   v-model="settings.orientation"
