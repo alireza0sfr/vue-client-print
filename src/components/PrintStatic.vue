@@ -176,6 +176,17 @@
                   <div class="element-title">عکس</div>
                 </span>
               </li>
+              <li style="width:100%; margin: 10px 0;">
+                <span
+                  draggable="true"
+                  @dragstart="startDraggingElement('bindingobjects')"
+                  @dragend="finishedDraggingElement()"
+                  class="d-none d-sm-inline"
+                >
+                  <img src="./elements/images/binding.png" />
+                  <div class="element-title">داده اتصالی</div>
+                </span>
+              </li>
             </ul>
             <div class="text-decoration-none mb-3 toolbar header">
               <span class="fs-5">تنظیمات المنت ها</span>
@@ -324,6 +335,25 @@
                     aria-describedby="inputGroup-sizing-sm"
                   />
                 </div>
+              </li>
+              <li
+                style="width:100%"
+                class="d-flex"
+                v-if="locals.selectedElement.type == 'bindingobjects'"
+              >
+                <label style="width: 40%;" class="p-2" for="bindingObjectsControl">نوع داده</label>
+                <div style="width:10%"></div>
+                <select
+                  style="height:25%; width:50%; margin-left: 8px"
+                  class="flex-grow-2 form-control mb-3"
+                  v-model="locals.selectedElement.options.configs.text"
+                  id="bindingObjectsControl"
+                >
+                  <option
+                    v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObjects)"
+                    :key="option"
+                  >{{option}}</option>
+                </select>
               </li>
             </ul>
             <div class="text-decoration-none mb-3 toolbar header">
@@ -571,7 +601,7 @@ import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
-import elementUtilities from "./elements/js/element-utilities";
+import BindingObjects from "./elements/BindingObjects.vue";
 import PageCounter from "./elements/PageCounter.vue";
 import ImageElement from "./elements/ImageElement.vue";
 export default {
@@ -584,6 +614,7 @@ export default {
     datetime: DateTime,
     pagecounter: PageCounter,
     imageelement: ImageElement,
+    bindingobjects: BindingObjects,
   },
   data() {
     return {
@@ -1108,12 +1139,12 @@ export default {
         return;
       }
       this.locals.selectedElement = {
-          type: {},
-          options: {
-            configs: {},
-            styles: {},
-          },
-        }
+        type: {},
+        options: {
+          configs: {},
+          styles: {},
+        },
+      };
       let selectedElements =
         document.getElementsByClassName("element selected");
       for (let index = 0; index < selectedElements.length; index++) {
@@ -1158,6 +1189,20 @@ export default {
             styles: {},
           },
         };
+      } else if (classType == "bindingobjects") {
+        tmp = {
+          type: classType,
+          options: {
+            configs: {
+              text: "داده اتصالی",
+              bindingObjects: {
+                code: 124164,
+                date: "2021/30/6",
+              },
+            },
+            styles: {},
+          },
+        };
       }
       if (parent.includes("header")) {
         this.elements.headerElements.push(tmp);
@@ -1194,8 +1239,8 @@ export default {
     onFileChange() {
       let image = document.getElementById("imageFileControl").files[0];
       this.toBase64(image).then((res) => {
-        this.locals.selectedElement.options.configs.imageSrc = res
-      })
+        this.locals.selectedElement.options.configs.imageSrc = res;
+      });
     },
     toBase64(file) {
       return new Promise((resolve, reject) => {

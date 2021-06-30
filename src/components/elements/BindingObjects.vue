@@ -5,7 +5,7 @@
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
-    >{{settings.configs.counter}}</div>
+    >{{settings.configs.text}}</div>
     <div ref="resizer" class="resizer"></div>
   </div>
 </template>
@@ -14,7 +14,7 @@
 import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
-  name: "PageCounter",
+  name: "BindingObjects",
   props: {
     options: Object,
   },
@@ -30,25 +30,21 @@ export default {
         Object.assign(this.settings, val);
         this.settings.styles = tmp;
         Object.assign(this.settings.styles, val.styles);
-        if (this.settings.configs.persianNumbers == true) {
-          this.settings.configs.counter = this.toPersianNumbers(
-            this.settings.configs.counter
-          );
-        } else {
-          this.settings.configs.counter = 1;
-        }
       },
     },
   },
   data() {
     return {
       locals: {
-        classType: "pagecounter",
+        classType: "bindingobjects",
       },
       settings: {
         configs: {
-          counter: 1,
-          persianNumbers: true,
+          text: "داده اتصالی",
+          bindingObjects: {
+            code: 124164,
+            date: "2021/30/6",
+          },
         },
         styles: defaultStyles,
       },
@@ -59,11 +55,6 @@ export default {
       elementUtilities.resizable(element, resizer);
       elementUtilities.dragable(element, classType);
       elementUtilities.click(element, classType);
-    },
-    toPersianNumbers(n) {
-      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-
-      return n.toString().replace(/\d/g, (x) => farsiDigits[x]);
     },
   },
 };

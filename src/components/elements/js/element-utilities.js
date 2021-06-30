@@ -2,10 +2,11 @@
  * Making the elements resizable
  */
 
-function resizable(element) {
-    var resizer = document.createElement("div");
-    resizer.className = "resizer";
-    element.appendChild(resizer);
+function resizable(element, resizer) {
+    
+    // var resizer = document.createElement("div");
+    // resizer.className = "resizer";
+    // element.appendChild(resizer);
     resizer.addEventListener("mousedown", initDrag, false);
     element.addEventListener("mousedown", dragable, false);
 
@@ -56,10 +57,6 @@ function click(element, classType) {
         let selectedElements = document.getElementsByClassName('element selected');
         for (let index = 0; index < selectedElements.length; index++) {
             selectedElements[index].className = classType + " element";
-        }
-        if (element.lastChild.className != 'resizer') {
-            console.log(element);
-            resizable(element) // So that the removed resizer from the new element gets replaced
         }
         element.className = classType + " element selected";
     }

@@ -1,11 +1,14 @@
 <template>
   <div>
-    <p
+    <div
       ref="element"
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
-    >{{settings.configs.text}}</p>
+    >
+      {{settings.configs.text}}
+      <div ref="resizer" class="resizer"></div>
+    </div>
   </div>
 </template>
 
@@ -18,7 +21,7 @@ export default {
     options: Object,
   },
   mounted() {
-    this.Initialize(this.$refs.element, this.locals.classType);
+    this.Initialize(this.$refs.element, this.$refs.resizer, this.locals.classType);
   },
   watch: {
     options: {
@@ -46,8 +49,8 @@ export default {
     };
   },
   methods: {
-    Initialize(element, classType) {
-      elementUtilities.resizable(element);
+    Initialize(element, resizer, classType) {
+      elementUtilities.resizable(element, resizer);
       elementUtilities.dragable(element, classType);
       elementUtilities.click(element, classType);
     },

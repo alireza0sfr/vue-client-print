@@ -5,21 +5,30 @@
     @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
     :style="settings.styles"
-  >{{dateToday}}</div>
+  >
+    {{dateToday}}
+    <div ref="resizer" class="resizer"></div>
+  </div>
   <div
     v-else-if="settings.configs.hasTime == true && settings.configs.hasDate == false"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
     :style="settings.styles"
-  >&nbsp; {{timeToday}}</div>
+  >
+    &nbsp; {{timeToday}}
+    <div ref="resizer" class="resizer"></div>
+  </div>
   <div
     v-else-if="settings.configs.hasDate && settings.configs.hasTime == true"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
     :class="locals.classType + ' element'"
     :style="settings.styles"
-  >{{dateToday}} &nbsp; {{timeToday}}</div>
+  >
+    {{dateToday}} &nbsp; {{timeToday}}
+    <div ref="resizer" class="resizer"></div>
+  </div>
 </template>
 
 <script>
@@ -33,7 +42,7 @@ export default {
     },
   },
   mounted() {
-    this.Initialize(this.$refs.element, this.locals.classType);
+    this.Initialize(this.$refs.element, this.$refs.resizer, this.locals.classType);
   },
   watch: {
     options: {
@@ -70,8 +79,8 @@ export default {
     };
   },
   methods: {
-    Initialize(element, classType) {
-      elementUtilities.resizable(element);
+    Initialize(element, resizer, classType) {
+      elementUtilities.resizable(element, resizer);
       elementUtilities.dragable(element, classType);
       elementUtilities.click(element, classType);
     },
