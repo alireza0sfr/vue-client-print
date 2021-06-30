@@ -7,7 +7,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{settings.configs.field}}
+      {{ settings.configs.bindingObjects[settings.configs.field] ? settings.configs.bindingObjects[settings.configs.field] : 'اتصال فیلد را انتخاب کنید'}}
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
