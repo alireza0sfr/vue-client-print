@@ -42,7 +42,11 @@ export default {
     },
   },
   mounted() {
-    this.Initialize(this.$refs.element, this.$refs.resizer, this.locals.classType);
+    this.Initialize(
+      this.$refs.element,
+      this.$refs.resizer,
+      this.locals.classType
+    );
   },
   watch: {
     options: {
@@ -69,6 +73,7 @@ export default {
         classType: "datetime",
       },
       settings: {
+        id: 0,
         configs: {
           hasDate: true,
           hasTime: true,

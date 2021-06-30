@@ -40,6 +40,7 @@ export default {
         classType: "imageelement",
       },
       settings: {
+        id: 0,
         configs: {
           imageSrc: require("./images/logo.png"),
         },

@@ -45,6 +45,7 @@ export default {
         classType: "bindingobjects",
       },
       settings: {
+        id: 0,
         configs: {
           field: "داده اتصالی",
           bindingObjects: {

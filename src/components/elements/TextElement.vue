@@ -41,6 +41,7 @@ export default {
         classType: "text",
       },
       settings: {
+        id: 0,
         configs: {
           text: "Enter Your Text",
         },

@@ -465,7 +465,7 @@
               id="headerTemplate"
               class="section header"
               ref="headerTemplate"
-              @drop="droppedEleemntOnHeader()"
+              @drop="droppedElementOnHeader()"
               @dragenter.prevent
               @dragover.prevent
             >
@@ -487,7 +487,7 @@
               id="footerTemplate"
               class="section footer"
               ref="footerTemplate"
-              @drop="droppedEleemntOnFooter()"
+              @drop="droppedElementOnFooter()"
               @dragenter.prevent
               @dragover.prevent
             >
@@ -661,6 +661,7 @@ export default {
         parent: "",
         classType: "",
         selectedElement: {
+          id: 0,
           type: {},
           options: {
             configs: {},
@@ -686,68 +687,8 @@ export default {
         margin: 0,
       },
       elements: {
-        headerElements: [
-          {
-            type: "textelement",
-            options: {
-              configs: {
-                text: "Header Default Text 1",
-              },
-              styles: {},
-            },
-          },
-          {
-            type: "textelement",
-            options: {
-              configs: {
-                text: "Header Default Text 2",
-              },
-              styles: {},
-            },
-          },
-          {
-            type: "datetime",
-            options: {
-              configs: {
-                hasDate: true,
-                hasTime: true,
-                persianDate: true,
-              },
-              styles: {},
-            },
-          },
-        ],
-        footerElements: [
-          {
-            type: "textelement",
-            options: {
-              configs: {
-                text: "Footer Default Text 1",
-              },
-              styles: {},
-            },
-          },
-          {
-            type: "textelement",
-            options: {
-              configs: {
-                text: "Footer Default Text 1",
-              },
-              styles: {},
-            },
-          },
-          {
-            type: "datetime",
-            options: {
-              configs: {
-                hasDate: true,
-                hasTime: true,
-                persianDate: true,
-              },
-              styles: {},
-            },
-          },
-        ],
+        headerElements: [],
+        footerElements: [],
       },
     };
   },
@@ -1133,6 +1074,11 @@ export default {
       modal.style.display = "none";
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
     },
+
+    /**
+     * Deselect all selected elements
+     */
+
     deSelectAll() {
       if (this.locals.isClicked) {
         this.locals.isClicked = false;
@@ -1154,11 +1100,13 @@ export default {
     clickedOnElement() {
       this.locals.isClicked = true;
     },
+
     createElement(parent) {
       let classType = this.locals.classType;
       let tmp;
       if (classType == "textelement") {
         tmp = {
+          id: this.idGenerator(5),
           type: classType,
           options: {
             configs: { text: "Enter Your Text" },
@@ -1167,6 +1115,7 @@ export default {
         };
       } else if (classType == "datetime") {
         tmp = {
+          id: this.idGenerator(5),
           type: classType,
           options: {
             configs: { hasDate: true, hasTime: true, persianDate: true },
@@ -1175,6 +1124,7 @@ export default {
         };
       } else if (classType == "pagecounter") {
         tmp = {
+          id: this.idGenerator(5),
           type: classType,
           options: {
             configs: { counter: 1, persianNumbers: true },
@@ -1183,6 +1133,7 @@ export default {
         };
       } else if (classType == "imageelement") {
         tmp = {
+          id: this.idGenerator(5),
           type: classType,
           options: {
             configs: { imageSrc: require("./elements/images/logo.png") },
@@ -1191,6 +1142,7 @@ export default {
         };
       } else if (classType == "bindingobjects") {
         tmp = {
+          id: this.idGenerator(5),
           type: classType,
           options: {
             configs: {
@@ -1219,11 +1171,11 @@ export default {
       let footerSection = this.$refs.footerTemplate;
       footerSection.className = footerSection.className + " dragged";
     },
-    droppedEleemntOnHeader() {
+    droppedElementOnHeader() {
       let parent = "header";
       this.createElement(parent);
     },
-    droppedEleemntOnFooter() {
+    droppedElementOnFooter() {
       let parent = "footer";
       this.createElement(parent);
     },
@@ -1235,6 +1187,7 @@ export default {
     },
     element2ToolbarBind(element) {
       this.locals.selectedElement = element;
+      this.deletingElementOnPressingDeleteKeyy();
     },
     onFileChange() {
       let image = document.getElementById("imageFileControl").files[0];
@@ -1242,6 +1195,11 @@ export default {
         this.locals.selectedElement.options.configs.imageSrc = res;
       });
     },
+
+    /**
+     * Converts givven image to base64
+     */
+
     toBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1249,6 +1207,41 @@ export default {
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
       });
+    },
+
+    /**
+     * Generate a n digit uinique id
+     */
+
+    idGenerator(n) {
+      return Math.random().toString(36).substr(2, n);
+    },
+
+    /** Adds an event listenner on delete button and then removes the element */
+
+    deletingElementOnPressingDeleteKeyy() {
+      let id = this.locals.selectedElement.id;
+      let headerElements = this.elements.headerElements;
+      let footerElements = this.elements.footerElements;
+      document.addEventListener("keydown", deleteElement, false);
+      document.removeEventListener('keyup', deleteElement, false)
+
+      function deleteElement(e) {
+        if (e.code == "Delete") {
+          for (let index = 0; index < headerElements.length; index++) {
+            if (headerElements[index].id == id) {
+              headerElements.pop(headerElements[index]);
+            }
+          }
+          for (let index = 0; index < footerElements.length; index++) {
+            if (footerElements[index].id == id) {
+              footerElements.pop(footerElements[index]);
+            }
+          }
+        }
+        console.log(headerElements);
+        console.log(footerElements);
+      }
     },
   },
 };

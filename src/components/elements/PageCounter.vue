@@ -46,6 +46,7 @@ export default {
         classType: "pagecounter",
       },
       settings: {
+        id: 0,
         configs: {
           counter: 1,
           persianNumbers: true,
