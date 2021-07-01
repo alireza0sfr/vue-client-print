@@ -1,7 +1,6 @@
 <template>
   <div id="page" :dir="settings.pageDirections">
     <!--Buttons-->
-    <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
     <i
       v-if="locals.settingsModalShow == false"
       @click="settingsInitFunc()"
@@ -14,12 +13,12 @@
       <!-- Section 1 (Template Builder) -->
       <div
         v-if="locals.settingsModalShow"
-        :style="{'height': locals.defaultHeightOfPaper + 'in'}"
+        :style="{'height': settings.defaultHeightOfPaper + 'in'}"
         class="template-builder container-fluid"
       >
         <div class="row flex-nowrap">
           <div
-            :style="{'height': locals.defaultHeightOfPaper + 'in',
+            :style="{'height': settings.defaultHeightOfPaper + 'in',
         'overflow': 'hidden',
         'width': '27%',
         'padding':'0px',
@@ -460,13 +459,13 @@
           <div>
             <div
               v-if="locals.settingsModalShow"
-              :style="{'height': locals.defaultHeightOfPaper + 'in', 'width': locals.defaultWidthOfPaper + 'in',
+              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
             'background-color': '#F1F5F8'}"
               class="template"
               @click="deSelectAll"
             >
               <div
-                :style="{'height': locals.pageHeaderSize + 'in',
+                :style="{'height': settings.pageHeaderSize + 'in',
               'min-height': '0.6in'}"
                 id="headerTemplate"
                 class="section header"
@@ -488,7 +487,7 @@
                 <div>Body</div>
               </div>
               <div
-                :style="{'height': locals.pageFooterSize + 'in',
+                :style="{'height': settings.pageFooterSize + 'in',
               'min-height': '0.6in'}"
                 id="footerTemplate"
                 class="section footer"
@@ -523,6 +522,7 @@ import ImageElement from "./elements/ImageElement.vue";
 export default {
   name: "TemplateBuilder",
   props: {
+    json: Object,
     options: Object,
   },
   components: {
@@ -580,6 +580,7 @@ export default {
       settings: {
         pageHeaderSize: 0,
         pageFooterSize: 0,
+        totalHeightOfAPaper: 10.4, // Useable height for body tag
         fileName: "nikan",
         isFooterRepeatable: true,
         isHeaderRepeatable: true,
@@ -591,6 +592,9 @@ export default {
       },
     };
   },
+  mounted() {
+    this.importFromJson();
+  },
   watch: {
     options: {
       immediate: true,
@@ -600,8 +604,396 @@ export default {
     },
   },
   methods: {
-      
-  }
+    /**
+     * Exports all the data to a single json
+     */
+
+    export2Json() {
+  
+      // Syncing headerElements with the user chagnes
+      let headerElements = this.elements.headerElements;
+      let footerElements = this.elements.footerElements;
+
+      for (let index = 0; index < headerElements.length; index++) {
+        let computedStyles = this.getCoordinates(
+          headerElements[index].options.id
+        );
+        let elementStyles = headerElements[index].options.styles;
+        Object.assign(elementStyles, computedStyles);
+      }
+
+      for (let index = 0; index < footerElements.length; index++) {
+        let computedStyles = this.getCoordinates(
+          footerElements[index].options.id
+        );
+        let elementStyles = footerElements[index].options.styles;
+        Object.assign(elementStyles, computedStyles);
+      }
+
+      let tmp = {
+        header: {
+          isHeaderRepeatable: this.settings.isHeaderRepeatable,
+          height: this.settings.pageHeaderSize,
+          headerElements: this.elements.headerElements,
+        },
+        footer: {
+          isFooterRepeatable: this.settings.isFooterRepeatable,
+          height: this.settings.pageFooterSize,
+          footerElements: this.elements.footerElements,
+        },
+        settings: {
+          orientation: this.settings.orientation,
+          pageSize: this.settings.pageSize,
+          pageDirections: this.settings.pageDirections,
+        },
+      };
+
+      // Closing the editWhileInPreview modal
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+
+      return tmp
+    },
+
+    /**
+     * Exports all the data to a single json
+     */
+
+    importFromJson() {
+      Object.assign(this.settings, json);
+    },
+
+    /**
+     * converts given inch to pixel
+     */
+
+    convert2Pixels(inches) {
+      return (inches * 96).toFixed(2);
+    },
+
+    /**
+     * Calculate the sizes based upon the selected page orientation and format
+     */
+
+    calculateSizes() {
+      console.log("=======Calculating Sizes=======");
+      // Subtracting this value to make the pages more accurate
+      const errorValue = 0.2;
+
+      // Gettings the default sizes from the base dic
+      this.settings.defaultHeightOfPaper =
+        this.locals.pageSizeDictionary[this.settings.orientation][
+          this.settings.pageSize
+        ]["height"];
+      this.settings.totalHeightOfAPaper =
+        this.settings.defaultHeightOfPaper -
+        this.settings.pageFooterSize -
+        this.settings.pageHeaderSize -
+        errorValue;
+
+      this.settings.defaultWidthOfPaper =
+        this.locals.pageSizeDictionary[this.settings.orientation][
+          this.settings.pageSize
+        ]["width"];
+
+      console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
+      console.log("defaultHeightOfPaper: ", this.settings.defaultHeightOfPaper);
+      console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
+    },
+
+    /**
+     * Initializing dragging settings
+     */
+
+    settingsInitFunc() {
+      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+      setTimeout(() => {
+        this.headerBorderDragFunc();
+        this.footerBorderDragFunc();
+      }, 100);
+    },
+
+    /**
+     * converts given pixel to inch
+     */
+
+    convert2Inches(pixels) {
+      return (pixels / 96).toFixed(2);
+    },
+    /**
+     * Adjust the section's height by dragging
+     */
+
+    headerBorderDragFunc() {
+      var headerSection = document.getElementsByClassName("section header")[0]; // element to make resizable
+
+      var resizer = document.createElement("div");
+      resizer.className = "resizer";
+      resizer.style.height = "10px";
+      headerSection.appendChild(resizer);
+      resizer.addEventListener("mousedown", initDrag, false);
+
+      var startY, startHeight;
+
+      let that = this; // Storing this value to that to be able to use it inside a function
+
+      function initDrag(e) {
+        startY = e.clientY;
+        startHeight = parseInt(
+          document.defaultView.getComputedStyle(headerSection).height,
+          10
+        );
+        document.documentElement.addEventListener("mousemove", doDrag, false);
+        document.documentElement.addEventListener("mouseup", stopDrag, false);
+      }
+
+      function doDrag(e) {
+        that.settings.pageHeaderSize = that.convert2Inches(
+          startHeight + e.clientY - startY
+        );
+      }
+
+      function stopDrag(e) {
+        document.documentElement.removeEventListener(
+          "mousemove",
+          doDrag,
+          false
+        );
+        document.documentElement.removeEventListener(
+          "mouseup",
+          stopDrag,
+          false
+        );
+      }
+    },
+
+    /**
+     * Adjust the section's height by dragging
+     */
+
+    footerBorderDragFunc() {
+      var footerSection = document.getElementsByClassName("section footer")[0]; // element to make resizable
+
+      var resizer = document.createElement("div");
+      resizer.className = "resizer";
+      resizer.style.height = "10px";
+      footerSection.appendChild(resizer);
+      resizer.addEventListener("mousedown", initDrag, false);
+
+      var startY, startHeight;
+
+      let that = this; // Storing this value to that to be able to use it inside a function
+
+      function initDrag(e) {
+        startY = e.clientY;
+        startHeight = parseInt(
+          document.defaultView.getComputedStyle(footerSection).height,
+          10
+        );
+        document.documentElement.addEventListener("mousemove", doDrag, false);
+        document.documentElement.addEventListener("mouseup", stopDrag, false);
+      }
+
+      function doDrag(e) {
+        that.settings.pageFooterSize = that.convert2Inches(
+          startHeight - e.clientY + startY
+        );
+      }
+
+      function stopDrag(e) {
+        document.documentElement.removeEventListener(
+          "mousemove",
+          doDrag,
+          false
+        );
+        document.documentElement.removeEventListener(
+          "mouseup",
+          stopDrag,
+          false
+        );
+      }
+    },
+    /**
+     * Deselect all selected elements
+     */
+
+    deSelectAll() {
+      if (this.locals.isClicked) {
+        this.locals.isClicked = false;
+        return;
+      }
+      this.locals.selectedElement = {
+        type: {},
+        options: {
+          configs: {},
+          styles: {},
+        },
+      };
+      let selectedElements =
+        document.getElementsByClassName("element selected");
+      for (let index = 0; index < selectedElements.length; index++) {
+        selectedElements[index].classList.remove("selected");
+      }
+    },
+
+    clickedOnElement() {
+      this.locals.isClicked = true;
+    },
+
+    createElement(parent) {
+      let classType = this.locals.classType;
+      let tmp;
+      if (classType == "textelement") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: { text: "Enter Your Text" },
+            styles: {},
+          },
+        };
+      } else if (classType == "datetime") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: { hasDate: true, hasTime: true, persianDate: true },
+            styles: {},
+          },
+        };
+      } else if (classType == "pagecounter") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: { counter: 1, persianNumbers: true },
+            styles: {},
+          },
+        };
+      } else if (classType == "imageelement") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: { imageSrc: require("./elements/images/logo.png") },
+            styles: {},
+          },
+        };
+      } else if (classType == "bindingobjects") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: {
+              field: "داده اتصالی",
+              bindingObjects: {
+                code: 124164,
+                date: "2021/30/6",
+              },
+            },
+            styles: {},
+          },
+        };
+      }
+      if (parent.includes("header")) {
+        this.elements.headerElements.push(tmp);
+      } else if (parent.includes("footer")) {
+        this.elements.footerElements.push(tmp);
+      }
+      this.locals.classType = "";
+      return;
+    },
+    startDraggingElement(classType) {
+      this.locals.classType = classType;
+      let headerSection = this.$refs.headerTemplate;
+      headerSection.className = headerSection.className + " dragged";
+      let footerSection = this.$refs.footerTemplate;
+      footerSection.className = footerSection.className + " dragged";
+    },
+    droppedElementOnHeader() {
+      let parent = "header";
+      this.createElement(parent);
+    },
+    droppedElementOnFooter() {
+      let parent = "footer";
+      this.createElement(parent);
+    },
+    finishedDraggingElement() {
+      let headerSection = this.$refs.headerTemplate;
+      headerSection.classList.remove("dragged");
+      let footerSection = this.$refs.footerTemplate;
+      footerSection.classList.remove("dragged");
+    },
+    element2ToolbarBind(element) {
+      this.locals.selectedElement = element;
+      this.deletingElementOnPressingDeleteKey();
+    },
+    onFileChange() {
+      let image = document.getElementById("imageFileControl").files[0];
+      this.toBase64(image).then((res) => {
+        this.locals.selectedElement.options.configs.imageSrc = res;
+      });
+    },
+
+    /**
+     * Converts givven image to base64
+     */
+
+    toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    },
+
+    /**
+     * Generate a n digit uinique id
+     */
+
+    idGenerator(n) {
+      return Math.random().toString(36).substr(2, n);
+    },
+
+    /** Adds an event listenner on delete button and then removes the element */
+
+    deletingElementOnPressingDeleteKey() {
+      let id = this.locals.selectedElement.options.id;
+      let headerElements = this.elements.headerElements;
+      let footerElements = this.elements.footerElements;
+      document.addEventListener("keydown", deleteElement, false);
+      document.removeEventListener("keyup", deleteElement, false);
+
+      function deleteElement(e) {
+        if (e.code == "Delete") {
+          for (let index = 0; index < headerElements.length; index++) {
+            if (headerElements[index].options.id == id) {
+              headerElements.pop(headerElements[index]);
+            }
+          }
+          for (let index = 0; index < footerElements.length; index++) {
+            if (footerElements[index].options.id == id) {
+              footerElements.pop(footerElements[index]);
+            }
+          }
+        }
+      }
+    },
+    getCoordinates(id) {
+      let tmp = document.getElementById(id);
+      let compStyle = getComputedStyle(tmp);
+      let top = compStyle.getPropertyValue("top");
+      let left = compStyle.getPropertyValue("left");
+      let height = compStyle.getPropertyValue("height");
+      let width = compStyle.getPropertyValue("width");
+      return {
+        top: top,
+        left: left,
+        height: height,
+        width: width,
+      };
+    },
+  },
 };
 </script>
 

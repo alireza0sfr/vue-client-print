@@ -1,13 +1,13 @@
 <template>
   <div>
     <div
-    :id="settings.id"
+      :id="settings.id"
       ref="element"
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ settings.configs.bindingObjects[settings.configs.field] ? settings.configs.bindingObjects[settings.configs.field] : 'اتصال فیلد را انتخاب کنید'}}
+      {{ settings.configs.field}}
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
@@ -19,6 +19,10 @@ import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "BindingObjects",
   props: {
+    mode:{
+      type: String,
+      default: 'template'
+    },
     options: Object,
   },
   mounted() {
@@ -48,7 +52,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          field: "داده اتصالی",
+          field: "اتصال فیلد را انتخاب کنید",
           bindingObjects: {
             code: 124164,
             date: "2021/30/6",
