@@ -52,9 +52,8 @@ print component:
     -Done data array
     -Done toolbar 2 section dare yki label yki content dg div khali nazar]
     
-    -mobile view ykami bhtar she
     -slot haro fix kon
+    -mobile view ykami bhtar she
 
     -toast for processing...
-    -slots
     -test

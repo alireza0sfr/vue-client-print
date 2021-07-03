@@ -9,7 +9,7 @@
     <i v-if="locals.settingsModalShow" @click="export2Json()" class="fas fa-2x fa-check-circle"></i>
 
     <!-- Section 1 (Template Builder) -->
-    <div v-if="locals.settingsModalShow" class="template-builder container-fluid">
+    <div v-if="locals.settingsModalShow" class="template-builder container-fluid" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
       <div class="row flex-nowrap">
         <div
           :style="{'height': settings.defaultHeightOfPaper + 'in',
@@ -587,7 +587,7 @@ export default {
      * Exports all the data to a single json
      */
 
-    export2Json() {
+    export2Json(callback) {
       // Syncing headerElements with the user chagnes
       let headerElements = this.settings.headerElements;
       let footerElements = this.settings.footerElements;
@@ -629,7 +629,7 @@ export default {
       // Closing the editWhileInPreview modal
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
 
-      return tmp;
+      callback(tmp)
     },
 
     /**

@@ -98,10 +98,10 @@ export default {
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
       },
       settings: {
-        defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
-        defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         pageHeaderSize: 0,
         pageFooterSize: 0,
+        defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
+        defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         fileName: "nikan",
         isFooterRepeatable: true,
@@ -180,15 +180,6 @@ export default {
 
     convert2Inches(pixels) {
       return (pixels / 96).toFixed(2);
-    },
-
-    /**
-     * imports all the data from a single json
-     */
-
-    importFromJson() {
-
-      Object.assign(this.settings, json)
     },
 
     /**
