@@ -43,42 +43,18 @@ print component:
     -Done Fix the watch bug on elements
     -Done Fix the page refresh at every add
     -Done resizer gets removed after editing the text in div
+    -Done bind true ya flase budan hasDate kar nmikone
+    -Done agar p nazari bra element resizer remove mishe vaqti test avaz mishe
+    -Doen agar p bzari ta vaqti text avaz nashe drag kar nmikone
+    -Done bind true ya flase budan hasDate kar nmikone
+    -Done props watch
+    -Done modal with checkboxes for users
+    -Done data array
+    -Done toolbar 2 section dare yki label yki content dg div khali nazar]
+    
+    -mobile view ykami bhtar she
+    -slot haro fix kon
 
-    -bind true ya flase budan hasDate kar nmikone
-
-
-    -agar p nazari bra element resizer remove mishe vaqti test avaz mishe
-    -agar p bzari ta vaqti text avaz nashe drag kar nmikone
-    -bind true ya flase budan hasDate kar nmikone
-
-
-
-
-    -page 1 footer size
-    -other pages footer size
-    -page 1 header size
-    -other pages header size
-
-    -props watch
-    -modal with checkboxes for users
     -toast for processing...
     -slots
-    -data array
     -test
-
-    margin: '0px',
-          color: 'black',
-          direction: 'rtl',
-          fontSize: '14',
-          border: '0px',
-          type: "",
-          text: '',
-          options: '',
-          styles: ''
-          
-
-
-         background-color: rgb(232, 235, 240);
-    color: #484848;
-    border-bottom: 3px solid #084298;
-    padding: 9px;

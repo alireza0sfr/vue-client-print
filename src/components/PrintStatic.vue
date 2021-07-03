@@ -1,37 +1,10 @@
 <template>
-<div id="page">
+<div id="printPage">
   <!--Buttons-->
   <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
   
 
-  <TemplateBuilder  ref="TemplateBuilder" :json="{}"/>
-
-  <!-- Section 3 (DATA)-->
-
-  <div class="section3">
-    <div :style="{'width': settings.defaultWidthOfPaper + 'in'}" id="toBeConverted">
-      <table style="width: 100%">
-        <thead>
-          <tr>
-            <th>ستون ۱</th>
-            <th>ستون ۲</th>
-            <th>ستون ۳</th>
-            <th>ستون ۴</th>
-            <th>ستون ۵</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="index in 100" :key="index">
-            <td>{{index}}</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-            <td>ردیف تست</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <TemplateBuilder  ref="TemplateBuilder" :options="{}"/>
 
   <!-- Preview Modal-->
 
@@ -108,7 +81,6 @@ import html2pdf from "html2pdf.js";
 export default {
   name: "PrintStatic",
   props: {
-    json: Object,
     options: Object,
   },
   components: {
@@ -117,6 +89,7 @@ export default {
     pagecounter: PageCounter,
     imageelement: ImageElement,
     bindingobjects: BindingObjects,
+    TemplateBuilder
   },
   data() {
     return {
