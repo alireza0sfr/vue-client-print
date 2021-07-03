@@ -46,14 +46,23 @@ print component:
     -Done bind true ya flase budan hasDate kar nmikone
     -Done agar p nazari bra element resizer remove mishe vaqti test avaz mishe
     -Doen agar p bzari ta vaqti text avaz nashe drag kar nmikone
-    -Done bind true ya flase budan hasDate kar nmikone
+    -Done bind true ya false budan hasDate kar nmikone
     -Done props watch
     -Done modal with checkboxes for users
     -Done data array
     -Done toolbar 2 section dare yki label yki content dg div khali nazar]
+    -Done image for icons => {done, edit, print}
+    -Done 2 methods for preview
     
-    -slot haro fix kon
+    -Remove BS
+    -Add modal for template builder
+    -design the modal
+    
+    -edit basic template in print
+    -slot
+    
     -mobile view ykami bhtar she
 
     -toast for processing...
+    -remove fa cdn
     -test

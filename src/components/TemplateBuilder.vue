@@ -1,15 +1,20 @@
 <template>
   <div id="templateBuilderPage" :dir="settings.pageDirections">
     <!--Buttons-->
-    <i
-      v-if="locals.settingsModalShow == false"
-      @click="settingsInitFunc()"
-      class="fas fa-2x fa-cog"
-    ></i>
-    <i v-if="locals.settingsModalShow" @click="export2Json()" class="fas fa-2x fa-check-circle"></i>
+    <img
+      v-if="locals.settingsModalShow"
+      @click="export2Json()"
+      src="./elements/images/floppy-disk.png"
+      alt="ذخیره"
+      class="icon"
+    />
 
     <!-- Section 1 (Template Builder) -->
-    <div v-if="locals.settingsModalShow" class="template-builder container-fluid" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
+    <div
+      v-if="locals.settingsModalShow"
+      class="template-builder container-fluid"
+      :style="{'width': settings.defaultWidthOfPaper + 'in'}"
+    >
       <div class="row flex-nowrap">
         <div
           :style="{'height': settings.defaultHeightOfPaper + 'in',
@@ -135,7 +140,7 @@
                   @dragend="finishedDraggingElement()"
                   class="d-sm-inline"
                 >
-                  <img src="./elements/images/text.png" />
+                  <img src="./elements/images/text.png" alt="متن" />
                   <div class="element-title">متن</div>
                 </span>
               </li>
@@ -146,7 +151,7 @@
                   @dragstart="startDraggingElement('datetime')"
                   @dragend="finishedDraggingElement()"
                 >
-                  <img src="./elements/images/timetable.png" />
+                  <img src="./elements/images/timetable.png" alt="تاریخ و ساعت" />
                   <div class="element-title">تاریخ و ساعت</div>
                 </span>
               </li>
@@ -157,7 +162,7 @@
                   @dragstart="startDraggingElement('pagecounter')"
                   @dragend="finishedDraggingElement()"
                 >
-                  <img src="./elements/images/pages.png" />
+                  <img src="./elements/images/pages.png" alt="شماره صفحه" />
                   <div class="element-title">شماره صفحه</div>
                 </span>
               </li>
@@ -168,7 +173,7 @@
                   @dragstart="startDraggingElement('imageelement')"
                   @dragend="finishedDraggingElement()"
                 >
-                  <img src="./elements/images/image.png" />
+                  <img src="./elements/images/image.png" alt="عکس" />
                   <div class="element-title">عکس</div>
                 </span>
               </li>
@@ -179,7 +184,7 @@
                   @dragend="finishedDraggingElement()"
                   class="d-sm-inline"
                 >
-                  <img src="./elements/images/binding.png" />
+                  <img src="./elements/images/binding.png" alt="اتصال داده" />
                   <div class="element-title">اتصال داده</div>
                 </span>
               </li>
@@ -213,7 +218,11 @@
                 class="d-flex"
                 v-if="locals.selectedElement.type == 'datetime'"
               >
-                <label style="width: 40%;" class="form-check-label p-2 me-2" for="hasDateControl">تاریخ</label>
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2 me-2"
+                  for="hasDateControl"
+                >تاریخ</label>
                 <div style="width:20%" class="form-check">
                   <input
                     class="form-check-input"
@@ -228,7 +237,11 @@
                 class="d-flex mt-2"
                 v-if="locals.selectedElement.type == 'datetime'"
               >
-                <label style="width: 40%;" class="form-check-label p-2 me-2" for="hasTimeControl">ساعت</label>
+                <label
+                  style="width: 40%;"
+                  class="form-check-label p-2 me-2"
+                  for="hasTimeControl"
+                >ساعت</label>
                 <div style="width:20%" class="form-check">
                   <input
                     class="form-check-input"
@@ -587,7 +600,7 @@ export default {
      * Exports all the data to a single json
      */
 
-    export2Json(callback) {
+    export2Json() {
       // Syncing headerElements with the user chagnes
       let headerElements = this.settings.headerElements;
       let footerElements = this.settings.footerElements;
@@ -629,7 +642,10 @@ export default {
       // Closing the editWhileInPreview modal
       this.locals.settingsModalShow = !this.locals.settingsModalShow;
 
-      callback(tmp)
+      if(this.settings.callback != undefined) {
+        this.settings.callback(tmp)
+      }
+
     },
 
     /**

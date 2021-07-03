@@ -1,10 +1,10 @@
 <template>
 <div id="printPage">
   <!--Buttons-->
-  <i @click="convert2Image()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
-  
+  <i @click="showPrintPreview()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
+  <i @click="showTemplateBuilder({})" class="fas fa-2x fa-cog"></i>
 
-  <TemplateBuilder  ref="TemplateBuilder" :options="{}"/>
+  <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
   <!-- Preview Modal-->
 
@@ -12,8 +12,8 @@
     <div class="modal-content">
       <div class="card-header">
         <span class="close-final">&times;</span>
-        <i @click="printForm()" class="fas fa-2x fa-file-pdf"></i>
-        <i @click="editWhileInPreview()" class="fas fa-2x fa-edit"></i>
+        <img @click="printForm()" src="./elements/images/printer.png" class="icon" alt="پرینت">
+        <img @click="editWhileInPreview()" src="./elements/images/edit.png" class="icon" alt="ویرایش" >
       </div>
       <div id="printForm">
         <div
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import TemplateBuilder from './TemplateBuilder.vue'
+import TemplateBuilder from "./TemplateBuilder.vue";
 import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
 import BindingObjects from "./elements/BindingObjects.vue";
@@ -89,13 +89,14 @@ export default {
     pagecounter: PageCounter,
     imageelement: ImageElement,
     bindingobjects: BindingObjects,
-    TemplateBuilder
+    TemplateBuilder,
   },
   data() {
     return {
       locals: {
         totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
+        templateBuilderData: {},
       },
       settings: {
         pageHeaderSize: 0,
@@ -290,6 +291,27 @@ export default {
           modal.style.display = "none";
         }
       };
+    },
+
+
+    /**
+     * By Triggering this func template builder modal will be displayed
+     */
+
+
+    showTemplateBuilder(json, callback) {
+      json.callback = callback;
+      this.locals.templateBuilderData = json;
+      this.$refs.TemplateBuilder.settingsInitFunc()
+    },
+
+
+    /**
+     * By Triggering this func Print Preview modal will be displayed
+     */
+
+    showPrintPreview(){
+      this.convert2Image()
     },
 
     /**
