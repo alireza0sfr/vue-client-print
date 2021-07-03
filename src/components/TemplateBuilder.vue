@@ -56,7 +56,7 @@
             </div>
             <div style="width:100%" class="toolbar-content-row">
               <div style="width: 50%; padding: 5px;">
-                <span style="width: 50%;" class="p-2">اسم فایل</span>
+                <span style="width: 50%;">اسم فایل</span>
               </div>
               <div style="width:50%; height:70%;">
                 <input
@@ -85,11 +85,7 @@
             </div>
             <div style="width:100%" class="toolbar-content-row">
               <div style="width: 50%; padding: 5px;">
-                <label
-                  style="width: 40%;"
-                  class="form-check-label p-2 me-3"
-                  for="repeatableFooterControl"
-                >تکرار فوتر</label>
+                <label style="width: 40%;" for="repeatableFooterControl">تکرار فوتر</label>
               </div>
               <div style="width:50%">
                 <input
@@ -103,9 +99,9 @@
             </div>
             <div style="width:100%; margin-bottom: 15px" class="toolbar-content-row">
               <div style="width: 50%; padding: 5px;">
-                <span style="width: 40%;">جهت صفحه</span>
+                <span>جهت صفحه</span>
               </div>
-              <div style="width:22%">
+              <div style="width:25%">
                 <input
                   type="radio"
                   name="pageDirections"
@@ -113,9 +109,9 @@
                   value="rtl"
                   v-model="settings.pageDirections"
                 />
-                <label class="form-check-label" for="pageDirections">راست</label>
+                <label for="pageDirections">راست</label>
               </div>
-              <div style="width:22%; margin-right:10px">
+              <div style="width:25%;">
                 <input
                   type="radio"
                   name="pageDirections"
@@ -195,52 +191,52 @@
               </div>
             </div>
           </div>
-          <div class="text-decoration-none mb-3 toolbar header">
+          <div class="toolbar-header">
             <span class="fs-5">تنظیمات المنت ها</span>
           </div>
-          <ul
-            class="nav nav-pills flex-column align-items-start align-items-sm-start"
-            id="elementConfigsMenu"
-          >
-            <li
+          <div class="toolbar-content-wrapper">
+            <div
               v-if="locals.selectedElement.type == 'textelement'"
               style="width:100%"
-              class="d-flex"
+              class="toolbar-content-row"
             >
-              <span style="width: 50%;" class="p-2">متن</span>
-              <div style="width:50%;" class="input-group input-group-sm">
+              <span style="width: 50%; padding: 8px">متن</span>
+              <div style="width:50%;">
                 <input
                   type="text"
-                  style="height: 80%; margin-left: 2px"
+                  style="height: 60%; margin-left: 2px;"
                   v-model="locals.selectedElement.options.configs.text"
-                  class="flex-grow-2 form-control mb-3 ms-2"
+                  class="toolbar-content-select input-form-control"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </div>
-            </li>
-            <li style="width:100%" class="d-flex" v-if="locals.selectedElement.type == 'datetime'">
-              <label
-                style="width: 40%;"
-                class="form-check-label p-2 me-2"
-                for="hasDateControl"
-              >تاریخ</label>
-              <div style="width:20%" class="form-check">
+            </div>
+            <div
+              style="width:100%"
+              class="toolbar-content-row"
+              v-if="locals.selectedElement.type == 'datetime'"
+            >
+              <div style="width: 50%; padding: 5px;">
+                <label style="width: 40%;" for="hasDateControl">تاریخ</label>
+              </div>
+              <div>
                 <input
-                  class="form-check-input"
                   type="checkbox"
                   v-model="locals.selectedElement.options.configs.hasDate"
                   id="hasDateControl"
                 />
               </div>
-            </li>
-            <li
+            </div>
+            <div
               style="width:100%"
-              class="d-flex mt-2"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'datetime'"
             >
-              <label style="width: 40%;" class="form-check-label p-2 me-2" for="hasTimeControl">ساعت</label>
-              <div style="width:20%" class="form-check">
+              <div style="width: 50%; padding: 5px;">
+                <label style="width: 40%;" for="hasTimeControl">ساعت</label>
+              </div>
+              <div>
                 <input
                   class="form-check-input"
                   type="checkbox"
@@ -248,202 +244,210 @@
                   id="hasTimeControl"
                 />
               </div>
-            </li>
-            <li
+            </div>
+            <div
               style="width:100%"
-              class="d-flex mt-2"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'datetime'"
             >
-              <label
-                style="width: 40%;"
-                class="form-check-label p-2 me-2"
-                for="persiaDateControl"
-              >تاریخ شمسی</label>
-              <div style="width:20%" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="locals.selectedElement.options.configs.persianDate"
-                  id="persiaDateControl"
-                />
+              <div style="width: 50%; padding: 5px;">
+                <label style="width: 40%;" for="persiaDateControl">تاریخ شمسی</label>
               </div>
-            </li>
-            <li
+              <input
+                class="form-check-input"
+                type="checkbox"
+                v-model="locals.selectedElement.options.configs.persianDate"
+                id="persiaDateControl"
+              />
+            </div>
+            <div
               style="width:100%"
-              class="d-flex mb-2"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'pagecounter'"
             >
-              <label
-                style="width: 40%;"
-                class="form-check-label p-2 me-3"
-                for="persianNumbersControl"
-              >اعداد فارسی</label>
-              <div style="width:20%" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="locals.selectedElement.options.configs.persianNumbers"
-                  id="persianNumbersControl"
-                />
+              <div style="width: 50%; padding: 5px;">
+                <label style="width: 40%;" for="persianNumbersControl">اعداد فارسی</label>
               </div>
-            </li>
-            <li
+              <input
+                type="checkbox"
+                v-model="locals.selectedElement.options.configs.persianNumbers"
+                id="persianNumbersControl"
+              />
+            </div>
+            <div
               style="width:100%"
-              class="d-flex"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'imageelement'"
             >
-              <label style="width: 50%;" class="p-2" for="imageFileControl">فایل تصویر</label>
-              <div style="width:50%;" class="input-group input-group-sm">
+              <div style="width: 30%; padding: 5px;">
+                <label for="imageFileControl">فایل تصویر</label>
+              </div>
+              <div style="width: 70%;">
                 <input
+                  style="width:100%;"
                   type="file"
                   @change="onFileChange()"
-                  style="margin-left: 2px"
-                  class="flex-grow-2 form-control mb-3 ms-2"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                   id="imageFileControl"
                 />
               </div>
-            </li>
-            <li
+            </div>
+            <div
               style="width:100%"
-              class="d-flex"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'imageelement'"
             >
-              <span style="width: 50%;" class="p-2">طول</span>
-              <div style="width:50%;" class="input-group input-group-sm">
+              <div style="width: 50%; padding: 5px;">
+                <span>طول</span>
+              </div>
+              <div style="width:50%;">
                 <input
                   type="text"
-                  class="flex-grow-2 form-control mb-3"
-                  style="height: 80%; margin-left: 8px"
+                  class="toolbar-content-select input-form-control"
+                  style="height: 60%; margin-left: 8px; width:70%"
                   v-model="locals.selectedElement.options.styles.height"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </div>
-            </li>
-            <li
+            </div>
+            <div
               style="width:100%"
-              class="d-flex"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'imageelement'"
             >
-              <span style="width: 50%;" class="p-2">عرض</span>
+              <div style="width: 50%; padding: 5px;">
+                <span style="width: 50%;" class="p-2">عرض</span>
+              </div>
               <div style="width:50%;" class="input-group input-group-sm">
                 <input
                   type="text"
-                  class="flex-grow-2 form-control mb-3"
-                  style="height: 80%; margin-left: 8px"
+                  class="toolbar-content-select input-form-control"
+                  style="height: 60%; margin-left: 8px; width:70%"
                   v-model="locals.selectedElement.options.styles.width"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </div>
-            </li>
-            <li
+            </div>
+            <div
               style="width:100%"
-              class="d-flex"
+              class="toolbar-content-row"
               v-if="locals.selectedElement.type == 'bindingobjects'"
             >
-              <label style="width: 50%;" class="p-2" for="bindingObjectsControl">نوع داده</label>
-              <select
-                style="height:25%; width:50%; margin-left: 8px"
-                class="flex-grow-2 form-control mb-3"
-                v-model="locals.selectedElement.options.configs.field"
-                id="bindingObjectsControl"
-              >
-                <option
-                  v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObjects)"
-                  :key="option"
-                >{{option}}</option>
-              </select>
-            </li>
-          </ul>
-          <div class="text-decoration-none mb-3 toolbar header">
-            <span class="fs-5">استایل المنت ها</span>
+              <div style="width: 50%; padding: 5px;">
+                <label style="width: 50%;" class="p-2" for="bindingObjectsControl">نوع داده</label>
+              </div>
+              <div style="width:50%">
+                <select
+                  style="height: 60%; margin-left: 8px; width:70%"
+                  class="toolbar-content-select input-form-control"
+                  v-model="locals.selectedElement.options.configs.field"
+                  id="bindingObjectsControl"
+                >
+                  <option
+                    v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObjects)"
+                    :key="option"
+                  >{{option}}</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <ul
-            class="nav nav-pills flex-column align-items-center align-items-sm-start"
-            id="elementStylesMenu"
-          >
-            <li style="width:100%" class="d-flex">
-              <label style="width: 50%;" class="p-2" for="elementTextAlignControl">مکان نوشته</label>
-              <select
-                v-model="locals.selectedElement.options.styles.textAlign"
-                style="height:25%; width:50%; margin-left: 8px"
-                class="flex-grow-2 form-control mb-3"
-                id="elementTextAlignControl"
-              >
-                <option value="right">راست</option>
-                <option value="center">وسط</option>
-                <option value="left">چپ</option>
-              </select>
-            </li>
-            <li style="width:100%" class="d-flex">
-              <span style="width: 50%;" class="p-2">رنگ نوشته</span>
-              <div style="width:50%" class="input-group input-group-sm">
+          <div style="margin-top: 15px" class="toolbar-header">
+            <span>استایل المنت ها</span>
+          </div>
+          <div class="toolbar-content-wrapper" id="elementStylesMenu">
+            <div style="width:100%" class="toolbar-content-row">
+              <div style="width: 50%; padding:5px;">
+                <label for="elementTextAlignControl">مکان نوشته</label>
+              </div>
+              <div style="width:50%">
+                <select
+                  v-model="locals.selectedElement.options.styles.textAlign"
+                  class="toolbar-content-select input-form-control"
+                  id="elementTextAlignControl"
+                >
+                  <option value="right">راست</option>
+                  <option value="center">وسط</option>
+                  <option value="left">چپ</option>
+                </select>
+              </div>
+            </div>
+            <div style="width:100%" class="toolbar-content-row">
+              <div style="width: 50%; padding:5px;">
+                <span style="width: 50%;" class="p-2">رنگ نوشته</span>
+              </div>
+              <div style="width:40%">
                 <input
                   type="color"
-                  class="flex-grow-2 form-control mb-3"
-                  style="height: 80%; margin-left: 8px"
+                  class="toolbar-content-select input-form-control"
                   v-model="locals.selectedElement.options.styles.color"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </div>
-            </li>
-            <li style="width:100%" class="d-flex mt-2">
-              <span style="width: 50%;" class="p-2">اندازه فونت</span>
-              <div style="width:50%;" class="input-group input-group-sm">
+            </div>
+            <div style="width:100%; margin-top: 25px;" class="toolbar-content-row">
+              <div style="width: 50%; padding:5px;">
+                <span>اندازه فونت</span>
+              </div>
+              <div style="width:50%">
                 <input
                   type="text"
-                  class="flex-grow-2 form-control mb-3"
-                  style="height: 80%; margin-left: 8px"
+                  class="toolbar-content-select input-form-control"
+                  style="height: 60%; width: 70%; margin-left: 8px"
                   v-model="locals.selectedElement.options.styles.fontSize"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </div>
-            </li>
-            <li style="width:100%" class="d-flex mt-2">
-              <span style="width: 40%;" class="p-2 me-2">حاشیه</span>
-              <div style="width:10%"></div>
-              <div style="width:50%;" class="input-group input-group-sm">
+            </div>
+            <div style="width:100%" class="toolbar-content-row">
+              <div style="width: 50%; padding:5px;">
+                <span>حاشیه</span>
+              </div>
+              <div style="width:50%;">
                 <input
+                  class="toolbar-content-select input-form-control"
                   type="text"
-                  class="flex-grow-2 form-control mb-3"
-                  style="height: 80%; margin-left: 8px"
+                  style="height: 60%; width: 70%;"
                   v-model="locals.selectedElement.options.styles.border"
                   aria-label="Small"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </div>
-            </li>
-            <li style="width:100%" class="d-flex mt-2">
-              <span style="width: 40%;" class="d-sm-inline p-2 me-2">جهت نوشته</span>
-              <div style="width:22%" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="elementDirections"
-                  id="elementDirections"
-                  value="rtl"
-                  v-model="locals.selectedElement.options.styles.direction"
-                />
-                <label class="form-check-label" for="elementDirections">راست به چپ</label>
+            </div>
+            <div style="width:100%" class="toolbar-content-row">
+              <div style="width: 50%; padding:5px;">
+                <span style="width: 40%;" class="d-sm-inline p-2 me-2">جهت نوشته</span>
               </div>
-              <div style="width:22%; margin-right:10px" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="elementDirections"
-                  id="elementDirections2"
-                  value="ltr"
-                  v-model="locals.selectedElement.options.styles.direction"
-                />
-                <label class="form-check-label" for="elementDirections2">چپ به راست</label>
+              <div>
+                <div>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="elementDirections"
+                    id="elementDirections"
+                    value="rtl"
+                    v-model="locals.selectedElement.options.styles.direction"
+                  />
+                  <label class="form-check-label" for="elementDirections">راست به چپ</label>
+                </div>
+                <div>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="elementDirections"
+                    id="elementDirections2"
+                    value="ltr"
+                    v-model="locals.selectedElement.options.styles.direction"
+                  />
+                  <label class="form-check-label" for="elementDirections2">چپ به راست</label>
+                </div>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
           <hr />
         </div>
       </div>
