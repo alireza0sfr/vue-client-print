@@ -328,5 +328,5 @@ export default {
 </script>
 
 <style>
-@import "./css/style.css";
+@import "./css/print.css";
 </style>
