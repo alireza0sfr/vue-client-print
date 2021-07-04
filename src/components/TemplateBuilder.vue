@@ -418,15 +418,99 @@
                   <div style="width: 50%; padding:5px;">
                     <span>حاشیه</span>
                   </div>
-                  <div style="width:50%;">
-                    <input
-                      class="toolbar-content-select input-form-control"
-                      type="text"
-                      style="height: 60%; width: 70%;"
-                      v-model="locals.selectedElement.options.styles.border"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
+                    <div style="width: 50%; padding: 5px;">
+                      <label style="width: 40%;" for="bordersAlldirections">همه جهات</label>
+                    </div>
+                    <div style="width:25%">
+                      <input
+                        style="width: 15px; height: 15px; border-radius: .25em;"
+                        class="toolbar-content-select input-form-control"
+                        type="checkbox"
+                        v-model="locals.bordersAllDirections"
+                        id="bordersAlldirections"
+                      />
+                  </div>
+                </div>
+                <div style="width:100%; margin-top: 25px;" class="toolbar-content-row">
+                  <div
+                    v-if="locals.bordersAllDirections"
+                    style="display:flex; flex-direction: row"
+                  >
+                    <div style="width: 50%; padding:5px;">
+                      <span>حاشیه همه جهات</span>
+                    </div>
+                    <div style="width:50%">
+                      <input
+                        type="text"
+                        class="toolbar-content-select input-form-control"
+                        style="height: 60%; width: 70%; margin-left: 8px"
+                        v-model="locals.selectedElement.options.styles.border"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div v-if="locals.bordersAllDirections == false">
+                    <div style="display:flex; flex-direction: row; margin-bottom: 5px;">
+                      <div style="width: 50%; padding:5px;">
+                        <span>حاشیه بالا</span>
+                      </div>
+                      <div style="width:50%">
+                        <input
+                          type="text"
+                          class="toolbar-content-select input-form-control"
+                          style="height: 60%; width: 70%; margin-left: 8px"
+                          v-model="locals.selectedElement.options.styles.borderTop"
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
+                    <div style="display:flex; flex-direction: row; margin-bottom: 5px;">
+                      <div style="width: 50%; padding:5px;">
+                        <span>حاشیه راست</span>
+                      </div>
+                      <div style="width:50%">
+                        <input
+                          type="text"
+                          class="toolbar-content-select input-form-control"
+                          style="height: 60%; width: 70%; margin-left: 8px"
+                          v-model="locals.selectedElement.options.styles.borderRight"
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
+                    <div style="display:flex; flex-direction: row; margin-bottom: 5px;">
+                      <div style="width: 50%; padding:5px;">
+                        <span>حاشیه پایین</span>
+                      </div>
+                      <div style="width:50%">
+                        <input
+                          type="text"
+                          class="toolbar-content-select input-form-control"
+                          style="height: 60%; width: 70%; margin-left: 8px"
+                          v-model="locals.selectedElement.options.styles.borderBottom"
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
+                    <div style="display:flex; flex-direction: row;">
+                      <div style="width: 50%; padding:5px;">
+                        <span>حاشیه چپ</span>
+                      </div>
+                      <div style="width:50%">
+                        <input
+                          type="text"
+                          class="toolbar-content-select input-form-control"
+                          style="height: 60%; width: 70%; margin-left: 8px"
+                          v-model="locals.selectedElement.options.styles.borderLeft"
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div style="width:100%" class="toolbar-content-row">
@@ -570,6 +654,7 @@ export default {
             },
           },
         },
+        bordersAllDirections: true,
         isClicked: false,
         classType: "",
         selectedElement: {
