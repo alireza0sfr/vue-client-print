@@ -19,13 +19,24 @@ select {
 
 .template {
     overflow: hidden;
-    border: 1px black ridge;
     display: flex;
     flex-direction: column;
+    margin: 20px;
+    border: 1px ridge #aaa;
 }
 
 #bodyTemplate {
     flex-grow: 2;
+}
+
+.watermark {
+    font-size: 79pt;
+    color: #e1e1e1;
+    margin-top: 100px;
+}
+
+#bodyTemplate p {
+    color: #a5a2a2;
 }
 
 .section {
@@ -130,19 +141,19 @@ select {
 }
 
 .toolbar-container {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    overflow: 'hidden';
+    box-shadow: -2px 6px 1rem rgb(0 0 0 / 22%) !important;
+    overflow: auto;
     width: 300px;
     padding: 0px;
-    overflow-y: scroll;
-    border: 1px ridge black;
+    border: 1px ridge #d1d1d1;
+    border-top: none;
 }
 
 .toolbar-header {
     background-color: rgb(232, 235, 240);
     color: #484848;
-    border-bottom: 3px solid #084298;
-    padding: 13px;
+    border-bottom: 1px solid #81c3ff;
+    padding: 10px;
 }
 
 .toolbar-content {

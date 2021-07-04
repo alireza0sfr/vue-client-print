@@ -11,12 +11,9 @@
             <h1>صفحه ساز</h1>
           </div>
           <div>
-            <img
-              @click="export2Json()"
-              src="./elements/images/floppy-disk.png"
-              alt="ذخیره"
-              class="icon"
-            />
+            <a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
+              <img src="./elements/images/floppy-disk.png" />
+            </a>
           </div>
         </div>
 
@@ -418,24 +415,21 @@
                   <div style="width: 50%; padding:5px;">
                     <span>حاشیه</span>
                   </div>
-                    <div style="width: 50%; padding: 5px;">
-                      <label style="width: 40%;" for="bordersAlldirections">همه جهات</label>
-                    </div>
-                    <div style="width:25%">
-                      <input
-                        style="width: 15px; height: 15px; border-radius: .25em;"
-                        class="toolbar-content-select input-form-control"
-                        type="checkbox"
-                        v-model="locals.bordersAllDirections"
-                        id="bordersAlldirections"
-                      />
+                  <div style="width: 50%; padding: 5px;">
+                    <label style="width: 40%;" for="bordersAlldirections">همه جهات</label>
+                  </div>
+                  <div style="width:25%">
+                    <input
+                      style="width: 15px; height: 15px; border-radius: .25em;"
+                      class="toolbar-content-select input-form-control"
+                      type="checkbox"
+                      v-model="locals.bordersAllDirections"
+                      id="bordersAlldirections"
+                    />
                   </div>
                 </div>
-                <div style="width:100%; margin-top: 25px;" class="toolbar-content-row">
-                  <div
-                    v-if="locals.bordersAllDirections"
-                    style="display:flex; flex-direction: row"
-                  >
+                <div style="width:100%;" class="toolbar-content-row">
+                  <div v-if="locals.bordersAllDirections" style="display:flex; flex-direction: row">
                     <div style="width: 50%; padding:5px;">
                       <span>حاشیه همه جهات</span>
                     </div>
@@ -575,7 +569,8 @@
               />
             </div>
             <div id="bodyTemplate">
-              <div>Body</div>
+              <div class="watermark">بدنه چاپ</div>
+              <p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
             </div>
             <div
               :style="{'height': settings.pageFooterSize + 'in',
@@ -1091,13 +1086,6 @@ export default {
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
         modal.style.display = "none";
-      };
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
       };
     },
     showModal() {

@@ -59,6 +59,9 @@ print component:
     -Done add border to element style
     -Done edit basic template in print
     
+
+    -font field
+    -toolbar static
     -component :is
     -slot
 

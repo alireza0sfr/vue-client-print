@@ -18,8 +18,12 @@
           <h3>پیش نمایش پرینت</h3>
         </div>
         <div>
-          <img @click="editWhileInPreview()" src="./elements/images/edit.png" alt="ویرایش" />
-          <img @click="printForm()" src="./elements/images/printer.png" alt="پرینت" />
+          <a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
+            <img src="./elements/images/edit.png" />
+          </a>
+          <a href="#" @click="printForm()" title="پرینت" class="modal-icon">
+            <img src="./elements/images/printer.png" />
+          </a>
         </div>
       </div>
       <div id="printForm">
@@ -36,8 +40,7 @@
             >
               <header style="height: 60px" class="mainHeader">
                 <div class="header card-body">
-                  <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
-                  </div>
+                  <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true"></div>
                 </div>
               </header>
             </div>
