@@ -411,6 +411,23 @@
                     />
                   </div>
                 </div>
+                <div style="width:100%;" class="toolbar-content-row">
+                  <div style="display:flex; flex-direction: row">
+                    <div style="width: 50%; padding:5px;">
+                      <span>فونت</span>
+                    </div>
+                    <div style="width:50%">
+                      <input
+                        type="text"
+                        class="toolbar-content-select input-form-control"
+                        style="height: 60%; width: 80%; margin-left: 8px"
+                        v-model="locals.selectedElement.options.styles.fontFamily"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div style="width:100%" class="toolbar-content-row">
                   <div style="width: 50%; padding:5px;">
                     <span>حاشیه</span>

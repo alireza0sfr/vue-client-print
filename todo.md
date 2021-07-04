@@ -58,15 +58,15 @@ print component:
     -Done design the modal
     -Done add border to element style
     -Done edit basic template in print
+    -Done mobile view ykami bhtar she
+    -Done font field
     
 
-    -font field
     -toolbar static
     -component :is
     -slot
 
     
-    -mobile view ykami bhtar she
 
     -toast for processing...
     -remove fa cdn
