@@ -1,18 +1,18 @@
 <template>
 <div id="printPage">
   <!--Buttons-->
-  <i @click="showPrintPreview()" id="print-modal-open-btn" type="button" class="fas fa-2x fa-eye"></i>
+  <i @click="showPrintPreview()" id="printModalOpenBtn" type="button" class="fas fa-2x fa-eye"></i>
   <i @click="showTemplateBuilder({})" class="fas fa-2x fa-cog"></i>
 
   <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
   <!-- Preview Modal-->
 
-  <div id="print-modal" class="print-modal">
+  <div id="printModal" class="print-modal">
     <div class="print-modal-content">
       <div class="print-modal-header">
         <div>
-          <span id="print-modal-close-btn" class="close-btn">&times;</span>
+          <span id="printModalCloseBtn" class="close-btn">&times;</span>
         </div>
         <div>
           <h3>پیش نمایش پرینت</h3>
@@ -122,9 +122,9 @@ export default {
   mounted() {
     console.log("=======Nikan is Live=======");
     this.modalFunc(
-      "print-modal",
-      "print-modal-open-btn",
-      "print-modal-close-btn"
+      "printModal",
+      "printModalOpenBtn",
+      "printModalCloseBtn"
     );
   },
   methods: {
@@ -316,6 +316,8 @@ export default {
      */
 
     editWhileInPreview() {
+      let printModal = document.getElementById("printModal");
+      printModal.style.display = "none";
       this.showTemplateBuilder(this.settings, (val) => {
         Object.assign(this.settings, val);
         this.showPrintPreview();
