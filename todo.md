@@ -62,9 +62,11 @@ print component:
     -Done font field
     -Done Close the element's settings on delete
     -Done toolbar static
+    -Done component :is
     
-
-    -component :is
+    -print comp cant print footer 
+    -binding obj and page counter elements
+    -add mode to elements
     -slot
 
     

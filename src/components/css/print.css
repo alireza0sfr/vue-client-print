@@ -24,14 +24,10 @@
     text-align: left;
 }
 
-.customHeader {
-    text-align: center;
-    margin-top: -50px;
-}
-
 .logo {
     text-align: right;
 }
+
 .converted img {
     width: 8.26in;
     margin-top: 24px;
@@ -39,11 +35,14 @@
     /* margin-right: 950px; */
 }
 
-.mainFooter {
-    margin-top: 7px;
-    margin-bottom: 14px;
-}
-
 #page {
     width: max-content;
+}
+
+.mainHeader {
+    position: relative;
+}
+
+.mainFooter {
+    position: relative;
 }

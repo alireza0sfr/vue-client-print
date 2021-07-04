@@ -32,7 +32,6 @@ select {
 .watermark {
     font-size: 79pt;
     color: #e1e1e1;
-    margin-top: 100px;
 }
 
 #bodyTemplate p {

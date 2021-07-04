@@ -729,8 +729,18 @@ export default {
         let computedStyles = this.getCoordinates(
           footerElements[index].options.id
         );
+        // computedStyles.top = -parseInt(computedStyles.top) + "px";
         let elementStyles = footerElements[index].options.styles;
         Object.assign(elementStyles, computedStyles);
+      }
+
+      let totalHeightOfAPaper =
+        this.settings.defaultHeightOfPaper -
+        this.settings.pageHeaderSize -
+        this.settings.pageFooterSize;
+
+      if (totalHeightOfAPaper < 0) {
+        totalHeightOfAPaper = 1.7;
       }
 
       let tmp = {
@@ -744,13 +754,13 @@ export default {
           height: this.settings.pageFooterSize,
           footerElements: this.settings.footerElements,
         },
-        settings: {
-          orientation: this.settings.orientation,
-          pageSize: this.settings.pageSize,
-          pageDirections: this.settings.pageDirections,
-        },
+        orientation: this.settings.orientation,
+        pageSize: this.settings.pageSize,
+        pageDirections: this.settings.pageDirections,
+        totalHeightOfAPaper: totalHeightOfAPaper,
       };
 
+      console.log(tmp.totalHeightOfAPaper);
       // Closing the template builder modal after save
       document.getElementById("templateBuilderModal").style.display = "none";
 

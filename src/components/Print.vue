@@ -2,14 +2,14 @@
 <div id="printPage">
   <!--Buttons-->
   <i @click="showPrintPreview()" id="printModalOpenBtn" type="button" class="fas fa-2x fa-eye"></i>
-  <i @click="showTemplateBuilder({})" class="fas fa-2x fa-cog"></i>
+  <i @click="test()" class="fas fa-2x fa-cog"></i>
 
   <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
   <!-- Preview Modal-->
 
   <div id="printModal" class="print-modal">
-    <div class="print-modal-content">
+    <div class="print-modal-content" :style="{'width': settings.defaultWidthOfPaper + .5 + 'in'}">
       <div class="print-modal-header">
         <div>
           <span id="printModalCloseBtn" class="close-btn">&times;</span>
@@ -28,7 +28,7 @@
       </div>
       <div id="printForm">
         <div
-          :style="{'border': '1px solid black', 'border-bottom': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in'}"
+          :style="{'border': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in'}"
           class="mainLoop"
           v-for="index in locals.totalPages"
           :key="index"
@@ -36,24 +36,33 @@
           <div class="pages">
             <div
               class="fixedHeaderCondition"
-              v-if="settings.hasHeader && settings.isHeaderRepeatable || index == 1"
+              v-if="settings.header.isHeaderRepeatable || index == 1"
             >
-              <header style="height: 60px" class="mainHeader">
-                <div class="header card-body">
-                  <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true"></div>
-                </div>
+              <header :style="{'height': settings.header.height + 'in'}" class="mainHeader">
+                <component
+                  v-for="element in settings.header.headerElements"
+                  :key="element"
+                  :is="element.type"
+                  :options="element.options"
+                />
               </header>
             </div>
             <body class="converted" :style="{'height': settings.totalHeightOfAPaper + 'in'}"></body>
             <div
               class="fixedFooterCondition"
-              v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
+              v-if="settings.footer.isFooterRepeatable || index == 1"
             >
-              <footer class="mainFooter break html2pdf__page-break">
-                <div
-                  v-if="settings.hasPageCounter == true"
-                  :style="{ 'text-align': settings.pageCounterPosition }"
-                >{{ index }}</div>
+              <footer
+                :style="{'height': settings.footer.height}"
+                class="mainFooter html2pdf__page-break break"
+              >
+                <component
+                  v-for="element in settings.footer.footerElements"
+                  :key="element"
+                  :is="element.type"
+                  :options="element.options"
+                />
+                <!-- <div>{{ index }}</div> -->
               </footer>
             </div>
           </div>
@@ -92,22 +101,27 @@ export default {
         totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         templateBuilderData: {},
+        test: {},
       },
       settings: {
-        pageHeaderSize: 0,
-        pageFooterSize: 0,
+        header: {
+          isHeaderRepeatable: true,
+          height: 0.5,
+          headerElements: [],
+        },
+        footer: {
+          isFooterRepeatable: true,
+          height: 0.5,
+          footerElements: [],
+        },
+        orientation: "portrait",
+        pageSize: "a4",
+        pageDirections: "rtl",
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         fileName: "nikan",
-        isFooterRepeatable: true,
-        isHeaderRepeatable: true,
-        orientation: "portrait",
-        pageSize: "a4",
-        pageDirections: "rtl",
         margin: 0,
-        headerElements: [],
-        footerElements: [],
       },
     };
   },
@@ -121,11 +135,7 @@ export default {
   },
   mounted() {
     console.log("=======Nikan is Live=======");
-    this.modalFunc(
-      "printModal",
-      "printModalOpenBtn",
-      "printModalCloseBtn"
-    );
+    this.modalFunc("printModal", "printModalOpenBtn", "printModalCloseBtn");
   },
   methods: {
     printForm() {
@@ -321,6 +331,13 @@ export default {
       this.showTemplateBuilder(this.settings, (val) => {
         Object.assign(this.settings, val);
         this.showPrintPreview();
+      });
+    },
+    test() {
+      this.showTemplateBuilder({}, (json) => {
+        Object.assign(this.settings, json);
+        console.log(this.settings);
+        this.locals.totalPages = 5;
       });
     },
   },

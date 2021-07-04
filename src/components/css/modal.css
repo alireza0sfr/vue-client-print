@@ -42,6 +42,7 @@
     /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
+    
 }
 
 /* Modal Content/Box */
@@ -50,6 +51,7 @@
     margin: 5% auto;
     width: 1090px;
     border-radius: 7px;
+    overflow: hidden;
     box-shadow: 1px 1px 20px 0px #282828;
 }
 
