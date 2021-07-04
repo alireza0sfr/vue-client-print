@@ -559,54 +559,55 @@
           </div>
 
           <!-- Section 2 (Template)-->
-
-          <div
-            :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
+          <div style="overflow: auto;">
+            <div
+              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
             'background-color': '#F1F5F8'}"
-            class="template"
-            @click="deSelectAll"
-          >
-            <div
-              :style="{'height': settings.pageHeaderSize + 'in',
-              'min-height': '0.6in'}"
-              id="headerTemplate"
-              class="section header"
-              ref="headerTemplate"
-              @drop="droppedElementOnHeader()"
-              @dragenter.prevent
-              @dragover.prevent
+              class="template"
+              @click="deSelectAll"
             >
-              <component
-                v-for="element in settings.headerElements"
-                :key="element"
-                :is="element.type"
-                :options="element.options"
-                @click="element2ToolbarBind(element)"
-                @clickedOnElement="clickedOnElement()"
-              />
-            </div>
-            <div id="bodyTemplate">
-              <div class="watermark">بدنه چاپ</div>
-              <p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
-            </div>
-            <div
-              :style="{'height': settings.pageFooterSize + 'in',
+              <div
+                :style="{'height': settings.pageHeaderSize + 'in',
               'min-height': '0.6in'}"
-              id="footerTemplate"
-              class="section footer"
-              ref="footerTemplate"
-              @drop="droppedElementOnFooter()"
-              @dragenter.prevent
-              @dragover.prevent
-            >
-              <component
-                v-for="element in settings.footerElements"
-                :key="element"
-                :is="element.type"
-                :options="element.options"
-                @click="element2ToolbarBind(element)"
-                @clickedOnElement="clickedOnElement()"
-              />
+                id="headerTemplate"
+                class="section header"
+                ref="headerTemplate"
+                @drop="droppedElementOnHeader()"
+                @dragenter.prevent
+                @dragover.prevent
+              >
+                <component
+                  v-for="element in settings.headerElements"
+                  :key="element"
+                  :is="element.type"
+                  :options="element.options"
+                  @click="element2ToolbarBind(element)"
+                  @clickedOnElement="clickedOnElement()"
+                />
+              </div>
+              <div id="bodyTemplate">
+                <div class="watermark">بدنه چاپ</div>
+                <p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
+              </div>
+              <div
+                :style="{'height': settings.pageFooterSize + 'in',
+              'min-height': '0.6in'}"
+                id="footerTemplate"
+                class="section footer"
+                ref="footerTemplate"
+                @drop="droppedElementOnFooter()"
+                @dragenter.prevent
+                @dragover.prevent
+              >
+                <component
+                  v-for="element in settings.footerElements"
+                  :key="element"
+                  :is="element.type"
+                  :options="element.options"
+                  @click="element2ToolbarBind(element)"
+                  @clickedOnElement="clickedOnElement()"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -1060,7 +1061,7 @@ export default {
       document.addEventListener("keydown", deleteElement, false);
       document.removeEventListener("keyup", deleteElement, false);
 
-      let that = this // Storing the value of this to be able to use it inside of the function
+      let that = this; // Storing the value of this to be able to use it inside of the function
 
       function deleteElement(e) {
         if (e.code == "Delete") {

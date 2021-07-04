@@ -60,9 +60,10 @@ print component:
     -Done edit basic template in print
     -Done mobile view ykami bhtar she
     -Done font field
+    -Done Close the element's settings on delete
+    -Done toolbar static
     
 
-    -toolbar static
     -component :is
     -slot
 
