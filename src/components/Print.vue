@@ -15,13 +15,13 @@
           <span id="printModalCloseBtn" class="close-btn">&times;</span>
         </div>
         <div>
-          <h3>پیش نمایش پرینت</h3>
+          <h3>پیش نمایش چاپ</h3>
         </div>
         <div>
           <a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
             <img src="./elements/images/edit.png" />
           </a>
-          <a href="#" @click="printForm()" title="پرینت" class="modal-icon">
+          <a href="#" @click="printForm()" title="چاپ" class="modal-icon">
             <img src="./elements/images/printer.png" />
           </a>
         </div>
