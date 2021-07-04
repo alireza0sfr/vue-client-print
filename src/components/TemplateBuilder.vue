@@ -1060,6 +1060,8 @@ export default {
       document.addEventListener("keydown", deleteElement, false);
       document.removeEventListener("keyup", deleteElement, false);
 
+      let that = this // Storing the value of this to be able to use it inside of the function
+
       function deleteElement(e) {
         if (e.code == "Delete") {
           for (let index = 0; index < headerElements.length; index++) {
@@ -1072,6 +1074,13 @@ export default {
               footerElements.pop(footerElements[index]);
             }
           }
+          that.locals.selectedElement = {
+            type: {},
+            options: {
+              configs: {},
+              styles: {},
+            },
+          };
         }
       }
     },
