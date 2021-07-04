@@ -44,7 +44,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          text: "Enter Your Text",
+          text: "متن خود را وارد نمایید",
         },
         styles: defaultStyles,
       },

@@ -53,10 +53,7 @@ export default {
         id: 0,
         configs: {
           field: "اتصال فیلد را انتخاب کنید",
-          bindingObjects: {
-            code: 124164,
-            date: "2021/30/6",
-          },
+          bindingObjects: {},
         },
         styles: defaultStyles,
       },

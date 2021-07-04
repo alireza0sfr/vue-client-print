@@ -355,7 +355,7 @@
                       id="bindingObjectsControl"
                     >
                       <option
-                        v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObjects)"
+                        v-for="option in Object.keys(settings.bindingObjects)"
                         :key="option"
                       >{{option}}</option>
                     </select>
@@ -692,6 +692,7 @@ export default {
         pageDirections: "rtl",
         headerElements: [],
         footerElements: [],
+        bindingObjects: {}
       },
     };
   },
@@ -760,7 +761,6 @@ export default {
         totalHeightOfAPaper: totalHeightOfAPaper,
       };
 
-      console.log(tmp.totalHeightOfAPaper);
       // Closing the template builder modal after save
       document.getElementById("templateBuilderModal").style.display = "none";
 
@@ -953,7 +953,7 @@ export default {
           type: classType,
           options: {
             id: this.idGenerator(5),
-            configs: { text: "Enter Your Text" },
+            configs: { text: "متن خود را وارد نمایید" },
             styles: {},
           },
         };

@@ -43,7 +43,7 @@
                   v-for="element in settings.header.headerElements"
                   :key="element"
                   :is="element.type"
-                  :options="element.options"
+                  :options="prepareComponentsOptions(elements.options, index)"
                 />
               </header>
             </div>
@@ -60,7 +60,7 @@
                   v-for="element in settings.footer.footerElements"
                   :key="element"
                   :is="element.type"
-                  :options="element.options"
+                  :options="element.type == 'pagecounter' ? preparePageCounter(element.options, index) :element.options"
                 />
                 <!-- <div>{{ index }}</div> -->
               </footer>
@@ -121,7 +121,6 @@ export default {
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         fileName: "nikan",
-        margin: 0,
       },
     };
   },
@@ -142,7 +141,6 @@ export default {
       console.log("=======Printing.....=======");
       let pages = document.getElementsByClassName("pages");
       let opt = {
-        margin: this.settings.margin,
         filename: this.settings.fileName + ".pdf",
         image: { type: "jpeg", quality: 1 },
         html2canvas: { dpi: 300, width: 1430 },
@@ -336,9 +334,12 @@ export default {
     test() {
       this.showTemplateBuilder({}, (json) => {
         Object.assign(this.settings, json);
-        console.log(this.settings);
         this.locals.totalPages = 5;
       });
+    },
+    prepareComponentsOptions(options, index) {
+      options.configs.counter = index;
+      return JSON.parse(JSON.stringify(options))
     },
   },
 };
