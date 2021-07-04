@@ -57,8 +57,8 @@ print component:
     -Done Add modal for template builder
     -Done design the modal
     -Done add border to element style
+    -Done edit basic template in print
     
-    -edit basic template in print
     -component :is
     -slot
 

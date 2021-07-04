@@ -37,19 +37,6 @@
               <header style="height: 60px" class="mainHeader">
                 <div class="header card-body">
                   <div class="dateAndTimeToday" v-if="settings.isFixedDateAndTime == true">
-                    {{dateToday}}
-                    <br />
-                    {{timeToday}}
-                  </div>
-                  <div class="customHeader">Custom Header {{settings.customHeader}}</div>
-                  <div class="logo">
-                    <img
-                      v-if="settings.logoURL != ''"
-                      :src="settings.logoURL"
-                      alt="Logo"
-                      height="40"
-                      width="40"
-                    />
                   </div>
                 </div>
               </header>
@@ -60,8 +47,6 @@
               v-if="settings.hasFooter && settings.isFooterRepeatable || index == 1"
             >
               <footer class="mainFooter break html2pdf__page-break">
-                {{settings.customFooter}}
-                <br />
                 <div
                   v-if="settings.hasPageCounter == true"
                   :style="{ 'text-align': settings.pageCounterPosition }"
