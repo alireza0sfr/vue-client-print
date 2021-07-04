@@ -1,19 +1,26 @@
 <template>
 <div id="printPage">
   <!--Buttons-->
-  <i @click="showPrintPreview()" id="myBtn-final" type="button" class="fas fa-2x fa-eye"></i>
+  <i @click="showPrintPreview()" id="print-modal-open-btn" type="button" class="fas fa-2x fa-eye"></i>
   <i @click="showTemplateBuilder({})" class="fas fa-2x fa-cog"></i>
 
   <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
   <!-- Preview Modal-->
 
-  <div id="myModal-final" class="modal card">
-    <div class="modal-content">
-      <div class="card-header">
-        <span class="close-final">&times;</span>
-        <img @click="printForm()" src="./elements/images/printer.png" class="icon" alt="پرینت">
-        <img @click="editWhileInPreview()" src="./elements/images/edit.png" class="icon" alt="ویرایش" >
+  <div id="print-modal" class="print-modal">
+    <div class="print-modal-content">
+      <div class="print-modal-header">
+        <div>
+          <span id="print-modal-close-btn" class="close-btn">&times;</span>
+        </div>
+        <div>
+          <h3>پیش نمایش پرینت</h3>
+        </div>
+        <div>
+          <img @click="editWhileInPreview()" src="./elements/images/edit.png" alt="ویرایش" />
+          <img @click="printForm()" src="./elements/images/printer.png" alt="پرینت" />
+        </div>
       </div>
       <div id="printForm">
         <div
@@ -126,7 +133,11 @@ export default {
   },
   mounted() {
     console.log("=======Nikan is Live=======");
-    this.modalFinalFunc();
+    this.modalFunc(
+      "print-modal",
+      "print-modal-open-btn",
+      "print-modal-close-btn"
+    );
   },
   methods: {
     printForm() {
@@ -266,14 +277,14 @@ export default {
      * JS functions for the modal
      */
 
-    modalFinalFunc() {
-      var modal = document.getElementById("myModal-final");
+    modalFunc(modalId, btnId, closeBtnId) {
+      var modal = document.getElementById(modalId);
 
       // Get the button that opens the modal
-      var btn = document.getElementById("myBtn-final");
+      var btn = document.getElementById(btnId);
 
       // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close-final")[0];
+      var span = document.getElementById(closeBtnId);
 
       // When the user clicks on the button, open the modal
       btn.onclick = function () {
@@ -293,25 +304,23 @@ export default {
       };
     },
 
-
     /**
      * By Triggering this func template builder modal will be displayed
      */
 
-
     showTemplateBuilder(json, callback) {
       json.callback = callback;
       this.locals.templateBuilderData = json;
-      this.$refs.TemplateBuilder.settingsInitFunc()
+      this.$refs.TemplateBuilder.settingsInitFunc();
+      this.$refs.TemplateBuilder.showModal();
     },
-
 
     /**
      * By Triggering this func Print Preview modal will be displayed
      */
 
-    showPrintPreview(){
-      this.convert2Image()
+    showPrintPreview() {
+      this.convert2Image();
     },
 
     /**
@@ -319,9 +328,10 @@ export default {
      */
 
     editWhileInPreview() {
-      let modal = document.getElementById("myModal-final");
-      modal.style.display = "none";
-      this.locals.settingsModalShow = !this.locals.settingsModalShow;
+      this.showTemplateBuilder(this.settings, (val) => {
+        Object.assign(this.settings, val);
+        this.showPrintPreview();
+      });
     },
   },
 };
@@ -329,4 +339,5 @@ export default {
 
 <style>
 @import "./css/print.css";
+@import "./css/modal.css";
 </style>

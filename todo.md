@@ -53,13 +53,15 @@ print component:
     -Done toolbar 2 section dare yki label yki content dg div khali nazar]
     -Done image for icons => {done, edit, print}
     -Done 2 methods for preview
+    -Done Remove BS
+    -Done Add modal for template builder
+    -Done design the modal
     
-    -Remove BS
-    -Add modal for template builder
-    -design the modal
-    
+    -add border to element style
     -edit basic template in print
+    -component :is
     -slot
+
     
     -mobile view ykami bhtar she
 
