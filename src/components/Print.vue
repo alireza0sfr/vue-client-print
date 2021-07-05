@@ -6,7 +6,12 @@
 
   <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
-  <!-- Preview Modal-->
+  <!-- Data Slots -->
+  <div id="toBeConverted" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
+    <slot name="printData"></slot>
+  </div>
+
+  <!-- Print Preview Modal-->
 
   <div id="printModal" class="print-modal">
     <div class="print-modal-content" :style="{'width': settings.defaultWidthOfPaper + .5 + 'in'}">
@@ -47,7 +52,7 @@
                 />
               </header>
             </div>
-            <body class="converted" :style="{'height': settings.totalHeightOfAPaper + 'in'}"></body>
+            <div class="converted" :style="{'height': settings.totalHeightOfAPaper + 'in'}"></div>
             <div
               class="fixedFooterCondition"
               v-if="settings.footer.isFooterRepeatable || index == 1"

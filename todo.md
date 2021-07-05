@@ -69,11 +69,12 @@ print component:
     -Done check body height in print preview
     -Done fix the toolbar drop downs
     -Done add mode to elements
+    -Done slot
+    -Done test
     
-    -slot
-
+    
+    -Text pattern element
     
 
     -toast for processing...
     -remove fa cdn
-    -test
