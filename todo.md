@@ -63,9 +63,12 @@ print component:
     -Done Close the element's settings on delete
     -Done toolbar static
     -Done component :is
+    -Done print comp cant print footer 
+    -Done binding obj and page counter elements
+    -Done replace bindingobj field with bindingobj value
+    -Done check body height in print preview
     
-    -print comp cant print footer 
-    -binding obj and page counter elements
+    -fix the toolbar drop downs
     -add mode to elements
     -slot
 

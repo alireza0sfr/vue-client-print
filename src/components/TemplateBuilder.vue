@@ -567,7 +567,7 @@
             >
               <div
                 :style="{'height': settings.pageHeaderSize + 'in',
-              'min-height': '0.6in'}"
+              'min-height': '0.15in'}"
                 id="headerTemplate"
                 class="section header"
                 ref="headerTemplate"
@@ -590,7 +590,7 @@
               </div>
               <div
                 :style="{'height': settings.pageFooterSize + 'in',
-              'min-height': '0.6in'}"
+              'min-height': '0.15in'}"
                 id="footerTemplate"
                 class="section footer"
                 ref="footerTemplate"
@@ -679,8 +679,8 @@ export default {
         },
       },
       settings: {
-        pageHeaderSize: 0,
-        pageFooterSize: 0,
+        pageHeaderSize: 0.5,
+        pageFooterSize: 0.5,
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
@@ -692,7 +692,7 @@ export default {
         pageDirections: "rtl",
         headerElements: [],
         footerElements: [],
-        bindingObjects: {}
+        bindingObjects: {},
       },
     };
   },
@@ -743,6 +743,7 @@ export default {
       if (totalHeightOfAPaper < 0) {
         totalHeightOfAPaper = 1.7;
       }
+
 
       let tmp = {
         header: {
@@ -990,7 +991,7 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              field: "داده اتصالی",
+              field: "اتصال فیلد را انتخاب کنید",
               bindingObjects: {
                 code: 124164,
                 date: "2021/30/6",

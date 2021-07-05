@@ -7,7 +7,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ settings.configs.field}}
+      {{settings.configs.value || settings.configs.field }}
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
@@ -53,7 +53,7 @@ export default {
         id: 0,
         configs: {
           field: "اتصال فیلد را انتخاب کنید",
-          bindingObjects: {},
+          value: null,
         },
         styles: defaultStyles,
       },

@@ -41,8 +41,10 @@
 
 .mainHeader {
     position: relative;
+    overflow: hidden;
 }
 
 .mainFooter {
     position: relative;
+    overflow: hidden;
 }

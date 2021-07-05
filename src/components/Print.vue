@@ -43,7 +43,7 @@
                   v-for="element in settings.header.headerElements"
                   :key="element"
                   :is="element.type"
-                  :options="prepareComponentsOptions(elements.options, index)"
+                  :options="prepareComponentsOptions(element.options, element.type, index)"
                 />
               </header>
             </div>
@@ -60,7 +60,7 @@
                   v-for="element in settings.footer.footerElements"
                   :key="element"
                   :is="element.type"
-                  :options="element.type == 'pagecounter' ? preparePageCounter(element.options, index) :element.options"
+                  :options="element.type == 'pagecounter' ? preparePageCounter(element.options, element.type, index) :element.options"
                 />
                 <!-- <div>{{ index }}</div> -->
               </footer>
@@ -101,7 +101,6 @@ export default {
         totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
         totalPagesHeight: 0, // The total size of the given div to be printed in inch
         templateBuilderData: {},
-        test: {},
       },
       settings: {
         header: {
@@ -114,6 +113,7 @@ export default {
           height: 0.5,
           footerElements: [],
         },
+        bindingObjects: {},
         orientation: "portrait",
         pageSize: "a4",
         pageDirections: "rtl",
@@ -307,6 +307,8 @@ export default {
     showTemplateBuilder(json, callback) {
       json.callback = callback;
       this.locals.templateBuilderData = json;
+      this.locals.templateBuilderData.bindingObjects =
+        this.settings.bindingObjects;
       this.$refs.TemplateBuilder.settingsInitFunc();
       this.$refs.TemplateBuilder.showModal();
     },
@@ -337,9 +339,14 @@ export default {
         this.locals.totalPages = 5;
       });
     },
-    prepareComponentsOptions(options, index) {
-      options.configs.counter = index;
-      return JSON.parse(JSON.stringify(options))
+    prepareComponentsOptions(options, type, index) {
+      if (type == "pagecounter") {
+        options.configs.counter = index;
+      } else if (type == "bindingobjects") {
+        let key = options.configs.field;
+        options.configs.value = this.settings.bindingObjects[key];
+      }
+      return JSON.parse(JSON.stringify(options));
     },
   },
 };
