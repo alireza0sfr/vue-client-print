@@ -7,7 +7,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      <div v-if="$parent.$options.name == 'TemplateBuilder'">{{settings.configs.field }}</div>
+      <div v-if="$parent.$options.name == 'TemplateBuilder'">{{settings.configs.field}}</div>
       <div v-else>{{settings.configs.value}}</div>
       <div ref="resizer" class="resizer"></div>
     </div>
@@ -20,10 +20,6 @@ import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "bindingObject",
   props: {
-    mode: {
-      type: String,
-      default: "template",
-    },
     options: Object,
   },
   mounted() {

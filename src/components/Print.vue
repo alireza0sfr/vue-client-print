@@ -56,14 +56,14 @@
                 v-if="settings.footer.isFooterRepeatable || index == 1"
               >
                 <footer
-                  :style="{'height': settings.footer.height}"
+                  :style="{'height': settings.footer.height + 'in'}"
                   class="mainFooter html2pdf__page-break break"
                 >
                   <component
                     v-for="element in settings.footer.footerElements"
                     :key="element"
                     :is="element.type"
-                    :options="element.type == 'pagecounter' ? preparePageCounter(element.options, element.type, index) :element.options"
+                    :options="element.type == 'pagecounter' ? prepareComponentsOptions(element.options, element.type, index) :element.options"
                   />
                   <!-- <div>{{ index }}</div> -->
                 </footer>
