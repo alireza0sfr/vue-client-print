@@ -83,7 +83,7 @@ import ImageElement from "./elements/ImageElement.vue";
 import domtoimage from "dom-to-image";
 import html2pdf from "html2pdf.js";
 export default {
-  name: "PrintStatic",
+  name: "Print",
   props: {
     options: Object,
   },

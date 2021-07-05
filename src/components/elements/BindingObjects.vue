@@ -19,18 +19,20 @@ import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "BindingObjects",
   props: {
-    mode:{
+    mode: {
       type: String,
-      default: 'template'
+      default: "template",
     },
     options: Object,
   },
   mounted() {
-    this.Initialize(
-      this.$refs.element,
-      this.$refs.resizer,
-      this.locals.classType
-    );
+    if (this.$parent.$options.name == "TemplateBuilder") {
+      this.Initialize(
+        this.$refs.element,
+        this.$refs.resizer,
+        this.locals.classType
+      );
+    }
   },
   watch: {
     options: {

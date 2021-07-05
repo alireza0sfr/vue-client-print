@@ -68,8 +68,8 @@ print component:
     -Done replace bindingobj field with bindingobj value
     -Done check body height in print preview
     -Done fix the toolbar drop downs
+    -Done add mode to elements
     
-    -add mode to elements
     -slot
 
     
