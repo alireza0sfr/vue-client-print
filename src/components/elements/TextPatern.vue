@@ -1,14 +1,15 @@
 <template>
   <div>
-    <img
+    <div
       :id="settings.id"
       ref="element"
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
-      :src="settings.configs.imageSrc"
-      alt="Image"
-    />
+    >
+      {{settings.configs.text}}
+      <div ref="resizer" class="resizer"></div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +17,7 @@
 import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
-  name: "ImageElement",
+  name: "TextPatern",
   props: {
     options: Object,
   },
@@ -24,6 +25,7 @@ export default {
     if (this.$parent.$options.name == "TemplateBuilder") {
       this.Initialize(
         this.$refs.element,
+        this.$refs.resizer,
         this.locals.classType
       );
     }
@@ -43,19 +45,20 @@ export default {
   data() {
     return {
       locals: {
-        classType: "imageelement",
+        classType: "textpatern",
       },
       settings: {
         id: 0,
         configs: {
-          imageSrc: require("./images/logo.png"),
+          text: "متن خود را وارد نمایید",
         },
         styles: defaultStyles,
       },
     };
   },
   methods: {
-    Initialize(element, classType) {
+    Initialize(element, resizer, classType) {
+      elementUtilities.resizable(element, resizer);
       elementUtilities.dragable(element, classType);
       elementUtilities.click(element, classType);
     },
