@@ -71,10 +71,8 @@ print component:
     -Done add mode to elements
     -Done slot
     -Done test
+    -Done remove fa cdn
     
     
     -Text pattern element
-    
-
     -toast for processing...
-    -remove fa cdn

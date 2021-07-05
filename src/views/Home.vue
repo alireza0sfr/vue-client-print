@@ -2,9 +2,14 @@
   <div class="home">
 
     <!-- Test Section -->
-    
-    <i @click="printPreview()" id="printModalOpenBtn" type="button" class="fas fa-2x fa-eye"></i>
-    <i @click="templateBuilder()" class="fas fa-2x fa-cog"></i>
+
+    <a @click="printPreview()" id="printModalOpenBtn" href="#" title="پیش نمایش پرینت">
+      یش نمایش پرینت
+    </a>
+    |
+    <a @click="templateBuilder()" href="#" title="صفحه ساز">
+      صفحه ساز
+    </a>
 
     <div></div>
     <Print ref="print" :options="printOptions" :bindingObject="bindingObject">
