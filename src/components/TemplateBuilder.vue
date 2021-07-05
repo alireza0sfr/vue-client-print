@@ -345,11 +345,11 @@
                   v-if="locals.selectedElement.type == 'bindingobjects'"
                 >
                   <div style="width: 50%; padding: 5px;">
-                    <label style="width: 50%;" class="p-2" for="bindingObjectsControl">نوع داده</label>
+                    <label for="bindingObjectsControl">نوع داده</label>
                   </div>
                   <div style="width:50%">
                     <select
-                      style="height: 60%; margin-left: 8px; width:70%"
+                      style="height: 85%; margin-left: 8px; width:80%"
                       class="toolbar-content-select input-form-control"
                       v-model="locals.selectedElement.options.configs.field"
                       id="bindingObjectsControl"
@@ -384,10 +384,11 @@
                 </div>
                 <div style="width:100%" class="toolbar-content-row">
                   <div style="width: 50%; padding:5px;">
-                    <span style="width: 50%;" class="p-2">رنگ نوشته</span>
+                    <span style="width: 50%;">رنگ نوشته</span>
                   </div>
                   <div style="width:40%">
                     <input
+                      style="margin-top: -4px; margin-right: -5px; width: 85%"
                       type="color"
                       class="toolbar-content-select input-form-control"
                       v-model="locals.selectedElement.options.styles.color"
@@ -396,7 +397,7 @@
                     />
                   </div>
                 </div>
-                <div style="width:100%; margin-top: 25px;" class="toolbar-content-row">
+                <div style="width:100%; margin-top: 18px;" class="toolbar-content-row">
                   <div style="width: 50%; padding:5px;">
                     <span>اندازه فونت</span>
                   </div>
@@ -414,13 +415,13 @@
                 <div style="width:100%;" class="toolbar-content-row">
                   <div style="display:flex; flex-direction: row">
                     <div style="width: 50%; padding:5px;">
-                      <span>فونت</span>
+                      <span style="margin-right: 10px">فونت</span>
                     </div>
                     <div style="width:50%">
                       <input
                         type="text"
                         class="toolbar-content-select input-form-control"
-                        style="height: 60%; width: 80%; margin-left: 8px"
+                        style="height: 60%; width: 80%; margin-right: 14px"
                         v-model="locals.selectedElement.options.styles.fontFamily"
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
@@ -429,7 +430,7 @@
                   </div>
                 </div>
                 <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px;">
+                  <div style="width: 50%; padding:5px; margin-right: 15px;">
                     <span>حاشیه</span>
                   </div>
                   <div style="width: 50%; padding: 5px;">

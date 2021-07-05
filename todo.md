@@ -67,8 +67,8 @@ print component:
     -Done binding obj and page counter elements
     -Done replace bindingobj field with bindingobj value
     -Done check body height in print preview
+    -Done fix the toolbar drop downs
     
-    -fix the toolbar drop downs
     -add mode to elements
     -slot
 
