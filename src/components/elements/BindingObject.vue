@@ -1,14 +1,25 @@
 <template>
   <div>
     <div
+      v-if="$parent.$options.name == 'TemplateBuilder'"
       :id="settings.id"
       ref="element"
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      <div v-if="$parent.$options.name == 'TemplateBuilder'">{{settings.configs.field}}</div>
-      <div v-else>{{settings.configs.value}}</div>
+      {{settings.configs.field}}
+      <div ref="resizer" class="resizer"></div>
+    </div>
+    <div
+      v-else
+      :id="settings.id"
+      ref="element"
+      @click="this.$emit('clickedOnElement')"
+      :class="locals.classType + ' element'"
+      :style="settings.styles"
+    >
+      {{settings.configs.value}}
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>

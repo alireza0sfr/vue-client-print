@@ -72,7 +72,7 @@ print component:
     -Done slot
     -Done test
     -Done remove fa cdn
-    
+    -Done binding object is not dragable untill its resized
     
     -Text pattern element
     -toast for processing...
