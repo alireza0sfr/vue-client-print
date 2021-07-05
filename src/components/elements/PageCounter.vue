@@ -6,8 +6,10 @@
       @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
-    >{{settings.configs.counter}}</div>
-    <div ref="resizer" class="resizer"></div>
+    >
+      {{settings.configs.counter}}
+      <div ref="resizer" class="resizer"></div>
+    </div>
   </div>
 </template>
 
