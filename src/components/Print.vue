@@ -1,88 +1,86 @@
 <template>
-<div id="printPage">
-  <!--Buttons-->
-  <i @click="showPrintPreview()" id="printModalOpenBtn" type="button" class="fas fa-2x fa-eye"></i>
-  <i @click="test()" class="fas fa-2x fa-cog"></i>
+  <div id="printPage">
+    <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
-  <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
-
-  <!-- Data Slots -->
-  <div id="toBeConverted" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
-    <slot name="printData"></slot>
-  </div>
-
-  <!-- Print Preview Modal-->
-
-  <div id="printModal" class="print-modal">
-    <div class="print-modal-content" :style="{'width': settings.defaultWidthOfPaper + .5 + 'in'}">
-      <div class="print-modal-header">
-        <div>
-          <span id="printModalCloseBtn" class="close-btn">&times;</span>
-        </div>
-        <div>
-          <h3>پیش نمایش چاپ</h3>
-        </div>
-        <div>
-          <a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
-            <img src="./elements/images/edit.png" />
-          </a>
-          <a href="#" @click="printForm()" title="چاپ" class="modal-icon">
-            <img src="./elements/images/printer.png" />
-          </a>
-        </div>
+    <!-- Data Slots -->
+    <div class="slotWrapper">
+      <div id="toBeConverted" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
+        <slot name="printData"></slot>
       </div>
-      <div id="printForm">
-        <div
-          :style="{'border': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in'}"
-          class="mainLoop"
-          v-for="index in locals.totalPages"
-          :key="index"
-        >
-          <div class="pages">
-            <div
-              class="fixedHeaderCondition"
-              v-if="settings.header.isHeaderRepeatable || index == 1"
-            >
-              <header :style="{'height': settings.header.height + 'in'}" class="mainHeader">
-                <component
-                  v-for="element in settings.header.headerElements"
-                  :key="element"
-                  :is="element.type"
-                  :options="prepareComponentsOptions(element.options, element.type, index)"
-                />
-              </header>
-            </div>
-            <div class="converted" :style="{'height': settings.totalHeightOfAPaper + 'in'}"></div>
-            <div
-              class="fixedFooterCondition"
-              v-if="settings.footer.isFooterRepeatable || index == 1"
-            >
-              <footer
-                :style="{'height': settings.footer.height}"
-                class="mainFooter html2pdf__page-break break"
+    </div>
+
+    <!-- Print Preview Modal-->
+
+    <div id="printModal" class="print-modal">
+      <div class="print-modal-content" :style="{'width': settings.defaultWidthOfPaper + .5 + 'in'}">
+        <div class="print-modal-header">
+          <div>
+            <span id="printModalCloseBtn" class="close-btn">&times;</span>
+          </div>
+          <div>
+            <h3>پیش نمایش چاپ</h3>
+          </div>
+          <div>
+            <a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
+              <img src="./elements/images/edit.png" />
+            </a>
+            <a href="#" @click="printForm()" title="چاپ" class="modal-icon">
+              <img src="./elements/images/printer.png" />
+            </a>
+          </div>
+        </div>
+        <div id="printForm">
+          <div
+            :style="{'border': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in'}"
+            class="mainLoop"
+            v-for="index in locals.totalPages"
+            :key="index"
+          >
+            <div class="pages">
+              <div
+                class="fixedHeaderCondition"
+                v-if="settings.header.isHeaderRepeatable || index == 1"
               >
-                <component
-                  v-for="element in settings.footer.footerElements"
-                  :key="element"
-                  :is="element.type"
-                  :options="element.type == 'pagecounter' ? preparePageCounter(element.options, element.type, index) :element.options"
-                />
-                <!-- <div>{{ index }}</div> -->
-              </footer>
+                <header :style="{'height': settings.header.height + 'in'}" class="mainHeader">
+                  <component
+                    v-for="element in settings.header.headerElements"
+                    :key="element"
+                    :is="element.type"
+                    :options="prepareComponentsOptions(element.options, element.type, index)"
+                  />
+                </header>
+              </div>
+              <div class="converted" :style="{'height': settings.totalHeightOfAPaper + 'in'}"></div>
+              <div
+                class="fixedFooterCondition"
+                v-if="settings.footer.isFooterRepeatable || index == 1"
+              >
+                <footer
+                  :style="{'height': settings.footer.height}"
+                  class="mainFooter html2pdf__page-break break"
+                >
+                  <component
+                    v-for="element in settings.footer.footerElements"
+                    :key="element"
+                    :is="element.type"
+                    :options="element.type == 'pagecounter' ? preparePageCounter(element.options, element.type, index) :element.options"
+                  />
+                  <!-- <div>{{ index }}</div> -->
+                </footer>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 import TemplateBuilder from "./TemplateBuilder.vue";
 import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
-import BindingObjects from "./elements/BindingObjects.vue";
+import BindingObject from "./elements/BindingObject.vue";
 import PageCounter from "./elements/PageCounter.vue";
 import ImageElement from "./elements/ImageElement.vue";
 import domtoimage from "dom-to-image";
@@ -91,13 +89,14 @@ export default {
   name: "Print",
   props: {
     options: Object,
+    bindingObject: Object,
   },
   components: {
     textelement: TextElement,
     datetime: DateTime,
     pagecounter: PageCounter,
     imageelement: ImageElement,
-    bindingobjects: BindingObjects,
+    bindingObject: BindingObject,
     TemplateBuilder,
   },
   data() {
@@ -118,7 +117,7 @@ export default {
           height: 0.5,
           footerElements: [],
         },
-        bindingObjects: {},
+        bindingObject: {},
         orientation: "portrait",
         pageSize: "a4",
         pageDirections: "rtl",
@@ -131,6 +130,7 @@ export default {
   },
   watch: {
     options: {
+      deep: true,
       immediate: true,
       handler(val) {
         Object.assign(this.settings, val);
@@ -138,12 +138,10 @@ export default {
     },
   },
   mounted() {
-    console.log("=======Nikan is Live=======");
     this.modalFunc("printModal", "printModalOpenBtn", "printModalCloseBtn");
   },
   methods: {
     printForm() {
-      console.log("=======Printing.....=======");
       let pages = document.getElementsByClassName("pages");
       let opt = {
         filename: this.settings.fileName + ".pdf",
@@ -158,7 +156,6 @@ export default {
       var worker = html2pdf().set(opt).from(pages[0]).toPdf();
       let n = 0;
       pages.forEach(function (page) {
-        console.log();
         worker = worker
           .get("pdf")
           .then(function (pdf) {
@@ -173,8 +170,6 @@ export default {
           .toPdf();
       });
       worker = worker.save();
-
-      console.log("=======Done=======");
     },
 
     /**
@@ -235,7 +230,6 @@ export default {
      */
 
     convert2Image() {
-      console.log("=======Converting 2 Image=======");
       domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
         let compStyles = window.getComputedStyle(
           document.getElementById("toBeConverted")
@@ -243,12 +237,10 @@ export default {
         let imgHeight = compStyles.getPropertyValue("height");
 
         this.locals.totalPagesHeight = this.convert2Inches(parseInt(imgHeight));
-        console.log("totalPagesHeight", this.locals.totalPagesHeight);
 
         this.locals.totalPages = Math.ceil(
           this.locals.totalPagesHeight / this.settings.totalHeightOfAPaper
         );
-        console.log("totalPages", this.locals.totalPages);
 
         // Element that children will be appended to
         let convertedElement = document.getElementsByClassName("converted");
@@ -267,9 +259,6 @@ export default {
             let result = this.canvasMaker(res, computedSy);
             convertedElement[index].appendChild(result);
           }
-          console.log(
-            `successfully appended ${convertedElement.length} Children`
-          );
         });
       });
     },
@@ -309,11 +298,14 @@ export default {
      * By Triggering this func template builder modal will be displayed
      */
 
-    showTemplateBuilder(json, callback) {
+    templateBuilder(json, callback) {
       json.callback = callback;
       this.locals.templateBuilderData = json;
-      this.locals.templateBuilderData.bindingObjects =
-        this.settings.bindingObjects;
+      let tmp = JSON.parse(JSON.stringify(this.bindingObject));
+      for (let item in tmp) {
+        tmp[item] = null;
+      }
+      this.locals.templateBuilderData.bindingObject = tmp;
       this.$refs.TemplateBuilder.settingsInitFunc();
       this.$refs.TemplateBuilder.showModal();
     },
@@ -322,7 +314,7 @@ export default {
      * By Triggering this func Print Preview modal will be displayed
      */
 
-    showPrintPreview() {
+    printPreview() {
       this.convert2Image();
     },
 
@@ -333,23 +325,17 @@ export default {
     editWhileInPreview() {
       let printModal = document.getElementById("printModal");
       printModal.style.display = "none";
-      this.showTemplateBuilder(this.settings, (val) => {
+      this.templateBuilder(this.settings, (val) => {
         Object.assign(this.settings, val);
-        this.showPrintPreview();
-      });
-    },
-    test() {
-      this.showTemplateBuilder({}, (json) => {
-        Object.assign(this.settings, json);
-        this.locals.totalPages = 5;
+        this.printPreview();
       });
     },
     prepareComponentsOptions(options, type, index) {
       if (type == "pagecounter") {
         options.configs.counter = index;
-      } else if (type == "bindingobjects") {
+      } else if (type == "bindingObject") {
         let key = options.configs.field;
-        options.configs.value = this.settings.bindingObjects[key];
+        options.configs.value = this.bindingObject[key];
       }
       return JSON.parse(JSON.stringify(options));
     },

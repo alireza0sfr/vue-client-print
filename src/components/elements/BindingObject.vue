@@ -7,7 +7,8 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{settings.configs.value || settings.configs.field }}
+      <div v-if="$parent.$options.name == 'TemplateBuilder'">{{settings.configs.field }}</div>
+      <div v-else>{{settings.configs.value}}</div>
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
@@ -17,7 +18,7 @@
 import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
-  name: "BindingObjects",
+  name: "bindingObject",
   props: {
     mode: {
       type: String,
@@ -49,7 +50,7 @@ export default {
   data() {
     return {
       locals: {
-        classType: "bindingobjects",
+        classType: "bindingObject",
       },
       settings: {
         id: 0,

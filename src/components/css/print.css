@@ -48,3 +48,7 @@
     position: relative;
     overflow: hidden;
 }
+.slotWrapper {
+    position: fixed;
+    left: 5000px;
+}

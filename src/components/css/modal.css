@@ -16,6 +16,8 @@
     width: 20px;
     height: 20px;
     display: inline-block;
+    margin-left: 3px;
+    margin-top: 5px;
 }
 
 .modal-icon img {

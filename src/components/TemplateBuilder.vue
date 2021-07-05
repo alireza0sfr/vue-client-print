@@ -189,7 +189,7 @@
                   <div style="width: 100%; padding:5px;">
                     <span
                       draggable="true"
-                      @dragstart="startDraggingElement('bindingobjects')"
+                      @dragstart="startDraggingElement('bindingObject')"
                       @dragend="finishedDraggingElement()"
                       class="d-sm-inline"
                     >
@@ -342,20 +342,20 @@
                 <div
                   style="width:100%"
                   class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'bindingobjects'"
+                  v-if="locals.selectedElement.type == 'bindingObject'"
                 >
                   <div style="width: 50%; padding: 5px;">
-                    <label for="bindingObjectsControl">نوع داده</label>
+                    <label for="bindingObjectControl">نوع داده</label>
                   </div>
                   <div style="width:50%">
                     <select
                       style="height: 85%; margin-left: 8px; width:80%"
                       class="toolbar-content-select input-form-control"
                       v-model="locals.selectedElement.options.configs.field"
-                      id="bindingObjectsControl"
+                      id="bindingObjectControl"
                     >
                       <option
-                        v-for="option in Object.keys(settings.bindingObjects)"
+                        v-for="option in Object.keys(settings.bindingObject)"
                         :key="option"
                       >{{option}}</option>
                     </select>
@@ -619,7 +619,7 @@
 <script>
 import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
-import BindingObjects from "./elements/BindingObjects.vue";
+import BindingObject from "./elements/BindingObject.vue";
 import PageCounter from "./elements/PageCounter.vue";
 import ImageElement from "./elements/ImageElement.vue";
 export default {
@@ -632,7 +632,7 @@ export default {
     datetime: DateTime,
     pagecounter: PageCounter,
     imageelement: ImageElement,
-    bindingobjects: BindingObjects,
+    bindingObject: BindingObject,
   },
   data() {
     return {
@@ -693,7 +693,7 @@ export default {
         pageDirections: "rtl",
         headerElements: [],
         footerElements: [],
-        bindingObjects: {},
+        bindingObject: {},
       },
     };
   },
@@ -745,7 +745,6 @@ export default {
         totalHeightOfAPaper = 1.7;
       }
 
-
       let tmp = {
         header: {
           isHeaderRepeatable: this.settings.isHeaderRepeatable,
@@ -784,7 +783,6 @@ export default {
      */
 
     calculateSizes() {
-      console.log("=======Calculating Sizes=======");
       // Subtracting this value to make the pages more accurate
       const errorValue = 0.2;
 
@@ -803,10 +801,6 @@ export default {
         this.locals.pageSizeDictionary[this.settings.orientation][
           this.settings.pageSize
         ]["width"];
-
-      console.log("defaultWidthOfPaper: ", this.settings.defaultWidthOfPaper);
-      console.log("defaultHeightOfPaper: ", this.settings.defaultHeightOfPaper);
-      console.log("totalHeightOfAPaper: ", this.settings.totalHeightOfAPaper);
     },
 
     /**
@@ -986,17 +980,14 @@ export default {
             styles: {},
           },
         };
-      } else if (classType == "bindingobjects") {
+      } else if (classType == "bindingObject") {
         tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
             configs: {
               field: "اتصال فیلد را انتخاب کنید",
-              bindingObjects: {
-                code: 124164,
-                date: "2021/30/6",
-              },
+              bindingObject: {},
             },
             styles: {},
           },
