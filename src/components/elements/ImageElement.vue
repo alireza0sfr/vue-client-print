@@ -4,6 +4,7 @@
       :id="settings.id"
       ref="element"
       @click="this.$emit('clickedOnElement')"
+      @finishededitingelement="this.$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
       :src="settings.configs.imageSrc"

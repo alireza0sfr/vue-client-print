@@ -8,7 +8,7 @@
             <span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
           </div>
           <div>
-            <h1>صفحه ساز</h1>
+            <h1>طراح صفحه</h1>
           </div>
           <div>
             <a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
@@ -582,6 +582,7 @@
                   :is="element.type"
                   :options="element.options"
                   @clickedOnElement="clickedOnElement(element)"
+                  @finishedEditingElement="finishedEditingElement(element)"
                 />
               </div>
               <div id="bodyTemplate">
@@ -604,6 +605,7 @@
                   :is="element.type"
                   :options="element.options"
                   @clickedOnElement="clickedOnElement(element)"
+                  @finishedEditingElement="finishedEditingElement(element)"
                 />
               </div>
             </div>
@@ -921,6 +923,7 @@ export default {
         this.locals.isClicked = false;
         return;
       }
+
       this.locals.selectedElement = {
         type: {},
         options: {
@@ -1065,12 +1068,12 @@ export default {
         if (e.code == "Delete") {
           for (let index = 0; index < headerElements.length; index++) {
             if (headerElements[index].options.id == id) {
-              headerElements.splice(index, index + 1)
+              headerElements.splice(index, index + 1);
             }
           }
           for (let index = 0; index < footerElements.length; index++) {
             if (footerElements[index].options.id == id) {
-              footerElements.splice(index, inedx + 1)
+              footerElements.splice(index, inedx + 1);
             }
           }
           that.locals.selectedElement = {
@@ -1115,6 +1118,26 @@ export default {
     },
     showModal() {
       document.getElementById("templateBuilderModal").style.display = "block";
+    },
+    finishedEditingElement(element) {
+      let tmp = this.settings.headerElements.find(
+        (x) => x.options.id == element.options.id
+      );
+      if (tmp) {
+        Object.assign(
+          tmp.options.styles,
+          this.getCoordinates(element.options.id)
+        );
+        return;
+      }
+      tmp = this.settings.footerElements.find(
+        (x) => x.options.id == element.options.id
+      );
+      Object.assign(
+        tmp.options.styles,
+        this.getCoordinates(element.options.id)
+      );
+      return;
     },
   },
 };

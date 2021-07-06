@@ -3,7 +3,7 @@
  */
 
 function resizable(element, resizer) {
-    
+
     // var resizer = document.createElement("div");
     // resizer.className = "resizer";
     // element.appendChild(resizer);
@@ -44,6 +44,7 @@ function resizable(element, resizer) {
             stopDrag,
             false
         );
+        element.dispatchEvent(new Event("finishededitingelement"));
     }
 }
 
@@ -108,6 +109,7 @@ function dragable(element, classType) {
             // stop moving when mouse button is released:
             document.onmouseup = null;
             document.onmousemove = null;
+            element.dispatchEvent(new Event("finishededitingelement"));
         }
     }
 }

@@ -138,7 +138,7 @@ export default {
     },
   },
   mounted() {
-    this.modalFunc("printModal", "printModalOpenBtn", "printModalCloseBtn");
+    this.modalFunc("printModal", "printModalCloseBtn");
   },
   methods: {
     printForm() {
@@ -267,19 +267,11 @@ export default {
      * JS functions for the modal
      */
 
-    modalFunc(modalId, btnId, closeBtnId) {
+    modalFunc(modalId, closeBtnId) {
       var modal = document.getElementById(modalId);
-
-      // Get the button that opens the modal
-      var btn = document.getElementById(btnId);
 
       // Get the <span> element that closes the modal
       var span = document.getElementById(closeBtnId);
-
-      // When the user clicks on the button, open the modal
-      btn.onclick = function () {
-        modal.style.display = "block";
-      };
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
@@ -315,6 +307,7 @@ export default {
      */
 
     printPreview() {
+      document.getElementById('printModal').style.display = 'block'
       this.convert2Image();
     },
 

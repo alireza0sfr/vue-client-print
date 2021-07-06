@@ -4,6 +4,7 @@
     :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
+    @finishededitingelement="this.$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
@@ -15,6 +16,7 @@
     :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
+    @finishededitingelement="this.$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
@@ -26,6 +28,7 @@
     :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
+    @finishededitingelement="this.$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
