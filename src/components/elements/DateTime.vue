@@ -4,7 +4,7 @@
     :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
-    @finishededitingelement="this.$emit('finishedEditingElement')"
+    @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
@@ -16,7 +16,7 @@
     :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
-    @finishededitingelement="this.$emit('finishedEditingElement')"
+    @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
@@ -28,7 +28,7 @@
     :id="settings.id"
     ref="element"
     @click="this.clickedOnElement(this.$refs.element)"
-    @finishededitingelement="this.$emit('finishedEditingElement')"
+    @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
@@ -102,7 +102,7 @@ export default {
      * Emmiting clicked on element and adding all the eventlistenners to the new element again
      */
     clickedOnElement(element) {
-      this.$emit("clickedOnElement");
+      $emit("clickedOnElement");
       if (element.lastChild.className != "resizer") {
         this.Initialize(element, this.locals.classType);
       }
