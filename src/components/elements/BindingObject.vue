@@ -4,8 +4,8 @@
       v-if="$parent.$options.name == 'TemplateBuilder'"
       :id="settings.id"
       ref="element"
-      @click="$emit('clickedOnElement')"
-      @finishededitingelement="$emit('finishedEditingElement')"
+      @click="this.$emit('clickedOnElement')"
+      @finishededitingelement="this.$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
@@ -16,7 +16,7 @@
       v-else
       :id="settings.id"
       ref="element"
-      @click="$emit('clickedOnElement')"
+      @click="this.$emit('clickedOnElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >

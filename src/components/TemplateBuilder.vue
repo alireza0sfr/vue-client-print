@@ -8,7 +8,7 @@
             <span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
           </div>
           <div>
-            <h1>طراح صفحه</h1>
+            <h3>طراح صفحه</h3>
           </div>
           <div>
             <a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">

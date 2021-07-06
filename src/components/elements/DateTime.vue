@@ -3,7 +3,7 @@
     v-if="settings.configs.hasDate == true && settings.configs.hasTime == false"
     :id="settings.id"
     ref="element"
-    @click="this.clickedOnElement(this.$refs.element)"
+    @click="clickedOnElement($refs.element)"
     @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
@@ -15,7 +15,7 @@
     v-else-if="settings.configs.hasTime == true && settings.configs.hasDate == false"
     :id="settings.id"
     ref="element"
-    @click="this.clickedOnElement(this.$refs.element)"
+    @click="clickedOnElement($refs.element)"
     @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
@@ -27,7 +27,7 @@
     v-else-if="settings.configs.hasDate && settings.configs.hasTime == true"
     :id="settings.id"
     ref="element"
-    @click="this.clickedOnElement(this.$refs.element)"
+    @click="clickedOnElement($refs.element)"
     @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
@@ -102,7 +102,7 @@ export default {
      * Emmiting clicked on element and adding all the eventlistenners to the new element again
      */
     clickedOnElement(element) {
-      $emit("clickedOnElement");
+      this.$emit("clickedOnElement");
       if (element.lastChild.className != "resizer") {
         this.Initialize(element, this.locals.classType);
       }
