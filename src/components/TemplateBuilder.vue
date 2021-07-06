@@ -29,13 +29,13 @@
                 <span>تنظیمات پرینت</span>
               </div>
               <div class="toolbar-content-wrapper" id="printConfigsMenu">
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px;">
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <label for="pageSizeControl">نوع صفحه</label>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <select
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       v-model="settings.pageSize"
                       @change="calculateSizes()"
                       id="pageSizeControl"
@@ -46,13 +46,13 @@
                     </select>
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding: 5px;">
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <label for="pageOrientiationsControl">حالت صفحه</label>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <select
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       @change="calculateSizes()"
                       v-model="settings.orientation"
                       id="pageOrientiationsControl"
@@ -62,54 +62,51 @@
                     </select>
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding: 5px;">
-                    <span style="width: 50%;">اسم فایل</span>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <span>اسم فایل</span>
                   </div>
-                  <div style="width:50%; height:70%;">
+                  <div class="toolbar-content-field">
                     <input
                       type="text"
                       v-model="settings.fileName"
-                      style="width:83px"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="repeatableHeaderControl">تکرار هدر</label>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <label for="repeatableHeaderControl">تکرار هدر</label>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <input
-                      style="width: 15px; height: 15px; border-radius: .25em;"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       type="checkbox"
                       v-model="settings.isHeaderRepeatable"
                       id="repeatableHeaderControl"
                     />
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="repeatableFooterControl">تکرار فوتر</label>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <label for="repeatableFooterControl">تکرار فوتر</label>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <input
-                      style="width: 15px; height: 15px; border-radius: .25em;"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       type="checkbox"
                       v-model="settings.isFooterRepeatable"
                       id="repeatableFooterControl"
                     />
                   </div>
                 </div>
-                <div style="width:100%; margin-bottom: 15px" class="toolbar-content-row">
-                  <div style="width: 50%; padding: 5px;">
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label span">
                     <span>جهت صفحه</span>
                   </div>
-                  <div style="width:25%">
+                  <div class="toolbar-content-field">
                     <input
                       type="radio"
                       name="pageDirections"
@@ -119,7 +116,7 @@
                     />
                     <label for="pageDirections">راست</label>
                   </div>
-                  <div style="width:25%;">
+                  <div class="toolbar-content-field">
                     <input
                       type="radio"
                       name="pageDirections"
@@ -135,8 +132,8 @@
                 <span>المنت ها</span>
               </div>
               <div class="toolbar-content-wrapper" style="flex-direction: row;" id="elementsMenu">
-                <div style="width:50%" class="toolbar-content-row">
-                  <div style="width: 100%; padding:5px;">
+                <div class="toolbar-content-row-elements">
+                  <div class="toolbar-content-row-element">
                     <span
                       draggable="true"
                       @dragstart="startDraggingElement('textelement')"
@@ -147,8 +144,8 @@
                     </span>
                   </div>
                 </div>
-                <div style="width:50%" class="toolbar-content-row">
-                  <div style="width: 100%; padding:5px;">
+                <div class="toolbar-content-row-elements">
+                  <div class="toolbar-content-row-element">
                     <span
                       draggable="true"
                       @dragstart="startDraggingElement('datetime')"
@@ -159,8 +156,8 @@
                     </span>
                   </div>
                 </div>
-                <div style="width:50%" class="toolbar-content-row">
-                  <div style="width: 100%; padding:5px;">
+                <div class="toolbar-content-row-elements">
+                  <div class="toolbar-content-row-element">
                     <span
                       class="d-sm-inline"
                       draggable="true"
@@ -172,8 +169,8 @@
                     </span>
                   </div>
                 </div>
-                <div style="width:50%" class="toolbar-content-row">
-                  <div style="width: 100%; padding:5px;">
+                <div class="toolbar-content-row-elements">
+                  <div class="toolbar-content-row-element">
                     <span
                       class="d-sm-inline"
                       draggable="true"
@@ -185,8 +182,8 @@
                     </span>
                   </div>
                 </div>
-                <div style="width:50%" class="toolbar-content-row">
-                  <div style="width: 100%; padding:5px;">
+                <div class="toolbar-content-row-elements">
+                  <div class="toolbar-content-row-element">
                     <span
                       draggable="true"
                       @dragstart="startDraggingElement('bindingObject')"
@@ -200,120 +197,114 @@
                 </div>
               </div>
               <div class="toolbar-header">
-                <span class="fs-5">تنظیمات المنت ها</span>
+                <span>تنظیمات المنت ها</span>
               </div>
               <div class="toolbar-content-wrapper">
                 <div
                   v-if="locals.selectedElement.type == 'textelement'"
-                  style="width:100%"
                   class="toolbar-content-row"
                 >
-                  <span style="width: 50%; padding: 8px">متن</span>
-                  <div style="width:50%;">
+                  <div class="toolbar-content-label">
+                    <span>متن</span>
+                  </div>
+                  <div class="toolbar-content-field">
                     <input
                       type="text"
-                      style="height: 60%; margin-left: 2px;"
                       v-model="locals.selectedElement.options.configs.text"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
                   </div>
                 </div>
-                <div
-                  style="width:100%"
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'datetime'"
-                >
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="hasDateControl">تاریخ</label>
+                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+                  <div class="toolbar-content-label">
+                    <label for="hasDateControl">تاریخ</label>
                   </div>
-                  <div>
+                  <div class="toolbar-content-field">
                     <input
+                      class="input-form-control"
                       type="checkbox"
                       v-model="locals.selectedElement.options.configs.hasDate"
                       id="hasDateControl"
                     />
                   </div>
                 </div>
-                <div
-                  style="width:100%"
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'datetime'"
-                >
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="hasTimeControl">ساعت</label>
+                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+                  <div class="toolbar-content-label">
+                    <label for="hasTimeControl">ساعت</label>
                   </div>
-                  <div>
+                  <div class="toolbar-content-field">
                     <input
-                      class="form-check-input"
+                      class="input-form-control"
                       type="checkbox"
                       v-model="locals.selectedElement.options.configs.hasTime"
                       id="hasTimeControl"
                     />
                   </div>
                 </div>
-                <div
-                  style="width:100%"
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'datetime'"
-                >
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="persiaDateControl">تاریخ شمسی</label>
+                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+                  <div class="toolbar-content-label">
+                    <label for="persiaDateControl">تاریخ شمسی</label>
                   </div>
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    v-model="locals.selectedElement.options.configs.persianDate"
-                    id="persiaDateControl"
-                  />
-                </div>
-                <div
-                  style="width:100%"
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'pagecounter'"
-                >
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="persianNumbersControl">اعداد فارسی</label>
-                  </div>
-                  <input
-                    type="checkbox"
-                    v-model="locals.selectedElement.options.configs.persianNumbers"
-                    id="persianNumbersControl"
-                  />
-                </div>
-                <div
-                  style="width:100%"
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'imageelement'"
-                >
-                  <div style="width: 30%; padding: 5px;">
-                    <label for="imageFileControl">فایل تصویر</label>
-                  </div>
-                  <div style="width: 70%;">
+                  <div class="toolbar-content-field">
                     <input
-                      style="width:100%;"
-                      type="file"
-                      @change="onFileChange()"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                      id="imageFileControl"
+                      class="input-form-control"
+                      type="checkbox"
+                      v-model="locals.selectedElement.options.configs.persianDate"
+                      id="persiaDateControl"
                     />
                   </div>
                 </div>
                 <div
-                  style="width:100%"
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'pagecounter'"
+                >
+                  <div class="toolbar-content-label">
+                    <label for="persianNumbersControl">اعداد فارسی</label>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="checkbox"
+                      class="input-form-control"
+                      v-model="locals.selectedElement.options.configs.persianNumbers"
+                      id="persianNumbersControl"
+                    />
+                  </div>
+                </div>
+                <div
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'imageelement'"
                 >
-                  <div style="width: 50%; padding: 5px;">
+                  <label
+                    style="margin-right: 37px;"
+                    for="imageFileControl"
+                  >فایل تصویر خود را انتخاب کنید</label>
+                </div>
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'imageelement'"
+                >
+                  <input
+                    type="file"
+                    @change="onFileChange()"
+                    aria-label="Small"
+                    aria-describedby="inputGroup-sizing-sm"
+                    id="imageFileControl"
+                  />
+                </div>
+
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'imageelement'"
+                >
+                  <div class="toolbar-content-label">
                     <span>طول</span>
                   </div>
-                  <div style="width:50%;">
+                  <div class="toolbar-content-field">
                     <input
                       type="text"
-                      class="toolbar-content-select input-form-control"
-                      style="height: 60%; margin-left: 8px; width:70%"
+                      class="input-form-control"
                       v-model="locals.selectedElement.options.styles.height"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
@@ -321,18 +312,16 @@
                   </div>
                 </div>
                 <div
-                  style="width:100%"
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'imageelement'"
                 >
-                  <div style="width: 50%; padding: 5px;">
-                    <span style="width: 50%;" class="p-2">عرض</span>
+                  <div class="toolbar-content-label">
+                    <span>عرض</span>
                   </div>
-                  <div style="width:50%;" class="input-group input-group-sm">
+                  <div class="toolbar-content-field">
                     <input
                       type="text"
-                      class="toolbar-content-select input-form-control"
-                      style="height: 60%; margin-left: 8px; width:70%"
+                      class="input-form-control"
                       v-model="locals.selectedElement.options.styles.width"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
@@ -340,17 +329,15 @@
                   </div>
                 </div>
                 <div
-                  style="width:100%"
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'bindingObject'"
                 >
-                  <div style="width: 50%; padding: 5px;">
+                  <div class="toolbar-content-label">
                     <label for="bindingObjectControl">نوع داده</label>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <select
-                      style="height: 85%; margin-left: 8px; width:80%"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       v-model="locals.selectedElement.options.configs.field"
                       id="bindingObjectControl"
                     >
@@ -366,14 +353,14 @@
                 <span>استایل المنت ها</span>
               </div>
               <div class="toolbar-content-wrapper" id="elementStylesMenu">
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px;">
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <label for="elementTextAlignControl">مکان نوشته</label>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <select
                       v-model="locals.selectedElement.options.styles.textAlign"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       id="elementTextAlignControl"
                     >
                       <option value="right">راست</option>
@@ -382,80 +369,74 @@
                     </select>
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px;">
-                    <span style="width: 50%;">رنگ نوشته</span>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <span>رنگ نوشته</span>
                   </div>
-                  <div style="width:40%">
+                  <div class="toolbar-content-field">
                     <input
-                      style="margin-top: -4px; margin-right: -5px; width: 85px"
                       type="color"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
                       v-model="locals.selectedElement.options.styles.color"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
                   </div>
                 </div>
-                <div style="width:100%; margin-top: 18px;" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px;">
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <span>اندازه فونت</span>
                   </div>
-                  <div style="width:50%">
+                  <div class="toolbar-content-field">
                     <input
                       type="text"
-                      class="toolbar-content-select input-form-control"
-                      style="height: 18px; width: 86px; margin-left: 8px"
+                      class="input-form-control"
                       v-model="locals.selectedElement.options.styles.fontSize"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
                   </div>
                 </div>
-                <div style="width:100%;" class="toolbar-content-row">
-                  <div style="display:flex; flex-direction: row">
-                    <div style="width: 50%; padding:5px;margin-right: 27">
-                      <span>فونت</span>
-                    </div>
-                    <div style="width:50%">
-                      <input
-                        type="text"
-                        class="toolbar-content-select input-form-control"
-                        style="height: 18px; width: 83px; margin-right: 43px"
-                        v-model="locals.selectedElement.options.styles.fontFamily"
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <span>فونت</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      class="input-form-control"
+                      v-model="locals.selectedElement.options.styles.fontFamily"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px; margin-right: 15px;">
+                <div class="toolbar-content-row">
+                  <div style="margin-right: 20px;" class="toolbar-content-label">
                     <span>حاشیه</span>
                   </div>
-                  <div style="width:25%">
+                  <div class="toolbar-content-field">
                     <input
-                      style="width: 15px; height: 15px; border-radius: .25em; margin-right: 25px"
-                      class="toolbar-content-select input-form-control"
+                      class="input-form-control"
+                      style="margin-right:50px"
                       type="checkbox"
                       v-model="locals.bordersAllDirections"
                       id="bordersAlldirections"
                     />
                   </div>
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="bordersAlldirections">همه جهات</label>
+                  <div class="toolbar-content-label">
+                    <label for="bordersAlldirections">همه جهات</label>
                   </div>
                 </div>
-                <div style="width:100%;" class="toolbar-content-row">
+                <div class="toolbar-content-row">
                   <div v-if="locals.bordersAllDirections" style="display:flex; flex-direction: row">
-                    <div style="width: 50%; padding:5px;">
+                    <div style="margin-right: 10px;" class="toolbar-content-label">
                       <span>حاشیه همه جهات</span>
                     </div>
-                    <div style="width:50%">
+                    <div class="toolbar-content-field borders">
                       <input
                         type="text"
-                        class="toolbar-content-select input-form-control"
-                        style="height: 18px; width: 83px; margin-left: 53px"
+                        class="input-form-control"
                         v-model="locals.selectedElement.options.styles.border"
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
@@ -463,60 +444,56 @@
                     </div>
                   </div>
                   <div v-if="locals.bordersAllDirections == false">
-                    <div style="display:flex; flex-direction: row; margin-bottom: 5px;">
-                      <div style="width: 50%; padding:5px;">
+                    <div class="toolbar-content-row">
+                      <div class="toolbar-content-label">
                         <span>حاشیه بالا</span>
                       </div>
-                      <div style="width:50%">
+                      <div class="toolbar-content-field borders">
                         <input
                           type="text"
-                          class="toolbar-content-select input-form-control"
-                          style="height: 18px; width: 83px; margin-left: 8px"
+                          class="input-form-control"
                           v-model="locals.selectedElement.options.styles.borderTop"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
                         />
                       </div>
                     </div>
-                    <div style="display:flex; flex-direction: row; margin-bottom: 5px;">
-                      <div style="width: 50%; padding:5px;">
+                    <div style="margin-top:5px" class="toolbar-content-row">
+                      <div class="toolbar-content-label">
                         <span>حاشیه راست</span>
                       </div>
-                      <div style="width:50%">
+                      <div class="toolbar-content-field borders">
                         <input
                           type="text"
-                          class="toolbar-content-select input-form-control"
-                          style="height: 18px; width: 83px; margin-left: 8px"
+                          class="input-form-control"
                           v-model="locals.selectedElement.options.styles.borderRight"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
                         />
                       </div>
                     </div>
-                    <div style="display:flex; flex-direction: row; margin-bottom: 5px;">
-                      <div style="width: 50%; padding:5px;">
+                    <div style="margin-top:5px" class="toolbar-content-row">
+                      <div class="toolbar-content-label">
                         <span>حاشیه پایین</span>
                       </div>
-                      <div style="width:50%">
+                      <div class="toolbar-content-field borders">
                         <input
                           type="text"
-                          class="toolbar-content-select input-form-control"
-                          style="height: 18px; width: 83px; margin-left: 8px"
+                          class="input-form-control"
                           v-model="locals.selectedElement.options.styles.borderBottom"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
                         />
                       </div>
                     </div>
-                    <div style="display:flex; flex-direction: row;">
-                      <div style="width: 50%; padding:5px;">
+                    <div style="margin-top:5px" class="toolbar-content-row">
+                      <div class="toolbar-content-label">
                         <span>حاشیه چپ</span>
                       </div>
-                      <div style="width:50%">
+                      <div class="toolbar-content-field borders">
                         <input
                           type="text"
-                          class="toolbar-content-select input-form-control"
-                          style="height: 18px; width: 83px; margin-left: 8px"
+                          class="input-form-control"
                           v-model="locals.selectedElement.options.styles.borderLeft"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
@@ -525,11 +502,11 @@
                     </div>
                   </div>
                 </div>
-                <div style="width:100%" class="toolbar-content-row">
-                  <div style="width: 50%; padding:5px;">
-                    <span style="width: 40%;" class="d-sm-inline p-2 me-2">جهت نوشته</span>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <span>جهت نوشته</span>
                   </div>
-                  <div>
+                  <div class="toolbar-content-field">
                     <div>
                       <input
                         class="form-check-input"

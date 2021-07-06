@@ -152,6 +152,7 @@ select {
     color: #484848;
     border-bottom: 1px solid #81c3ff;
     padding: 10px;
+    font-weight: bold;
 }
 
 .toolbar-content {
@@ -176,14 +177,18 @@ select {
     margin-top: 15px;
     flex-direction: row;
     display: flex;
+    width: 100%;
 }
 
-.toolbar-content-select {
-    height: 90%;
-    width: 80%;
-    flex-grow: 2;
-    text-align: center;
-    text-align-last: center;
+.toolbar-content-row-element {
+    width: 100%;
+    justify-content: center;
+    padding-top: 20px;
+    margin-bottom: 5px;
+}
+
+.toolbar-content-row-elements {
+    width: 50%;
 }
 
 .input-form-control {
@@ -198,4 +203,53 @@ select {
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.toolbar-content-label {
+    width: 50%;
+    padding: 5px;
+}
+
+.toolbar-content-label.span {
+    margin-right: 20px;
+}
+
+.toolbar-content-field {
+    width: 50%
+}
+
+.toolbar-content-field select {
+    height: 30px;
+    width: 105px;
+    flex-grow: 2;
+    text-align: center;
+    text-align-last: center;
+}
+
+.toolbar-content-field input {
+    height: 18px;
+    width: 92px;
+    flex-grow: 2;
+    text-align: center;
+    text-align-last: center;
+}
+.toolbar-content-field.borders input {
+    height: 18px;
+    width: 92px;
+    flex-grow: 2;
+    margin-right: 18px;
+    text-align: center;
+    text-align-last: center;
+}
+
+.toolbar-content-field input[type='checkbox'],
+.toolbar-content-field input[type='radio'] {
+    width: 15px;
+    height: 15px;
+    border-radius: .25em;
+}
+
+.toolbar-content-field input[type='color'] {
+    width: 93px;
+    height: 21px;
 }
