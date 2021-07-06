@@ -581,8 +581,7 @@
                   :key="element"
                   :is="element.type"
                   :options="element.options"
-                  @click="element2ToolbarBind(element)"
-                  @clickedOnElement="clickedOnElement()"
+                  @clickedOnElement="clickedOnElement(element)"
                 />
               </div>
               <div id="bodyTemplate">
@@ -604,8 +603,7 @@
                   :key="element"
                   :is="element.type"
                   :options="element.options"
-                  @click="element2ToolbarBind(element)"
-                  @clickedOnElement="clickedOnElement()"
+                  @clickedOnElement="clickedOnElement(element)"
                 />
               </div>
             </div>
@@ -937,7 +935,9 @@ export default {
       }
     },
 
-    clickedOnElement() {
+    clickedOnElement(element) {
+      this.locals.selectedElement = element;
+      this.deletingElementOnPressingDeleteKey();
       this.locals.isClicked = true;
     },
 
@@ -1022,10 +1022,6 @@ export default {
       let footerSection = this.$refs.footerTemplate;
       footerSection.classList.remove("dragged");
     },
-    element2ToolbarBind(element) {
-      this.locals.selectedElement = element;
-      this.deletingElementOnPressingDeleteKey();
-    },
     onFileChange() {
       let image = document.getElementById("imageFileControl").files[0];
       this.toBase64(image).then((res) => {
@@ -1057,7 +1053,6 @@ export default {
     /** Adds an event listenner on delete button and then removes the element */
 
     deletingElementOnPressingDeleteKey() {
-      let id = this.locals.selectedElement.options.id;
       let headerElements = this.settings.headerElements;
       let footerElements = this.settings.footerElements;
       document.addEventListener("keydown", deleteElement, false);
@@ -1066,15 +1061,16 @@ export default {
       let that = this; // Storing the value of this to be able to use it inside of the function
 
       function deleteElement(e) {
+        let id = that.locals.selectedElement.options.id;
         if (e.code == "Delete") {
           for (let index = 0; index < headerElements.length; index++) {
             if (headerElements[index].options.id == id) {
-              headerElements.pop(headerElements[index]);
+              headerElements.splice(index, index + 1)
             }
           }
           for (let index = 0; index < footerElements.length; index++) {
             if (footerElements[index].options.id == id) {
-              footerElements.pop(footerElements[index]);
+              footerElements.splice(index, inedx + 1)
             }
           }
           that.locals.selectedElement = {
