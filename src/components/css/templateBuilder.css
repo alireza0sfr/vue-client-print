@@ -233,14 +233,6 @@ select {
     text-align: center;
     text-align-last: center;
 }
-.toolbar-content-field.borders input {
-    height: 18px;
-    width: 92px;
-    flex-grow: 2;
-    margin-right: 18px;
-    text-align: center;
-    text-align-last: center;
-}
 
 .toolbar-content-field input[type='checkbox'],
 .toolbar-content-field input[type='radio'] {

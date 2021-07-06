@@ -8,16 +8,21 @@
     justify-content: space-between;
     direction: rtl;
 }
-
+.print-modal-header .title{
+    margin: 5px 0 0 0;
+}
 .modal-icon {
-    padding: 7px;
+    padding: 0;
     border-radius: 50px;
     background-color: rgb(255 255 255);
-    width: 20px;
-    height: 20px;
-    display: inline-block;
+    width: 30px;
+    height: 30px;
+    display: flex;
     margin-left: 3px;
-    margin-top: 5px;
+    margin-top: 2px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-icon img {

@@ -8,7 +8,7 @@
             <span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
           </div>
           <div>
-            <h3>طراح صفحه</h3>
+            <h3 class="title">طراح چاپ</h3>
           </div>
           <div>
             <a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
@@ -103,28 +103,30 @@
                   </div>
                 </div>
                 <div class="toolbar-content-row">
-                  <div class="toolbar-content-label span">
+                  <div class="toolbar-content-label">
                     <span>جهت صفحه</span>
                   </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="radio"
-                      name="pageDirections"
-                      id="pageDirections"
-                      value="rtl"
-                      v-model="settings.pageDirections"
-                    />
-                    <label for="pageDirections">راست</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="radio"
-                      name="pageDirections"
-                      id="pageDirections2"
-                      value="ltr"
-                      v-model="settings.pageDirections"
-                    />
-                    <label for="pageDirections2">چپ</label>
+                  <div class="toolbar-content-field" style="text-align: right">
+                      <div>
+                          <label for="pageDirections">
+                              <input type="radio"
+                                     name="pageDirections"
+                                     id="pageDirections"
+                                     value="ltr"
+                                     v-model="settings.pageDirections" />
+                              راست به چپ
+                          </label>
+                      </div>
+                      <div>
+                          <label for="pageDirections">
+                              <input type="radio"
+                                     name="pageDirections"
+                                     id="pageDirections"
+                                     value="rtl"
+                                     v-model="settings.pageDirections" />
+                              چپ به راست
+                          </label>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -412,43 +414,38 @@
                   </div>
                 </div>
                 <div class="toolbar-content-row">
-                  <div style="margin-right: 20px;" class="toolbar-content-label">
-                    <span>حاشیه</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      class="input-form-control"
-                      style="margin-right:50px"
-                      type="checkbox"
-                      v-model="locals.bordersAllDirections"
-                      id="bordersAlldirections"
-                    />
-                  </div>
-                  <div class="toolbar-content-label">
-                    <label for="bordersAlldirections">همه جهات</label>
-                  </div>
+                    <div class="toolbar-content-label">
+                        <span>استایل لبه ها</span>
+                    </div>
+                    <div class="toolbar-content-field" style="text-align: right">
+                        <label for="bordersAlldirections">
+                            <input class="input-form-control"
+                                   style="display: inline-block"
+                                   type="checkbox"
+                                   v-model="locals.bordersAllDirections"
+                                   id="bordersAlldirections" />
+                            همه جهات
+                        </label>
+                    </div>
                 </div>
-                <div class="toolbar-content-row">
-                  <div v-if="locals.bordersAllDirections" style="display:flex; flex-direction: row">
+                <div class="toolbar-content-row" v-if="locals.bordersAllDirections" >
                     <div style="margin-right: 10px;" class="toolbar-content-label">
-                      <span>حاشیه همه جهات</span>
+                        <span>استایل همه لبه ها</span>
                     </div>
-                    <div class="toolbar-content-field borders">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.border"
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
+                    <div class="toolbar-content-field">
+                        <input type="text"
+                                class="input-form-control"
+                                v-model="locals.selectedElement.options.styles.border"
+                                aria-label="Small"
+                                aria-describedby="inputGroup-sizing-sm" />
                     </div>
-                  </div>
-                  <div v-if="locals.bordersAllDirections == false">
+                </div>
+                  <div v-if="locals.bordersAllDirections == false" style="width:100%">
                     <div class="toolbar-content-row">
                       <div class="toolbar-content-label">
-                        <span>حاشیه بالا</span>
+                        <span>لبه بالا</span>
                       </div>
-                      <div class="toolbar-content-field borders">
+                      <div class="toolbar-content-field">
                         <input
                           type="text"
                           class="input-form-control"
@@ -458,11 +455,11 @@
                         />
                       </div>
                     </div>
-                    <div style="margin-top:5px" class="toolbar-content-row">
+                    <div class="toolbar-content-row">
                       <div class="toolbar-content-label">
-                        <span>حاشیه راست</span>
+                        <span>لبه راست</span>
                       </div>
-                      <div class="toolbar-content-field borders">
+                      <div class="toolbar-content-field">
                         <input
                           type="text"
                           class="input-form-control"
@@ -472,11 +469,11 @@
                         />
                       </div>
                     </div>
-                    <div style="margin-top:5px" class="toolbar-content-row">
+                    <div class="toolbar-content-row">
                       <div class="toolbar-content-label">
-                        <span>حاشیه پایین</span>
+                        <span>لبه پایین</span>
                       </div>
-                      <div class="toolbar-content-field borders">
+                      <div class="toolbar-content-field">
                         <input
                           type="text"
                           class="input-form-control"
@@ -486,11 +483,11 @@
                         />
                       </div>
                     </div>
-                    <div style="margin-top:5px" class="toolbar-content-row">
+                    <div class="toolbar-content-row">
                       <div class="toolbar-content-label">
-                        <span>حاشیه چپ</span>
+                        <span>لبه چپ</span>
                       </div>
-                      <div class="toolbar-content-field borders">
+                      <div class="toolbar-content-field">
                         <input
                           type="text"
                           class="input-form-control"
@@ -501,12 +498,11 @@
                       </div>
                     </div>
                   </div>
-                </div>
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
                     <span>جهت نوشته</span>
                   </div>
-                  <div class="toolbar-content-field">
+                  <div class="toolbar-content-field" style="text-align: right">
                     <div>
                       <input
                         class="form-check-input"
