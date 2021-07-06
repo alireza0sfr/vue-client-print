@@ -24,10 +24,10 @@
         }"
             class="toolbar-container"
           >
-            <div class="toolbar-header">
-              <span>تنظیمات پرینت</span>
-            </div>
             <div class="toolbar-content">
+              <div class="toolbar-header">
+                <span>تنظیمات پرینت</span>
+              </div>
               <div class="toolbar-content-wrapper" id="printConfigsMenu">
                 <div style="width:100%" class="toolbar-content-row">
                   <div style="width: 50%; padding:5px;">
@@ -70,7 +70,7 @@
                     <input
                       type="text"
                       v-model="settings.fileName"
-                      style="width:70%"
+                      style="width:83px"
                       class="toolbar-content-select input-form-control"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
@@ -388,7 +388,7 @@
                   </div>
                   <div style="width:40%">
                     <input
-                      style="margin-top: -4px; margin-right: -5px; width: 85%"
+                      style="margin-top: -4px; margin-right: -5px; width: 85px"
                       type="color"
                       class="toolbar-content-select input-form-control"
                       v-model="locals.selectedElement.options.styles.color"
@@ -405,7 +405,7 @@
                     <input
                       type="text"
                       class="toolbar-content-select input-form-control"
-                      style="height: 60%; width: 70%; margin-left: 8px"
+                      style="height: 18px; width: 86px; margin-left: 8px"
                       v-model="locals.selectedElement.options.styles.fontSize"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
@@ -414,14 +414,14 @@
                 </div>
                 <div style="width:100%;" class="toolbar-content-row">
                   <div style="display:flex; flex-direction: row">
-                    <div style="width: 50%; padding:5px;">
-                      <span style="margin-right: 10px">فونت</span>
+                    <div style="width: 50%; padding:5px;margin-right: 27">
+                      <span>فونت</span>
                     </div>
                     <div style="width:50%">
                       <input
                         type="text"
                         class="toolbar-content-select input-form-control"
-                        style="height: 60%; width: 80%; margin-right: 14px"
+                        style="height: 18px; width: 83px; margin-right: 43px"
                         v-model="locals.selectedElement.options.styles.fontFamily"
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
@@ -433,17 +433,17 @@
                   <div style="width: 50%; padding:5px; margin-right: 15px;">
                     <span>حاشیه</span>
                   </div>
-                  <div style="width: 50%; padding: 5px;">
-                    <label style="width: 40%;" for="bordersAlldirections">همه جهات</label>
-                  </div>
                   <div style="width:25%">
                     <input
-                      style="width: 15px; height: 15px; border-radius: .25em;"
+                      style="width: 15px; height: 15px; border-radius: .25em; margin-right: 25px"
                       class="toolbar-content-select input-form-control"
                       type="checkbox"
                       v-model="locals.bordersAllDirections"
                       id="bordersAlldirections"
                     />
+                  </div>
+                  <div style="width: 50%; padding: 5px;">
+                    <label style="width: 40%;" for="bordersAlldirections">همه جهات</label>
                   </div>
                 </div>
                 <div style="width:100%;" class="toolbar-content-row">
@@ -455,7 +455,7 @@
                       <input
                         type="text"
                         class="toolbar-content-select input-form-control"
-                        style="height: 60%; width: 70%; margin-left: 8px"
+                        style="height: 18px; width: 83px; margin-left: 53px"
                         v-model="locals.selectedElement.options.styles.border"
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
@@ -471,7 +471,7 @@
                         <input
                           type="text"
                           class="toolbar-content-select input-form-control"
-                          style="height: 60%; width: 70%; margin-left: 8px"
+                          style="height: 18px; width: 83px; margin-left: 8px"
                           v-model="locals.selectedElement.options.styles.borderTop"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
@@ -486,7 +486,7 @@
                         <input
                           type="text"
                           class="toolbar-content-select input-form-control"
-                          style="height: 60%; width: 70%; margin-left: 8px"
+                          style="height: 18px; width: 83px; margin-left: 8px"
                           v-model="locals.selectedElement.options.styles.borderRight"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
@@ -501,7 +501,7 @@
                         <input
                           type="text"
                           class="toolbar-content-select input-form-control"
-                          style="height: 60%; width: 70%; margin-left: 8px"
+                          style="height: 18px; width: 83px; margin-left: 8px"
                           v-model="locals.selectedElement.options.styles.borderBottom"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"
@@ -516,7 +516,7 @@
                         <input
                           type="text"
                           class="toolbar-content-select input-form-control"
-                          style="height: 60%; width: 70%; margin-left: 8px"
+                          style="height: 18px; width: 83px; margin-left: 8px"
                           v-model="locals.selectedElement.options.styles.borderLeft"
                           aria-label="Small"
                           aria-describedby="inputGroup-sizing-sm"

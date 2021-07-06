@@ -28,10 +28,12 @@ select {
 .watermark {
     font-size: 79pt;
     color: #e1e1e1;
+    text-align: center;
 }
 
 #bodyTemplate p {
     color: #a5a2a2;
+    text-align: center;
 }
 
 .section {
