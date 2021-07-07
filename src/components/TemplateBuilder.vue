@@ -582,7 +582,7 @@
           </div>
 
           <!-- Section 2 (Template)-->
-          <div style="overflow: auto;">
+          <div style="overflow: auto;width: 100%;padding: 20px;">
             <div
               :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in'}"
               class="template"
