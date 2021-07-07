@@ -205,7 +205,7 @@
                       @dragstart="startDraggingElement('textpatern')"
                       @dragend="finishedDraggingElement()"
                     >
-                      <img src="./elements/images/binding.png" alt="متن الگویی" />
+                      <img src="./elements/images/textpattern.png" alt="متن الگویی" />
                       <div class="element-title">متن الگویی</div>
                     </span>
                   </div>
@@ -216,20 +216,24 @@
               </div>
               <div class="toolbar-content-wrapper">
                 <div
-                  v-if="locals.selectedElement.type == 'textelement'"
                   class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'textelement'"
                 >
-                  <div class="toolbar-content-label">
-                    <span>متن</span>
+                  <div class="toolbar-content-label" style="margin: auto">
+                    <span>متن خود را وارد کنید</span>
                   </div>
+                </div>
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'textelement'"
+                >
                   <div class="toolbar-content-field">
-                    <input
-                      type="text"
+                    <textarea
                       v-model="locals.selectedElement.options.configs.text"
                       class="input-form-control"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
-                    />
+                    ></textarea>
                   </div>
                 </div>
                 <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
@@ -364,36 +368,33 @@
                   </div>
                 </div>
                 <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpatern'">
-                  <div class="toolbar-content-label">
-                    <span>متن</span>
+                  <div class="toolbar-content-label" style="margin: auto">
+                    <span>متن خود را وارد کنید</span>
+                    <p>مثال: سلام {name} خوش آمدید</p>
                   </div>
+                </div>
+                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpatern'">
                   <div class="toolbar-content-field">
-                    <input
-                      type="text"
+                    <textarea
                       v-model="locals.selectedElement.options.configs.text"
                       class="input-form-control"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
-                    />
+                    ></textarea>
                   </div>
+                </div>
+                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpatern'">
                   <div class="toolbar-content-label">
                     <label for="textPaternControl">نوع داده</label>
                   </div>
-                  <!-- <div style="display: flex; flex-direction: column"> -->
                   <div class="toolbar-content-field">
-                    <select
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.configs.text"
-                      id="textPaternControl"
-                    >
+                    <select class="input-form-control" id="textPaternControl">
                       <option
                         v-for="option in Object.keys(settings.bindingObject)"
                         :key="option"
                       >{{option}}</option>
                     </select>
                   </div>
-
-                  <!-- </div> -->
                 </div>
               </div>
               <div style="margin-top: 15px" class="toolbar-header">
@@ -1025,7 +1026,7 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              text: "متن خود را وارد نمایید",
+              text: "الگوی خود را وارد کنید",
               bindingObject: {},
             },
             styles: {},

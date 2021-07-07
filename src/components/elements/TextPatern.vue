@@ -3,8 +3,8 @@
     <div
       :id="settings.id"
       ref="element"
-      @click="this.$emit('clickedOnElement')"
-      @finishededitingelement="this.$emit('finishedEditingElement')"
+      @click="$emit('clickedOnElement')"
+      @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
@@ -51,7 +51,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          text: "متن خود را وارد نمایید",
+          text: "الگوی خود را وارد کنید",
           value: null,
         },
         styles: defaultStyles,

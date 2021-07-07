@@ -3,10 +3,10 @@
     <div
       :id="settings.id"
       ref="element"
-      @click="this.$emit('clickedOnElement')"
-      @finishededitingelement="this.$emit('finishedEditingElement')"
+      @click="$emit('clickedOnElement')"
+      @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
-      :style="settings.styles"
+      style="white-space: pre"
     >
       {{settings.configs.text}}
       <div ref="resizer" class="resizer"></div>
