@@ -18,9 +18,9 @@
             <span id="printModalCloseBtn" class="close-btn">&times;</span>
           </div>
           <div>
-            <h3>پیش نمایش چاپ</h3>
+            <h3 class="title">پیش نمایش چاپ</h3>
           </div>
-          <div>
+          <div style="display: flex;">
             <a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
               <img src="./elements/images/edit.png" />
             </a>
