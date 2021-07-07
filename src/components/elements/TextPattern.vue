@@ -1,6 +1,7 @@
 <template>
   <div>
     <div
+      v-if="$parent.$options.name == 'TemplateBuilder'"
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
@@ -11,6 +12,17 @@
       {{settings.configs.text}}
       <div ref="resizer" class="resizer"></div>
     </div>
+    <div
+      v-else
+      :id="settings.id"
+      ref="element"
+      @click="$emit('clickedOnElement')"
+      :class="locals.classType + ' element'"
+      :style="settings.styles"
+    >
+      {{settings.configs.value}}
+      <div ref="resizer" class="resizer"></div>
+    </div>
   </div>
 </template>
 
@@ -18,7 +30,7 @@
 import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
-  name: "TextPatern",
+  name: "TextPattern",
   props: {
     options: Object,
   },
@@ -46,7 +58,7 @@ export default {
   data() {
     return {
       locals: {
-        classType: "textpatern",
+        classType: "textpattern",
       },
       settings: {
         id: 0,

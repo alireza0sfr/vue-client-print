@@ -78,6 +78,7 @@
 
 <script>
 import TemplateBuilder from "./TemplateBuilder.vue";
+import TextPattern from "./elements/TextPattern.vue";
 import TextElement from "./elements/TextElement.vue";
 import DateTime from "./elements/DateTime.vue";
 import BindingObject from "./elements/BindingObject.vue";
@@ -97,6 +98,7 @@ export default {
     pagecounter: PageCounter,
     imageelement: ImageElement,
     bindingObject: BindingObject,
+    textpattern: TextPattern,
     TemplateBuilder,
   },
   data() {
@@ -307,7 +309,7 @@ export default {
      */
 
     printPreview() {
-      document.getElementById('printModal').style.display = 'block'
+      document.getElementById("printModal").style.display = "block";
       this.convert2Image();
     },
 
@@ -329,6 +331,28 @@ export default {
       } else if (type == "bindingObject") {
         let key = options.configs.field;
         options.configs.value = this.bindingObject[key];
+      } else if (type == "textpattern") {
+        let matches = [], // an array to collect the strings that are matches
+          types = [],
+          regex = /{([^{]*?\w)(?=\})}/gim,
+          text = options.configs.text,
+          curMatch;
+
+        while ((curMatch = regex.exec(text))) {
+          types.push(curMatch[1]);
+          matches.push(curMatch[0]);
+        }
+
+        console.log("types: ", types);
+        console.log("matches: ", matches);
+
+        for (let index = 0; index < types.length; index++) {
+          text = text.replace(
+            "{" + types[index] + "}",
+            this.bindingObject[types[index]]
+          );
+        }
+        options.configs.value = text;
       }
       return JSON.parse(JSON.stringify(options));
     },

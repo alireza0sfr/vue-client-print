@@ -2,17 +2,6 @@ shadow {
     box-shadow: -3px 4px 9px 0px #ddd;
 }
 
-input {
-    text-align: center;
-    text-align-last: center;
-}
-
-select {
-    text-align: center;
-    text-align-last: center;
-}
-
-
 .template {
     overflow: hidden;
     display: flex;

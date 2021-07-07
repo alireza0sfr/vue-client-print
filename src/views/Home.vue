@@ -50,7 +50,7 @@ export default {
     return {
       printOptions: {},
       bindingObject: {
-        code: 646464,
+        name: 'nikan',
         date: "2021/5/6",
       },
     };
