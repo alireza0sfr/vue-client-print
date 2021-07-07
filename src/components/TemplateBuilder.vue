@@ -610,7 +610,7 @@
               >
                 <component
                   v-for="element in settings.headerElements"
-                  :key="element"
+                  :key="element.id"
                   :is="element.type"
                   :options="element.options"
                   @clickedOnElement="clickedOnElement(element)"
@@ -633,7 +633,7 @@
               >
                 <component
                   v-for="element in settings.footerElements"
-                  :key="element"
+                  :key="element.id"
                   :is="element.type"
                   :options="element.options"
                   @clickedOnElement="clickedOnElement(element)"

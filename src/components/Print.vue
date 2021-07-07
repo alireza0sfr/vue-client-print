@@ -44,7 +44,7 @@
                 <header :style="{'height': settings.header.height + 'in'}" class="mainHeader">
                   <component
                     v-for="element in settings.header.headerElements"
-                    :key="element"
+                    :key="element.id"
                     :is="element.type"
                     :options="prepareComponentsOptions(element.options, element.type, index)"
                   />
@@ -61,7 +61,7 @@
                 >
                   <component
                     v-for="element in settings.footer.footerElements"
-                    :key="element"
+                    :key="element.id"
                     :is="element.type"
                     :options="element.type == 'pagecounter' ? prepareComponentsOptions(element.options, element.type, index) :element.options"
                   />
