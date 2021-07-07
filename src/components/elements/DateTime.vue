@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "DateTime",
@@ -87,7 +86,7 @@ export default {
           hasTime: true,
           persianDate: true,
         },
-        styles: defaultStyles,
+        styles: {}
       },
     };
   },

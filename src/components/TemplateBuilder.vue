@@ -987,7 +987,10 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: { text: "متن خود را وارد نمایید" },
-            styles: {},
+            styles: {
+              whiteSpace: "pre",
+              width: "150px",
+            },
           },
         };
       } else if (classType == "datetime") {
@@ -996,7 +999,7 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: { hasDate: true, hasTime: true, persianDate: true },
-            styles: {},
+            styles: { width: "150px" },
           },
         };
       } else if (classType == "pagecounter") {
@@ -1014,7 +1017,10 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: { imageSrc: require("./elements/images/logo.png") },
-            styles: {},
+            styles: {
+              top: 0,
+              left: 0
+            },
           },
         };
       } else if (classType == "bindingObject") {
@@ -1026,7 +1032,10 @@ export default {
               field: "اتصال فیلد را انتخاب کنید",
               bindingObject: {},
             },
-            styles: {},
+            styles: {
+              whiteSpace: "pre",
+              width: "150px",
+            },
           },
         };
       } else if (classType == "textpattern") {
@@ -1038,7 +1047,10 @@ export default {
               text: "متن خود را وارد کنید",
               value: null,
             },
-            styles: {},
+            styles: {
+              whiteSpace: 'pre',
+              width: '150px'
+            }
           },
         };
       }

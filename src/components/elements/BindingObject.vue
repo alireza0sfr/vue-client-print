@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "bindingObject",
@@ -66,7 +65,7 @@ export default {
           field: "اتصال فیلد را انتخاب کنید",
           value: null,
         },
-        styles: defaultStyles,
+        styles: {},
       },
     };
   },

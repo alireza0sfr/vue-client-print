@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "PageCounter",
@@ -61,7 +60,7 @@ export default {
           counter: 1,
           persianNumbers: true,
         },
-        styles: defaultStyles,
+        styles: {},
       },
     };
   },

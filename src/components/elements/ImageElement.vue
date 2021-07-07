@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "ImageElement",
@@ -51,7 +50,7 @@ export default {
         configs: {
           imageSrc: require("./images/logo.png"),
         },
-        styles: defaultStyles,
+        styles: {},
       },
     };
   },

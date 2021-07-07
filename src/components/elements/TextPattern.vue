@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "TextPattern",
@@ -66,7 +65,7 @@ export default {
           text: "الگوی خود را وارد کنید",
           value: null,
         },
-        styles: defaultStyles,
+        styles: {},
       },
     };
   },

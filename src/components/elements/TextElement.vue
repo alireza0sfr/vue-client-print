@@ -6,7 +6,7 @@
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
-      style="white-space: pre"
+      :style="settings.styles"
     >
       {{settings.configs.text}}
       <div ref="resizer" class="resizer"></div>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import defaultStyles from "./js/default-styles.js";
 import elementUtilities from "./js/element-utilities.js";
 export default {
   name: "TextElement",
@@ -53,7 +52,7 @@ export default {
         configs: {
           text: "متن خود را وارد نمایید",
         },
-        styles: defaultStyles,
+        styles: {},
       },
     };
   },
