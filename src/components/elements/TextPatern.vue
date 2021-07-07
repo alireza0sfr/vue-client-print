@@ -52,6 +52,7 @@ export default {
         id: 0,
         configs: {
           text: "متن خود را وارد نمایید",
+          value: null,
         },
         styles: defaultStyles,
       },

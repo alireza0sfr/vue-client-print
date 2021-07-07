@@ -107,26 +107,30 @@
                     <span>جهت صفحه</span>
                   </div>
                   <div class="toolbar-content-field" style="text-align: right">
-                      <div>
-                          <label for="pageDirections">
-                              <input type="radio"
-                                     name="pageDirections"
-                                     id="pageDirections"
-                                     value="ltr"
-                                     v-model="settings.pageDirections" />
-                              راست به چپ
-                          </label>
-                      </div>
-                      <div>
-                          <label for="pageDirections">
-                              <input type="radio"
-                                     name="pageDirections"
-                                     id="pageDirections"
-                                     value="rtl"
-                                     v-model="settings.pageDirections" />
-                              چپ به راست
-                          </label>
-                      </div>
+                    <div>
+                      <label for="pageDirections">
+                        <input
+                          type="radio"
+                          name="pageDirections"
+                          id="pageDirections"
+                          value="ltr"
+                          v-model="settings.pageDirections"
+                        />
+                        راست به چپ
+                      </label>
+                    </div>
+                    <div>
+                      <label for="pageDirections">
+                        <input
+                          type="radio"
+                          name="pageDirections"
+                          id="pageDirections"
+                          value="rtl"
+                          v-model="settings.pageDirections"
+                        />
+                        چپ به راست
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -161,7 +165,6 @@
                 <div class="toolbar-content-row-elements">
                   <div class="toolbar-content-row-element">
                     <span
-                      class="d-sm-inline"
                       draggable="true"
                       @dragstart="startDraggingElement('pagecounter')"
                       @dragend="finishedDraggingElement()"
@@ -174,7 +177,6 @@
                 <div class="toolbar-content-row-elements">
                   <div class="toolbar-content-row-element">
                     <span
-                      class="d-sm-inline"
                       draggable="true"
                       @dragstart="startDraggingElement('imageelement')"
                       @dragend="finishedDraggingElement()"
@@ -190,10 +192,21 @@
                       draggable="true"
                       @dragstart="startDraggingElement('bindingObject')"
                       @dragend="finishedDraggingElement()"
-                      class="d-sm-inline"
                     >
                       <img src="./elements/images/binding.png" alt="اتصال داده" />
                       <div class="element-title">اتصال داده</div>
+                    </span>
+                  </div>
+                </div>
+                <div class="toolbar-content-row-elements">
+                  <div class="toolbar-content-row-element">
+                    <span
+                      draggable="true"
+                      @dragstart="startDraggingElement('textpatern')"
+                      @dragend="finishedDraggingElement()"
+                    >
+                      <img src="./elements/images/binding.png" alt="متن الگویی" />
+                      <div class="element-title">متن الگویی</div>
                     </span>
                   </div>
                 </div>
@@ -350,6 +363,38 @@
                     </select>
                   </div>
                 </div>
+                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpatern'">
+                  <div class="toolbar-content-label">
+                    <span>متن</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      v-model="locals.selectedElement.options.configs.text"
+                      class="input-form-control"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                  <div class="toolbar-content-label">
+                    <label for="textPaternControl">نوع داده</label>
+                  </div>
+                  <!-- <div style="display: flex; flex-direction: column"> -->
+                  <div class="toolbar-content-field">
+                    <select
+                      class="input-form-control"
+                      v-model="locals.selectedElement.options.configs.text"
+                      id="textPaternControl"
+                    >
+                      <option
+                        v-for="option in Object.keys(settings.bindingObject)"
+                        :key="option"
+                      >{{option}}</option>
+                    </select>
+                  </div>
+
+                  <!-- </div> -->
+                </div>
               </div>
               <div style="margin-top: 15px" class="toolbar-header">
                 <span>استایل المنت ها</span>
@@ -414,90 +459,94 @@
                   </div>
                 </div>
                 <div class="toolbar-content-row">
-                    <div class="toolbar-content-label">
-                        <span>استایل لبه ها</span>
-                    </div>
-                    <div class="toolbar-content-field" style="text-align: right">
-                        <label for="bordersAlldirections">
-                            <input class="input-form-control"
-                                   style="display: inline-block"
-                                   type="checkbox"
-                                   v-model="locals.bordersAllDirections"
-                                   id="bordersAlldirections" />
-                            همه جهات
-                        </label>
-                    </div>
+                  <div class="toolbar-content-label">
+                    <span>استایل لبه ها</span>
+                  </div>
+                  <div class="toolbar-content-field" style="text-align: right">
+                    <label for="bordersAlldirections">
+                      <input
+                        class="input-form-control"
+                        style="display: inline-block"
+                        type="checkbox"
+                        v-model="locals.bordersAllDirections"
+                        id="bordersAlldirections"
+                      />
+                      همه جهات
+                    </label>
+                  </div>
                 </div>
-                <div class="toolbar-content-row" v-if="locals.bordersAllDirections" >
-                    <div style="margin-right: 10px;" class="toolbar-content-label">
-                        <span>استایل همه لبه ها</span>
+                <div class="toolbar-content-row" v-if="locals.bordersAllDirections">
+                  <div style="margin-right: 10px;" class="toolbar-content-label">
+                    <span>استایل همه لبه ها</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      class="input-form-control"
+                      v-model="locals.selectedElement.options.styles.border"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div v-if="locals.bordersAllDirections == false" style="width:100%">
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>لبه بالا</span>
                     </div>
                     <div class="toolbar-content-field">
-                        <input type="text"
-                                class="input-form-control"
-                                v-model="locals.selectedElement.options.styles.border"
-                                aria-label="Small"
-                                aria-describedby="inputGroup-sizing-sm" />
-                    </div>
-                </div>
-                  <div v-if="locals.bordersAllDirections == false" style="width:100%">
-                    <div class="toolbar-content-row">
-                      <div class="toolbar-content-label">
-                        <span>لبه بالا</span>
-                      </div>
-                      <div class="toolbar-content-field">
-                        <input
-                          type="text"
-                          class="input-form-control"
-                          v-model="locals.selectedElement.options.styles.borderTop"
-                          aria-label="Small"
-                          aria-describedby="inputGroup-sizing-sm"
-                        />
-                      </div>
-                    </div>
-                    <div class="toolbar-content-row">
-                      <div class="toolbar-content-label">
-                        <span>لبه راست</span>
-                      </div>
-                      <div class="toolbar-content-field">
-                        <input
-                          type="text"
-                          class="input-form-control"
-                          v-model="locals.selectedElement.options.styles.borderRight"
-                          aria-label="Small"
-                          aria-describedby="inputGroup-sizing-sm"
-                        />
-                      </div>
-                    </div>
-                    <div class="toolbar-content-row">
-                      <div class="toolbar-content-label">
-                        <span>لبه پایین</span>
-                      </div>
-                      <div class="toolbar-content-field">
-                        <input
-                          type="text"
-                          class="input-form-control"
-                          v-model="locals.selectedElement.options.styles.borderBottom"
-                          aria-label="Small"
-                          aria-describedby="inputGroup-sizing-sm"
-                        />
-                      </div>
-                    </div>
-                    <div class="toolbar-content-row">
-                      <div class="toolbar-content-label">
-                        <span>لبه چپ</span>
-                      </div>
-                      <div class="toolbar-content-field">
-                        <input
-                          type="text"
-                          class="input-form-control"
-                          v-model="locals.selectedElement.options.styles.borderLeft"
-                          aria-label="Small"
-                          aria-describedby="inputGroup-sizing-sm"
-                        />
-                      </div>
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.borderTop"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
                     </div>
                   </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>لبه راست</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.borderRight"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>لبه پایین</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.borderBottom"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>لبه چپ</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.borderLeft"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
                     <span>جهت نوشته</span>
@@ -595,6 +644,7 @@ import DateTime from "./elements/DateTime.vue";
 import BindingObject from "./elements/BindingObject.vue";
 import PageCounter from "./elements/PageCounter.vue";
 import ImageElement from "./elements/ImageElement.vue";
+import TextPatern from "./elements/TextPatern.vue";
 export default {
   name: "TemplateBuilder",
   props: {
@@ -606,6 +656,7 @@ export default {
     pagecounter: PageCounter,
     imageelement: ImageElement,
     bindingObject: BindingObject,
+    textpatern: TextPatern,
   },
   data() {
     return {
@@ -963,6 +1014,18 @@ export default {
             id: this.idGenerator(5),
             configs: {
               field: "اتصال فیلد را انتخاب کنید",
+              bindingObject: {},
+            },
+            styles: {},
+          },
+        };
+      } else if (classType == "textpatern") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: {
+              text: "متن خود را وارد نمایید",
               bindingObject: {},
             },
             styles: {},
