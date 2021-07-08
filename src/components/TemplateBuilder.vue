@@ -212,7 +212,7 @@
                 </div>
               </div>
               <div class="toolbar-header">
-                <span>تنظیمات المنت ها</span>
+                <span>تنظیمات المنت</span>
               </div>
               <div class="toolbar-content-wrapper">
                 <div
@@ -312,24 +312,6 @@
                     id="imageFileControl"
                   />
                 </div>
-
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'imageelement'"
-                >
-                  <div class="toolbar-content-label">
-                    <span>طول</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.height"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
-                </div>
                 <div
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'imageelement'"
@@ -342,6 +324,23 @@
                       type="text"
                       class="input-form-control"
                       v-model="locals.selectedElement.options.styles.width"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'imageelement'"
+                >
+                  <div class="toolbar-content-label">
+                    <span>ارتفاع</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      class="input-form-control"
+                      v-model="locals.selectedElement.options.styles.height"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
@@ -376,9 +375,7 @@
                     <p>مثال: سلام {name} خوش آمدید</p>
                   </div>
                 </div>
-                <div
-                  v-if="locals.selectedElement.type == 'textpattern'"
-                >
+                <div v-if="locals.selectedElement.type == 'textpattern'">
                   <div class="toolbar-content-field">
                     <textarea
                       v-model="locals.selectedElement.options.configs.text"
@@ -393,7 +390,7 @@
                   v-if="locals.selectedElement.type == 'textpattern'"
                 >
                   <div class="toolbar-content-label">
-                    <label for="textpatternControl">نوع داده</label>
+                    <label for="textpatternControl">فیلد ها</label>
                   </div>
                   <div class="toolbar-content-field">
                     <select class="input-form-control" id="textpatternControl">
@@ -406,7 +403,7 @@
                 </div>
               </div>
               <div style="margin-top: 15px" class="toolbar-header">
-                <span>استایل المنت ها</span>
+                <span>استایل المنت</span>
               </div>
               <div class="toolbar-content-wrapper" id="elementStylesMenu">
                 <div class="toolbar-content-row">
@@ -561,28 +558,30 @@
                     <span>جهت نوشته</span>
                   </div>
                   <div class="toolbar-content-field" style="text-align: right">
-                    <div>
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="elementDirections"
-                        id="elementDirections"
-                        value="rtl"
-                        v-model="locals.selectedElement.options.styles.direction"
-                      />
-                      <label class="form-check-label" for="elementDirections">راست به چپ</label>
-                    </div>
-                    <div>
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="elementDirections"
-                        id="elementDirections2"
-                        value="ltr"
-                        v-model="locals.selectedElement.options.styles.direction"
-                      />
-                      <label class="form-check-label" for="elementDirections2">چپ به راست</label>
-                    </div>
+                    <label for="elementDirections">
+                      <div>
+                        <input
+                          type="radio"
+                          name="elementDirections"
+                          id="elementDirections"
+                          value="rtl"
+                          v-model="locals.selectedElement.options.styles.direction"
+                        />
+                        راست به چپ
+                      </div>
+                    </label>
+                    <label for="elementDirections2">
+                      <div>
+                        <input
+                          type="radio"
+                          name="elementDirections"
+                          id="elementDirections2"
+                          value="ltr"
+                          v-model="locals.selectedElement.options.styles.direction"
+                        />
+                        چپ به راست
+                      </div>
+                    </label>
                   </div>
                 </div>
               </div>
@@ -1019,6 +1018,8 @@ export default {
             styles: {
               top: 0,
               left: 0,
+              width: "100px",
+              height: "100px",
             },
           },
         };
@@ -1043,7 +1044,7 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              text: "الکوی خود را وارد نمایید",
+              text: "الکو خود را وارد نمایید",
               value: null,
             },
             styles: {

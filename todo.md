@@ -74,7 +74,7 @@ print component:
     -Done remove fa cdn
     -Done binding object is not dragable untill its resized
     -Done Text pattern element
+    -Done fix the pdf bug
     
-    -fix the pdf bug
     -revamp the calculate size system
     -toast for processing...
