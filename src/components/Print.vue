@@ -57,13 +57,13 @@
               >
                 <footer
                   :style="{'height': settings.footer.height + 'in'}"
-                  class="mainFooter html2pdf__page-break break"
+                  class="mainFooter"
                 >
                   <component
                     v-for="element in settings.footer.footerElements"
                     :key="element.id"
                     :is="element.type"
-                    :options="element.type == 'pagecounter' ? prepareComponentsOptions(element.options, element.type, index) :element.options"
+                    :options="prepareComponentsOptions(element.options, element.type, index)"
                   />
                   <!-- <div>{{ index }}</div> -->
                 </footer>
@@ -155,6 +155,7 @@ export default {
           orientation: this.settings.orientation,
         },
       };
+
       var worker = html2pdf().set(opt).from(pages[0]).toPdf();
       let n = 0;
       pages.forEach(function (page) {
@@ -342,9 +343,6 @@ export default {
           types.push(curMatch[1]);
           matches.push(curMatch[0]);
         }
-
-        console.log("types: ", types);
-        console.log("matches: ", matches);
 
         for (let index = 0; index < types.length; index++) {
           text = text.replace(

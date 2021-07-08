@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 shadow {
     box-shadow: -3px 4px 9px 0px #ddd;
 }
@@ -216,8 +220,8 @@ shadow {
 }
 
 .toolbar-content-field input {
-    height: 18px;
-    width: 92px;
+    height: 28px;
+    width: 105px;
     flex-grow: 2;
     text-align: center;
     text-align-last: center;
@@ -231,8 +235,10 @@ shadow {
 }
 
 .toolbar-content-field input[type='color'] {
-    width: 102px;
-    height: 26px;
+    padding: 0;
+
+    width: 107px;
+    height: 28px;
 }
 
 .toolbar-content-field textarea {

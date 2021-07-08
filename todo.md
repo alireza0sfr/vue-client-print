@@ -73,6 +73,8 @@ print component:
     -Done test
     -Done remove fa cdn
     -Done binding object is not dragable untill its resized
+    -Done Text pattern element
     
-    -Text pattern element
+    -fix the pdf bug
+    -revamp the calculate size system
     -toast for processing...

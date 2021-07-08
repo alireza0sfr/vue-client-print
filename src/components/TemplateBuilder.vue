@@ -219,7 +219,7 @@
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'textelement'"
                 >
-                  <div class="toolbar-content-label" style="margin: auto">
+                  <div style="text-align: center; width: 100%">
                     <span>متن خود را وارد کنید</span>
                   </div>
                 </div>
@@ -371,13 +371,12 @@
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'textpattern'"
                 >
-                  <div class="toolbar-content-label" style="margin: auto">
+                  <div style="text-align: center; width: 100%">
                     <span>متن خود را وارد کنید</span>
                     <p>مثال: سلام {name} خوش آمدید</p>
                   </div>
                 </div>
                 <div
-                  class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'textpattern'"
                 >
                   <div class="toolbar-content-field">
@@ -776,7 +775,7 @@ export default {
         this.settings.pageFooterSize;
 
       if (totalHeightOfAPaper < 0) {
-        totalHeightOfAPaper = 1.7;
+        totalHeightOfAPaper = 1.77;
       }
 
       let tmp = {
@@ -1019,7 +1018,7 @@ export default {
             configs: { imageSrc: require("./elements/images/logo.png") },
             styles: {
               top: 0,
-              left: 0
+              left: 0,
             },
           },
         };
@@ -1029,7 +1028,7 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              field: "اتصال فیلد را انتخاب کنید",
+              field: "اتصال فیلد را انتخاب نمایید",
               bindingObject: {},
             },
             styles: {
@@ -1044,13 +1043,13 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              text: "متن خود را وارد کنید",
+              text: "الکوی خود را وارد نمایید",
               value: null,
             },
             styles: {
-              whiteSpace: 'pre',
-              width: '150px'
-            }
+              whiteSpace: "pre",
+              width: "150px",
+            },
           },
         };
       }
