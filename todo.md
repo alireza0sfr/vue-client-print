@@ -75,6 +75,12 @@ print component:
     -Done binding object is not dragable untill its resized
     -Done Text pattern element
     -Done fix the pdf bug
+    -Done delete bug
+
+    -border printform
+    -margin printform
+    -fontsize drop down
+    -finished drag bug
     
     -revamp the calculate size system
     -toast for processing...

@@ -113,7 +113,7 @@
                           type="radio"
                           name="pageDirections"
                           id="pageDirections"
-                          value="ltr"
+                          value="rtl"
                           v-model="settings.pageDirections"
                         />
                         راست به چپ
@@ -125,7 +125,7 @@
                           type="radio"
                           name="pageDirections"
                           id="pageDirections"
-                          value="rtl"
+                          value="ltr"
                           v-model="settings.pageDirections"
                         />
                         چپ به راست
@@ -608,7 +608,7 @@
               >
                 <component
                   v-for="element in settings.headerElements"
-                  :key="element.id"
+                  :key="element.options.id"
                   :is="element.type"
                   :options="element.options"
                   @clickedOnElement="clickedOnElement(element)"
@@ -631,7 +631,7 @@
               >
                 <component
                   v-for="element in settings.footerElements"
-                  :key="element.id"
+                  :key="element.options.id"
                   :is="element.type"
                   :options="element.options"
                   @clickedOnElement="clickedOnElement(element)"
@@ -972,7 +972,7 @@ export default {
 
     clickedOnElement(element) {
       this.locals.selectedElement = element;
-      this.deletingElementOnPressingDeleteKey();
+      this.deletingElementOnPressingDeleteKey(element);
       this.locals.isClicked = true;
     },
 
@@ -988,6 +988,7 @@ export default {
             styles: {
               whiteSpace: "pre",
               width: "150px",
+              direction: "rtl",
             },
           },
         };
@@ -1035,6 +1036,7 @@ export default {
             styles: {
               whiteSpace: "pre",
               width: "150px",
+              direction: "rtl",
             },
           },
         };
@@ -1044,12 +1046,13 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              text: "الکو خود را وارد نمایید",
+              text: "الگو خود را وارد نمایید",
               value: null,
             },
             styles: {
               whiteSpace: "pre",
               width: "150px",
+              direction: "rtl",
             },
           },
         };
@@ -1113,7 +1116,7 @@ export default {
 
     /** Adds an event listenner on delete button and then removes the element */
 
-    deletingElementOnPressingDeleteKey() {
+    deletingElementOnPressingDeleteKey(element) {
       let headerElements = this.settings.headerElements;
       let footerElements = this.settings.footerElements;
       document.addEventListener("keydown", deleteElement, false);
@@ -1122,16 +1125,16 @@ export default {
       let that = this; // Storing the value of this to be able to use it inside of the function
 
       function deleteElement(e) {
-        let id = that.locals.selectedElement.options.id;
         if (e.code == "Delete") {
+          let id = element.options.id;
           for (let index = 0; index < headerElements.length; index++) {
             if (headerElements[index].options.id == id) {
-              headerElements.splice(index, index + 1);
+              headerElements.splice(index, 1);
             }
           }
           for (let index = 0; index < footerElements.length; index++) {
             if (footerElements[index].options.id == id) {
-              footerElements.splice(index, inedx + 1);
+              footerElements.splice(index, 1);
             }
           }
           that.locals.selectedElement = {

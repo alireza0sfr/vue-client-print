@@ -44,7 +44,7 @@
                 <header :style="{'height': settings.header.height + 'in'}" class="mainHeader">
                   <component
                     v-for="element in settings.header.headerElements"
-                    :key="element.id"
+                    :key="element.options.id"
                     :is="element.type"
                     :options="prepareComponentsOptions(element.options, element.type, index)"
                   />
@@ -61,7 +61,7 @@
                 >
                   <component
                     v-for="element in settings.footer.footerElements"
-                    :key="element.id"
+                    :key="element.options.id"
                     :is="element.type"
                     :options="prepareComponentsOptions(element.options, element.type, index)"
                   />
