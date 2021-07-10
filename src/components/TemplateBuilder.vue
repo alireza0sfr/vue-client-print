@@ -84,7 +84,7 @@
                     <input
                       class="input-form-control"
                       type="checkbox"
-                      v-model="settings.isHeaderRepeatable"
+                      v-model="settings.header.isHeaderRepeatable"
                       id="repeatableHeaderControl"
                     />
                   </div>
@@ -97,7 +97,7 @@
                     <input
                       class="input-form-control"
                       type="checkbox"
-                      v-model="settings.isFooterRepeatable"
+                      v-model="settings.footer.isFooterRepeatable"
                       id="repeatableFooterControl"
                     />
                   </div>
@@ -441,13 +441,32 @@
                     <span>اندازه فونت</span>
                   </div>
                   <div class="toolbar-content-field">
-                    <input
-                      type="text"
+                    <select
                       class="input-form-control"
                       v-model="locals.selectedElement.options.styles.fontSize"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
+                      id="pageSizeControl"
+                    >
+                      <option
+                        v-for="option in locals.fontSizes"
+                        :key="option"
+                        :value="option + 'px'"
+                      >{{option}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <label for="fontWeightControl">نوع نوشته</label>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <select
+                      v-model="locals.selectedElement.options.styles.fontWeight"
+                      class="input-form-control"
+                      id="elementTextAlignControl"
+                    >
+                      <option value="normal">عادی</option>
+                      <option value="bold">ضخیم</option>
+                    </select>
                   </div>
                 </div>
                 <div class="toolbar-content-row">
@@ -597,7 +616,7 @@
               @click="deSelectAll"
             >
               <div
-                :style="{'height': settings.pageHeaderSize + 'in',
+                :style="{'height': settings.header.height + 'in',
               'min-height': '0.15in'}"
                 id="headerTemplate"
                 class="section header"
@@ -607,7 +626,7 @@
                 @dragover.prevent
               >
                 <component
-                  v-for="element in settings.headerElements"
+                  v-for="element in settings.header.headerElements"
                   :key="element.options.id"
                   :is="element.type"
                   :options="element.options"
@@ -620,7 +639,7 @@
                 <p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
               </div>
               <div
-                :style="{'height': settings.pageFooterSize + 'in',
+                :style="{'height': settings.footer.height + 'in',
               'min-height': '0.15in'}"
                 id="footerTemplate"
                 class="section footer"
@@ -630,7 +649,7 @@
                 @dragover.prevent
               >
                 <component
-                  v-for="element in settings.footerElements"
+                  v-for="element in settings.footer.footerElements"
                   :key="element.options.id"
                   :is="element.type"
                   :options="element.options"
@@ -710,21 +729,28 @@ export default {
             styles: {},
           },
         },
+        fontSizes: [
+          8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74,
+        ],
       },
       settings: {
-        pageHeaderSize: 0.5,
-        pageFooterSize: 0.5,
+        header: {
+          isHeaderRepeatable: true,
+          height: 0.5,
+          headerElements: [],
+        },
+        footer: {
+          isFooterRepeatable: true,
+          height: 0.5,
+          footerElements: [],
+        },
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         fileName: "nikan",
-        isFooterRepeatable: true,
-        isHeaderRepeatable: true,
         orientation: "portrait",
         pageSize: "a4",
         pageDirections: "rtl",
-        headerElements: [],
-        footerElements: [],
         bindingObject: {},
       },
     };
@@ -748,8 +774,8 @@ export default {
 
     export2Json() {
       // Syncing headerElements with the user chagnes
-      let headerElements = this.settings.headerElements;
-      let footerElements = this.settings.footerElements;
+      let headerElements = this.settings.header.headerElements;
+      let footerElements = this.settings.footer.footerElements;
 
       for (let index = 0; index < headerElements.length; index++) {
         let computedStyles = this.getCoordinates(
@@ -770,8 +796,8 @@ export default {
 
       let totalHeightOfAPaper =
         this.settings.defaultHeightOfPaper -
-        this.settings.pageHeaderSize -
-        this.settings.pageFooterSize;
+        this.settings.header.height -
+        this.settings.footer.height;
 
       if (totalHeightOfAPaper < 0) {
         totalHeightOfAPaper = 1.77;
@@ -780,13 +806,13 @@ export default {
       let tmp = {
         header: {
           isHeaderRepeatable: this.settings.isHeaderRepeatable,
-          height: this.settings.pageHeaderSize,
-          headerElements: this.settings.headerElements,
+          height: this.settings.header.height,
+          headerElements: this.settings.header.headerElements,
         },
         footer: {
           isFooterRepeatable: this.settings.isFooterRepeatable,
-          height: this.settings.pageFooterSize,
-          footerElements: this.settings.footerElements,
+          height: this.settings.footer.height,
+          footerElements: this.settings.footer.footerElements,
         },
         orientation: this.settings.orientation,
         pageSize: this.settings.pageSize,
@@ -797,9 +823,13 @@ export default {
       // Closing the template builder modal after save
       document.getElementById("templateBuilderModal").style.display = "none";
 
-      if (this.settings.callback != undefined) {
-        this.settings.callback(tmp);
-      }
+      localStorage.setItem(
+        'tmp', JSON.stringify(tmp))
+
+
+      // if (this.settings.callback != undefined) {
+      //   this.settings.callback(tmp);
+      // }
     },
 
     /**
@@ -825,8 +855,8 @@ export default {
         ]["height"];
       this.settings.totalHeightOfAPaper =
         this.settings.defaultHeightOfPaper -
-        this.settings.pageFooterSize -
-        this.settings.pageHeaderSize -
+        this.settings.footer.height -
+        this.settings.header.height -
         errorValue;
 
       this.settings.defaultWidthOfPaper =
@@ -881,7 +911,7 @@ export default {
       }
 
       function doDrag(e) {
-        that.settings.pageHeaderSize = that.convert2Inches(
+        that.settings.header.height = that.convert2Inches(
           startHeight + e.clientY - startY
         );
       }
@@ -928,7 +958,7 @@ export default {
       }
 
       function doDrag(e) {
-        that.settings.pageFooterSize = that.convert2Inches(
+        that.settings.footer.height = that.convert2Inches(
           startHeight - e.clientY + startY
         );
       }
@@ -989,6 +1019,7 @@ export default {
               whiteSpace: "pre",
               width: "150px",
               direction: "rtl",
+              fontWeight: "",
             },
           },
         };
@@ -1058,9 +1089,9 @@ export default {
         };
       }
       if (parent.includes("header")) {
-        this.settings.headerElements.push(tmp);
+        this.settings.header.headerElements.push(tmp);
       } else if (parent.includes("footer")) {
-        this.settings.footerElements.push(tmp);
+        this.settings.footer.footerElements.push(tmp);
       }
       this.locals.classType = "";
       return;
@@ -1117,8 +1148,8 @@ export default {
     /** Adds an event listenner on delete button and then removes the element */
 
     deletingElementOnPressingDeleteKey(element) {
-      let headerElements = this.settings.headerElements;
-      let footerElements = this.settings.footerElements;
+      let headerElements = this.settings.header.headerElements;
+      let footerElements = this.settings.footer.footerElements;
       document.addEventListener("keydown", deleteElement, false);
       document.removeEventListener("keyup", deleteElement, false);
 
@@ -1181,7 +1212,7 @@ export default {
       document.getElementById("templateBuilderModal").style.display = "block";
     },
     finishedEditingElement(element) {
-      let tmp = this.settings.headerElements.find(
+      let tmp = this.settings.header.headerElements.find(
         (x) => x.options.id == element.options.id
       );
       if (tmp) {
@@ -1191,7 +1222,7 @@ export default {
         );
         return;
       }
-      tmp = this.settings.footerElements.find(
+      tmp = this.settings.footer.footerElements.find(
         (x) => x.options.id == element.options.id
       );
       Object.assign(

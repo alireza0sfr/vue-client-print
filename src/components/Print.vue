@@ -119,14 +119,14 @@ export default {
           height: 0.5,
           footerElements: [],
         },
-        bindingObject: {},
-        orientation: "portrait",
-        pageSize: "a4",
-        pageDirections: "rtl",
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
         fileName: "nikan",
+        orientation: "portrait",
+        pageSize: "a4",
+        pageDirections: "rtl",
+        bindingObject: {},
       },
     };
   },

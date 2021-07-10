@@ -77,9 +77,10 @@ print component:
     -Done fix the pdf bug
     -Done delete bug
 
+    -fontsize drop down
     -border printform
     -margin printform
-    -fontsize drop down
+    -pagecounter format
     -finished drag bug
     
     -revamp the calculate size system
