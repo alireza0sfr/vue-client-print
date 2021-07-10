@@ -5,7 +5,7 @@
     <!-- Data Slots -->
     <div class="slotWrapper">
       <div id="toBeConverted" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
-        <slot name="printData"></slot>
+        <slot class="printData" name="printData"></slot>
       </div>
     </div>
 
@@ -30,13 +30,12 @@
           </div>
         </div>
         <div id="printForm">
-          <div
-            :style="{'border': '1px solid black', 'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in'}"
-            class="mainLoop"
-            v-for="index in locals.totalPages"
-            :key="index"
-          >
-            <div class="pages">
+          <div class="mainLoop" v-for="index in locals.totalPages" :key="index">
+            <div
+              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
+              'border': settings.pageBorder}"
+              class="pages"
+            >
               <div
                 class="fixedHeaderCondition"
                 v-if="settings.header.isHeaderRepeatable || index == 1"
@@ -55,10 +54,7 @@
                 class="fixedFooterCondition"
                 v-if="settings.footer.isFooterRepeatable || index == 1"
               >
-                <footer
-                  :style="{'height': settings.footer.height + 'in'}"
-                  class="mainFooter"
-                >
+                <footer :style="{'height': settings.footer.height + 'in'}" class="mainFooter">
                   <component
                     v-for="element in settings.footer.footerElements"
                     :key="element.options.id"
@@ -127,6 +123,8 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
+        pageMargin: "",
+        pageBorder: "",
       },
     };
   },

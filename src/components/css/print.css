@@ -48,7 +48,21 @@
     position: relative;
     overflow: hidden;
 }
+
 .slotWrapper {
     position: fixed;
     left: 5000px;
+}
+
+.pages {
+    border: 1px solid black;
+    margin-left: 7px;
+    margin-top: 17px;
+}
+
+/* .converted {
+    margin: 50px;
+} */
+.converted canvas {
+    width: 100%;
 }

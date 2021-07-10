@@ -77,11 +77,13 @@ print component:
     -Done fix the pdf bug
     -Done delete bug
     -Done fontsize drop down
+    -Done adjusting print preveiw depending on page width and height 
+    -Done border printform
 
-    -border printform
     -margin printform
     -pagecounter format
     -finished drag bug
+    -printing on a3 portrait/landscape and a4 and a5 landscape have bugs
     
     -revamp the calculate size system
     -toast for processing...

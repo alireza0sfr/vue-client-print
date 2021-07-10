@@ -78,6 +78,20 @@
                 </div>
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
+                    <span>لبه ی صفحه</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      class="input-form-control"
+                      v-model="settings.pageBorder"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <label for="repeatableHeaderControl">تکرار هدر</label>
                   </div>
                   <div class="toolbar-content-field">
@@ -501,7 +515,7 @@
                   </div>
                 </div>
                 <div class="toolbar-content-row" v-if="locals.bordersAllDirections">
-                  <div style="margin-right: 10px;" class="toolbar-content-label">
+                  <div class="toolbar-content-label">
                     <span>استایل همه لبه ها</span>
                   </div>
                   <div class="toolbar-content-field">
@@ -611,7 +625,8 @@
           <!-- Section 2 (Template)-->
           <div style="overflow: auto;width: 100%;padding: 20px;">
             <div
-              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in'}"
+              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
+              'border': settings.pageBorder}"
               class="template"
               @click="deSelectAll"
             >
@@ -752,6 +767,8 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
+        pageMargin: "",
+        pageBorder: "",
       },
     };
   },
@@ -818,14 +835,16 @@ export default {
         pageSize: this.settings.pageSize,
         pageDirections: this.settings.pageDirections,
         totalHeightOfAPaper: totalHeightOfAPaper,
+        defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
+        defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
+        pageBorder: this.settings.pageBorder,
+        pageMargin: this.settings.pageMargin,
       };
 
       // Closing the template builder modal after save
       document.getElementById("templateBuilderModal").style.display = "none";
 
-      localStorage.setItem(
-        'tmp', JSON.stringify(tmp))
-
+      localStorage.setItem("tmp", JSON.stringify(tmp));
 
       if (this.settings.callback != undefined) {
         this.settings.callback(tmp);
