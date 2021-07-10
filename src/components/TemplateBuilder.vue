@@ -827,9 +827,9 @@ export default {
         'tmp', JSON.stringify(tmp))
 
 
-      // if (this.settings.callback != undefined) {
-      //   this.settings.callback(tmp);
-      // }
+      if (this.settings.callback != undefined) {
+        this.settings.callback(tmp);
+      }
     },
 
     /**

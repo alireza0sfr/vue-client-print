@@ -76,8 +76,8 @@ print component:
     -Done Text pattern element
     -Done fix the pdf bug
     -Done delete bug
+    -Done fontsize drop down
 
-    -fontsize drop down
     -border printform
     -margin printform
     -pagecounter format
