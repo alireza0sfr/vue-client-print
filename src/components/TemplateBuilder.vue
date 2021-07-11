@@ -5,7 +5,9 @@
       <div class="print-modal-content">
         <div class="print-modal-header">
           <div>
-            <span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
+            <span id="TemplateBuilderModalCloseBtn" class="close-btn"
+              >&times;</span
+            >
           </div>
           <div>
             <h3 class="title">طراح چاپ</h3>
@@ -20,8 +22,7 @@
         <!-- Section 1 (Template Builder) -->
         <div class="template-builder-container">
           <div
-            :style="{'height': settings.defaultHeightOfPaper + 'in',
-        }"
+            :style="{ height: settings.defaultHeightOfPaper + 'in' }"
             class="toolbar-container"
           >
             <div class="toolbar-content">
@@ -78,13 +79,27 @@
                 </div>
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
-                    <span>لبه ی صفحه</span>
+                    <span>خط لبه</span>
                   </div>
                   <div class="toolbar-content-field">
                     <input
                       type="text"
                       class="input-form-control"
                       v-model="settings.pageBorder"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
+                    <span>فاصله از کناره</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      class="input-form-control"
+                      v-model="settings.pagePadding"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
@@ -151,7 +166,11 @@
               <div class="toolbar-header">
                 <span>المنت ها</span>
               </div>
-              <div class="toolbar-content-wrapper" style="flex-direction: row;" id="elementsMenu">
+              <div
+                class="toolbar-content-wrapper"
+                style="flex-direction: row"
+                id="elementsMenu"
+              >
                 <div class="toolbar-content-row-elements">
                   <div class="toolbar-content-row-element">
                     <span
@@ -171,7 +190,10 @@
                       @dragstart="startDraggingElement('datetime')"
                       @dragend="finishedDraggingElement()"
                     >
-                      <img src="./elements/images/timetable.png" alt="تاریخ و ساعت" />
+                      <img
+                        src="./elements/images/timetable.png"
+                        alt="تاریخ و ساعت"
+                      />
                       <div class="element-title">تاریخ و ساعت</div>
                     </span>
                   </div>
@@ -207,7 +229,10 @@
                       @dragstart="startDraggingElement('bindingObject')"
                       @dragend="finishedDraggingElement()"
                     >
-                      <img src="./elements/images/binding.png" alt="اتصال داده" />
+                      <img
+                        src="./elements/images/binding.png"
+                        alt="اتصال داده"
+                      />
                       <div class="element-title">اتصال داده</div>
                     </span>
                   </div>
@@ -219,7 +244,10 @@
                       @dragstart="startDraggingElement('textpattern')"
                       @dragend="finishedDraggingElement()"
                     >
-                      <img src="./elements/images/textpattern.png" alt="متن الگویی" />
+                      <img
+                        src="./elements/images/textpattern.png"
+                        alt="متن الگویی"
+                      />
                       <div class="element-title">متن الگویی</div>
                     </span>
                   </div>
@@ -250,7 +278,10 @@
                     ></textarea>
                   </div>
                 </div>
-                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'datetime'"
+                >
                   <div class="toolbar-content-label">
                     <label for="hasDateControl">تاریخ</label>
                   </div>
@@ -263,7 +294,10 @@
                     />
                   </div>
                 </div>
-                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'datetime'"
+                >
                   <div class="toolbar-content-label">
                     <label for="hasTimeControl">ساعت</label>
                   </div>
@@ -276,7 +310,10 @@
                     />
                   </div>
                 </div>
-                <div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'datetime'"
+                >
                   <div class="toolbar-content-label">
                     <label for="persiaDateControl">تاریخ شمسی</label>
                   </div>
@@ -284,7 +321,9 @@
                     <input
                       class="input-form-control"
                       type="checkbox"
-                      v-model="locals.selectedElement.options.configs.persianDate"
+                      v-model="
+                        locals.selectedElement.options.configs.persianDate
+                      "
                       id="persiaDateControl"
                     />
                   </div>
@@ -300,7 +339,9 @@
                     <input
                       type="checkbox"
                       class="input-form-control"
-                      v-model="locals.selectedElement.options.configs.persianNumbers"
+                      v-model="
+                        locals.selectedElement.options.configs.persianNumbers
+                      "
                       id="persianNumbersControl"
                     />
                   </div>
@@ -309,10 +350,9 @@
                   class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'imageelement'"
                 >
-                  <label
-                    style="margin-right: 37px;"
-                    for="imageFileControl"
-                  >فایل تصویر خود را انتخاب کنید</label>
+                  <label style="margin-right: 37px" for="imageFileControl"
+                    >فایل تصویر خود را انتخاب کنید</label
+                  >
                 </div>
                 <div
                   class="toolbar-content-row"
@@ -376,7 +416,9 @@
                       <option
                         v-for="option in Object.keys(settings.bindingObject)"
                         :key="option"
-                      >{{option}}</option>
+                      >
+                        {{ option }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -411,7 +453,9 @@
                       <option
                         v-for="option in Object.keys(settings.bindingObject)"
                         :key="option"
-                      >{{option}}</option>
+                      >
+                        {{ option }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -464,7 +508,9 @@
                         v-for="option in locals.fontSizes"
                         :key="option"
                         :value="option + 'px'"
-                      >{{option}}</option>
+                      >
+                        {{ option }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -514,7 +560,10 @@
                     </label>
                   </div>
                 </div>
-                <div class="toolbar-content-row" v-if="locals.bordersAllDirections">
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.bordersAllDirections"
+                >
                   <div class="toolbar-content-label">
                     <span>استایل همه لبه ها</span>
                   </div>
@@ -528,7 +577,10 @@
                     />
                   </div>
                 </div>
-                <div v-if="locals.bordersAllDirections == false" style="width:100%">
+                <div
+                  v-if="locals.bordersAllDirections == false"
+                  style="width: 100%"
+                >
                   <div class="toolbar-content-row">
                     <div class="toolbar-content-label">
                       <span>لبه بالا</span>
@@ -537,7 +589,9 @@
                       <input
                         type="text"
                         class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.borderTop"
+                        v-model="
+                          locals.selectedElement.options.styles.borderTop
+                        "
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
                       />
@@ -551,7 +605,9 @@
                       <input
                         type="text"
                         class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.borderRight"
+                        v-model="
+                          locals.selectedElement.options.styles.borderRight
+                        "
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
                       />
@@ -565,7 +621,9 @@
                       <input
                         type="text"
                         class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.borderBottom"
+                        v-model="
+                          locals.selectedElement.options.styles.borderBottom
+                        "
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
                       />
@@ -579,7 +637,9 @@
                       <input
                         type="text"
                         class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.borderLeft"
+                        v-model="
+                          locals.selectedElement.options.styles.borderLeft
+                        "
                         aria-label="Small"
                         aria-describedby="inputGroup-sizing-sm"
                       />
@@ -598,7 +658,9 @@
                           name="elementDirections"
                           id="elementDirections"
                           value="rtl"
-                          v-model="locals.selectedElement.options.styles.direction"
+                          v-model="
+                            locals.selectedElement.options.styles.direction
+                          "
                         />
                         راست به چپ
                       </div>
@@ -610,7 +672,9 @@
                           name="elementDirections"
                           id="elementDirections2"
                           value="ltr"
-                          v-model="locals.selectedElement.options.styles.direction"
+                          v-model="
+                            locals.selectedElement.options.styles.direction
+                          "
                         />
                         چپ به راست
                       </div>
@@ -623,54 +687,70 @@
           </div>
 
           <!-- Section 2 (Template)-->
-          <div style="overflow: auto;width: 100%;padding: 20px;">
+          <div style="overflow: auto; width: 100%; padding: 20px">
             <div
-              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
-              'border': settings.pageBorder}"
-              class="template"
-              @click="deSelectAll"
+              :style="{
+                'box-shadow': '-1px 4px 10px 0px #818181',
+                height: settings.defaultHeightOfPaper + 'in',
+                width: settings.defaultWidthOfPaper + 'in',
+                padding: settings.pagePadding
+              }"
             >
               <div
-                :style="{'height': settings.header.height + 'in',
-              'min-height': '0.15in'}"
-                id="headerTemplate"
-                class="section header"
-                ref="headerTemplate"
-                @drop="droppedElementOnHeader()"
-                @dragenter.prevent
-                @dragover.prevent
+                :style="{
+                  width: '100%',
+                  height: '100%',
+                  border: settings.pageBorder,
+                }"
+                class="template"
+                @click="deSelectAll"
               >
-                <component
-                  v-for="element in settings.header.headerElements"
-                  :key="element.options.id"
-                  :is="element.type"
-                  :options="element.options"
-                  @clickedOnElement="clickedOnElement(element)"
-                  @finishedEditingElement="finishedEditingElement(element)"
-                />
-              </div>
-              <div id="bodyTemplate">
-                <div class="watermark">بدنه چاپ</div>
-                <p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
-              </div>
-              <div
-                :style="{'height': settings.footer.height + 'in',
-              'min-height': '0.15in'}"
-                id="footerTemplate"
-                class="section footer"
-                ref="footerTemplate"
-                @drop="droppedElementOnFooter()"
-                @dragenter.prevent
-                @dragover.prevent
-              >
-                <component
-                  v-for="element in settings.footer.footerElements"
-                  :key="element.options.id"
-                  :is="element.type"
-                  :options="element.options"
-                  @clickedOnElement="clickedOnElement(element)"
-                  @finishedEditingElement="finishedEditingElement(element)"
-                />
+                <div
+                  :style="{
+                    height: settings.header.height + 'in',
+                    'min-height': '0.15in',
+                  }"
+                  id="headerTemplate"
+                  class="section header"
+                  ref="headerTemplate"
+                  @drop="droppedElementOnHeader()"
+                  @dragenter.prevent
+                  @dragover.prevent
+                >
+                  <component
+                    v-for="element in settings.header.headerElements"
+                    :key="element.options.id"
+                    :is="element.type"
+                    :options="element.options"
+                    @clickedOnElement="clickedOnElement(element)"
+                    @finishedEditingElement="finishedEditingElement(element)"
+                  />
+                </div>
+                <div id="bodyTemplate">
+                  <div class="watermark">بدنه چاپ</div>
+                  <p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
+                </div>
+                <div
+                  :style="{
+                    height: settings.footer.height + 'in',
+                    'min-height': '0.15in',
+                  }"
+                  id="footerTemplate"
+                  class="section footer"
+                  ref="footerTemplate"
+                  @drop="droppedElementOnFooter()"
+                  @dragenter.prevent
+                  @dragover.prevent
+                >
+                  <component
+                    v-for="element in settings.footer.footerElements"
+                    :key="element.options.id"
+                    :is="element.type"
+                    :options="element.options"
+                    @clickedOnElement="clickedOnElement(element)"
+                    @finishedEditingElement="finishedEditingElement(element)"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -767,7 +847,7 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
-        pageMargin: "",
+        pagePadding: "5px",
         pageBorder: "",
       },
     };
@@ -838,7 +918,7 @@ export default {
         defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
         defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
         pageBorder: this.settings.pageBorder,
-        pageMargin: this.settings.pageMargin,
+        pagePadding: this.settings.pagePadding,
       };
 
       // Closing the template builder modal after save

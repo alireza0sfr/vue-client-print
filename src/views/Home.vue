@@ -17,11 +17,11 @@
         <table>
           <thead>
             <tr>
-              <th>ستون۱</th>
-              <th>ستون۲</th>
-              <th>ستون۳</th>
-              <th>ستون۴</th>
-              <th>ستون۵</th>
+              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
+              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
+              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
+              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
+              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
             </tr>
           </thead>
           <tbody>

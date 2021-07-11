@@ -1,18 +1,31 @@
 <template>
   <div id="printPage">
-    <TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
+    <TemplateBuilder
+      ref="TemplateBuilder"
+      :options="locals.templateBuilderData"
+    />
 
     <!-- Data Slots -->
     <div class="slotWrapper">
-      <div id="toBeConverted" :style="{'width': settings.defaultWidthOfPaper + 'in'}">
-        <slot class="printData" name="printData"></slot>
+      <div
+        :style="{
+          width: settings.defaultWidthOfPaper + 'in',
+          padding: settings.pagePadding,
+        }"
+      >
+        <div id="toBeConverted">
+          <slot class="printData" name="printData"></slot>
+        </div>
       </div>
     </div>
 
     <!-- Print Preview Modal-->
 
     <div id="printModal" class="print-modal">
-      <div class="print-modal-content" :style="{'width': settings.defaultWidthOfPaper + .5 + 'in'}">
+      <div
+        class="print-modal-content"
+        :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }"
+      >
         <div class="print-modal-header">
           <div>
             <span id="printModalCloseBtn" class="close-btn">&times;</span>
@@ -20,8 +33,13 @@
           <div>
             <h3 class="title">پیش نمایش چاپ</h3>
           </div>
-          <div style="display: flex;">
-            <a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
+          <div style="display: flex">
+            <a
+              @click="editWhileInPreview()"
+              title="ویرایش"
+              class="modal-icon"
+              href="#"
+            >
               <img src="./elements/images/edit.png" />
             </a>
             <a href="#" @click="printForm()" title="چاپ" class="modal-icon">
@@ -30,36 +48,68 @@
           </div>
         </div>
         <div id="printForm">
-          <div class="mainLoop" v-for="index in locals.totalPages" :key="index">
+          <div
+            class="mainLoop"
+            :style="{
+              height: settings.defaultheightofpaper + 'in',
+              width: settings.defaultWidthOfPaper + 'in',
+            }"
+            v-for="index in locals.totalPages"
+            :key="index"
+          >
             <div
-              :style="{'height': settings.defaultHeightOfPaper + 'in', 'width': settings.defaultWidthOfPaper + 'in',
-              'border': settings.pageBorder}"
+              :style="{
+                width: 'auto',
+                border: settings.pageBorder,
+                margin: settings.pagePadding,
+              }"
               class="pages"
             >
               <div
                 class="fixedHeaderCondition"
                 v-if="settings.header.isHeaderRepeatable || index == 1"
               >
-                <header :style="{'height': settings.header.height + 'in'}" class="mainHeader">
+                <header
+                  :style="{ height: settings.header.height + 'in' }"
+                  class="mainHeader"
+                >
                   <component
                     v-for="element in settings.header.headerElements"
                     :key="element.options.id"
                     :is="element.type"
-                    :options="prepareComponentsOptions(element.options, element.type, index)"
+                    :options="
+                      prepareComponentsOptions(
+                        element.options,
+                        element.type,
+                        index
+                      )
+                    "
                   />
                 </header>
               </div>
-              <div class="converted" :style="{'height': settings.totalHeightOfAPaper + 'in'}"></div>
+              <div
+                class="converted"
+                :style="{ height: settings.totalHeightOfAPaper + 'in' }"
+              ></div>
               <div
                 class="fixedFooterCondition"
                 v-if="settings.footer.isFooterRepeatable || index == 1"
               >
-                <footer :style="{'height': settings.footer.height + 'in'}" class="mainFooter">
+                <footer
+                  :style="{ height: settings.footer.height + 'in' }"
+                  class="mainFooter"
+                >
                   <component
                     v-for="element in settings.footer.footerElements"
                     :key="element.options.id"
                     :is="element.type"
-                    :options="prepareComponentsOptions(element.options, element.type, index)"
+                    :options="
+                      prepareComponentsOptions(
+                        element.options,
+                        element.type,
+                        index
+                      )
+                    "
                   />
                   <!-- <div>{{ index }}</div> -->
                 </footer>
@@ -123,7 +173,7 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
-        pageMargin: "",
+        pagePadding: "5px",
         pageBorder: "",
       },
     };
