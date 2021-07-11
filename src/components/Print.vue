@@ -174,7 +174,7 @@ export default {
         pageDirections: "rtl",
         bindingObject: {},
         pagePadding: "5px",
-        pageBorder: "",
+        pageBorder: "0px",
       },
     };
   },

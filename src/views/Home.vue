@@ -20,8 +20,7 @@
               <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
               <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
               <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
-              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
-              <th>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut, eius?</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -29,8 +28,7 @@
               <td>{{index}}</td>
               <td>{{index}}</td>
               <td>{{index}}</td>
-              <td>{{index}}</td>
-              <td>{{index}}</td>
+              
             </tr>
           </tbody>
         </table>
