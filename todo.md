@@ -80,8 +80,10 @@ print component:
     -Done adjusting print preveiw depending on page width and height 
     -Done border printform
     -Done margin printform
+    -Done repeatable header and footer bug
+    -Done footer is not rendering in pdf
 
-    -repeatable header and footer bug
+
     -pagecounter format
     -finished drag bug
     -printing on a3 portrait/landscape and a4 and a5 landscape have bugs

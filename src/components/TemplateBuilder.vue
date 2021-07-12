@@ -893,30 +893,37 @@ export default {
         Object.assign(elementStyles, computedStyles);
       }
 
-      let totalHeightOfAPaper =
+      this.settings.totalHeightOfAPaper =
         this.settings.defaultHeightOfPaper -
         this.settings.header.height -
         this.settings.footer.height;
 
-      if (totalHeightOfAPaper < 0) {
-        totalHeightOfAPaper = 1.77;
+      if (this.settings.totalHeightOfAPaper < 0) {
+        this.settings.totalHeightOfAPaper = 1.77;
       }
+
+
+
+      console.log(this.settings.header.height);
+      console.log(this.settings.header.height);
+      console.log(this.settings.totalHeightOfAPaper);
+
 
       let tmp = {
         header: {
-          isHeaderRepeatable: this.settings.isHeaderRepeatable,
+          isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
           height: this.settings.header.height,
           headerElements: this.settings.header.headerElements,
         },
         footer: {
-          isFooterRepeatable: this.settings.isFooterRepeatable,
+          isFooterRepeatable: this.settings.footer.isFooterRepeatable,
           height: this.settings.footer.height,
           footerElements: this.settings.footer.footerElements,
         },
         orientation: this.settings.orientation,
         pageSize: this.settings.pageSize,
         pageDirections: this.settings.pageDirections,
-        totalHeightOfAPaper: totalHeightOfAPaper,
+        totalHeightOfAPaper: this.settings.totalHeightOfAPaper,
         defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
         defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
         pageBorder: this.settings.pageBorder,
