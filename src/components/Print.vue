@@ -10,7 +10,7 @@
       <div
         :style="{
           width: settings.defaultWidthOfPaper + 'in',
-          padding: settings.pagePadding,
+          padding: settings.pagePadding + 'px',
         }"
       >
         <div id="toBeConverted">
@@ -61,7 +61,7 @@
               :style="{
                 width: 'auto',
                 border: settings.pageBorder,
-                margin: settings.pagePadding,
+                margin: settings.pagePadding + 'px',
               }"
               class="pages"
             >
@@ -173,7 +173,7 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
-        pagePadding: "5px",
+        pagePadding: 5,
         pageBorder: "0px",
       },
     };

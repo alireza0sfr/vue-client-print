@@ -97,11 +97,13 @@
                   </div>
                   <div class="toolbar-content-field">
                     <input
-                      type="text"
+                      type="number"
                       class="input-form-control"
                       v-model="settings.pagePadding"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
+                      min="0"
+                      max="100"
                     />
                   </div>
                 </div>
@@ -693,7 +695,7 @@
                 'box-shadow': '-1px 4px 10px 0px #818181',
                 height: settings.defaultHeightOfPaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
-                padding: settings.pagePadding
+                padding: settings.pagePadding + 'px',
               }"
             >
               <div
@@ -847,7 +849,7 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
-        pagePadding: "5px",
+        pagePadding: 5,
         pageBorder: "",
       },
     };
