@@ -10,7 +10,7 @@
       <div
         :style="{
           width: settings.defaultWidthOfPaper + 'in',
-          padding: settings.pagePadding + 'px',
+          padding: '5px',
         }"
       >
         <div id="toBeConverted">
@@ -61,7 +61,7 @@
               :style="{
                 width: 'auto',
                 border: settings.pageBorder,
-                margin: settings.pagePadding + 'px',
+                margin: '5px',
               }"
               class="pages"
             >
@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import printJs from "print-js";
 import TemplateBuilder from "./TemplateBuilder.vue";
 import TextPattern from "./elements/TextPattern.vue";
 import TextElement from "./elements/TextElement.vue";
@@ -173,7 +174,6 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
-        pagePadding: 5,
         pageBorder: "0px",
       },
     };
@@ -192,35 +192,12 @@ export default {
   },
   methods: {
     printForm() {
-      let pages = document.getElementsByClassName("pages");
-      let opt = {
-        filename: this.settings.fileName + ".pdf",
-        image: { type: "jpeg", quality: 1 },
-        html2canvas: { dpi: 300, width: 1430 },
-        jsPDF: {
-          unit: "px",
-          format: this.settings.pageSize,
-          orientation: this.settings.orientation,
-        },
-      };
-
-      var worker = html2pdf().set(opt).from(pages[0]).toPdf();
-      let n = 0;
-      pages.forEach(function (page) {
-        worker = worker
-          .get("pdf")
-          .then(function (pdf) {
-            if (n != 0) {
-              pdf.addPage();
-            }
-            n += 1;
-          })
-          .from(page)
-          .toContainer()
-          .toCanvas()
-          .toPdf();
+      printJS({
+        printable: "printForm",
+        type: "html",
+        scanStyles: false,
+        style:['.element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}'],
       });
-      worker = worker.save();
     },
 
     /**

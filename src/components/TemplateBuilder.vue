@@ -93,22 +93,6 @@
                 </div>
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
-                    <span>فاصله از کناره</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="number"
-                      class="input-form-control"
-                      v-model="settings.pagePadding"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                      min="0"
-                      max="100"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
                     <label for="repeatableHeaderControl">تکرار هدر</label>
                   </div>
                   <div class="toolbar-content-field">
@@ -695,7 +679,7 @@
                 'box-shadow': '-1px 4px 10px 0px #818181',
                 height: settings.defaultHeightOfPaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
-                padding: settings.pagePadding + 'px',
+                padding: '5px',
               }"
             >
               <div
@@ -849,7 +833,6 @@ export default {
         pageSize: "a4",
         pageDirections: "rtl",
         bindingObject: {},
-        pagePadding: 5,
         pageBorder: "",
       },
     };
@@ -902,13 +885,6 @@ export default {
         this.settings.totalHeightOfAPaper = 1.77;
       }
 
-
-
-      console.log(this.settings.header.height);
-      console.log(this.settings.header.height);
-      console.log(this.settings.totalHeightOfAPaper);
-
-
       let tmp = {
         header: {
           isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
@@ -927,7 +903,6 @@ export default {
         defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
         defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
         pageBorder: this.settings.pageBorder,
-        pagePadding: this.settings.pagePadding,
       };
 
       // Closing the template builder modal after save
