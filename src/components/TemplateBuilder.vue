@@ -334,6 +334,24 @@
                 </div>
                 <div
                   class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'pagecounter'"
+                >
+                  <div class="toolbar-content-label">
+                    <label for="completeFormControl">صفحه از کل</label>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="checkbox"
+                      class="input-form-control"
+                      v-model="
+                        locals.selectedElement.options.configs.completeForm
+                      "
+                      id="completeFormControl"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="toolbar-content-row"
                   v-if="locals.selectedElement.type == 'imageelement'"
                 >
                   <label style="margin-right: 37px" for="imageFileControl"
@@ -674,7 +692,8 @@
 
           <!-- Section 2 (Template)-->
           <div style="overflow: auto; width: 100%; padding: 20px">
-            <div class="template-container"
+            <div
+              class="template-container"
               :style="{
                 height: settings.defaultHeightOfPaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
@@ -745,12 +764,12 @@
 </template>
 
 <script>
-import TextElement from "./elements/TextElement.vue";
-import DateTime from "./elements/DateTime.vue";
-import BindingObject from "./elements/BindingObject.vue";
-import PageCounter from "./elements/PageCounter.vue";
-import ImageElement from "./elements/ImageElement.vue";
-import TextPattern from "./elements/TextPattern.vue";
+import TextElement from "./elements/TextElement.vue"
+import DateTime from "./elements/DateTime.vue"
+import BindingObject from "./elements/BindingObject.vue"
+import PageCounter from "./elements/PageCounter.vue"
+import ImageElement from "./elements/ImageElement.vue"
+import TextPattern from "./elements/TextPattern.vue"
 export default {
   name: "TemplateBuilder",
   props: {
@@ -833,19 +852,19 @@ export default {
         bindingObject: {},
         pageBorder: "",
       },
-    };
+    }
   },
   watch: {
     options: {
       deep: true,
       immediate: true,
       handler(val) {
-        Object.assign(this.settings, val);
+        Object.assign(this.settings, val)
       },
     },
   },
   mounted() {
-    this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn");
+    this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn")
   },
   methods: {
     /**
@@ -854,33 +873,33 @@ export default {
 
     export2Json() {
       // Syncing headerElements with the user chagnes
-      let headerElements = this.settings.header.headerElements;
-      let footerElements = this.settings.footer.footerElements;
+      let headerElements = this.settings.header.headerElements
+      let footerElements = this.settings.footer.footerElements
 
       for (let index = 0; index < headerElements.length; index++) {
         let computedStyles = this.getCoordinates(
           headerElements[index].options.id
-        );
-        let elementStyles = headerElements[index].options.styles;
-        Object.assign(elementStyles, computedStyles);
+        )
+        let elementStyles = headerElements[index].options.styles
+        Object.assign(elementStyles, computedStyles)
       }
 
       for (let index = 0; index < footerElements.length; index++) {
         let computedStyles = this.getCoordinates(
           footerElements[index].options.id
-        );
+        )
         // computedStyles.top = -parseInt(computedStyles.top) + "px";
-        let elementStyles = footerElements[index].options.styles;
-        Object.assign(elementStyles, computedStyles);
+        let elementStyles = footerElements[index].options.styles
+        Object.assign(elementStyles, computedStyles)
       }
 
       this.settings.totalHeightOfAPaper =
         this.settings.defaultHeightOfPaper -
         this.settings.header.height -
-        this.settings.footer.height;
+        this.settings.footer.height
 
       if (this.settings.totalHeightOfAPaper < 0) {
-        this.settings.totalHeightOfAPaper = 1.77;
+        this.settings.totalHeightOfAPaper = 1.77
       }
 
       let tmp = {
@@ -901,15 +920,15 @@ export default {
         defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
         defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
         pageBorder: this.settings.pageBorder,
-      };
+      }
 
       // Closing the template builder modal after save
-      document.getElementById("templateBuilderModal").style.display = "none";
+      document.getElementById("templateBuilderModal").style.display = "none"
 
-      localStorage.setItem("tmp", JSON.stringify(tmp));
+      localStorage.setItem("tmp", JSON.stringify(tmp))
 
       if (this.settings.callback != undefined) {
-        this.settings.callback(tmp);
+        this.settings.callback(tmp)
       }
     },
 
@@ -918,7 +937,7 @@ export default {
      */
 
     convert2Pixels(inches) {
-      return (inches * 96).toFixed(2);
+      return (inches * 96).toFixed(2)
     },
 
     /**
@@ -927,23 +946,23 @@ export default {
 
     calculateSizes() {
       // Subtracting this value to make the pages more accurate
-      const errorValue = 0.2;
+      const errorValue = 0.2
 
       // Gettings the default sizes from the base dic
       this.settings.defaultHeightOfPaper =
         this.locals.pageSizeDictionary[this.settings.orientation][
-          this.settings.pageSize
-        ]["height"];
+        this.settings.pageSize
+        ]["height"]
       this.settings.totalHeightOfAPaper =
         this.settings.defaultHeightOfPaper -
         this.settings.footer.height -
         this.settings.header.height -
-        errorValue;
+        errorValue
 
       this.settings.defaultWidthOfPaper =
         this.locals.pageSizeDictionary[this.settings.orientation][
-          this.settings.pageSize
-        ]["width"];
+        this.settings.pageSize
+        ]["width"]
     },
 
     /**
@@ -952,9 +971,9 @@ export default {
 
     settingsInitFunc() {
       setTimeout(() => {
-        this.headerBorderDragFunc();
-        this.footerBorderDragFunc();
-      }, 100);
+        this.headerBorderDragFunc()
+        this.footerBorderDragFunc()
+      }, 100)
     },
 
     /**
@@ -962,39 +981,39 @@ export default {
      */
 
     convert2Inches(pixels) {
-      return (pixels / 96).toFixed(2);
+      return (pixels / 96).toFixed(2)
     },
     /**
      * Adjust the section's height by dragging
      */
 
     headerBorderDragFunc() {
-      var headerSection = document.getElementsByClassName("section header")[0]; // element to make resizable
+      var headerSection = document.getElementsByClassName("section header")[0] // element to make resizable
 
-      var resizer = document.createElement("div");
-      resizer.className = "resizer";
-      resizer.style.height = "10px";
-      headerSection.appendChild(resizer);
-      resizer.addEventListener("mousedown", initDrag, false);
+      var resizer = document.createElement("div")
+      resizer.className = "resizer"
+      resizer.style.height = "10px"
+      headerSection.appendChild(resizer)
+      resizer.addEventListener("mousedown", initDrag, false)
 
-      var startY, startHeight;
+      var startY, startHeight
 
-      let that = this; // Storing this value to that to be able to use it inside a function
+      let that = this // Storing this value to that to be able to use it inside a function
 
       function initDrag(e) {
-        startY = e.clientY;
+        startY = e.clientY
         startHeight = parseInt(
           document.defaultView.getComputedStyle(headerSection).height,
           10
-        );
-        document.documentElement.addEventListener("mousemove", doDrag, false);
-        document.documentElement.addEventListener("mouseup", stopDrag, false);
+        )
+        document.documentElement.addEventListener("mousemove", doDrag, false)
+        document.documentElement.addEventListener("mouseup", stopDrag, false)
       }
 
       function doDrag(e) {
         that.settings.header.height = that.convert2Inches(
           startHeight + e.clientY - startY
-        );
+        )
       }
 
       function stopDrag(e) {
@@ -1002,12 +1021,12 @@ export default {
           "mousemove",
           doDrag,
           false
-        );
+        )
         document.documentElement.removeEventListener(
           "mouseup",
           stopDrag,
           false
-        );
+        )
       }
     },
 
@@ -1016,32 +1035,32 @@ export default {
      */
 
     footerBorderDragFunc() {
-      var footerSection = document.getElementsByClassName("section footer")[0]; // element to make resizable
+      var footerSection = document.getElementsByClassName("section footer")[0] // element to make resizable
 
-      var resizer = document.createElement("div");
-      resizer.className = "resizer";
-      resizer.style.height = "10px";
-      footerSection.appendChild(resizer);
-      resizer.addEventListener("mousedown", initDrag, false);
+      var resizer = document.createElement("div")
+      resizer.className = "resizer"
+      resizer.style.height = "10px"
+      footerSection.appendChild(resizer)
+      resizer.addEventListener("mousedown", initDrag, false)
 
-      var startY, startHeight;
+      var startY, startHeight
 
-      let that = this; // Storing this value to that to be able to use it inside a function
+      let that = this // Storing this value to that to be able to use it inside a function
 
       function initDrag(e) {
-        startY = e.clientY;
+        startY = e.clientY
         startHeight = parseInt(
           document.defaultView.getComputedStyle(footerSection).height,
           10
-        );
-        document.documentElement.addEventListener("mousemove", doDrag, false);
-        document.documentElement.addEventListener("mouseup", stopDrag, false);
+        )
+        document.documentElement.addEventListener("mousemove", doDrag, false)
+        document.documentElement.addEventListener("mouseup", stopDrag, false)
       }
 
       function doDrag(e) {
         that.settings.footer.height = that.convert2Inches(
           startHeight - e.clientY + startY
-        );
+        )
       }
 
       function stopDrag(e) {
@@ -1049,12 +1068,12 @@ export default {
           "mousemove",
           doDrag,
           false
-        );
+        )
         document.documentElement.removeEventListener(
           "mouseup",
           stopDrag,
           false
-        );
+        )
       }
     },
     /**
@@ -1063,8 +1082,8 @@ export default {
 
     deSelectAll() {
       if (this.locals.isClicked) {
-        this.locals.isClicked = false;
-        return;
+        this.locals.isClicked = false
+        return
       }
 
       this.locals.selectedElement = {
@@ -1073,23 +1092,23 @@ export default {
           configs: {},
           styles: {},
         },
-      };
+      }
       let selectedElements =
-        document.getElementsByClassName("element selected");
+        document.getElementsByClassName("element selected")
       for (let index = 0; index < selectedElements.length; index++) {
-        selectedElements[index].classList.remove("selected");
+        selectedElements[index].classList.remove("selected")
       }
     },
 
     clickedOnElement(element) {
-      this.locals.selectedElement = element;
-      this.deletingElementOnPressingDeleteKey(element);
-      this.locals.isClicked = true;
+      this.locals.selectedElement = element
+      this.deletingElementOnPressingDeleteKey(element)
+      this.locals.isClicked = true
     },
 
     createElement(parent) {
-      let classType = this.locals.classType;
-      let tmp;
+      let classType = this.locals.classType
+      let tmp
       if (classType == "textelement") {
         tmp = {
           type: classType,
@@ -1103,7 +1122,7 @@ export default {
               fontWeight: "",
             },
           },
-        };
+        }
       } else if (classType == "datetime") {
         tmp = {
           type: classType,
@@ -1112,16 +1131,16 @@ export default {
             configs: { hasDate: true, hasTime: true, persianDate: true },
             styles: { width: "150px" },
           },
-        };
+        }
       } else if (classType == "pagecounter") {
         tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
-            configs: { counter: 1, persianNumbers: true },
+            configs: { counter: 1, persianNumbers: true, completeForm: true },
             styles: {},
           },
-        };
+        }
       } else if (classType == "imageelement") {
         tmp = {
           type: classType,
@@ -1135,7 +1154,7 @@ export default {
               height: "100px",
             },
           },
-        };
+        }
       } else if (classType == "bindingObject") {
         tmp = {
           type: classType,
@@ -1151,7 +1170,7 @@ export default {
               direction: "rtl",
             },
           },
-        };
+        }
       } else if (classType == "textpattern") {
         tmp = {
           type: classType,
@@ -1167,42 +1186,42 @@ export default {
               direction: "rtl",
             },
           },
-        };
+        }
       }
       if (parent.includes("header")) {
-        this.settings.header.headerElements.push(tmp);
+        this.settings.header.headerElements.push(tmp)
       } else if (parent.includes("footer")) {
-        this.settings.footer.footerElements.push(tmp);
+        this.settings.footer.footerElements.push(tmp)
       }
-      this.locals.classType = "";
-      return;
+      this.locals.classType = ""
+      return
     },
     startDraggingElement(classType) {
-      this.locals.classType = classType;
-      let headerSection = this.$refs.headerTemplate;
-      headerSection.className = headerSection.className + " dragged";
-      let footerSection = this.$refs.footerTemplate;
-      footerSection.className = footerSection.className + " dragged";
+      this.locals.classType = classType
+      let headerSection = this.$refs.headerTemplate
+      headerSection.className = headerSection.className + " dragged"
+      let footerSection = this.$refs.footerTemplate
+      footerSection.className = footerSection.className + " dragged"
     },
     droppedElementOnHeader() {
-      let parent = "header";
-      this.createElement(parent);
+      let parent = "header"
+      this.createElement(parent)
     },
     droppedElementOnFooter() {
-      let parent = "footer";
-      this.createElement(parent);
+      let parent = "footer"
+      this.createElement(parent)
     },
     finishedDraggingElement() {
-      let headerSection = this.$refs.headerTemplate;
-      headerSection.classList.remove("dragged");
-      let footerSection = this.$refs.footerTemplate;
-      footerSection.classList.remove("dragged");
+      let headerSection = this.$refs.headerTemplate
+      headerSection.classList.remove("dragged")
+      let footerSection = this.$refs.footerTemplate
+      footerSection.classList.remove("dragged")
     },
     onFileChange() {
-      let image = document.getElementById("imageFileControl").files[0];
+      let image = document.getElementById("imageFileControl").files[0]
       this.toBase64(image).then((res) => {
-        this.locals.selectedElement.options.configs.imageSrc = res;
-      });
+        this.locals.selectedElement.options.configs.imageSrc = res
+      })
     },
 
     /**
@@ -1211,11 +1230,11 @@ export default {
 
     toBase64(file) {
       return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      });
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = (error) => reject(error)
+      })
     },
 
     /**
@@ -1223,30 +1242,30 @@ export default {
      */
 
     idGenerator(n) {
-      return Math.random().toString(36).substr(2, n);
+      return Math.random().toString(36).substr(2, n)
     },
 
     /** Adds an event listenner on delete button and then removes the element */
 
     deletingElementOnPressingDeleteKey(element) {
-      let headerElements = this.settings.header.headerElements;
-      let footerElements = this.settings.footer.footerElements;
-      document.addEventListener("keydown", deleteElement, false);
-      document.removeEventListener("keyup", deleteElement, false);
+      let headerElements = this.settings.header.headerElements
+      let footerElements = this.settings.footer.footerElements
+      document.addEventListener("keydown", deleteElement, false)
+      document.removeEventListener("keyup", deleteElement, false)
 
-      let that = this; // Storing the value of this to be able to use it inside of the function
+      let that = this // Storing the value of this to be able to use it inside of the function
 
       function deleteElement(e) {
         if (e.code == "Delete") {
-          let id = element.options.id;
+          let id = element.options.id
           for (let index = 0; index < headerElements.length; index++) {
             if (headerElements[index].options.id == id) {
-              headerElements.splice(index, 1);
+              headerElements.splice(index, 1)
             }
           }
           for (let index = 0; index < footerElements.length; index++) {
             if (footerElements[index].options.id == id) {
-              footerElements.splice(index, 1);
+              footerElements.splice(index, 1)
             }
           }
           that.locals.selectedElement = {
@@ -1255,23 +1274,23 @@ export default {
               configs: {},
               styles: {},
             },
-          };
+          }
         }
       }
     },
     getCoordinates(id) {
-      let tmp = document.getElementById(id);
-      let compStyle = getComputedStyle(tmp);
-      let top = compStyle.getPropertyValue("top");
-      let left = compStyle.getPropertyValue("left");
-      let height = compStyle.getPropertyValue("height");
-      let width = compStyle.getPropertyValue("width");
+      let tmp = document.getElementById(id)
+      let compStyle = getComputedStyle(tmp)
+      let top = compStyle.getPropertyValue("top")
+      let left = compStyle.getPropertyValue("left")
+      let height = compStyle.getPropertyValue("height")
+      let width = compStyle.getPropertyValue("width")
       return {
         top: top,
         left: left,
         height: height,
         width: width,
-      };
+      }
     },
 
     /**
@@ -1279,38 +1298,38 @@ export default {
      */
 
     modalFunc(modalId, closeBtnId) {
-      var modal = document.getElementById(modalId);
+      var modal = document.getElementById(modalId)
 
       // Get the <span> element that closes the modal
-      var span = document.getElementById(closeBtnId);
+      var span = document.getElementById(closeBtnId)
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
-        modal.style.display = "none";
-      };
+        modal.style.display = "none"
+      }
     },
     showModal() {
-      document.getElementById("templateBuilderModal").style.display = "block";
+      document.getElementById("templateBuilderModal").style.display = "block"
     },
     finishedEditingElement(element) {
       let tmp = this.settings.header.headerElements.find(
         (x) => x.options.id == element.options.id
-      );
+      )
       if (tmp) {
         Object.assign(
           tmp.options.styles,
           this.getCoordinates(element.options.id)
-        );
-        return;
+        )
+        return
       }
       tmp = this.settings.footer.footerElements.find(
         (x) => x.options.id == element.options.id
-      );
+      )
       Object.assign(
         tmp.options.styles,
         this.getCoordinates(element.options.id)
-      );
-      return;
+      )
+      return
     },
   },
 };

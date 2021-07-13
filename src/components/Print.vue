@@ -123,16 +123,16 @@
 </template>
 
 <script>
-import printJs from "print-js";
-import TemplateBuilder from "./TemplateBuilder.vue";
-import TextPattern from "./elements/TextPattern.vue";
-import TextElement from "./elements/TextElement.vue";
-import DateTime from "./elements/DateTime.vue";
-import BindingObject from "./elements/BindingObject.vue";
-import PageCounter from "./elements/PageCounter.vue";
-import ImageElement from "./elements/ImageElement.vue";
-import domtoimage from "dom-to-image";
-import html2pdf from "html2pdf.js";
+import printJs from "print-js"
+import TemplateBuilder from "./TemplateBuilder.vue"
+import TextPattern from "./elements/TextPattern.vue"
+import TextElement from "./elements/TextElement.vue"
+import DateTime from "./elements/DateTime.vue"
+import BindingObject from "./elements/BindingObject.vue"
+import PageCounter from "./elements/PageCounter.vue"
+import ImageElement from "./elements/ImageElement.vue"
+import domtoimage from "dom-to-image"
+import html2pdf from "html2pdf.js"
 export default {
   name: "Print",
   props: {
@@ -176,28 +176,30 @@ export default {
         bindingObject: {},
         pageBorder: "0px",
       },
-    };
+    }
   },
   watch: {
     options: {
       deep: true,
       immediate: true,
       handler(val) {
-        Object.assign(this.settings, val);
+        Object.assign(this.settings, val)
       },
     },
   },
   mounted() {
-    this.modalFunc("printModal", "printModalCloseBtn");
+    this.modalFunc("printModal", "printModalCloseBtn")
   },
   methods: {
     printForm() {
       printJS({
         printable: "printForm",
         type: "html",
-        scanStyles: false, // If this is fakse the inline styles wont be removed 
-        style:['.element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}'],
-      }); // some custom styles needed for print
+        scanStyles: false, // If this is fakse the inline styles wont be removed
+        style: [
+          ".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}",
+        ],
+      }) // some custom styles needed for print
     },
 
     /**
@@ -206,7 +208,7 @@ export default {
 
     removeAllChildNodes(parent) {
       while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
+        parent.removeChild(parent.firstChild)
       }
     },
 
@@ -215,7 +217,7 @@ export default {
      */
 
     convert2Inches(pixels) {
-      return (pixels / 96).toFixed(2);
+      return (pixels / 96).toFixed(2)
     },
 
     /**
@@ -223,7 +225,7 @@ export default {
      */
 
     convert2Pixels(inches) {
-      return (inches * 96).toFixed(2);
+      return (inches * 96).toFixed(2)
     },
 
     /**
@@ -231,26 +233,29 @@ export default {
      */
 
     canvasMaker(imgBase64, sy) {
-      let img = new Image();
-      let canvas = document.createElement("canvas");
-      canvas.height = this.convert2Pixels(this.settings.totalHeightOfAPaper);
-      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper);
-      let context = canvas.getContext("2d");
-      img.src = imgBase64;
+      let img = new Image()
+      let canvas = document.createElement("canvas")
+      canvas.height =
+        this.convert2Pixels(this.settings.totalHeightOfAPaper) * 2
+      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2
+      console.log(canvas.height)
+      console.log(canvas.width)
+      let context = canvas.getContext("2d")
+      img.src = imgBase64
       img.onload = () => {
         context.drawImage(
           img,
           0,
           sy,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper),
-          this.convert2Pixels(this.settings.totalHeightOfAPaper),
+          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
+          this.convert2Pixels(this.settings.totalHeightOfAPaper) * 2,
           0,
           0,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper),
-          this.convert2Pixels(this.settings.totalHeightOfAPaper)
-        );
-      };
-      return canvas;
+          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
+          this.convert2Pixels(this.settings.totalHeightOfAPaper) * 2
+        )
+      }
+      return canvas
     },
 
     /**
@@ -258,37 +263,58 @@ export default {
      */
 
     convert2Image() {
-      domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
-        let compStyles = window.getComputedStyle(
-          document.getElementById("toBeConverted")
-        );
-        let imgHeight = compStyles.getPropertyValue("height");
+      var scale = 2
+      let domNode = document.getElementById("toBeConverted")
+      domtoimage
+        .toBlob(domNode, {
+          width: domNode.clientWidth * scale,
+          height: domNode.clientHeight * scale,
+          style: {
+            transform: "scale(" + scale + ")",
+            transformOrigin: "top left",
+          },
+        })
+        .then((res) => {
+          var reader = new FileReader()
+          reader.readAsDataURL(res)
+          reader.onloadend = () => {
+            var result = reader.result
+            console.log(result)
 
-        this.locals.totalPagesHeight = this.convert2Inches(parseInt(imgHeight));
+            let compStyles = window.getComputedStyle(
+              document.getElementById("toBeConverted")
+            )
+            let imgHeight = compStyles.getPropertyValue("height")
 
-        this.locals.totalPages = Math.ceil(
-          this.locals.totalPagesHeight / this.settings.totalHeightOfAPaper
-        );
+            this.locals.totalPagesHeight = this.convert2Inches(
+              parseInt(imgHeight)
+            )
 
-        // Element that children will be appended to
-        let convertedElement = document.getElementsByClassName("converted");
+            this.locals.totalPages = Math.ceil(
+              this.locals.totalPagesHeight / this.settings.totalHeightOfAPaper
+            )
 
-        // Waits till the base template is generated and then appends the children
-        this.$nextTick(() => {
-          for (let index = 0; index < convertedElement.length; index++) {
-            // Removing the existing canvas
-            this.removeAllChildNodes(convertedElement[index]);
+            // Element that children will be appended to
+            let convertedElement = document.getElementsByClassName("converted")
+
+            // Waits till the base template is generated and then appends the children
+            this.$nextTick(() => {
+              for (let index = 0; index < convertedElement.length; index++) {
+                // Removing the existing canvas
+                this.removeAllChildNodes(convertedElement[index])
+              }
+
+              // Appening the results to parents
+              for (let index = 0; index < convertedElement.length; index++) {
+                let computedSy =
+                  index *
+                  this.convert2Pixels(this.settings.totalHeightOfAPaper)
+                let result1 = this.canvasMaker(result, computedSy)
+                convertedElement[index].appendChild(result1)
+              }
+            })
           }
-
-          // Appening the results to parents
-          for (let index = 0; index < convertedElement.length; index++) {
-            let computedSy =
-              index * this.convert2Pixels(this.settings.totalHeightOfAPaper);
-            let result = this.canvasMaker(res, computedSy);
-            convertedElement[index].appendChild(result);
-          }
-        });
-      });
+        })
     },
 
     /**
@@ -296,22 +322,22 @@ export default {
      */
 
     modalFunc(modalId, closeBtnId) {
-      var modal = document.getElementById(modalId);
+      var modal = document.getElementById(modalId)
 
       // Get the <span> element that closes the modal
-      var span = document.getElementById(closeBtnId);
+      var span = document.getElementById(closeBtnId)
 
       // When the user clicks on <span> (x), close the modal
       span.onclick = function () {
-        modal.style.display = "none";
-      };
+        modal.style.display = "none"
+      }
 
       // When the user clicks anywhere outside of the modal, close it
       window.onclick = function (event) {
         if (event.target == modal) {
-          modal.style.display = "none";
+          modal.style.display = "none"
         }
-      };
+      }
     },
 
     /**
@@ -319,15 +345,15 @@ export default {
      */
 
     templateBuilder(json, callback) {
-      json.callback = callback;
-      this.locals.templateBuilderData = json;
-      let tmp = JSON.parse(JSON.stringify(this.bindingObject));
+      json.callback = callback
+      this.locals.templateBuilderData = json
+      let tmp = JSON.parse(JSON.stringify(this.bindingObject))
       for (let item in tmp) {
-        tmp[item] = null;
+        tmp[item] = null
       }
-      this.locals.templateBuilderData.bindingObject = tmp;
-      this.$refs.TemplateBuilder.settingsInitFunc();
-      this.$refs.TemplateBuilder.showModal();
+      this.locals.templateBuilderData.bindingObject = tmp
+      this.$refs.TemplateBuilder.settingsInitFunc()
+      this.$refs.TemplateBuilder.showModal()
     },
 
     /**
@@ -335,8 +361,8 @@ export default {
      */
 
     printPreview() {
-      document.getElementById("printModal").style.display = "block";
-      this.convert2Image();
+      document.getElementById("printModal").style.display = "block"
+      this.convert2Image()
     },
 
     /**
@@ -344,40 +370,41 @@ export default {
      */
 
     editWhileInPreview() {
-      let printModal = document.getElementById("printModal");
-      printModal.style.display = "none";
+      let printModal = document.getElementById("printModal")
+      printModal.style.display = "none"
       this.templateBuilder(this.settings, (val) => {
-        Object.assign(this.settings, val);
-        this.printPreview();
-      });
+        Object.assign(this.settings, val)
+        this.printPreview()
+      })
     },
     prepareComponentsOptions(options, type, index) {
+      let opt = JSON.parse(JSON.stringify(options))
       if (type == "pagecounter") {
-        options.configs.counter = index;
+        opt.configs.counter = index
       } else if (type == "bindingObject") {
-        let key = options.configs.field;
-        options.configs.value = this.bindingObject[key];
+        let key = opt.configs.field
+        opt.configs.value = this.bindingObject[key]
       } else if (type == "textpattern") {
         let matches = [], // an array to collect the strings that are matches
           types = [],
           regex = /{([^{]*?\w)(?=\})}/gim,
-          text = options.configs.text,
-          curMatch;
+          text = opt.configs.text,
+          curMatch
 
         while ((curMatch = regex.exec(text))) {
-          types.push(curMatch[1]);
-          matches.push(curMatch[0]);
+          types.push(curMatch[1])
+          matches.push(curMatch[0])
         }
 
         for (let index = 0; index < types.length; index++) {
           text = text.replace(
             "{" + types[index] + "}",
             this.bindingObject[types[index]]
-          );
+          )
         }
-        options.configs.value = text;
+        opt.configs.value = text
       }
-      return JSON.parse(JSON.stringify(options));
+      return opt
     },
   },
 };

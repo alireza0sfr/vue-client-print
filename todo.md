@@ -83,9 +83,10 @@ print component:
     -Done repeatable header and footer bug
     -Done footer is not rendering in pdf
     -Done printing on a3 portrait/landscape and a4 and a5 landscape have bugs
+    -Done pagecounter format
+    -Done scale for convert2image
 
-
-    -pagecounter format
+    -background color
     -finished drag bug
     
     -revamp the calculate size system
