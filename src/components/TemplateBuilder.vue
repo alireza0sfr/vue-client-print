@@ -32,6 +32,20 @@
               <div class="toolbar-content-wrapper" id="printConfigsMenu">
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
+                    <span>نام طرح</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="text"
+                      v-model="settings.designName"
+                      class="input-form-control"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <label for="pageSizeControl">نوع صفحه</label>
                   </div>
                   <div class="toolbar-content-field">
@@ -61,20 +75,6 @@
                       <option value="portrait">عمودی</option>
                       <option value="landscape">افقی</option>
                     </select>
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>اسم فایل</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      v-model="settings.fileName"
-                      class="input-form-control"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
                   </div>
                 </div>
                 <div class="toolbar-content-row">
@@ -845,7 +845,7 @@ export default {
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
-        fileName: "nikan",
+        designName: "nikan",
         orientation: "portrait",
         pageSize: "a4",
         pageDirections: "rtl",
