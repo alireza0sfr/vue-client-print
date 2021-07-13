@@ -235,11 +235,8 @@ export default {
     canvasMaker(imgBase64, sy) {
       let img = new Image()
       let canvas = document.createElement("canvas")
-      canvas.height =
-        this.convert2Pixels(this.settings.totalHeightOfAPaper) * 2
-      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2
-      console.log(canvas.height)
-      console.log(canvas.width)
+      canvas.height = this.convert2Pixels(this.settings.totalHeightOfAPaper)
+      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper)
       let context = canvas.getContext("2d")
       img.src = imgBase64
       img.onload = () => {
@@ -247,12 +244,12 @@ export default {
           img,
           0,
           sy,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
-          this.convert2Pixels(this.settings.totalHeightOfAPaper) * 2,
+          this.convert2Pixels(this.settings.defaultWidthOfPaper),
+          this.convert2Pixels(this.settings.totalHeightOfAPaper),
           0,
           0,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
-          this.convert2Pixels(this.settings.totalHeightOfAPaper) * 2
+          this.convert2Pixels(this.settings.defaultWidthOfPaper),
+          this.convert2Pixels(this.settings.totalHeightOfAPaper)
         )
       }
       return canvas
@@ -263,58 +260,37 @@ export default {
      */
 
     convert2Image() {
-      var scale = 2
-      let domNode = document.getElementById("toBeConverted")
-      domtoimage
-        .toBlob(domNode, {
-          width: domNode.clientWidth * scale,
-          height: domNode.clientHeight * scale,
-          style: {
-            transform: "scale(" + scale + ")",
-            transformOrigin: "top left",
-          },
-        })
-        .then((res) => {
-          var reader = new FileReader()
-          reader.readAsDataURL(res)
-          reader.onloadend = () => {
-            var result = reader.result
-            console.log(result)
+      domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
+        let compStyles = window.getComputedStyle(
+          document.getElementById("toBeConverted")
+        )
+        let imgHeight = compStyles.getPropertyValue("height")
 
-            let compStyles = window.getComputedStyle(
-              document.getElementById("toBeConverted")
-            )
-            let imgHeight = compStyles.getPropertyValue("height")
+        this.locals.totalPagesHeight = this.convert2Inches(parseInt(imgHeight))
 
-            this.locals.totalPagesHeight = this.convert2Inches(
-              parseInt(imgHeight)
-            )
+        this.locals.totalPages = Math.ceil(
+          this.locals.totalPagesHeight / this.settings.totalHeightOfAPaper
+        )
 
-            this.locals.totalPages = Math.ceil(
-              this.locals.totalPagesHeight / this.settings.totalHeightOfAPaper
-            )
+        // Element that children will be appended to
+        let convertedElement = document.getElementsByClassName("converted")
 
-            // Element that children will be appended to
-            let convertedElement = document.getElementsByClassName("converted")
+        // Waits till the base template is generated and then appends the children
+        this.$nextTick(() => {
+          for (let index = 0; index < convertedElement.length; index++) {
+            // Removing the existing canvas
+            this.removeAllChildNodes(convertedElement[index])
+          }
 
-            // Waits till the base template is generated and then appends the children
-            this.$nextTick(() => {
-              for (let index = 0; index < convertedElement.length; index++) {
-                // Removing the existing canvas
-                this.removeAllChildNodes(convertedElement[index])
-              }
-
-              // Appening the results to parents
-              for (let index = 0; index < convertedElement.length; index++) {
-                let computedSy =
-                  index *
-                  this.convert2Pixels(this.settings.totalHeightOfAPaper)
-                let result1 = this.canvasMaker(result, computedSy)
-                convertedElement[index].appendChild(result1)
-              }
-            })
+          // Appening the results to parents
+          for (let index = 0; index < convertedElement.length; index++) {
+            let computedSy =
+              index * this.convert2Pixels(this.settings.totalHeightOfAPaper)
+            let result = this.canvasMaker(res, computedSy)
+            convertedElement[index].appendChild(result)
           }
         })
+      })
     },
 
     /**

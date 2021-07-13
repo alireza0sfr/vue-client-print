@@ -67,3 +67,7 @@
     box-shadow: -1px 4px 10px 0px #818181;
     margin-bottom: 25px;
 }
+
+.converted canvas {
+    width: 100%
+}
