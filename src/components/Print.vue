@@ -89,7 +89,7 @@
               </div>
               <div
                 class="converted"
-                :style="{ height: settings.totalHeightOfAPaper + 'in' }"
+                :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"
               ></div>
               <div
                 class="fixedFooterCondition"
@@ -234,7 +234,7 @@ export default {
 
       console.log('totalPagesHeight', totalPagesHeight)
 
-      const errorValue = 0.2 // Subtracting this value to make the pages more accurate
+      let errorValue // Subtractable value to make the pages height more accurate
 
       let pageHeadersSize = []
       let pageFootersSize = []
@@ -247,6 +247,8 @@ export default {
       let defaultHeightOfPaper
 
       while (remainingHeight > 0) {
+
+        errorValue = pageHeadersSize.length == 0 ? 0 : 0.2
 
         defaultHeightOfPaper = this.settings.defaultHeightOfPaper
 
@@ -286,7 +288,7 @@ export default {
       console.log('currentTotalPages:', currentTotalPages)
 
       this.locals.pageHeadersSizes = pageHeadersSize
-      this.locals.pageBodiesSizess = pageBodiesSize
+      this.locals.pageBodiesSizes = pageBodiesSize
       this.locals.pageFootersSizes = pageFootersSize
       this.locals.totalPages = currentTotalPages
 
@@ -301,10 +303,10 @@ export default {
      * Converts given base64 to canvas
      */
 
-    canvasMaker(imgBase64, sy) {
+    canvasMaker(imgBase64, sy, index) {
       let img = new Image()
       let canvas = document.createElement("canvas")
-      canvas.height = this.convert2Pixels(this.settings.totalHeightOfAPaper)
+      canvas.height = this.convert2Pixels(this.locals.pageBodiesSizes[index])
       canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper)
       let context = canvas.getContext("2d")
       img.src = imgBase64
@@ -314,11 +316,11 @@ export default {
           0,
           sy,
           this.convert2Pixels(this.settings.defaultWidthOfPaper),
-          this.convert2Pixels(this.settings.totalHeightOfAPaper),
+          this.convert2Pixels(this.locals.pageBodiesSizes[index]),
           0,
           0,
           this.convert2Pixels(this.settings.defaultWidthOfPaper),
-          this.convert2Pixels(this.settings.totalHeightOfAPaper)
+          this.convert2Pixels(this.locals.pageBodiesSizes[index])
         )
       }
       return canvas
@@ -352,8 +354,8 @@ export default {
           // Appening the results to parents
           for (let index = 0; index < convertedElement.length; index++) {
             let computedSy =
-              index * this.convert2Pixels(this.settings.totalHeightOfAPaper)
-            let result = this.canvasMaker(res, computedSy)
+              index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
+            let result = this.canvasMaker(res, computedSy, index)
             convertedElement[index].appendChild(result)
           }
         })
