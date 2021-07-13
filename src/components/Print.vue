@@ -70,7 +70,7 @@
                 v-if="settings.header.isHeaderRepeatable || index == 1"
               >
                 <header
-                  :style="{ height: settings.header.height + 'in' }"
+                  :style="{ height: locals.pageHeadersSizes[index - 1] + 'in' }"
                   class="mainHeader"
                 >
                   <component
@@ -281,13 +281,13 @@ export default {
 
 
       console.log('pageHeadersSize:', pageHeadersSize)
-      console.log('pageFootersSize:', pageFootersSize)
       console.log('pageBodiesSize:', pageBodiesSize)
+      console.log('pageFootersSize:', pageFootersSize)
       console.log('currentTotalPages:', currentTotalPages)
 
-      this.locals.pageHeadersSize = pageBodiesSize
-      this.locals.pageBodiesSizes = pageBodiesSize
-      this.locals.pageFootersSize = pageBodiesSize
+      this.locals.pageHeadersSizes = pageHeadersSize
+      this.locals.pageBodiesSizess = pageBodiesSize
+      this.locals.pageFootersSizes = pageFootersSize
       this.locals.totalPages = currentTotalPages
 
       // console.log('this.settings.header.height:', this.settings.header.height)
