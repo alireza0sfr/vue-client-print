@@ -96,7 +96,7 @@
                 v-if="settings.footer.isFooterRepeatable || index == 1"
               >
                 <footer
-                  :style="{ height: settings.footer.height + 'in' }"
+                  :style="{ height: locals.pageFootersSizes[index - 1] + 'in' }"
                   class="mainFooter"
                 >
                   <component
