@@ -195,9 +195,9 @@ export default {
       printJS({
         printable: "printForm",
         type: "html",
-        scanStyles: false,
+        scanStyles: false, // If this is fakse the inline styles wont be removed 
         style:['.element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}'],
-      });
+      }); // some custom styles needed for print
     },
 
     /**

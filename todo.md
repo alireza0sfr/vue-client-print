@@ -82,11 +82,11 @@ print component:
     -Done margin printform
     -Done repeatable header and footer bug
     -Done footer is not rendering in pdf
+    -Done printing on a3 portrait/landscape and a4 and a5 landscape have bugs
 
 
     -pagecounter format
     -finished drag bug
-    -printing on a3 portrait/landscape and a4 and a5 landscape have bugs
     
     -revamp the calculate size system
     -toast for processing...

@@ -674,12 +674,10 @@
 
           <!-- Section 2 (Template)-->
           <div style="overflow: auto; width: 100%; padding: 20px">
-            <div
+            <div class="template-container"
               :style="{
-                'box-shadow': '-1px 4px 10px 0px #818181',
                 height: settings.defaultHeightOfPaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
-                padding: '5px',
               }"
             >
               <div

@@ -11,7 +11,7 @@ shadow {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    
+
 }
 
 #bodyTemplate {
@@ -253,4 +253,10 @@ shadow {
 .toolbar-content-label p {
     font-size: 13px;
     width: 140px;
+}
+
+.template-container {
+    padding: '5px';
+    margin: auto;
+    box-shadow: -1px 4px 10px 0px #818181;
 }
