@@ -152,8 +152,10 @@ export default {
     return {
       locals: {
         totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
-        totalPagesHeight: 0, // The total size of the given div to be printed in inch
         templateBuilderData: {},
+        pageBodiesSizes: [],
+        pageFootersSizes: [],
+        pageHeadersSizes: [],
       },
       settings: {
         header: {
@@ -228,6 +230,73 @@ export default {
       return (inches * 96).toFixed(2)
     },
 
+    calculateSizes(totalPagesHeight) {
+
+      console.log('totalPagesHeight', totalPagesHeight)
+
+      const errorValue = 0.2 // Subtracting this value to make the pages more accurate
+
+      let pageHeadersSize = []
+      let pageFootersSize = []
+      let pageBodiesSize = []
+      let remainingHeight = totalPagesHeight
+      let currentTotalPages = 0
+      let totalBodySize
+      let headerHeight
+      let footerHeight
+      let defaultHeightOfPaper
+
+      while (remainingHeight > 0) {
+
+        defaultHeightOfPaper = this.settings.defaultHeightOfPaper
+
+        if (this.settings.header.isHeaderRepeatable || pageHeadersSize.length == 0) { // if the header is reapeatable or its the first page
+          headerHeight = this.settings.header.height
+        } else {
+          headerHeight = 0
+        }
+
+        let footerHeightLastPage = this.settings.footer.height
+        let headerHeightLastPage = this.settings.header.isHeaderRepeatable ? headerHeight : 0
+        let pageBodySize = defaultHeightOfPaper - footerHeightLastPage - headerHeightLastPage
+        let isLastPage = remainingHeight - pageBodySize <= 0
+
+
+        if (this.settings.footer.isFooterRepeatable || isLastPage) { // if the header is reapeatable or its the last page
+          footerHeight = this.settings.footer.height
+        } else {
+          footerHeight = 0
+        }
+
+        totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight - errorValue
+
+        remainingHeight -= totalBodySize
+        currentTotalPages += 1
+
+        pageBodiesSize.push(totalBodySize)
+        pageHeadersSize.push(headerHeight)
+        pageFootersSize.push(footerHeight)
+
+      }
+
+
+      console.log('pageHeadersSize:', pageHeadersSize)
+      console.log('pageFootersSize:', pageFootersSize)
+      console.log('pageBodiesSize:', pageBodiesSize)
+      console.log('currentTotalPages:', currentTotalPages)
+
+      this.locals.pageHeadersSize = pageBodiesSize
+      this.locals.pageBodiesSizes = pageBodiesSize
+      this.locals.pageFootersSize = pageBodiesSize
+      this.locals.totalPages = currentTotalPages
+
+      // console.log('this.settings.header.height:', this.settings.header.height)
+      // console.log('this.settings.footer.height:', this.settings.footer.height)
+      // console.log('this.settings.totalHeightOfAPaper:', this.settings.totalHeightOfAPaper)
+      // console.log('this.locals.totalPages:', this.locals.totalPages)
+
+    },
+
     /**
      * Converts given base64 to canvas
      */
@@ -266,11 +335,9 @@ export default {
         )
         let imgHeight = compStyles.getPropertyValue("height")
 
-        this.locals.totalPagesHeight = this.convert2Inches(parseInt(imgHeight))
+        let totalPagesHeight = this.convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
 
-        this.locals.totalPages = Math.ceil(
-          this.locals.totalPagesHeight / this.settings.totalHeightOfAPaper
-        )
+        this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
 
         // Element that children will be appended to
         let convertedElement = document.getElementsByClassName("converted")

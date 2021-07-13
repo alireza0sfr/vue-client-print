@@ -506,7 +506,9 @@
                     <input
                       type="color"
                       class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.backgroundColor"
+                      v-model="
+                        locals.selectedElement.options.styles.backgroundColor
+                      "
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
                     />
@@ -955,18 +957,16 @@ export default {
     },
 
     /**
-     * Calculate the sizes based upon the selected page orientation and format
+     * sync the sizes based upon the selected page orientation and format
      */
 
-    calculateSizes() {
-      // Subtracting this value to make the pages more accurate
-      const errorValue = 0.2
+    syncSizes() {
 
-      // Gettings the default sizes from the base dic
+      const errorValue = 0.2 // Subtracting this value to make the pages more accurate
+
       this.settings.defaultHeightOfPaper =
-        this.locals.pageSizeDictionary[this.settings.orientation][
-        this.settings.pageSize
-        ]["height"]
+        this.locals.pageSizeDictionary[this.settings.orientation][this.settings.pageSize]["height"] // Gettings the default sizes from the base dic
+
       this.settings.totalHeightOfAPaper =
         this.settings.defaultHeightOfPaper -
         this.settings.footer.height -
@@ -978,7 +978,6 @@ export default {
         this.settings.pageSize
         ]["width"]
     },
-
     /**
      * Initializing dragging settings
      */
