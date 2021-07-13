@@ -85,8 +85,8 @@ print component:
     -Done printing on a3 portrait/landscape and a4 and a5 landscape have bugs
     -Done pagecounter format
     -Done scale for convert2image
+    -Done background color
 
-    -background color
     -finished drag bug
     
     -revamp the calculate size system

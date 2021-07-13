@@ -500,6 +500,20 @@
                 </div>
                 <div class="toolbar-content-row">
                   <div class="toolbar-content-label">
+                    <span>رنگ پس زمینه</span>
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="color"
+                      class="input-form-control"
+                      v-model="locals.selectedElement.options.styles.backgroundColor"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </div>
+                </div>
+                <div class="toolbar-content-row">
+                  <div class="toolbar-content-label">
                     <span>اندازه فونت</span>
                   </div>
                   <div class="toolbar-content-field">
