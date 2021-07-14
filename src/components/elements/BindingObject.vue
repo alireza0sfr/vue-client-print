@@ -9,7 +9,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{settings.configs.field}}
+      {{ settings.configs.field == "" ? locals.text1 : locals.text + settings.configs.field }}
       <div ref="resizer" class="resizer"></div>
     </div>
     <div
@@ -20,14 +20,14 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{settings.configs.value}}
+      {{ computedValue }}
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
 </template>
 
 <script>
-import elementUtilities from "./js/element-utilities.js";
+import elementUtilities from "./js/element-utilities.js"
 export default {
   name: "bindingObject",
   props: {
@@ -39,7 +39,15 @@ export default {
         this.$refs.element,
         this.$refs.resizer,
         this.locals.classType
-      );
+      )
+    }
+  },
+  computed: {
+    computedValue() {
+      if (this.settings.configs.persianNumbers) {
+        return this.toPersianNumbers(this.settings.configs.value)
+      }
+      return this.settings.configs.value
     }
   },
   watch: {
@@ -47,10 +55,10 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
-        let tmp = this.options.styles;
-        Object.assign(this.settings, val);
-        this.settings.styles = tmp;
-        Object.assign(this.settings.styles, val.styles);
+        let tmp = this.options.styles
+        Object.assign(this.settings, val)
+        this.settings.styles = tmp
+        Object.assign(this.settings.styles, val.styles)
       },
     },
   },
@@ -58,22 +66,30 @@ export default {
     return {
       locals: {
         classType: "bindingObject",
+        text: 'اتصال داده: ',
+        text1: 'اتصال فیلد را انتخاب کنید'
       },
       settings: {
         id: 0,
         configs: {
-          field: "اتصال فیلد را انتخاب کنید",
+          persianNumbers: false,
+          field: "",
           value: null,
         },
         styles: {},
       },
-    };
+    }
   },
   methods: {
     Initialize(element, resizer, classType) {
-      elementUtilities.resizable(element, resizer);
-      elementUtilities.dragable(element, classType);
-      elementUtilities.click(element, classType);
+      elementUtilities.resizable(element, resizer)
+      elementUtilities.dragable(element, classType)
+      elementUtilities.click(element, classType)
+    },
+    toPersianNumbers(n) {
+      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+
+      return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
   },
 };

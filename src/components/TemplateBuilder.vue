@@ -409,6 +409,26 @@
                   v-if="locals.selectedElement.type == 'bindingObject'"
                 >
                   <div class="toolbar-content-label">
+                    <label for="bindingObjectPersianNumbersControl"
+                      >اعداد فارسی</label
+                    >
+                  </div>
+                  <div class="toolbar-content-field">
+                    <input
+                      type="checkbox"
+                      class="input-form-control"
+                      v-model="
+                        locals.selectedElement.options.configs.persianNumbers
+                      "
+                      id="bindingObjectPersianNumbersControl"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="toolbar-content-row"
+                  v-if="locals.selectedElement.type == 'bindingObject'"
+                >
+                  <div class="toolbar-content-label">
                     <label for="bindingObjectControl">نوع داده</label>
                   </div>
                   <div class="toolbar-content-field">
@@ -450,18 +470,38 @@
                   v-if="locals.selectedElement.type == 'textpattern'"
                 >
                   <div class="toolbar-content-label">
-                    <label for="textpatternControl">فیلد ها</label>
+                    <label for="textPatternPersianNumbersControl"
+                      >اعداد فارسی</label
+                    >
                   </div>
                   <div class="toolbar-content-field">
-                    <select class="input-form-control" id="textpatternControl">
-                      <option
-                        v-for="option in Object.keys(settings.bindingObject)"
-                        :key="option"
-                      >
-                        {{ option }}
-                      </option>
-                    </select>
+                    <input
+                      type="checkbox"
+                      class="input-form-control"
+                      v-model="
+                        locals.selectedElement.options.configs.persianNumbers
+                      "
+                      id="textPatternPersianNumbersControl"
+                    />
                   </div>
+                </div>
+              </div>
+              <div
+                class="toolbar-content-row"
+                v-if="locals.selectedElement.type == 'textpattern'"
+              >
+                <div class="toolbar-content-label">
+                  <label for="textpatternControl">فیلد ها</label>
+                </div>
+                <div class="toolbar-content-field">
+                  <select class="input-form-control" id="textpatternControl">
+                    <option
+                      v-for="option in Object.keys(settings.bindingObject)"
+                      :key="option"
+                    >
+                      {{ option }}
+                    </option>
+                  </select>
                 </div>
               </div>
               <div style="margin-top: 15px" class="toolbar-header">
@@ -1174,7 +1214,8 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
-              field: "اتصال فیلد را انتخاب نمایید",
+              persianNumbers: false,
+              field: "",
               bindingObject: {},
             },
             styles: {
@@ -1190,6 +1231,7 @@ export default {
           options: {
             id: this.idGenerator(5),
             configs: {
+              persianNumbers: false,
               text: "الگو خود را وارد نمایید",
               value: null,
             },
