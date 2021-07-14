@@ -47,72 +47,93 @@
             </a>
           </div>
         </div>
-        <div id="printForm">
-          <div
-            class="mainLoop"
-            :style="{
-              height: settings.defaultheightofpaper + 'in',
-              width: settings.defaultWidthOfPaper + 'in',
-            }"
-            v-for="index in locals.totalPages"
-            :key="index"
-          >
+        <div style="position: relative; min-height: 200px">
+          <!-- Loading popup modal -->
+          <div id="loadingModal" class="loading-modal animate-opacity">
+            <div class="loading-modal-content">
+              <div class="loading-modal-inner">
+                <!-- Spinner -->
+
+                <div class="sk-chase">
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                </div>
+                <p style="margin-top: 20px">...درحال پردازش</p>
+              </div>
+            </div>
+          </div>
+          <div id="printForm">
             <div
+              class="mainLoop"
               :style="{
-                width: 'auto',
-                border: settings.pageBorder,
-                margin: '5px',
+                height: settings.defaultheightofpaper + 'in',
+                width: settings.defaultWidthOfPaper + 'in',
               }"
-              class="pages"
+              v-for="index in locals.totalPages"
+              :key="index"
             >
               <div
-                class="fixedHeaderCondition"
-                v-if="settings.header.isHeaderRepeatable || index == 1"
+                :style="{
+                  width: 'auto',
+                  border: settings.pageBorder,
+                  margin: '5px',
+                }"
+                class="pages"
               >
-                <header
-                  :style="{ height: locals.pageHeadersSizes[index - 1] + 'in' }"
-                  class="mainHeader"
+                <div
+                  class="fixedHeaderCondition"
+                  v-if="settings.header.isHeaderRepeatable || index == 1"
                 >
-                  <component
-                    v-for="element in settings.header.headerElements"
-                    :key="element.options.id"
-                    :is="element.type"
-                    :options="
-                      prepareComponentsOptions(
-                        element.options,
-                        element.type,
-                        index
-                      )
-                    "
-                  />
-                </header>
-              </div>
-              <div
-                class="converted"
-                :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"
-              ></div>
-              <div
-                class="fixedFooterCondition"
-                v-if="settings.footer.isFooterRepeatable || index == 1"
-              >
-                <footer
-                  :style="{ height: locals.pageFootersSizes[index - 1] + 'in' }"
-                  class="mainFooter"
+                  <header
+                    :style="{
+                      height: locals.pageHeadersSizes[index - 1] + 'in',
+                    }"
+                    class="mainHeader"
+                  >
+                    <component
+                      v-for="element in settings.header.headerElements"
+                      :key="element.options.id"
+                      :is="element.type"
+                      :options="
+                        prepareComponentsOptions(
+                          element.options,
+                          element.type,
+                          index
+                        )
+                      "
+                    />
+                  </header>
+                </div>
+                <div
+                  class="converted"
+                  :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"
+                ></div>
+                <div
+                  class="fixedFooterCondition"
+                  v-if="settings.footer.isFooterRepeatable || index == 1"
                 >
-                  <component
-                    v-for="element in settings.footer.footerElements"
-                    :key="element.options.id"
-                    :is="element.type"
-                    :options="
-                      prepareComponentsOptions(
-                        element.options,
-                        element.type,
-                        index
-                      )
-                    "
-                  />
-                  <!-- <div>{{ index }}</div> -->
-                </footer>
+                  <footer
+                    :style="{
+                      height: locals.pageFootersSizes[index - 1] + 'in',
+                    }"
+                    class="mainFooter"
+                  >
+                    <component
+                      v-for="element in settings.footer.footerElements"
+                      :key="element.options.id"
+                      :is="element.type"
+                      :options="
+                        prepareComponentsOptions(
+                          element.options,
+                          element.type,
+                          index
+                        )
+                      "
+                    />
+                  </footer>
+                </div>
               </div>
             </div>
           </div>
@@ -132,7 +153,6 @@ import BindingObject from "./elements/BindingObject.vue"
 import PageCounter from "./elements/PageCounter.vue"
 import ImageElement from "./elements/ImageElement.vue"
 import domtoimage from "dom-to-image"
-import html2pdf from "html2pdf.js"
 export default {
   name: "Print",
   props: {
@@ -151,7 +171,7 @@ export default {
   data() {
     return {
       locals: {
-        totalPages: 1, // Needs to be one for the v-for to make the basic template before preview is triggered
+        totalPages: 0,
         templateBuilderData: {},
         pageBodiesSizes: [],
         pageFootersSizes: [],
@@ -232,8 +252,6 @@ export default {
 
     calculateSizes(totalPagesHeight) {
 
-      console.log('totalPagesHeight', totalPagesHeight)
-
       let errorValue // Subtractable value to make the pages height more accurate
 
       let pageHeadersSize = []
@@ -280,23 +298,10 @@ export default {
         pageFootersSize.push(footerHeight)
 
       }
-
-
-      console.log('pageHeadersSize:', pageHeadersSize)
-      console.log('pageBodiesSize:', pageBodiesSize)
-      console.log('pageFootersSize:', pageFootersSize)
-      console.log('currentTotalPages:', currentTotalPages)
-
       this.locals.pageHeadersSizes = pageHeadersSize
       this.locals.pageBodiesSizes = pageBodiesSize
       this.locals.pageFootersSizes = pageFootersSize
       this.locals.totalPages = currentTotalPages
-
-      // console.log('this.settings.header.height:', this.settings.header.height)
-      // console.log('this.settings.footer.height:', this.settings.footer.height)
-      // console.log('this.settings.totalHeightOfAPaper:', this.settings.totalHeightOfAPaper)
-      // console.log('this.locals.totalPages:', this.locals.totalPages)
-
     },
 
     /**
@@ -306,21 +311,21 @@ export default {
     canvasMaker(imgBase64, sy, index) {
       let img = new Image()
       let canvas = document.createElement("canvas")
-      canvas.height = this.convert2Pixels(this.locals.pageBodiesSizes[index])
-      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper)
+      canvas.height = this.convert2Pixels(this.locals.pageBodiesSizes[index]) * 2
+      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2
       let context = canvas.getContext("2d")
       img.src = imgBase64
       img.onload = () => {
         context.drawImage(
           img,
           0,
-          sy,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper),
-          this.convert2Pixels(this.locals.pageBodiesSizes[index]),
+          sy * 2,
+          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
+          this.convert2Pixels(this.locals.pageBodiesSizes[index]) * 2,
           0,
           0,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper),
-          this.convert2Pixels(this.locals.pageBodiesSizes[index])
+          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
+          this.convert2Pixels(this.locals.pageBodiesSizes[index] * 2)
         )
       }
       return canvas
@@ -331,35 +336,49 @@ export default {
      */
 
     convert2Image() {
-      domtoimage.toPng(document.getElementById("toBeConverted")).then((res) => {
-        let compStyles = window.getComputedStyle(
-          document.getElementById("toBeConverted")
-        )
-        let imgHeight = compStyles.getPropertyValue("height")
+      var scale = 2
+      let domNode = document.getElementById("toBeConverted")
+      domtoimage
+        .toBlob(domNode, {
+          width: domNode.clientWidth * scale,
+          height: domNode.clientHeight * scale,
+          style: {
+            transform: "scale(" + scale + ")",
+            transformOrigin: "top left",
+          },
+        })
+        .then((res) => {
+          var reader = new FileReader()
+          reader.readAsDataURL(res)
+          reader.onloadend = () => {
+            var result = reader.result
+            let compStyles = window.getComputedStyle(
+              document.getElementById("toBeConverted")
+            )
+            let imgHeight = compStyles.getPropertyValue("height")
+            let totalPagesHeight = this.convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
 
-        let totalPagesHeight = this.convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
+            this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
 
-        this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
+            let convertedElement = document.getElementsByClassName("converted") // Element that children will be appended to
 
-        // Element that children will be appended to
-        let convertedElement = document.getElementsByClassName("converted")
+            this.$nextTick(() => {  // Waits till the base template is generated and then appends the children
+              for (let index = 0; index < convertedElement.length; index++) {
 
-        // Waits till the base template is generated and then appends the children
-        this.$nextTick(() => {
-          for (let index = 0; index < convertedElement.length; index++) {
-            // Removing the existing canvas
-            this.removeAllChildNodes(convertedElement[index])
-          }
+                this.removeAllChildNodes(convertedElement[index]) // Removing the existing canvas
+              }
 
-          // Appening the results to parents
-          for (let index = 0; index < convertedElement.length; index++) {
-            let computedSy =
-              index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
-            let result = this.canvasMaker(res, computedSy, index)
-            convertedElement[index].appendChild(result)
+              // Appening the results to parents
+              for (let index = 0; index < convertedElement.length; index++) {
+                let computedSy =
+                  index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
+                let finalResult = this.canvasMaker(result, computedSy, index)
+                convertedElement[index].appendChild(finalResult)
+              }
+              document.getElementById('loadingModal').style.display = 'none'
+            })
           }
         })
-      })
     },
 
     /**
@@ -407,7 +426,11 @@ export default {
 
     printPreview() {
       document.getElementById("printModal").style.display = "block"
-      this.convert2Image()
+      document.getElementById('loadingModal').style.display = 'block'
+
+      setTimeout(() => {
+        this.convert2Image()
+      }, 100)
     },
 
     /**

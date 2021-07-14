@@ -34,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="index in 50" :key="index">
+            <tr v-for="index in 500" :key="index">
               <td>{{ index }}</td>
               <td>{{ index }}</td>
               <td>{{ index }}</td>

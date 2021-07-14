@@ -86,8 +86,6 @@ print component:
     -Done pagecounter format
     -Done scale for convert2image
     -Done background color
-
-    -finished drag bug
-    
-    -revamp the calculate size system
-    -toast for processing...
+    -Done revamp the calculate size system
+    -Done add blob type and debug its size its for the width not being 100%
+    -Done spinner for processing...
