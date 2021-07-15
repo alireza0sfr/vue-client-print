@@ -190,7 +190,6 @@ export default {
         },
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
-        totalHeightOfAPaper: 10.4, // Useable height for body tag
         designName: "nikan",
         orientation: "portrait",
         pageSize: "a4",
@@ -288,7 +287,7 @@ export default {
           footerHeight = 0
         }
 
-        totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight - errorValue
+        totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight 
 
         remainingHeight -= totalBodySize
         currentTotalPages += 1
@@ -302,6 +301,11 @@ export default {
       this.locals.pageBodiesSizes = pageBodiesSize
       this.locals.pageFootersSizes = pageFootersSize
       this.locals.totalPages = currentTotalPages
+
+      console.log('pageHeadersSizes: ', this.locals.pageHeadersSizes)
+      console.log('pageBodiesSizes: ', this.locals.pageBodiesSizes)
+      console.log('pageFootersSizes: ', this.locals.pageFootersSizes)
+      console.log('totalPages: ', this.locals.totalPages)
     },
 
     /**

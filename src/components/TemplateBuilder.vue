@@ -52,7 +52,7 @@
                     <select
                       class="input-form-control"
                       v-model="settings.pageSize"
-                      @change="calculateSizes()"
+                      @change="syncSizes()"
                       id="pageSizeControl"
                     >
                       <option value="a3">A3</option>
@@ -68,7 +68,7 @@
                   <div class="toolbar-content-field">
                     <select
                       class="input-form-control"
-                      @change="calculateSizes()"
+                      @change="syncSizes()"
                       v-model="settings.orientation"
                       id="pageOrientiationsControl"
                     >
