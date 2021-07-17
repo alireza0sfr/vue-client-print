@@ -48,6 +48,9 @@
           </div>
         </div>
         <div style="position: relative; min-height: 200px">
+          <div style="padding-top: 10px">
+            تعداد صفحه: {{ locals.totalPages }}
+          </div>
           <!-- Loading popup modal -->
           <div id="loadingModal" class="loading-modal animate-opacity">
             <div class="loading-modal-content">
@@ -296,11 +299,6 @@ export default {
       this.locals.pageBodiesSizes = pageBodiesSize
       this.locals.pageFootersSizes = pageFootersSize
       this.locals.totalPages = currentTotalPages
-
-      console.log('pageHeadersSizes: ', this.locals.pageHeadersSizes)
-      console.log('pageBodiesSizes: ', this.locals.pageBodiesSizes)
-      console.log('pageFootersSizes: ', this.locals.pageFootersSizes)
-      console.log('totalPages: ', this.locals.totalPages)
     },
 
     /**
@@ -444,10 +442,26 @@ export default {
         this.printPreview()
       })
     },
+    toPersianNumbers(n) {
+      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+
+      return n.toString().replace(/\d/g, (x) => farsiDigits[x])
+    },
     prepareComponentsOptions(options, type, index) {
       let opt = JSON.parse(JSON.stringify(options))
       if (type == "pagecounter") {
-        opt.configs.counter = index
+        if (opt.configs.completeForm) {
+          if (opt.configs.persianNumbers) {
+            index = this.toPersianNumbers(index)
+            let totalPages = this.toPersianNumbers(this.locals.totalPages)
+            opt.configs.counter = opt.configs.counter.replace('1', `صفحه ${index} از ${totalPages}`)
+          } else {
+            opt.configs.counter = opt.configs.counter.replace('1', `page ${index} / ${this.locals.totalPages}`)
+          }
+        } else {
+          opt.configs.counter = index
+        }
+        console.log(opt.configs.counter)
       } else if (type == "bindingObject") {
         let key = opt.configs.field
         opt.configs.value = this.bindingObject[key]

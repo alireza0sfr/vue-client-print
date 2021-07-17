@@ -32,14 +32,16 @@ export default {
   },
   computed: {
     computedCounter() {
-      if (this.settings.configs.completeForm) {
-        if (this.settings.configs.persianNumbers) {
-          return this.toPersianNumbers('صفحه ۱ از ۱')
+      if (this.$parent.$options.name == "TemplateBuilder") {
+        if (this.settings.configs.completeForm) {
+          if (this.settings.configs.persianNumbers) {
+            return this.toPersianNumbers('صفحه ۱ از ۱')
+          }
+          return 'page 1 / 1'
         }
-        return 'صفحه 1 از 1'
-      }
-      if (this.settings.configs.persianNumbers) {
-        return this.toPersianNumbers(this.settings.configs.counter)
+        if (this.settings.configs.persianNumbers) {
+          return this.toPersianNumbers(this.settings.configs.counter)
+        }
       }
       return this.settings.configs.counter
     }
@@ -64,7 +66,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          counter: 1,
+          counter: '1',
           persianNumbers: true,
           completeForm: true,
         },

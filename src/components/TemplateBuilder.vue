@@ -1190,7 +1190,7 @@ export default {
           type: classType,
           options: {
             id: this.idGenerator(5),
-            configs: { counter: 1, persianNumbers: true, completeForm: true },
+            configs: { counter: '1', persianNumbers: true, completeForm: true },
             styles: {},
           },
         }

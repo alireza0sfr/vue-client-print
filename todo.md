@@ -90,9 +90,7 @@ print component:
     -Done add blob type and debug its size its for the width not being 100%
     -Done spinner for processing...
     -Done printing header bug
-
-
-    -page index / total pages not work properly
+    -Done page index / total pages not work properly
 
 Before npm publish:
     -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))
