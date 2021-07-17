@@ -83,57 +83,52 @@
                 class="pages"
               >
                 <div
-                  class="fixedHeaderCondition"
                   v-if="settings.header.isHeaderRepeatable || index == 1"
+                  :style="{
+                    height: locals.pageHeadersSizes[index - 1] + 'in',
+                  }"
+                  class="mainHeader"
                 >
-                  <header
-                    :style="{
-                      height: locals.pageHeadersSizes[index - 1] + 'in',
-                    }"
-                    class="mainHeader"
-                  >
-                    <component
-                      v-for="element in settings.header.headerElements"
-                      :key="element.options.id"
-                      :is="element.type"
-                      :options="
-                        prepareComponentsOptions(
-                          element.options,
-                          element.type,
-                          index
-                        )
-                      "
-                    />
-                  </header>
+                  <component
+                    v-for="element in settings.header.headerElements"
+                    :key="element.options.id"
+                    :is="element.type"
+                    :options="
+                      prepareComponentsOptions(
+                        element.options,
+                        element.type,
+                        index
+                      )
+                    "
+                  />
                 </div>
-                <div
-                  class="converted"
-                  :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"
-                ></div>
-                <div
-                  class="fixedFooterCondition"
-                  v-if="settings.footer.isFooterRepeatable || index == 1"
-                >
-                  <footer
-                    :style="{
-                      height: locals.pageFootersSizes[index - 1] + 'in',
-                    }"
-                    class="mainFooter"
-                  >
-                    <component
-                      v-for="element in settings.footer.footerElements"
-                      :key="element.options.id"
-                      :is="element.type"
-                      :options="
-                        prepareComponentsOptions(
-                          element.options,
-                          element.type,
-                          index
-                        )
-                      "
-                    />
-                  </footer>
-                </div>
+              </div>
+              <div
+                class="converted"
+                :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"
+              ></div>
+              <div
+                v-if="
+                  settings.footer.isFooterRepeatable ||
+                  index == locals.totalPages
+                "
+                :style="{
+                  height: locals.pageFootersSizes[index - 1] + 'in',
+                }"
+                class="mainFooter"
+              >
+                <component
+                  v-for="element in settings.footer.footerElements"
+                  :key="element.options.id"
+                  :is="element.type"
+                  :options="
+                    prepareComponentsOptions(
+                      element.options,
+                      element.type,
+                      index
+                    )
+                  "
+                />
               </div>
             </div>
           </div>
@@ -216,7 +211,7 @@ export default {
       printJS({
         printable: "printForm",
         type: "html",
-        scanStyles: false, // If this is fakse the inline styles wont be removed
+        scanStyles: false, // If true inline styles will be removed
         style: [
           ".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}",
         ],
@@ -265,7 +260,7 @@ export default {
 
       while (remainingHeight > 0) {
 
-        errorValue = pageHeadersSize.length == 0 ? 0 : 0.2
+        errorValue = 0.01 // Dividing the whole body from this value to make it more accurate
 
         defaultHeightOfPaper = this.settings.defaultHeightOfPaper
 
@@ -287,7 +282,7 @@ export default {
           footerHeight = 0
         }
 
-        totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight 
+        totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight - errorValue
 
         remainingHeight -= totalBodySize
         currentTotalPages += 1

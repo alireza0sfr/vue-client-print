@@ -89,3 +89,15 @@ print component:
     -Done revamp the calculate size system
     -Done add blob type and debug its size its for the width not being 100%
     -Done spinner for processing...
+    -Done printing header bug
+
+
+    -page index / total pages not work properly
+
+Before npm publish:
+    -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))
+    -sync rtl and ltr with the language
+    -add il8n for languages
+    -add exmaple code
+    -use np to publish
+    - :printjs :{} options for printjs like jspdf
