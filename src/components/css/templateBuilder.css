@@ -132,7 +132,6 @@ shadow {
 }
 
 .toolbar-container {
-    box-shadow: -2px 6px 1rem rgb(0 0 0 / 22%) !important;
     overflow: auto;
     min-width: 240px;
     width: 250px;
@@ -164,7 +163,6 @@ shadow {
     flex-direction: column;
     align-items: flex-start;
     padding: 0 !important;
-
 }
 
 .toolbar-content-row {
@@ -259,4 +257,114 @@ shadow {
     padding: '5px';
     margin: auto;
     box-shadow: -1px 4px 10px 0px #818181;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-top: 8px;
+    border-bottom: 1px solid #78bfff;
+}
+
+.tabs a {
+    padding: 5px;
+}
+
+.tab {
+    background-color: white;
+    color: #aaa;
+    border: 1px solid #d4d4d4;
+}
+
+.tab.selected {
+    background-color: rgb(232, 235, 240);
+    color: #484848;
+    border: 1px solid #81c3ff;
+    border-bottom: 0;
+    margin-bottom: -1px;
+}
+
+.variables-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.variables-header {
+    text-align: center;
+}
+
+.add-section {
+    margin-top: 10px;
+    border: 1px solid black;
+    padding: 3px;
+    text-align: center;
+    display: inline-block;
+}
+
+.add-section :hover {
+    cursor: pointer;
+}
+
+.add-section span {
+    margin-right: 5px;
+}
+
+.variables-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.large {
+    width: 80% !important;
+}
+
+.small {
+    width: 20% !important;
+}
+
+.variables-content-field input {
+    border: 1px solid rgb(207, 195, 195);
+    height: 100%;
+    width: 100%;
+    flex-grow: 2;
+    text-align: center;
+    text-align-last: center;
+    background-color: transparent;
+}
+
+.variables-content-field select {
+    border: 1px solid rgb(207, 195, 195);
+    height: 100%;
+    width: 100%;
+    flex-grow: 2;
+    text-align: center;
+    text-align-last: center;
+    background-color: transparent;
+}
+
+.variables-content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    flex-direction: column;
+}
+
+.variables-content-field input[type='file'] {
+    margin-top: 3px;
+    border: 0;
+}
+
+.variable {
+    margin-top: 10px;
+    background-color: #faecff;
+    padding: 5px;
+}
+.variables-content-field img {
+    margin-top: 10px;
+}
+.small img {
+    cursor: pointer;
 }

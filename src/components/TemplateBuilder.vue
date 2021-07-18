@@ -26,417 +26,598 @@
             class="toolbar-container"
           >
             <div class="toolbar-content">
-              <div class="toolbar-header">
-                <span>تنظیمات پرینت</span>
+              <!-- Tabs -->
+              <div class="tabs">
+                <a
+                  class="tab selected"
+                  @click="showVariablesTab('settings', this.$refs.settings)"
+                  ref="settings"
+                >
+                  تنظیمات
+                </a>
+                <a
+                  class="tab"
+                  @click="showVariablesTab('variables', this.$refs.variables)"
+                  ref="variables"
+                >
+                  متغیر ها
+                </a>
               </div>
-              <div class="toolbar-content-wrapper" id="printConfigsMenu">
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>نام طرح</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      v-model="settings.designName"
-                      class="input-form-control"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
+
+              <!-- Variables Tab -->
+              
+              <div v-show="locals.showVariablesTab" class="variables-tab">
+                <div
+                  class="toolbar-header variables-header"
+                  style="border-right: 1px solid #81c3ff"
+                >
+                  <span>لیست متغیر ها</span>
                 </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <label for="pageSizeControl">نوع صفحه</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <select
-                      class="input-form-control"
-                      v-model="settings.pageSize"
-                      @change="syncSizes()"
-                      id="pageSizeControl"
-                    >
-                      <option value="a3">A3</option>
-                      <option value="a4">A4</option>
-                      <option value="a5">A5</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <label for="pageOrientiationsControl">حالت صفحه</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <select
-                      class="input-form-control"
-                      @change="syncSizes()"
-                      v-model="settings.orientation"
-                      id="pageOrientiationsControl"
-                    >
-                      <option value="portrait">عمودی</option>
-                      <option value="landscape">افقی</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>خط لبه</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      class="input-form-control"
-                      v-model="settings.pageBorder"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <label for="repeatableHeaderControl">تکرار هدر</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      class="input-form-control"
-                      type="checkbox"
-                      v-model="settings.header.isHeaderRepeatable"
-                      id="repeatableHeaderControl"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <label for="repeatableFooterControl">تکرار فوتر</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      class="input-form-control"
-                      type="checkbox"
-                      v-model="settings.footer.isFooterRepeatable"
-                      id="repeatableFooterControl"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>جهت صفحه</span>
-                  </div>
-                  <div class="toolbar-content-field" style="text-align: right">
-                    <div>
-                      <label for="pageDirections">
-                        <input
-                          type="radio"
-                          name="pageDirections"
-                          id="pageDirections"
-                          value="rtl"
-                          v-model="settings.pageDirections"
-                        />
-                        راست به چپ
-                      </label>
+                <div class="variables-content-wrapper">
+                  <div style="text-align: center">
+                    <div @click="createVariable()" class="add-section">
+                      <span style="font-size: 22px; font-weight: bold">+</span>
+                      <span>افزودن متغیر</span>
                     </div>
-                    <div>
-                      <label for="pageDirections">
-                        <input
-                          type="radio"
-                          name="pageDirections"
-                          id="pageDirections"
-                          value="ltr"
-                          v-model="settings.pageDirections"
-                        />
-                        چپ به راست
-                      </label>
+                  </div>
+                  <div class="variables">
+                    <div
+                      class="variable"
+                      v-for="variable in settings.variables"
+                      :key="variable.id"
+                    >
+                      <div class="variables-row">
+                        <div class="variables-row large">
+                          <div
+                            class="variables-content-field"
+                            style="width: 60%"
+                          >
+                            <input
+                              type="text"
+                              v-model="variable.name"
+                              class="input-form-control"
+                              aria-label="Small"
+                              placeholder="نام متغیر"
+                              aria-describedby="inputGroup-sizing-sm"
+                            />
+                          </div>
+                          <div
+                            class="variables-content-field"
+                            style="width: 40%"
+                          >
+                            <select
+                              class="input-form-control"
+                              v-model="variable.type"
+                            >
+                              <option value="text">متن</option>
+                              <option value="image">عکس</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div
+                          draggable="true"
+                          class="variables-content-field small"
+                        >
+                          <img style="cursor: move" src="./variables/images/drag.png" />
+                        </div>
+                      </div>
+                      <div class="variables-row">
+                        <div
+                          v-if="variable.type == 'text'"
+                          class="variables-content-field large"
+                        >
+                          <input
+                            type="text"
+                            v-model="variable.context"
+                            class="input-form-control"
+                            aria-label="Small"
+                            placeholder="متن"
+                            aria-describedby="inputGroup-sizing-sm"
+                          />
+                        </div>
+                        <div
+                          class="variables-content-field large"
+                          v-if="variable.type == 'image'"
+                        >
+                          <input
+                            type="file"
+                            @change="onFileChange()"
+                            aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm"
+                          />
+                        </div>
+                        <div class="variables-content-field small">
+                          <img
+                            @click="deleteVariable(variable.id)"
+                            src="./variables/images/cancel.png"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="toolbar-header">
-                <span>المنت ها</span>
-              </div>
-              <div
-                class="toolbar-content-wrapper"
-                style="flex-direction: row"
-                id="elementsMenu"
-              >
-                <div class="toolbar-content-row-elements">
-                  <div class="toolbar-content-row-element">
-                    <span
-                      draggable="true"
-                      @dragstart="startDraggingElement('textelement')"
-                      @dragend="finishedDraggingElement()"
-                    >
-                      <img src="./elements/images/text.png" alt="متن" />
-                      <div class="element-title">متن</div>
-                    </span>
-                  </div>
+
+              <!-- Settings Tab -->
+              <div v-show="!locals.showVariablesTab" class="settings-tab">
+                <div
+                  class="toolbar-header"
+                  style="border-right: 1px solid #81c3ff"
+                >
+                  <span>تنظیمات پرینت</span>
                 </div>
-                <div class="toolbar-content-row-elements">
-                  <div class="toolbar-content-row-element">
-                    <span
-                      draggable="true"
-                      @dragstart="startDraggingElement('datetime')"
-                      @dragend="finishedDraggingElement()"
-                    >
-                      <img
-                        src="./elements/images/timetable.png"
-                        alt="تاریخ و ساعت"
+                <div class="toolbar-content-wrapper" id="printConfigsMenu">
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>نام طرح</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        v-model="settings.designName"
+                        class="input-form-control"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
                       />
-                      <div class="element-title">تاریخ و ساعت</div>
-                    </span>
+                    </div>
                   </div>
-                </div>
-                <div class="toolbar-content-row-elements">
-                  <div class="toolbar-content-row-element">
-                    <span
-                      draggable="true"
-                      @dragstart="startDraggingElement('pagecounter')"
-                      @dragend="finishedDraggingElement()"
-                    >
-                      <img src="./elements/images/pages.png" alt="شماره صفحه" />
-                      <div class="element-title">شماره صفحه</div>
-                    </span>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <label for="pageSizeControl">نوع صفحه</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <select
+                        class="input-form-control"
+                        v-model="settings.pageSize"
+                        @change="syncSizes()"
+                        id="pageSizeControl"
+                      >
+                        <option value="a3">A3</option>
+                        <option value="a4">A4</option>
+                        <option value="a5">A5</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div class="toolbar-content-row-elements">
-                  <div class="toolbar-content-row-element">
-                    <span
-                      draggable="true"
-                      @dragstart="startDraggingElement('imageelement')"
-                      @dragend="finishedDraggingElement()"
-                    >
-                      <img src="./elements/images/image.png" alt="عکس" />
-                      <div class="element-title">عکس</div>
-                    </span>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <label for="pageOrientiationsControl">حالت صفحه</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <select
+                        class="input-form-control"
+                        @change="syncSizes()"
+                        v-model="settings.orientation"
+                        id="pageOrientiationsControl"
+                      >
+                        <option value="portrait">عمودی</option>
+                        <option value="landscape">افقی</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div class="toolbar-content-row-elements">
-                  <div class="toolbar-content-row-element">
-                    <span
-                      draggable="true"
-                      @dragstart="startDraggingElement('bindingObject')"
-                      @dragend="finishedDraggingElement()"
-                    >
-                      <img
-                        src="./elements/images/binding.png"
-                        alt="اتصال داده"
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>خط لبه</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="settings.pageBorder"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
                       />
-                      <div class="element-title">اتصال داده</div>
-                    </span>
+                    </div>
                   </div>
-                </div>
-                <div class="toolbar-content-row-elements">
-                  <div class="toolbar-content-row-element">
-                    <span
-                      draggable="true"
-                      @dragstart="startDraggingElement('textpattern')"
-                      @dragend="finishedDraggingElement()"
-                    >
-                      <img
-                        src="./elements/images/textpattern.png"
-                        alt="متن الگویی"
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <label for="repeatableHeaderControl">تکرار هدر</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        class="input-form-control"
+                        type="checkbox"
+                        v-model="settings.header.isHeaderRepeatable"
+                        id="repeatableHeaderControl"
                       />
-                      <div class="element-title">متن الگویی</div>
-                    </span>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <label for="repeatableFooterControl">تکرار فوتر</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        class="input-form-control"
+                        type="checkbox"
+                        v-model="settings.footer.isFooterRepeatable"
+                        id="repeatableFooterControl"
+                      />
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>جهت صفحه</span>
+                    </div>
+                    <div
+                      class="toolbar-content-field"
+                      style="text-align: right"
+                    >
+                      <div>
+                        <label for="pageDirections">
+                          <input
+                            type="radio"
+                            name="pageDirections"
+                            id="pageDirections"
+                            value="rtl"
+                            v-model="settings.pageDirections"
+                          />
+                          راست به چپ
+                        </label>
+                      </div>
+                      <div>
+                        <label for="pageDirections">
+                          <input
+                            type="radio"
+                            name="pageDirections"
+                            id="pageDirections"
+                            value="ltr"
+                            v-model="settings.pageDirections"
+                          />
+                          چپ به راست
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="toolbar-header">
-                <span>تنظیمات المنت</span>
-              </div>
-              <div class="toolbar-content-wrapper">
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'textelement'"
-                >
-                  <div style="text-align: center; width: 100%">
-                    <span>متن خود را وارد کنید</span>
-                  </div>
+                <div class="toolbar-header">
+                  <span>المنت ها</span>
                 </div>
                 <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'textelement'"
+                  class="toolbar-content-wrapper"
+                  style="flex-direction: row"
+                  id="elementsMenu"
                 >
-                  <div class="toolbar-content-field">
-                    <textarea
-                      v-model="locals.selectedElement.options.configs.text"
-                      class="input-form-control"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    ></textarea>
+                  <div class="toolbar-content-row-elements">
+                    <div class="toolbar-content-row-element">
+                      <span
+                        draggable="true"
+                        @dragstart="startDraggingElement('textelement')"
+                        @dragend="finishedDraggingElement()"
+                      >
+                        <img src="./elements/images/text.png" alt="متن" />
+                        <div class="element-title">متن</div>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row-elements">
+                    <div class="toolbar-content-row-element">
+                      <span
+                        draggable="true"
+                        @dragstart="startDraggingElement('datetime')"
+                        @dragend="finishedDraggingElement()"
+                      >
+                        <img
+                          src="./elements/images/timetable.png"
+                          alt="تاریخ و ساعت"
+                        />
+                        <div class="element-title">تاریخ و ساعت</div>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row-elements">
+                    <div class="toolbar-content-row-element">
+                      <span
+                        draggable="true"
+                        @dragstart="startDraggingElement('pagecounter')"
+                        @dragend="finishedDraggingElement()"
+                      >
+                        <img
+                          src="./elements/images/pages.png"
+                          alt="شماره صفحه"
+                        />
+                        <div class="element-title">شماره صفحه</div>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row-elements">
+                    <div class="toolbar-content-row-element">
+                      <span
+                        draggable="true"
+                        @dragstart="startDraggingElement('imageelement')"
+                        @dragend="finishedDraggingElement()"
+                      >
+                        <img src="./elements/images/image.png" alt="عکس" />
+                        <div class="element-title">عکس</div>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row-elements">
+                    <div class="toolbar-content-row-element">
+                      <span
+                        draggable="true"
+                        @dragstart="startDraggingElement('bindingObject')"
+                        @dragend="finishedDraggingElement()"
+                      >
+                        <img
+                          src="./elements/images/binding.png"
+                          alt="اتصال داده"
+                        />
+                        <div class="element-title">اتصال داده</div>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row-elements">
+                    <div class="toolbar-content-row-element">
+                      <span
+                        draggable="true"
+                        @dragstart="startDraggingElement('textpattern')"
+                        @dragend="finishedDraggingElement()"
+                      >
+                        <img
+                          src="./elements/images/textpattern.png"
+                          alt="متن الگویی"
+                        />
+                        <div class="element-title">متن الگویی</div>
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'datetime'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="hasDateControl">تاریخ</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      class="input-form-control"
-                      type="checkbox"
-                      v-model="locals.selectedElement.options.configs.hasDate"
-                      id="hasDateControl"
-                    />
-                  </div>
+                <div class="toolbar-header">
+                  <span>تنظیمات المنت</span>
                 </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'datetime'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="hasTimeControl">ساعت</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      class="input-form-control"
-                      type="checkbox"
-                      v-model="locals.selectedElement.options.configs.hasTime"
-                      id="hasTimeControl"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'datetime'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="persiaDateControl">تاریخ شمسی</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      class="input-form-control"
-                      type="checkbox"
-                      v-model="
-                        locals.selectedElement.options.configs.persianDate
-                      "
-                      id="persiaDateControl"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'pagecounter'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="persianNumbersControl">اعداد فارسی</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="checkbox"
-                      class="input-form-control"
-                      v-model="
-                        locals.selectedElement.options.configs.persianNumbers
-                      "
-                      id="persianNumbersControl"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'pagecounter'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="completeFormControl">صفحه از کل</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="checkbox"
-                      class="input-form-control"
-                      v-model="
-                        locals.selectedElement.options.configs.completeForm
-                      "
-                      id="completeFormControl"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'imageelement'"
-                >
-                  <label style="margin-right: 37px" for="imageFileControl"
-                    >فایل تصویر خود را انتخاب کنید</label
+                <div class="toolbar-content-wrapper">
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'textelement'"
                   >
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'imageelement'"
-                >
-                  <input
-                    type="file"
-                    @change="onFileChange()"
-                    aria-label="Small"
-                    aria-describedby="inputGroup-sizing-sm"
-                    id="imageFileControl"
-                  />
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'imageelement'"
-                >
-                  <div class="toolbar-content-label">
-                    <span>عرض</span>
+                    <div style="text-align: center; width: 100%">
+                      <span>متن خود را وارد کنید</span>
+                    </div>
                   </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.width"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'textelement'"
+                  >
+                    <div class="toolbar-content-field">
+                      <textarea
+                        v-model="locals.selectedElement.options.configs.text"
+                        class="input-form-control"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      ></textarea>
+                    </div>
                   </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'imageelement'"
-                >
-                  <div class="toolbar-content-label">
-                    <span>ارتفاع</span>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'datetime'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="hasDateControl">تاریخ</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        class="input-form-control"
+                        type="checkbox"
+                        v-model="locals.selectedElement.options.configs.hasDate"
+                        id="hasDateControl"
+                      />
+                    </div>
                   </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.height"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'datetime'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="hasTimeControl">ساعت</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        class="input-form-control"
+                        type="checkbox"
+                        v-model="locals.selectedElement.options.configs.hasTime"
+                        id="hasTimeControl"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'bindingObject'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="bindingObjectPersianNumbersControl"
-                      >اعداد فارسی</label
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'datetime'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="persiaDateControl">تاریخ شمسی</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        class="input-form-control"
+                        type="checkbox"
+                        v-model="
+                          locals.selectedElement.options.configs.persianDate
+                        "
+                        id="persiaDateControl"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'pagecounter'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="persianNumbersControl">اعداد فارسی</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="checkbox"
+                        class="input-form-control"
+                        v-model="
+                          locals.selectedElement.options.configs.persianNumbers
+                        "
+                        id="persianNumbersControl"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'pagecounter'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="completeFormControl">صفحه از کل</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="checkbox"
+                        class="input-form-control"
+                        v-model="
+                          locals.selectedElement.options.configs.completeForm
+                        "
+                        id="completeFormControl"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'imageelement'"
+                  >
+                    <label style="margin-right: 37px" for="imageFileControl"
+                      >فایل تصویر خود را انتخاب کنید</label
                     >
                   </div>
-                  <div class="toolbar-content-field">
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'imageelement'"
+                  >
                     <input
-                      type="checkbox"
-                      class="input-form-control"
-                      v-model="
-                        locals.selectedElement.options.configs.persianNumbers
-                      "
-                      id="bindingObjectPersianNumbersControl"
+                      type="file"
+                      @change="onFileChange()"
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                      id="imageFileControl"
                     />
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'imageelement'"
+                  >
+                    <div class="toolbar-content-label">
+                      <span>عرض</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.width"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'imageelement'"
+                  >
+                    <div class="toolbar-content-label">
+                      <span>ارتفاع</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.height"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'bindingObject'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="bindingObjectPersianNumbersControl"
+                        >اعداد فارسی</label
+                      >
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="checkbox"
+                        class="input-form-control"
+                        v-model="
+                          locals.selectedElement.options.configs.persianNumbers
+                        "
+                        id="bindingObjectPersianNumbersControl"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'bindingObject'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="bindingObjectControl">نوع داده</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <select
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.configs.field"
+                        id="bindingObjectControl"
+                      >
+                        <option
+                          v-for="option in Object.keys(settings.bindingObject)"
+                          :key="option"
+                        >
+                          {{ option }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'textpattern'"
+                  >
+                    <div style="text-align: center; width: 100%">
+                      <span>متن خود را وارد کنید</span>
+                      <p>مثال: سلام {name} خوش آمدید</p>
+                    </div>
+                  </div>
+                  <div v-if="locals.selectedElement.type == 'textpattern'">
+                    <div class="toolbar-content-field">
+                      <textarea
+                        v-model="locals.selectedElement.options.configs.text"
+                        class="input-form-control"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.selectedElement.type == 'textpattern'"
+                  >
+                    <div class="toolbar-content-label">
+                      <label for="textPatternPersianNumbersControl"
+                        >اعداد فارسی</label
+                      >
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="checkbox"
+                        class="input-form-control"
+                        v-model="
+                          locals.selectedElement.options.configs.persianNumbers
+                        "
+                        id="textPatternPersianNumbersControl"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div
                   class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'bindingObject'"
+                  v-if="locals.selectedElement.type == 'textpattern'"
                 >
                   <div class="toolbar-content-label">
-                    <label for="bindingObjectControl">نوع داده</label>
+                    <label for="textpatternControl">فیلد ها</label>
                   </div>
                   <div class="toolbar-content-field">
-                    <select
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.configs.field"
-                      id="bindingObjectControl"
-                    >
+                    <select class="input-form-control" id="textpatternControl">
                       <option
                         v-for="option in Object.keys(settings.bindingObject)"
                         :key="option"
@@ -446,303 +627,258 @@
                     </select>
                   </div>
                 </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'textpattern'"
-                >
-                  <div style="text-align: center; width: 100%">
-                    <span>متن خود را وارد کنید</span>
-                    <p>مثال: سلام {name} خوش آمدید</p>
-                  </div>
+                <div style="margin-top: 15px" class="toolbar-header">
+                  <span>استایل المنت</span>
                 </div>
-                <div v-if="locals.selectedElement.type == 'textpattern'">
-                  <div class="toolbar-content-field">
-                    <textarea
-                      v-model="locals.selectedElement.options.configs.text"
-                      class="input-form-control"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    ></textarea>
-                  </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.selectedElement.type == 'textpattern'"
-                >
-                  <div class="toolbar-content-label">
-                    <label for="textPatternPersianNumbersControl"
-                      >اعداد فارسی</label
-                    >
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="checkbox"
-                      class="input-form-control"
-                      v-model="
-                        locals.selectedElement.options.configs.persianNumbers
-                      "
-                      id="textPatternPersianNumbersControl"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                class="toolbar-content-row"
-                v-if="locals.selectedElement.type == 'textpattern'"
-              >
-                <div class="toolbar-content-label">
-                  <label for="textpatternControl">فیلد ها</label>
-                </div>
-                <div class="toolbar-content-field">
-                  <select class="input-form-control" id="textpatternControl">
-                    <option
-                      v-for="option in Object.keys(settings.bindingObject)"
-                      :key="option"
-                    >
-                      {{ option }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div style="margin-top: 15px" class="toolbar-header">
-                <span>استایل المنت</span>
-              </div>
-              <div class="toolbar-content-wrapper" id="elementStylesMenu">
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <label for="elementTextAlignControl">مکان نوشته</label>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <select
-                      v-model="locals.selectedElement.options.styles.textAlign"
-                      class="input-form-control"
-                      id="elementTextAlignControl"
-                    >
-                      <option value="right">راست</option>
-                      <option value="center">وسط</option>
-                      <option value="left">چپ</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>رنگ نوشته</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="color"
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.color"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>رنگ پس زمینه</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="color"
-                      class="input-form-control"
-                      v-model="
-                        locals.selectedElement.options.styles.backgroundColor
-                      "
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>اندازه فونت</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <select
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.fontSize"
-                      id="pageSizeControl"
-                    >
-                      <option
-                        v-for="option in locals.fontSizes"
-                        :key="option"
-                        :value="option + 'px'"
+                <div class="toolbar-content-wrapper" id="elementStylesMenu">
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <label for="elementTextAlignControl">مکان نوشته</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <select
+                        v-model="
+                          locals.selectedElement.options.styles.textAlign
+                        "
+                        class="input-form-control"
+                        id="elementTextAlignControl"
                       >
-                        {{ option }}
-                      </option>
-                    </select>
+                        <option value="right">راست</option>
+                        <option value="center">وسط</option>
+                        <option value="left">چپ</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <label for="fontWeightControl">نوع نوشته</label>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>رنگ نوشته</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="color"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.color"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
                   </div>
-                  <div class="toolbar-content-field">
-                    <select
-                      v-model="locals.selectedElement.options.styles.fontWeight"
-                      class="input-form-control"
-                      id="elementTextAlignControl"
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>رنگ پس زمینه</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="color"
+                        class="input-form-control"
+                        v-model="
+                          locals.selectedElement.options.styles.backgroundColor
+                        "
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>اندازه فونت</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <select
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.fontSize"
+                        id="pageSizeControl"
+                      >
+                        <option
+                          v-for="option in locals.fontSizes"
+                          :key="option"
+                          :value="option + 'px'"
+                        >
+                          {{ option }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <label for="fontWeightControl">نوع نوشته</label>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <select
+                        v-model="
+                          locals.selectedElement.options.styles.fontWeight
+                        "
+                        class="input-form-control"
+                        id="elementTextAlignControl"
+                      >
+                        <option value="normal">عادی</option>
+                        <option value="bold">ضخیم</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>فونت</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="
+                          locals.selectedElement.options.styles.fontFamily
+                        "
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>استایل لبه ها</span>
+                    </div>
+                    <div
+                      class="toolbar-content-field"
+                      style="text-align: right"
                     >
-                      <option value="normal">عادی</option>
-                      <option value="bold">ضخیم</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>فونت</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.fontFamily"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>استایل لبه ها</span>
-                  </div>
-                  <div class="toolbar-content-field" style="text-align: right">
-                    <label for="bordersAlldirections">
-                      <input
-                        class="input-form-control"
-                        style="display: inline-block"
-                        type="checkbox"
-                        v-model="locals.bordersAllDirections"
-                        id="bordersAlldirections"
-                      />
-                      همه جهات
-                    </label>
-                  </div>
-                </div>
-                <div
-                  class="toolbar-content-row"
-                  v-if="locals.bordersAllDirections"
-                >
-                  <div class="toolbar-content-label">
-                    <span>استایل همه لبه ها</span>
-                  </div>
-                  <div class="toolbar-content-field">
-                    <input
-                      type="text"
-                      class="input-form-control"
-                      v-model="locals.selectedElement.options.styles.border"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </div>
-                </div>
-                <div
-                  v-if="locals.bordersAllDirections == false"
-                  style="width: 100%"
-                >
-                  <div class="toolbar-content-row">
-                    <div class="toolbar-content-label">
-                      <span>لبه بالا</span>
-                    </div>
-                    <div class="toolbar-content-field">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="
-                          locals.selectedElement.options.styles.borderTop
-                        "
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div class="toolbar-content-row">
-                    <div class="toolbar-content-label">
-                      <span>لبه راست</span>
-                    </div>
-                    <div class="toolbar-content-field">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="
-                          locals.selectedElement.options.styles.borderRight
-                        "
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div class="toolbar-content-row">
-                    <div class="toolbar-content-label">
-                      <span>لبه پایین</span>
-                    </div>
-                    <div class="toolbar-content-field">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="
-                          locals.selectedElement.options.styles.borderBottom
-                        "
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div class="toolbar-content-row">
-                    <div class="toolbar-content-label">
-                      <span>لبه چپ</span>
-                    </div>
-                    <div class="toolbar-content-field">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="
-                          locals.selectedElement.options.styles.borderLeft
-                        "
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="toolbar-content-row">
-                  <div class="toolbar-content-label">
-                    <span>جهت نوشته</span>
-                  </div>
-                  <div class="toolbar-content-field" style="text-align: right">
-                    <label for="elementDirections">
-                      <div>
+                      <label for="bordersAlldirections">
                         <input
-                          type="radio"
-                          name="elementDirections"
-                          id="elementDirections"
-                          value="rtl"
-                          v-model="
-                            locals.selectedElement.options.styles.direction
-                          "
+                          class="input-form-control"
+                          style="display: inline-block"
+                          type="checkbox"
+                          v-model="locals.bordersAllDirections"
+                          id="bordersAlldirections"
                         />
-                        راست به چپ
+                        همه جهات
+                      </label>
+                    </div>
+                  </div>
+                  <div
+                    class="toolbar-content-row"
+                    v-if="locals.bordersAllDirections"
+                  >
+                    <div class="toolbar-content-label">
+                      <span>استایل همه لبه ها</span>
+                    </div>
+                    <div class="toolbar-content-field">
+                      <input
+                        type="text"
+                        class="input-form-control"
+                        v-model="locals.selectedElement.options.styles.border"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    v-if="locals.bordersAllDirections == false"
+                    style="width: 100%"
+                  >
+                    <div class="toolbar-content-row">
+                      <div class="toolbar-content-label">
+                        <span>لبه بالا</span>
                       </div>
-                    </label>
-                    <label for="elementDirections2">
-                      <div>
+                      <div class="toolbar-content-field">
                         <input
-                          type="radio"
-                          name="elementDirections"
-                          id="elementDirections2"
-                          value="ltr"
+                          type="text"
+                          class="input-form-control"
                           v-model="
-                            locals.selectedElement.options.styles.direction
+                            locals.selectedElement.options.styles.borderTop
                           "
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
                         />
-                        چپ به راست
                       </div>
-                    </label>
+                    </div>
+                    <div class="toolbar-content-row">
+                      <div class="toolbar-content-label">
+                        <span>لبه راست</span>
+                      </div>
+                      <div class="toolbar-content-field">
+                        <input
+                          type="text"
+                          class="input-form-control"
+                          v-model="
+                            locals.selectedElement.options.styles.borderRight
+                          "
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
+                    <div class="toolbar-content-row">
+                      <div class="toolbar-content-label">
+                        <span>لبه پایین</span>
+                      </div>
+                      <div class="toolbar-content-field">
+                        <input
+                          type="text"
+                          class="input-form-control"
+                          v-model="
+                            locals.selectedElement.options.styles.borderBottom
+                          "
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
+                    <div class="toolbar-content-row">
+                      <div class="toolbar-content-label">
+                        <span>لبه چپ</span>
+                      </div>
+                      <div class="toolbar-content-field">
+                        <input
+                          type="text"
+                          class="input-form-control"
+                          v-model="
+                            locals.selectedElement.options.styles.borderLeft
+                          "
+                          aria-label="Small"
+                          aria-describedby="inputGroup-sizing-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="toolbar-content-row">
+                    <div class="toolbar-content-label">
+                      <span>جهت نوشته</span>
+                    </div>
+                    <div
+                      class="toolbar-content-field"
+                      style="text-align: right"
+                    >
+                      <label for="elementDirections">
+                        <div>
+                          <input
+                            type="radio"
+                            name="elementDirections"
+                            id="elementDirections"
+                            value="rtl"
+                            v-model="
+                              locals.selectedElement.options.styles.direction
+                            "
+                          />
+                          راست به چپ
+                        </div>
+                      </label>
+                      <label for="elementDirections2">
+                        <div>
+                          <input
+                            type="radio"
+                            name="elementDirections"
+                            id="elementDirections2"
+                            value="ltr"
+                            v-model="
+                              locals.selectedElement.options.styles.direction
+                            "
+                          />
+                          چپ به راست
+                        </div>
+                      </label>
+                    </div>
                   </div>
                 </div>
+                <hr />
               </div>
-              <hr />
             </div>
           </div>
 
@@ -873,6 +1009,7 @@ export default {
           },
         },
         bordersAllDirections: true,
+        showVariablesTab: false,
         isClicked: false,
         classType: "",
         selectedElement: {
@@ -898,6 +1035,9 @@ export default {
           height: 0.5,
           footerElements: [],
         },
+        variables: [
+          { id: 'a2das', name: 'test', type: 'text', context: 'hi' },
+        ],
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
@@ -969,6 +1109,7 @@ export default {
           height: this.settings.footer.height,
           footerElements: this.settings.footer.footerElements,
         },
+        variables: this.settings.variables,
         orientation: this.settings.orientation,
         pageSize: this.settings.pageSize,
         pageDirections: this.settings.pageDirections,
@@ -1129,6 +1270,18 @@ export default {
         )
       }
     },
+
+    showVariablesTab(type, tab) {
+      let slecetdTab = document.getElementsByClassName('tab selected')[0]
+      slecetdTab.classList.remove('selected')
+      tab.classList.add('selected')
+      if (type == 'settings') {
+        this.locals.showVariablesTab = false
+      } else {
+        this.locals.showVariablesTab = true
+      }
+    },
+
     /**
      * Deselect all selected elements
      */
@@ -1251,6 +1404,26 @@ export default {
       this.locals.classType = ""
       return
     },
+
+    createVariable() {
+      let tmp = {
+        id: this.idGenerator(5),
+        name: `نام متغیر`,
+        type: 'text',
+        context: 'متن را وارد کنید',
+      }
+      this.settings.variables.push(tmp)
+    },
+
+    deleteVariable(id) {
+      let variablesList = this.settings.variables
+      for (let index = 0; index < variablesList.length; index++) {
+        if(variablesList[index].id == id){
+          variablesList.splice(index, 1)
+        }
+      }
+    },
+    
     startDraggingElement(classType) {
       this.locals.classType = classType
       let headerSection = this.$refs.headerTemplate
