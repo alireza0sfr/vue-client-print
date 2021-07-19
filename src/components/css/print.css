@@ -71,3 +71,7 @@
 .converted canvas {
     width: 100%
 }
+
+.converted {
+    margin-left: 10px;
+}

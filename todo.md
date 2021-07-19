@@ -100,8 +100,8 @@ print component:
     -Done make variable creation dynamic
     -Done variable image functunality
     -Done add prepare variable in print.vue and variable option
+    -Done bindingobject and variable showing undefined
 
-    -bindingobject and variable showing undefined
     -delete element has bug
 
 

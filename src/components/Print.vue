@@ -323,23 +323,24 @@ export default {
      */
 
     canvasMaker(imgBase64, sy, index) {
+      let scale = 2
       let img = new Image()
       let canvas = document.createElement("canvas")
-      canvas.height = this.convert2Pixels(this.locals.pageBodiesSizes[index]) * 2
-      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2
+      canvas.height = this.convert2Pixels(this.locals.pageBodiesSizes[index]) * scale
+      canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper) * scale
       let context = canvas.getContext("2d")
       img.src = imgBase64
       img.onload = () => {
         context.drawImage(
           img,
           0,
-          sy * 2,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
-          this.convert2Pixels(this.locals.pageBodiesSizes[index]) * 2,
+          sy * scale,
+          this.convert2Pixels(this.settings.defaultWidthOfPaper) * scale,
+          this.convert2Pixels(this.locals.pageBodiesSizes[index]) * scale,
           0,
           0,
-          this.convert2Pixels(this.settings.defaultWidthOfPaper) * 2,
-          this.convert2Pixels(this.locals.pageBodiesSizes[index] * 2)
+          this.convert2Pixels(this.settings.defaultWidthOfPaper) * scale,
+          this.convert2Pixels(this.locals.pageBodiesSizes[index] * scale)
         )
       }
       return canvas
@@ -481,7 +482,12 @@ export default {
         console.log(opt.configs.counter)
       } else if (type == "bindingObject") {
         let key = opt.configs.field
-        opt.configs.value = this.bindingObject[key]
+        if (this.bindingObject[key]) {
+          console.log(this.bindingObject[key]);
+          opt.configs.value = this.bindingObject[key]
+        } else {
+          opt.configs.value = ''
+        }
       } else if (type == "textpattern") {
         let matches = [], // an array to collect the strings that are matches
           types = [],
@@ -502,7 +508,7 @@ export default {
         }
         opt.configs.value = text
       } else if (type == "variable") {
-        opt.styles.backgroundColor = 'white!important'
+        opt.styles.backgroundColor = 'white'
       }
       return opt
     },

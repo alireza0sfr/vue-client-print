@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="variable.type == 'text'"
+      v-if="computedVariable.type == 'text'"
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
@@ -9,7 +9,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ variable.context }}
+      {{ computedVariable.context }}
       <div ref="resizer" class="resizer"></div>
     </div>
     <div
@@ -24,7 +24,7 @@
         class="image"
         draggable="false"
         :style="settings.styles"
-        :src="variable.context"
+        :src="computedVariable.context"
         alt="Image"
       />
       <div ref="resizer" class="resizer"></div>
@@ -39,6 +39,11 @@ export default {
   props: {
     options: Object,
     variable: Object,
+  },
+  computed: {
+    computedVariable() {
+      return this.variable || {}
+    }
   },
   mounted() {
     if (this.$parent.$options.name == "TemplateBuilder") {
