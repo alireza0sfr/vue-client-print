@@ -512,40 +512,6 @@
                   </div>
                   <div
                     class="toolbar-content-row"
-                    v-if="locals.selectedElement.type == 'imageelement'"
-                  >
-                    <div class="toolbar-content-label">
-                      <span>عرض</span>
-                    </div>
-                    <div class="toolbar-content-field">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.width"
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="toolbar-content-row"
-                    v-if="locals.selectedElement.type == 'imageelement'"
-                  >
-                    <div class="toolbar-content-label">
-                      <span>ارتفاع</span>
-                    </div>
-                    <div class="toolbar-content-field">
-                      <input
-                        type="text"
-                        class="input-form-control"
-                        v-model="locals.selectedElement.options.styles.height"
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="toolbar-content-row"
                     v-if="locals.selectedElement.type == 'bindingObject'"
                   >
                     <div class="toolbar-content-label">
@@ -934,7 +900,14 @@
                     :key="element.options.id"
                     :is="element.type"
                     :options="element.options"
-                    :variable="element.type == 'variable'? this.settings.variables.find((x) => x.uniqueId == element.options.configs.uniqueId): {}"
+                    :variable="
+                      element.type == 'variable'
+                        ? this.settings.variables.find(
+                            (x) =>
+                              x.uniqueId == element.options.configs.uniqueId
+                          )
+                        : ''
+                    "
                     @clickedOnElement="clickedOnElement(element)"
                     @finishedEditingElement="finishedEditingElement(element)"
                   />
@@ -964,8 +937,7 @@
                       element.type == 'variable'
                         ? this.settings.variables.find(
                             (x) =>
-                              x.uniqueId ==
-                              element.options.configs.uniqueId
+                              x.uniqueId == element.options.configs.uniqueId
                           )
                         : {}
                     "
@@ -1156,8 +1128,6 @@ export default {
 
       // Closing the template builder modal after save
       document.getElementById("templateBuilderModal").style.display = "none"
-
-      localStorage.setItem("tmp", JSON.stringify(tmp))
 
       if (this.settings.callback != undefined) {
         this.settings.callback(tmp)

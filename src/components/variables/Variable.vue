@@ -15,13 +15,18 @@
     <div
       v-else
       :id="settings.id"
-      ref="element"
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
-      :style="settings.styles"
+      ref="element"
     >
-      <img :src="variable.context" />
+      <img
+        class="image"
+        draggable="false"
+        :style="settings.styles"
+        :src="variable.context"
+        alt="Image"
+      />
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
