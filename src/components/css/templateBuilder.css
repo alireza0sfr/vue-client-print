@@ -357,7 +357,7 @@ shadow {
     border: 0;
 }
 
-.variable {
+.variables .variable {
     margin-top: 10px;
     background-color: #faecff;
     padding: 5px;

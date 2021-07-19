@@ -48,7 +48,7 @@
           </div>
         </div>
         <div style="position: relative; min-height: 200px">
-          <div style="padding-top: 10px">
+          <div style="padding-top: 10px; text-align: center">
             تعداد صفحه: {{ locals.totalPages }}
           </div>
           <!-- Loading popup modal -->
@@ -63,7 +63,7 @@
                   <div class="sk-chase-dot"></div>
                   <div class="sk-chase-dot"></div>
                 </div>
-                <p style="margin-top: 20px">...درحال پردازش</p>
+                <p style="margin-top: 20px">درحال پردازش...</p>
               </div>
             </div>
           </div>

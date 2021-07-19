@@ -30,14 +30,14 @@
               <div class="tabs">
                 <a
                   class="tab selected"
-                  @click="showVariablesTab('settings', this.$refs.settings)"
+                  @click="switchTabs('settings', this.$refs.settings)"
                   ref="settings"
                 >
                   تنظیمات
                 </a>
                 <a
                   class="tab"
-                  @click="showVariablesTab('variables', this.$refs.variables)"
+                  @click="switchTabs('variables', this.$refs.variables)"
                   ref="variables"
                 >
                   متغیر ها
@@ -45,8 +45,8 @@
               </div>
 
               <!-- Variables Tab -->
-              
-              <div v-show="locals.showVariablesTab" class="variables-tab">
+
+              <div v-show="locals.tabName == 'variables'" class="variables-tab">
                 <div
                   class="toolbar-header variables-header"
                   style="border-right: 1px solid #81c3ff"
@@ -74,7 +74,7 @@
                           >
                             <input
                               type="text"
-                              v-model="variable.name"
+                              v-model="variable.configs.name"
                               class="input-form-control"
                               aria-label="Small"
                               placeholder="نام متغیر"
@@ -87,7 +87,7 @@
                           >
                             <select
                               class="input-form-control"
-                              v-model="variable.type"
+                              v-model="variable.configs.type"
                             >
                               <option value="text">متن</option>
                               <option value="image">عکس</option>
@@ -97,18 +97,25 @@
                         <div
                           draggable="true"
                           class="variables-content-field small"
+                          @dragstart="
+                            startDraggingElement('variable', variable.id)
+                          "
+                          @dragend="finishedDraggingElement()"
                         >
-                          <img style="cursor: move" src="./variables/images/drag.png" />
+                          <img
+                            style="cursor: move"
+                            src="./variables/images/drag.png"
+                          />
                         </div>
                       </div>
                       <div class="variables-row">
                         <div
-                          v-if="variable.type == 'text'"
+                          v-if="variable.configs.type == 'text'"
                           class="variables-content-field large"
                         >
                           <input
                             type="text"
-                            v-model="variable.context"
+                            v-model="variable.configs.context"
                             class="input-form-control"
                             aria-label="Small"
                             placeholder="متن"
@@ -139,7 +146,7 @@
               </div>
 
               <!-- Settings Tab -->
-              <div v-show="!locals.showVariablesTab" class="settings-tab">
+              <div v-show="locals.tabName == 'settings'" class="settings-tab">
                 <div
                   class="toolbar-header"
                   style="border-right: 1px solid #81c3ff"
@@ -956,6 +963,7 @@
 </template>
 
 <script>
+import Variable from './variables/Variable.vue'
 import TextElement from "./elements/TextElement.vue"
 import DateTime from "./elements/DateTime.vue"
 import BindingObject from "./elements/BindingObject.vue"
@@ -974,6 +982,7 @@ export default {
     imageelement: ImageElement,
     bindingObject: BindingObject,
     textpattern: TextPattern,
+    variable: Variable,
   },
   data() {
     return {
@@ -1009,9 +1018,10 @@ export default {
           },
         },
         bordersAllDirections: true,
-        showVariablesTab: false,
+        tabName: 'settings',
         isClicked: false,
         classType: "",
+        uniqueId: 0,
         selectedElement: {
           type: {},
           options: {
@@ -1036,7 +1046,14 @@ export default {
           footerElements: [],
         },
         variables: [
-          { id: 'a2das', name: 'test', type: 'text', context: 'hi' },
+          {
+            id: 'a2das',
+            configs: {
+              name: 'test',
+              type: 'text',
+              context: 'hi'
+            }
+          },
         ],
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
@@ -1271,14 +1288,14 @@ export default {
       }
     },
 
-    showVariablesTab(type, tab) {
+    switchTabs(type, tab) {
       let slecetdTab = document.getElementsByClassName('tab selected')[0]
       slecetdTab.classList.remove('selected')
       tab.classList.add('selected')
       if (type == 'settings') {
-        this.locals.showVariablesTab = false
-      } else {
-        this.locals.showVariablesTab = true
+        this.locals.tabName = 'settings'
+      } else if (type == 'variables') {
+        this.locals.tabName = 'variables'
       }
     },
 
@@ -1293,7 +1310,7 @@ export default {
       }
 
       this.locals.selectedElement = {
-        type: {},
+        type: '',
         options: {
           configs: {},
           styles: {},
@@ -1314,6 +1331,7 @@ export default {
 
     createElement(parent) {
       let classType = this.locals.classType
+      let uniqueId = this.locals.uniqueId
       let tmp
       if (classType == "textelement") {
         tmp = {
@@ -1385,8 +1403,26 @@ export default {
             id: this.idGenerator(5),
             configs: {
               persianNumbers: false,
-              text: "الگو خود را وارد نمایید",
+              text: 'الگوی خود را وارد نمایید',
               value: null,
+            },
+            styles: {
+              whiteSpace: "pre",
+              width: "150px",
+              direction: "rtl",
+            },
+          },
+        }
+      } else if (classType == "variable") {
+        tmp = {
+          type: classType,
+          options: {
+            id: this.idGenerator(5),
+            configs: {
+              uniqueId: uniqueId,
+              name: this.settings.variables[0].configs.name,
+              type: this.settings.variables[0].configs.type,
+              context: this.settings.variables[0].configs.context,
             },
             styles: {
               whiteSpace: "pre",
@@ -1402,30 +1438,57 @@ export default {
         this.settings.footer.footerElements.push(tmp)
       }
       this.locals.classType = ""
+      this.locals.uniqueId = 0
       return
     },
 
     createVariable() {
       let tmp = {
         id: this.idGenerator(5),
-        name: `نام متغیر`,
-        type: 'text',
-        context: 'متن را وارد کنید',
+        configs: {
+          name: `نام متغیر`,
+          type: 'text',
+          context: 'متن را وارد کنید',
+        }
       }
       this.settings.variables.push(tmp)
     },
 
     deleteVariable(id) {
       let variablesList = this.settings.variables
+      let footerElements = this.settings.footer.footerElements
+      let headerElements = this.settings.header.headerElements
+
+      function searchInHeader() {
+        for (let index = 0; index < headerElements.length; index++) {
+          if (headerElements[index].options.configs.uniqueId == id) {
+            headerElements.splice(index, 1)
+          }
+        }
+      }
+
+      function searchInFooter() {
+        for (let index = 0; index < footerElements.length; index++) {
+          if (footerElements[index].options.configs.uniqueId == id) {
+            footerElements.splice(index, 1)
+          }
+        }
+      }
+
       for (let index = 0; index < variablesList.length; index++) {
-        if(variablesList[index].id == id){
+        searchInHeader()
+        searchInFooter()
+        if (variablesList[index].id == id) {
+          searchInHeader()
+          searchInFooter()
           variablesList.splice(index, 1)
         }
       }
     },
-    
-    startDraggingElement(classType) {
+
+    startDraggingElement(classType, uniqueId) {
       this.locals.classType = classType
+      this.locals.uniqueId = uniqueId
       let headerSection = this.$refs.headerTemplate
       headerSection.className = headerSection.className + " dragged"
       let footerSection = this.$refs.footerTemplate

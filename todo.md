@@ -91,6 +91,18 @@ print component:
     -Done spinner for processing...
     -Done printing header bug
     -Done page index / total pages not work properly
+    -Done created variable has background-color 
+    -Done variable drag functuanility has bugs
+    -Done delete variable in temeplate builder by deleting variable in toolbar
+    -Done Unique ID
+
+
+    -variable image functunality
+    -variables[0] in create element make in dynamic
+    -bindingobject and variable showing undefined
+    -add prepare variable in print.vue
+    -delete element has bug
+
 
 Before npm publish:
     -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))
