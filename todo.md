@@ -95,10 +95,11 @@ print component:
     -Done variable drag functuanility has bugs
     -Done delete variable in temeplate builder by deleting variable in toolbar
     -Done Unique ID
+    -Done use variable context instead of name
+    -Done add a hardcode to specify that a element is variable or not
+    -Done make variable creation dynamic
+    -Done variable image functunality
 
-
-    -variable image functunality
-    -variables[0] in create element make in dynamic
     -bindingobject and variable showing undefined
     -add prepare variable in print.vue
     -delete element has bug

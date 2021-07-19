@@ -62,9 +62,16 @@
                   </div>
                   <div class="variables">
                     <div
-                      class="variable"
+                      :class="[
+                        'variable',
+                        {
+                          selected:
+                            locals.selectedElement.options.configs.uniqueId ==
+                            variable.uniqueId,
+                        },
+                      ]"
                       v-for="variable in settings.variables"
-                      :key="variable.id"
+                      :key="variable.uniqueId"
                     >
                       <div class="variables-row">
                         <div class="variables-row large">
@@ -74,7 +81,7 @@
                           >
                             <input
                               type="text"
-                              v-model="variable.configs.name"
+                              v-model="variable.name"
                               class="input-form-control"
                               aria-label="Small"
                               placeholder="نام متغیر"
@@ -87,7 +94,7 @@
                           >
                             <select
                               class="input-form-control"
-                              v-model="variable.configs.type"
+                              v-model="variable.type"
                             >
                               <option value="text">متن</option>
                               <option value="image">عکس</option>
@@ -98,7 +105,7 @@
                           draggable="true"
                           class="variables-content-field small"
                           @dragstart="
-                            startDraggingElement('variable', variable.id)
+                            startDraggingElement('variable', variable.uniqueId)
                           "
                           @dragend="finishedDraggingElement()"
                         >
@@ -110,12 +117,12 @@
                       </div>
                       <div class="variables-row">
                         <div
-                          v-if="variable.configs.type == 'text'"
+                          v-if="variable.type == 'text'"
                           class="variables-content-field large"
                         >
                           <input
                             type="text"
-                            v-model="variable.configs.context"
+                            v-model="variable.context"
                             class="input-form-control"
                             aria-label="Small"
                             placeholder="متن"
@@ -128,14 +135,15 @@
                         >
                           <input
                             type="file"
-                            @change="onFileChange()"
+                            @change="onFileChange(variable.uniqueId)"
                             aria-label="Small"
                             aria-describedby="inputGroup-sizing-sm"
+                            id="variableImageFileControl"
                           />
                         </div>
                         <div class="variables-content-field small">
                           <img
-                            @click="deleteVariable(variable.id)"
+                            @click="deleteVariable(variable.uniqueId)"
                             src="./variables/images/cancel.png"
                           />
                         </div>
@@ -484,7 +492,9 @@
                     class="toolbar-content-row"
                     v-if="locals.selectedElement.type == 'imageelement'"
                   >
-                    <label style="margin-right: 37px" for="imageFileControl"
+                    <label
+                      style="margin-right: 37px"
+                      for="elementImageFileControl"
                       >فایل تصویر خود را انتخاب کنید</label
                     >
                   </div>
@@ -497,7 +507,7 @@
                       @change="onFileChange()"
                       aria-label="Small"
                       aria-describedby="inputGroup-sizing-sm"
-                      id="imageFileControl"
+                      id="elementImageFileControl"
                     />
                   </div>
                   <div
@@ -924,6 +934,7 @@
                     :key="element.options.id"
                     :is="element.type"
                     :options="element.options"
+                    :variable="element.type == 'variable'? this.settings.variables.find((x) => x.uniqueId == element.options.configs.uniqueId): {}"
                     @clickedOnElement="clickedOnElement(element)"
                     @finishedEditingElement="finishedEditingElement(element)"
                   />
@@ -949,6 +960,15 @@
                     :key="element.options.id"
                     :is="element.type"
                     :options="element.options"
+                    :variable="
+                      element.type == 'variable'
+                        ? this.settings.variables.find(
+                            (x) =>
+                              x.uniqueId ==
+                              element.options.configs.uniqueId
+                          )
+                        : {}
+                    "
                     @clickedOnElement="clickedOnElement(element)"
                     @finishedEditingElement="finishedEditingElement(element)"
                   />
@@ -1023,7 +1043,7 @@ export default {
         classType: "",
         uniqueId: 0,
         selectedElement: {
-          type: {},
+          type: '',
           options: {
             id: 0,
             configs: {},
@@ -1047,12 +1067,10 @@ export default {
         },
         variables: [
           {
-            id: 'a2das',
-            configs: {
-              name: 'test',
-              type: 'text',
-              context: 'hi'
-            }
+            uniqueId: 'a2das',
+            name: 'test',
+            type: 'text',
+            context: 'hi'
           },
         ],
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
@@ -1414,15 +1432,13 @@ export default {
           },
         }
       } else if (classType == "variable") {
+        let variable = this.settings.variables.find(x => x.uniqueId == uniqueId)
         tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
             configs: {
               uniqueId: uniqueId,
-              name: this.settings.variables[0].configs.name,
-              type: this.settings.variables[0].configs.type,
-              context: this.settings.variables[0].configs.context,
             },
             styles: {
               whiteSpace: "pre",
@@ -1444,24 +1460,22 @@ export default {
 
     createVariable() {
       let tmp = {
-        id: this.idGenerator(5),
-        configs: {
-          name: `نام متغیر`,
-          type: 'text',
-          context: 'متن را وارد کنید',
-        }
+        uniqueId: this.idGenerator(5),
+        name: `نام متغیر`,
+        type: 'text',
+        context: 'متن را وارد کنید',
       }
       this.settings.variables.push(tmp)
     },
 
-    deleteVariable(id) {
+    deleteVariable(uniqueId) {
       let variablesList = this.settings.variables
       let footerElements = this.settings.footer.footerElements
       let headerElements = this.settings.header.headerElements
 
       function searchInHeader() {
         for (let index = 0; index < headerElements.length; index++) {
-          if (headerElements[index].options.configs.uniqueId == id) {
+          if (headerElements[index].options.configs.uniqueId == uniqueId) {
             headerElements.splice(index, 1)
           }
         }
@@ -1469,7 +1483,7 @@ export default {
 
       function searchInFooter() {
         for (let index = 0; index < footerElements.length; index++) {
-          if (footerElements[index].options.configs.uniqueId == id) {
+          if (footerElements[index].options.configs.uniqueId == uniqueId) {
             footerElements.splice(index, 1)
           }
         }
@@ -1478,7 +1492,7 @@ export default {
       for (let index = 0; index < variablesList.length; index++) {
         searchInHeader()
         searchInFooter()
-        if (variablesList[index].id == id) {
+        if (variablesList[index].uniqueId == uniqueId) {
           searchInHeader()
           searchInFooter()
           variablesList.splice(index, 1)
@@ -1508,15 +1522,30 @@ export default {
       let footerSection = this.$refs.footerTemplate
       footerSection.classList.remove("dragged")
     },
-    onFileChange() {
-      let image = document.getElementById("imageFileControl").files[0]
-      this.toBase64(image).then((res) => {
-        this.locals.selectedElement.options.configs.imageSrc = res
-      })
+    onFileChange(uniqueId) {
+      if (this.locals.selectedElement.type == 'imageelement') {
+        let image = document.getElementById("elementImageFileControl").files[0]
+        this.toBase64(image).then((res) => {
+          this.locals.selectedElement.options.configs.imageSrc = res
+        })
+      } else {
+        let variables = this.settings.variables
+        let variable
+
+        for (let index = 0; index < variables.length; index++) {
+          if (variables[index].uniqueId == uniqueId) {
+            variable = variables[index]
+          }
+        }
+        let image = document.getElementById("variableImageFileControl").files[0]
+        this.toBase64(image).then((res) => {
+          variable.context = res
+        })
+      }
     },
 
     /**
-     * Converts givven image to base64
+     * Converts given image to base64
      */
 
     toBase64(file) {

@@ -107,7 +107,7 @@ shadow {
 
 .element.selected {
     width: 100px;
-    border: 1px #aaa dashed;
+    border: 1px #aaa dashed!important;
     border-radius: 4px;
 }
 
@@ -367,4 +367,11 @@ shadow {
 }
 .small img {
     cursor: pointer;
+}
+.variable.element {
+    background-color: #faecff;
+}
+
+.variables .variable.selected {
+    background-color: #f1caff;
 }

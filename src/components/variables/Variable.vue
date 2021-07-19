@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="$parent.$options.name == 'TemplateBuilder'"
+      v-if="variable.type == 'text'"
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
@@ -9,7 +9,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ locals.text + settings.configs.name }}
+      {{ variable.context }}
       <div ref="resizer" class="resizer"></div>
     </div>
     <div
@@ -17,10 +17,11 @@
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
+      @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ computedValue }}
+      <img :src="variable.context" />
       <div ref="resizer" class="resizer"></div>
     </div>
   </div>
@@ -32,6 +33,7 @@ export default {
   name: "Variable",
   props: {
     options: Object,
+    variable: Object,
   },
   mounted() {
     if (this.$parent.$options.name == "TemplateBuilder") {
@@ -48,7 +50,7 @@ export default {
         return this.toPersianNumbers(this.settings.configs.value)
       }
       return this.settings.configs.value
-    }
+    },
   },
   watch: {
     options: {
@@ -66,14 +68,11 @@ export default {
     return {
       locals: {
         classType: "variable",
-        text: 'متغیر: ',
       },
       settings: {
         id: 0,
         configs: {
-          name: "",
-          type: '',
-          context: null,
+          uniqueId: '',
         },
         styles: {},
       },
