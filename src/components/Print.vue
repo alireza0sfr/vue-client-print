@@ -103,6 +103,14 @@
                         index
                       )
                     "
+                    :variable="
+                      element.type == 'variable'
+                        ? this.settings.variables.find(
+                            (x) =>
+                              x.uniqueId == element.options.configs.uniqueId
+                          )
+                        : ''
+                    "
                   />
                 </div>
               </div>
@@ -131,6 +139,13 @@
                       index
                     )
                   "
+                  :variable="
+                    element.type == 'variable'
+                      ? this.settings.variables.find(
+                          (x) => x.uniqueId == element.options.configs.uniqueId
+                        )
+                      : {}
+                  "
                 />
               </div>
             </div>
@@ -150,6 +165,7 @@ import DateTime from "./elements/DateTime.vue"
 import BindingObject from "./elements/BindingObject.vue"
 import PageCounter from "./elements/PageCounter.vue"
 import ImageElement from "./elements/ImageElement.vue"
+import Variable from './variables/Variable.vue'
 import domtoimage from "dom-to-image"
 export default {
   name: "Print",
@@ -158,6 +174,7 @@ export default {
     bindingObject: Object,
   },
   components: {
+    variable: Variable,
     textelement: TextElement,
     datetime: DateTime,
     pagecounter: PageCounter,
@@ -484,6 +501,8 @@ export default {
           )
         }
         opt.configs.value = text
+      } else if (type == "variable") {
+        opt.styles.backgroundColor = 'white!important'
       }
       return opt
     },

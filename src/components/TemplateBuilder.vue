@@ -934,13 +934,7 @@
                     :is="element.type"
                     :options="element.options"
                     :variable="
-                      element.type == 'variable'
-                        ? this.settings.variables.find(
-                            (x) =>
-                              x.uniqueId == element.options.configs.uniqueId
-                          )
-                        : {}
-                    "
+                      element.type == 'variable' ? this.settings.variables.find((x) => x.uniqueId == element.options.configs.uniqueId): {}"
                     @clickedOnElement="clickedOnElement(element)"
                     @finishedEditingElement="finishedEditingElement(element)"
                   />

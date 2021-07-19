@@ -99,8 +99,8 @@ print component:
     -Done add a hardcode to specify that a element is variable or not
     -Done make variable creation dynamic
     -Done variable image functunality
+    -Done add prepare variable in print.vue and variable option
 
-    -add prepare variable in print.vue and add variable option
     -bindingobject and variable showing undefined
     -delete element has bug
 
