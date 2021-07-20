@@ -96,6 +96,7 @@
                             <select
                               class="input-form-control"
                               v-model="variable.type"
+                              @change="onVariableTypeChange(variable)"
                             >
                               <option value="text">متن</option>
                               <option value="image">عکس</option>
@@ -1481,6 +1482,14 @@ export default {
     },
 
     /**
+     * Empty the context on type change
+     */
+
+    onVariableTypeChange(variable) {
+      variable.context = ''
+    },
+
+    /**
     * Deletes variable in variables tab list
     */
 
@@ -1680,6 +1689,7 @@ export default {
       )
       return
     },
+    
   },
 };
 </script>
