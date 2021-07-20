@@ -4,12 +4,12 @@
     @click="$emit('clickedOnElement')"
     @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
+      :style="settings.styles"
     ref="element"
   >
     <img
       class="image"
       draggable="false"
-      :style="settings.styles"
       :src="settings.configs.imageSrc"
       alt="Image"
     />
@@ -25,7 +25,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.locals.classType,
@@ -60,6 +60,11 @@ export default {
     }
   },
   methods: {
+
+    /**
+     *  Convertes the given number to persian format 
+     */
+    
     Initialize(element, classType, resizer) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)

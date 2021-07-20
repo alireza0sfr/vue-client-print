@@ -104,7 +104,8 @@ print component:
     -Done delete element has bug
     -Done object assign for props
 
-
+    -imageelement class will be replaced by variable when clicked
+    -empty the context after changing the variable type
 
 Before npm publish:
     -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))

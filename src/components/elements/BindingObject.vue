@@ -1,5 +1,7 @@
 <template>
   <div>
+
+    <!-- If its the template builder mode -->
     <div
       v-if="$parent.$options.name == 'TemplateBuilder'"
       :id="settings.id"
@@ -12,6 +14,8 @@
       {{ settings.configs.field == "" ? locals.text1 : locals.text + settings.configs.field }}
       <div ref="resizer" class="resizer"></div>
     </div>
+
+    <!-- If its the print mode -->
     <div
       v-else
       :id="settings.id"
@@ -23,6 +27,7 @@
       {{ computedValue }}
       <div ref="resizer" class="resizer"></div>
     </div>
+    
   </div>
 </template>
 
@@ -34,7 +39,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,
@@ -44,9 +49,12 @@ export default {
   },
   computed: {
     computedValue() {
+
       if (this.settings.configs.persianNumbers) {
+
         return this.toPersianNumbers(this.settings.configs.value)
       }
+
       return this.settings.configs.value
     }
   },
@@ -81,16 +89,27 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Initializing the element utilities for the created element
+     */
+
     Initialize(element, resizer, classType) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
       elementUtilities.click(element, classType)
     },
+
+    /**
+     *  Convertes the given number to persian format 
+     */
+    
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
       return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
+    
   },
 };
 </script>

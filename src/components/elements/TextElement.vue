@@ -22,7 +22,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,
@@ -57,6 +57,11 @@ export default {
     };
   },
   methods: {
+
+     /**
+     * Initializing the element utilities for the created element
+     */
+    
     Initialize(element, resizer, classType) {
       elementUtilities.resizable(element, resizer);
       elementUtilities.dragable(element, classType);

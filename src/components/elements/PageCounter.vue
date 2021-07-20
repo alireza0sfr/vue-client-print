@@ -22,7 +22,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { 
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     computedCounter() {
-      if (this.$parent.$options.name == "TemplateBuilder") {
+      if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
         if (this.settings.configs.completeForm) {
           if (this.settings.configs.persianNumbers) {
             return this.toPersianNumbers('صفحه ۱ از ۱')
@@ -75,16 +75,27 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Initializing the element utilities for the created element
+     */
+
     Initialize(element, resizer, classType) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
       elementUtilities.click(element, classType)
     },
+
+    /**
+     *  Convertes the given number to persian format 
+     */
+
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
       return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
+    
   },
 };
 </script>

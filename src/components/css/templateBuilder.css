@@ -295,6 +295,10 @@ shadow {
     cursor: pointer;
 }
 
+.imageelement.element img, .variable.element img {
+    width: 100%;
+    height: 100%;
+}
 /* Variables  */
 
 .variables-header {
@@ -310,9 +314,10 @@ shadow {
 .add-section {
     margin-top: 10px;
     border: 1px solid black;
-    padding: 3px;
+    padding: 3px 15px 3px;
     text-align: center;
     display: inline-block;
+    position: relative;
 }
 
 .add-section :hover {

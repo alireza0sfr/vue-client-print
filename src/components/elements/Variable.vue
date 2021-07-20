@@ -1,34 +1,39 @@
 <template>
   <div>
+
+    <!-- If the variable is text -->
     <div
-      v-if="variable.type == 'text'"
+      v-show="variable.type == 'text' ? true : false"
       :id="settings.id"
-      ref="element"
+      ref="textVariable"
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
       {{ variable.context }}
-      <div ref="resizer" class="resizer"></div>
+      <div ref="textResizer" class="resizer"></div>
     </div>
+
+    <!-- If the variable is image -->
     <div
-      v-else
+      v-show="variable.type == 'image' ? true : false"
       :id="settings.id"
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
-      ref="element"
+      :style="settings.styles"
+      ref="imageVariable"
     >
       <img
         class="image"
         draggable="false"
-        :style="settings.styles"
         :src="variable.context"
         alt="Image"
       />
-      <div ref="resizer" class="resizer"></div>
+      <div ref="imageResizer" class="resizer"></div>
     </div>
+
   </div>
 </template>
 
@@ -41,17 +46,17 @@ export default {
     variable: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
-        this.$refs.element,
+        this.$refs.textVariable,
         this.locals.classType,
-        this.$refs.resizer,
+        this.$refs.textResizer,
       )
-    }
-  },
-  computed: {
-    computedVariable() {
-      return this.variable
+      this.Initialize(
+        this.$refs.imageVariable,
+        this.locals.classType,
+        this.$refs.imageResizer,
+      )
     }
   },
   watch: {
@@ -81,11 +86,17 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Initializing the element utilities for the created element
+     */
+
     Initialize(element, classType, resizer) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
       elementUtilities.click(element, classType)
     },
+
   },
 };
 </script>

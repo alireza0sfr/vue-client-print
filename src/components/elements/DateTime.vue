@@ -2,7 +2,7 @@
   <div
     :id="settings.id"
     ref="element"
-    @click="clickedOnElement($refs.element)"
+    @click="$emit('clickedOnElement')"
     @finishededitingelement="$emit('finishedEditingElement')"
     :class="locals.classType + ' element'"
     :style="settings.styles"
@@ -22,7 +22,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,
@@ -32,12 +32,16 @@ export default {
   },
   computed: {
     computedValue() {
+
       if (this.settings.configs.hasDate && this.settings.configs.hasTime) {
         return this.dateToday + ' ' + this.timeToday
+
       } else if (this.settings.configs.hasDate && !this.settings.configs.hasTime) {
         return this.dateToday
+
       } else if (this.settings.configs.hasTime && !this.settings.configs.hasDate) {
         return this.timeToday
+
       } else {
         return ''
       }
@@ -79,26 +83,31 @@ export default {
     }
   },
   methods: {
+    
+    /**
+     * Initializing the element utilities for the created element
+     */
+
     Initialize(element, resizer, classType) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
       elementUtilities.click(element, classType)
     },
 
-    /**
-     * Emmiting clicked on element and adding all the eventlistenners to the new element again
-     */
-    clickedOnElement(element) {
-      this.$emit("clickedOnElement")
-      if (element.lastChild.className != "resizer") {
-        this.Initialize(element, this.locals.classType)
-      }
-    },
+   /** 
+    * Returns the date in solar date 
+    */
+
     persianDate() {
       let today = new Date().toLocaleDateString("fa-IR")
       this.dateToday = today
       this.timeToday = this.toPersianNumbers(this.timeNow())
     },
+
+    /** 
+     * Returns the date in AD date 
+     */
+
     adDate() {
       var today = new Date()
       var dd = String(today.getDate()).padStart(2, "0")
@@ -108,6 +117,11 @@ export default {
       this.dateToday = yyyy + "/" + dd + "/" + mm
       this.timeToday = this.timeNow()
     },
+
+    /** 
+     * Returns the current time 
+     */
+
     timeNow() {
       return (
         new Date().getHours() +
@@ -117,11 +131,17 @@ export default {
         new Date().getSeconds()
       )
     },
+
+    /**
+     *  Convertes the given number to persian format 
+     */
+
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
       return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
+    
   },
 };
 </script>

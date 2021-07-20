@@ -1,7 +1,9 @@
 <template>
   <div>
+
+    <!-- If its the template builder mode -->
     <div
-      v-if="$parent.$options.name == 'TemplateBuilder'"
+      v-if="$parent.$options.name == 'TemplateBuilder'" 
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
@@ -12,6 +14,8 @@
       {{ settings.configs.text }}
       <div ref="resizer" class="resizer"></div>
     </div>
+
+    <!-- If its the print mode -->
     <div
       v-else
       :id="settings.id"
@@ -23,6 +27,7 @@
       {{ computedValue }}
       <div ref="resizer" class="resizer"></div>
     </div>
+
   </div>
 </template>
 
@@ -34,7 +39,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") {
+    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,
@@ -79,11 +84,21 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Initializing the element utilities for the created element
+     */
+
     Initialize(element, resizer, classType) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
       elementUtilities.click(element, classType)
     },
+
+    /**
+     *  Convertes the given number to persian format 
+     */
+    
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 

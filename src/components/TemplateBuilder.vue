@@ -30,14 +30,14 @@
               <div class="tabs">
                 <a
                   class="tab selected"
-                  @click="switchTabs('settings', this.$refs.settings)"
+                  @click="switchTabs('settings', $refs.settings)"
                   ref="settings"
                 >
                   تنظیمات
                 </a>
                 <a
                   class="tab"
-                  @click="switchTabs('variables', this.$refs.variables)"
+                  @click="switchTabs('variables', $refs.variables)"
                   ref="variables"
                 >
                   متغیر ها
@@ -56,7 +56,7 @@
                 <div class="variables-content-wrapper">
                   <div style="text-align: center">
                     <div @click="createVariable()" class="add-section">
-                      <span style="font-size: 22px; font-weight: bold">+</span>
+                      <span style="font-size: 22px;font-weight: bold;height: 32px;position: absolute;right: 0px;top: -3px;">+</span>
                       <span>افزودن متغیر</span>
                     </div>
                   </div>
@@ -902,7 +902,7 @@
                     :options="element.options"
                     :variable="
                       element.type == 'variable'
-                        ? this.settings.variables.find(
+                        ? settings.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
@@ -935,7 +935,7 @@
                     :options="element.options"
                     :variable="
                       element.type == 'variable'
-                        ? this.settings.variables.find(
+                        ? settings.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
@@ -1132,6 +1132,7 @@ export default {
         defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
         defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
         pageBorder: this.settings.pageBorder,
+        designName: this.settings.designName
       }
 
       // Closing the template builder modal after save
@@ -1440,9 +1441,9 @@ export default {
     createVariable() {
       let tmp = {
         uniqueId: this.idGenerator(5),
-        name: `نام متغیر`,
+        name: '',
         type: 'text',
-        context: 'متن را وارد کنید',
+        context: '', 
       }
       this.settings.variables.push(tmp)
     },
