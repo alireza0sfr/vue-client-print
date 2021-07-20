@@ -165,7 +165,7 @@ import DateTime from "./elements/DateTime.vue"
 import BindingObject from "./elements/BindingObject.vue"
 import PageCounter from "./elements/PageCounter.vue"
 import ImageElement from "./elements/ImageElement.vue"
-import Variable from './variables/Variable.vue'
+import Variable from './elements/Variable.vue'
 import domtoimage from "dom-to-image"
 export default {
   name: "Print",

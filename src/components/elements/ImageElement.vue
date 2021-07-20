@@ -7,8 +7,8 @@
     ref="element"
   >
     <img
-    class="image"
-    draggable="false"
+      class="image"
+      draggable="false"
       :style="settings.styles"
       :src="settings.configs.imageSrc"
       alt="Image"

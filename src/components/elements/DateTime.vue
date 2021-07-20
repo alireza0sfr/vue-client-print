@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="settings.configs.hasDate == true && settings.configs.hasTime == false"
     :id="settings.id"
     ref="element"
     @click="clickedOnElement($refs.element)"
@@ -8,37 +7,13 @@
     :class="locals.classType + ' element'"
     :style="settings.styles"
   >
-    {{dateToday}}
-    <div ref="resizer" class="resizer"></div>
-  </div>
-  <div
-    v-else-if="settings.configs.hasTime == true && settings.configs.hasDate == false"
-    :id="settings.id"
-    ref="element"
-    @click="clickedOnElement($refs.element)"
-    @finishededitingelement="$emit('finishedEditingElement')"
-    :class="locals.classType + ' element'"
-    :style="settings.styles"
-  >
-    &nbsp; {{timeToday}}
-    <div ref="resizer" class="resizer"></div>
-  </div>
-  <div
-    v-else-if="settings.configs.hasDate && settings.configs.hasTime == true"
-    :id="settings.id"
-    ref="element"
-    @click="clickedOnElement($refs.element)"
-    @finishededitingelement="$emit('finishedEditingElement')"
-    :class="locals.classType + ' element'"
-    :style="settings.styles"
-  >
-    {{dateToday}} &nbsp; {{timeToday}}
+    {{ computedValue }}
     <div ref="resizer" class="resizer"></div>
   </div>
 </template>
 
 <script>
-import elementUtilities from "./js/element-utilities.js";
+import elementUtilities from "./js/element-utilities.js"
 export default {
   name: "DateTime",
   props: {
@@ -52,7 +27,20 @@ export default {
         this.$refs.element,
         this.$refs.resizer,
         this.locals.classType
-      );
+      )
+    }
+  },
+  computed: {
+    computedValue() {
+      if (this.settings.configs.hasDate && this.settings.configs.hasTime) {
+        return this.dateToday + ' ' + this.timeToday
+      } else if (this.settings.configs.hasDate && !this.settings.configs.hasTime) {
+        return this.dateToday
+      } else if (this.settings.configs.hasTime && !this.settings.configs.hasDate) {
+        return this.timeToday
+      } else {
+        return ''
+      }
     }
   },
   watch: {
@@ -60,14 +48,14 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
-        let tmp = this.options.styles;
-        Object.assign(this.settings, val);
-        this.settings.styles = tmp;
-        Object.assign(this.settings.styles, val.styles);
+        let tmp = this.options.styles
+        Object.assign(this.settings, val)
+        this.settings.styles = tmp
+        Object.assign(this.settings.styles, val.styles)
         if (this.settings.configs.persianDate == true) {
-          this.persianDate();
+          this.persianDate()
         } else {
-          this.adDate();
+          this.adDate()
         }
       },
     },
@@ -88,37 +76,37 @@ export default {
         },
         styles: {}
       },
-    };
+    }
   },
   methods: {
     Initialize(element, resizer, classType) {
-      elementUtilities.resizable(element, resizer);
-      elementUtilities.dragable(element, classType);
-      elementUtilities.click(element, classType);
+      elementUtilities.resizable(element, resizer)
+      elementUtilities.dragable(element, classType)
+      elementUtilities.click(element, classType)
     },
 
     /**
      * Emmiting clicked on element and adding all the eventlistenners to the new element again
      */
     clickedOnElement(element) {
-      this.$emit("clickedOnElement");
+      this.$emit("clickedOnElement")
       if (element.lastChild.className != "resizer") {
-        this.Initialize(element, this.locals.classType);
+        this.Initialize(element, this.locals.classType)
       }
     },
     persianDate() {
-      let today = new Date().toLocaleDateString("fa-IR");
-      this.dateToday = today;
-      this.timeToday = this.toPersianNumbers(this.timeNow());
+      let today = new Date().toLocaleDateString("fa-IR")
+      this.dateToday = today
+      this.timeToday = this.toPersianNumbers(this.timeNow())
     },
     adDate() {
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, "0");
-      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      var yyyy = today.getFullYear();
+      var today = new Date()
+      var dd = String(today.getDate()).padStart(2, "0")
+      var mm = String(today.getMonth() + 1).padStart(2, "0") //January is 0!
+      var yyyy = today.getFullYear()
 
-      this.dateToday = yyyy + "/" + dd + "/" + mm;
-      this.timeToday = this.timeNow();
+      this.dateToday = yyyy + "/" + dd + "/" + mm
+      this.timeToday = this.timeNow()
     },
     timeNow() {
       return (
@@ -127,12 +115,12 @@ export default {
         new Date().getMinutes() +
         ":" +
         new Date().getSeconds()
-      );
+      )
     },
     toPersianNumbers(n) {
-      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
-      return n.toString().replace(/\d/g, (x) => farsiDigits[x]);
+      return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
   },
 };

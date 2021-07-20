@@ -111,7 +111,7 @@
                         >
                           <img
                             style="cursor: move"
-                            src="./variables/images/drag.png"
+                            src="./elements/images/drag.png"
                           />
                         </div>
                       </div>
@@ -144,7 +144,7 @@
                         <div class="variables-content-field small">
                           <img
                             @click="deleteVariable(variable.uniqueId)"
-                            src="./variables/images/cancel.png"
+                            src="./elements/images/cancel.png"
                           />
                         </div>
                       </div>
@@ -949,7 +949,7 @@
 </template>
 
 <script>
-import Variable from './variables/Variable.vue'
+import Variable from './elements/Variable.vue'
 import TextElement from "./elements/TextElement.vue"
 import DateTime from "./elements/DateTime.vue"
 import BindingObject from "./elements/BindingObject.vue"

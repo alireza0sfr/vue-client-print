@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="computedVariable.type == 'text'"
+      v-if="variable.type == 'text'"
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
@@ -9,7 +9,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ computedVariable.context }}
+      {{ variable.context }}
       <div ref="resizer" class="resizer"></div>
     </div>
     <div
@@ -24,7 +24,7 @@
         class="image"
         draggable="false"
         :style="settings.styles"
-        :src="computedVariable.context"
+        :src="variable.context"
         alt="Image"
       />
       <div ref="resizer" class="resizer"></div>
@@ -33,34 +33,26 @@
 </template>
 
 <script>
-import elementUtilities from '../elements/js/element-utilities'
+import elementUtilities from './js/element-utilities'
 export default {
   name: "Variable",
   props: {
     options: Object,
     variable: Object,
   },
-  computed: {
-    computedVariable() {
-      return this.variable || {}
-    }
-  },
   mounted() {
     if (this.$parent.$options.name == "TemplateBuilder") {
       this.Initialize(
         this.$refs.element,
+        this.locals.classType,
         this.$refs.resizer,
-        this.locals.classType
       )
     }
   },
   computed: {
-    computedValue() {
-      if (this.settings.configs.persianNumbers) {
-        return this.toPersianNumbers(this.settings.configs.value)
-      }
-      return this.settings.configs.value
-    },
+    computedVariable() {
+      return this.variable
+    }
   },
   watch: {
     options: {
@@ -89,15 +81,10 @@ export default {
     }
   },
   methods: {
-    Initialize(element, resizer, classType) {
+    Initialize(element, classType, resizer) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
       elementUtilities.click(element, classType)
-    },
-    toPersianNumbers(n) {
-      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-      return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
   },
 };
