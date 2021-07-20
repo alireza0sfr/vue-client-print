@@ -409,7 +409,7 @@ export default {
     },
 
     /**
-     * JS function for the modal
+     * function for the modal
      */
 
     modalFunc(modalId, closeBtnId) {

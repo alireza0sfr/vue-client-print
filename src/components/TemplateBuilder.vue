@@ -1,5 +1,6 @@
 <template>
   <div id="templateBuilderPage" :dir="settings.pageDirections">
+
     <!-- Preview Modal-->
     <div id="templateBuilderModal" class="print-modal">
       <div class="print-modal-content">
@@ -154,7 +155,10 @@
               </div>
 
               <!-- Settings Tab -->
+
               <div v-show="locals.tabName == 'settings'" class="settings-tab">
+
+                <!-- Settings -->
                 <div
                   class="toolbar-header"
                   style="border-right: 1px solid #81c3ff"
@@ -284,6 +288,9 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Elements -->
+
                 <div class="toolbar-header">
                   <span>المنت ها</span>
                 </div>
@@ -378,6 +385,9 @@
                   </div>
                 </div>
                 <div class="toolbar-header">
+
+                  <!-- Element's Settings -->
+
                   <span>تنظیمات المنت</span>
                 </div>
                 <div class="toolbar-content-wrapper">
@@ -610,6 +620,9 @@
                     </select>
                   </div>
                 </div>
+                
+                <!-- Element's Styles -->
+
                 <div style="margin-top: 15px" class="toolbar-header">
                   <span>استایل المنت</span>
                 </div>
@@ -1058,14 +1071,7 @@ export default {
           height: 0.5,
           footerElements: [],
         },
-        variables: [
-          {
-            uniqueId: 'a2das',
-            name: 'test',
-            type: 'text',
-            context: 'hi'
-          },
-        ],
+        variables: [],
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
@@ -1099,7 +1105,6 @@ export default {
         let computedStyles = this.getCoordinates(
           footerElements[index].options.id
         )
-        // computedStyles.top = -parseInt(computedStyles.top) + "px";
         let elementStyles = footerElements[index].options.styles
         Object.assign(elementStyles, computedStyles)
       }
@@ -1173,6 +1178,7 @@ export default {
         this.settings.pageSize
         ]["width"]
     },
+
     /**
      * Initializing dragging settings
      */
@@ -1191,6 +1197,7 @@ export default {
     convert2Inches(pixels) {
       return (pixels / 96).toFixed(2)
     },
+
     /**
      * Adjust the section's height by dragging
      */
@@ -1285,6 +1292,10 @@ export default {
       }
     },
 
+    /** 
+     * Swtich between tabs in toolbar 
+     */
+
     switchTabs(type, tab) {
       let slecetdTab = document.getElementsByClassName('tab selected')[0]
       slecetdTab.classList.remove('selected')
@@ -1331,8 +1342,10 @@ export default {
       let classType = this.locals.classType
       let uniqueId = this.locals.uniqueId
       let tmp
-      if (classType == "textelement") {
-        tmp = {
+
+      switch (classType) {
+        case 'textelement':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1345,8 +1358,10 @@ export default {
             },
           },
         }
-      } else if (classType == "datetime") {
-        tmp = {
+          break;
+      
+        case 'datetime':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1354,8 +1369,10 @@ export default {
             styles: { width: "150px" },
           },
         }
-      } else if (classType == "pagecounter") {
-        tmp = {
+        break
+
+        case 'pagecounter':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1363,8 +1380,10 @@ export default {
             styles: {},
           },
         }
-      } else if (classType == "imageelement") {
-        tmp = {
+        break
+        
+        case 'imageelement':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1377,8 +1396,10 @@ export default {
             },
           },
         }
-      } else if (classType == "bindingObject") {
-        tmp = {
+        break
+
+        case 'bindingObject':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1394,8 +1415,10 @@ export default {
             },
           },
         }
-      } else if (classType == "textpattern") {
-        tmp = {
+        break
+        
+        case 'textpattern':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1411,9 +1434,10 @@ export default {
             },
           },
         }
-      } else if (classType == "variable") {
-        let variable = this.settings.variables.find(x => x.uniqueId == uniqueId)
-        tmp = {
+        break
+
+        case 'variable':
+          tmp = {
           type: classType,
           options: {
             id: this.idGenerator(5),
@@ -1427,6 +1451,10 @@ export default {
             },
           },
         }
+        break
+
+        default:
+          break;
       }
       if (parent.includes("header")) {
         this.settings.header.headerElements.push(tmp)
@@ -1438,6 +1466,10 @@ export default {
       return
     },
 
+    /**
+    * Creates variable in variables tab list
+    */
+   
     createVariable() {
       let tmp = {
         uniqueId: this.idGenerator(5),
@@ -1448,12 +1480,16 @@ export default {
       this.settings.variables.push(tmp)
     },
 
+    /**
+    * Deletes variable in variables tab list
+    */
+
     deleteVariable(uniqueId) {
       let variablesList = this.settings.variables
       let footerElements = this.settings.footer.footerElements
       let headerElements = this.settings.header.headerElements
 
-      function searchInHeader() {
+      function deleteFromHeader() {
         for (let index = 0; index < headerElements.length; index++) {
           if (headerElements[index].options.configs.uniqueId == uniqueId) {
             headerElements.splice(index, 1)
@@ -1461,7 +1497,7 @@ export default {
         }
       }
 
-      function searchInFooter() {
+      function deleteFromFooter() {
         for (let index = 0; index < footerElements.length; index++) {
           if (footerElements[index].options.configs.uniqueId == uniqueId) {
             footerElements.splice(index, 1)
@@ -1470,11 +1506,11 @@ export default {
       }
 
       for (let index = 0; index < variablesList.length; index++) {
-        searchInHeader()
-        searchInFooter()
+        deleteFromHeader()
+        deleteFromFooter()
         if (variablesList[index].uniqueId == uniqueId) {
-          searchInHeader()
-          searchInFooter()
+          deleteFromHeader() // Checks if there is any variable with specific uniqueId left
+          deleteFromFooter()
           variablesList.splice(index, 1)
         }
       }
@@ -1488,27 +1524,31 @@ export default {
       let footerSection = this.$refs.footerTemplate
       footerSection.className = footerSection.className + " dragged"
     },
+
     droppedElementOnHeader() {
       let parent = "header"
       this.createElement(parent)
     },
+
     droppedElementOnFooter() {
       let parent = "footer"
       this.createElement(parent)
     },
+
     finishedDraggingElement() {
       let headerSection = this.$refs.headerTemplate
       headerSection.classList.remove("dragged")
       let footerSection = this.$refs.footerTemplate
       footerSection.classList.remove("dragged")
     },
+
     onFileChange(uniqueId) {
       if (this.locals.selectedElement.type == 'imageelement') {
         let image = document.getElementById("elementImageFileControl").files[0]
         this.toBase64(image).then((res) => {
           this.locals.selectedElement.options.configs.imageSrc = res
         })
-      } else {
+      } else { // Its a variable image
         let variables = this.settings.variables
         let variable
 
@@ -1545,7 +1585,9 @@ export default {
       return Math.random().toString(36).substr(2, n)
     },
 
-    /** Adds an event listenner on delete button and then removes the element */
+    /**
+     * Adds an event listenner on delete button and then removes the element 
+     */
 
     deletingElementOnPressingDeleteKey() {
       let headerElements = this.settings.header.headerElements
@@ -1578,6 +1620,11 @@ export default {
         }
       }
     },
+
+    /**
+     * Gets coordinates of the given element
+     */
+
     getCoordinates(id) {
       let tmp = document.getElementById(id)
       let compStyle = getComputedStyle(tmp)
@@ -1594,7 +1641,7 @@ export default {
     },
 
     /**
-     * JS functions for the modal
+     * function for the modal
      */
 
     modalFunc(modalId, closeBtnId) {
@@ -1608,9 +1655,11 @@ export default {
         modal.style.display = "none"
       }
     },
+
     showModal() {
       document.getElementById("templateBuilderModal").style.display = "block"
     },
+    
     finishedEditingElement(element) {
       let tmp = this.settings.header.headerElements.find(
         (x) => x.options.id == element.options.id
