@@ -351,6 +351,7 @@ export default {
      */
 
     convert2Image() {
+      let transformOrigin = this.settings.pageDirections == 'rtl' ? 'top right' : 'top left'
       var scale = 2
       let domNode = document.getElementById("toBeConverted")
       domtoimage
@@ -359,7 +360,7 @@ export default {
           height: domNode.clientHeight * scale,
           style: {
             transform: "scale(" + scale + ")",
-            transformOrigin: "top left",
+            transformOrigin: transformOrigin,
           },
         })
         .then((res) => {
@@ -483,7 +484,7 @@ export default {
       } else if (type == "bindingObject") {
         let key = opt.configs.field
         if (this.bindingObject[key]) {
-          console.log(this.bindingObject[key]);
+          console.log(this.bindingObject[key])
           opt.configs.value = this.bindingObject[key]
         } else {
           opt.configs.value = ''

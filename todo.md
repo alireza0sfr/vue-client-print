@@ -102,6 +102,7 @@ print component:
     -Done add prepare variable in print.vue and variable option
     -Done bindingobject and variable showing undefined
 
+    -object assign for props
     -delete element has bug
 
 
