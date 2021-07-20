@@ -102,8 +102,8 @@ print component:
     -Done add prepare variable in print.vue and variable option
     -Done bindingobject and variable showing undefined
     -Done delete element has bug
+    -Done object assign for props
 
-    -object assign for props
 
 
 Before npm publish:

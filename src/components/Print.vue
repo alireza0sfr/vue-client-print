@@ -480,11 +480,9 @@ export default {
         } else {
           opt.configs.counter = index
         }
-        console.log(opt.configs.counter)
       } else if (type == "bindingObject") {
         let key = opt.configs.field
         if (this.bindingObject[key]) {
-          console.log(this.bindingObject[key])
           opt.configs.value = this.bindingObject[key]
         } else {
           opt.configs.value = ''

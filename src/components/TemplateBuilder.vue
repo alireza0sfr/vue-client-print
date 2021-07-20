@@ -934,7 +934,13 @@
                     :is="element.type"
                     :options="element.options"
                     :variable="
-                      element.type == 'variable' ? this.settings.variables.find((x) => x.uniqueId == element.options.configs.uniqueId): {}"
+                      element.type == 'variable'
+                        ? this.settings.variables.find(
+                            (x) =>
+                              x.uniqueId == element.options.configs.uniqueId
+                          )
+                        : {}
+                    "
                     @clickedOnElement="clickedOnElement(element)"
                     @finishedEditingElement="finishedEditingElement(element)"
                   />
@@ -1021,7 +1027,27 @@ export default {
           8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74,
         ],
       },
-      settings: {
+      settings: this.getDefault()
+    }
+  },
+  watch: {
+    options: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        let rawSettings = this.getDefault()
+        Object.assign(rawSettings, val)
+        this.settings = rawSettings
+      },
+    },
+  },
+  mounted() {
+    this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn")
+  },
+  methods: {
+
+    getDefault() {
+      return {
         header: {
           isHeaderRepeatable: true,
           height: 0.5,
@@ -1049,22 +1075,9 @@ export default {
         pageDirections: "rtl",
         bindingObject: {},
         pageBorder: "",
-      },
-    }
-  },
-  watch: {
-    options: {
-      deep: true,
-      immediate: true,
-      handler(val) {
-        Object.assign(this.settings, val)
-      },
+      }
     },
-  },
-  mounted() {
-    this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn")
-  },
-  methods: {
+
     /**
      * Exports all the data to a single json
      */
