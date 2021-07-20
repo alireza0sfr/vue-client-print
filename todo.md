@@ -101,9 +101,9 @@ print component:
     -Done variable image functunality
     -Done add prepare variable in print.vue and variable option
     -Done bindingobject and variable showing undefined
+    -Done delete element has bug
 
     -object assign for props
-    -delete element has bug
 
 
 Before npm publish:

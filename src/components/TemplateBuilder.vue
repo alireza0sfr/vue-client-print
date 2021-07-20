@@ -1006,6 +1006,7 @@ export default {
         bordersAllDirections: true,
         tabName: 'settings',
         isClicked: false,
+        clickedElementId: 0,
         classType: "",
         uniqueId: 0,
         selectedElement: {
@@ -1307,7 +1308,8 @@ export default {
 
     clickedOnElement(element) {
       this.locals.selectedElement = element
-      this.deletingElementOnPressingDeleteKey(element)
+      this.locals.clickedElementId = element.options.id
+      this.deletingElementOnPressingDeleteKey()
       this.locals.isClicked = true
     },
 
@@ -1531,7 +1533,7 @@ export default {
 
     /** Adds an event listenner on delete button and then removes the element */
 
-    deletingElementOnPressingDeleteKey(element) {
+    deletingElementOnPressingDeleteKey() {
       let headerElements = this.settings.header.headerElements
       let footerElements = this.settings.footer.footerElements
       document.addEventListener("keydown", deleteElement, false)
@@ -1541,7 +1543,7 @@ export default {
 
       function deleteElement(e) {
         if (e.code == "Delete") {
-          let id = element.options.id
+          let id = that.locals.clickedElementId
           for (let index = 0; index < headerElements.length; index++) {
             if (headerElements[index].options.id == id) {
               headerElements.splice(index, 1)
