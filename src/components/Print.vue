@@ -51,10 +51,13 @@
           <div style="padding-top: 10px; text-align: center">
             تعداد صفحه: {{ locals.totalPages }}
           </div>
+
           <!-- Loading popup modal -->
+          
           <div id="loadingModal" class="loading-modal animate-opacity">
             <div class="loading-modal-content">
               <div class="loading-modal-inner">
+
                 <!-- Spinner -->
 
                 <div class="sk-chase">
@@ -228,6 +231,11 @@ export default {
   },
   methods: {
     printForm() {
+
+      /**
+       * Prints the form
+       */
+
       printJS({
         printable: "printForm",
         type: "html",
@@ -263,6 +271,10 @@ export default {
     convert2Pixels(inches) {
       return (inches * 96).toFixed(2)
     },
+
+    /** 
+     * Calculate Dynamic sizes from template builder before print
+     */
 
     calculateSizes(totalPagesHeight) {
 
@@ -355,13 +367,13 @@ export default {
       var scale = 2
       let domNode = document.getElementById("toBeConverted")
       domtoimage
-        .toBlob(domNode, {
+        .toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality
           width: domNode.clientWidth * scale,
           height: domNode.clientHeight * scale,
           style: {
             transform: "scale(" + scale + ")",
             transformOrigin: transformOrigin,
-          },
+          }, 
         })
         .then((res) => {
           var reader = new FileReader()
@@ -376,16 +388,15 @@ export default {
 
             this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
 
-            let convertedElement = document.getElementsByClassName("converted") // Element that children will be appended to
-
             this.$nextTick(() => {  // Waits till the base template is generated and then appends the children
+
+              let convertedElement = document.getElementsByClassName("converted") // Element that children will be appended to
+
+              // Removing the existing canvas and Appening the results to parents
               for (let index = 0; index < convertedElement.length; index++) {
 
-                this.removeAllChildNodes(convertedElement[index]) // Removing the existing canvas
-              }
+                this.removeAllChildNodes(convertedElement[index])
 
-              // Appening the results to parents
-              for (let index = 0; index < convertedElement.length; index++) {
                 let computedSy =
                   index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
                 let finalResult = this.canvasMaker(result, computedSy, index)
@@ -398,7 +409,7 @@ export default {
     },
 
     /**
-     * JS functions for the modal
+     * JS function for the modal
      */
 
     modalFunc(modalId, closeBtnId) {
@@ -450,7 +461,7 @@ export default {
     },
 
     /**
-     *  Triggering editWhileInPreview
+     *  Triggering editWhileInPreview 
      */
 
     editWhileInPreview() {
@@ -461,15 +472,29 @@ export default {
         this.printPreview()
       })
     },
+
+    /**
+     * Covertes the given number to persian fotmat
+     */
+
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
       return n.toString().replace(/\d/g, (x) => farsiDigits[x])
     },
+
+    /**
+     * Prepare elements options before previewing in print preview
+     */
+
     prepareComponentsOptions(options, type, index) {
-      let opt = JSON.parse(JSON.stringify(options))
-      if (type == "pagecounter") {
-        if (opt.configs.completeForm) {
+
+      let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt 
+
+      switch (type) {
+        
+        case 'pagecounter':
+          if (opt.configs.completeForm) {
           if (opt.configs.persianNumbers) {
             index = this.toPersianNumbers(index)
             let totalPages = this.toPersianNumbers(this.locals.totalPages)
@@ -480,15 +505,19 @@ export default {
         } else {
           opt.configs.counter = index
         }
-      } else if (type == "bindingObject") {
-        let key = opt.configs.field
+          break;
+
+        case 'pagecounter':
+           let key = opt.configs.field
         if (this.bindingObject[key]) {
           opt.configs.value = this.bindingObject[key]
         } else {
           opt.configs.value = ''
         }
-      } else if (type == "textpattern") {
-        let matches = [], // an array to collect the strings that are matches
+          break
+
+        case 'textpattern':
+          let matches = [], // an array to collect the strings that are matches
           types = [],
           regex = /{([^{]*?\w)(?=\})}/gim,
           text = opt.configs.text,
@@ -506,9 +535,17 @@ export default {
           )
         }
         opt.configs.value = text
-      } else if (type == "variable") {
+
+        break
+
+        case 'variable':
+
         opt.styles.backgroundColor = 'white'
+
+        default:
+          break;
       }
+      
       return opt
     },
   },
