@@ -20,21 +20,6 @@
     cursor: pointer;
 }
 
-.dateAndTimeToday {
-    text-align: left;
-}
-
-.logo {
-    text-align: right;
-}
-
-.converted img {
-    width: 8.26in;
-    margin-top: 24px;
-    margin-bottom: 24px;
-    /* margin-right: 950px; */
-}
-
 #page {
     width: max-content;
 }
@@ -44,14 +29,9 @@
     overflow: hidden;
 }
 
-.mainFooter {
-    position: relative;
-    overflow: hidden;
-}
-
-.slotWrapper {
-    position: fixed;
-    left: 5000px;
+.mainLoop {
+    box-shadow: -1px 4px 10px 0px #818181;
+    margin-bottom: 25px;
 }
 
 .pages {
@@ -59,13 +39,9 @@
     margin-top: 17px;
 }
 
-/* .converted {
-    margin: 50px;
-} */
-
-.mainLoop {
-    box-shadow: -1px 4px 10px 0px #818181;
-    margin-bottom: 25px;
+.slotWrapper {
+    position: fixed;
+    left: 5000px;
 }
 
 .converted canvas {
@@ -74,4 +50,9 @@
 
 .converted {
     margin-left: 10px;
+}
+
+.mainFooter {
+    position: relative;
+    overflow: hidden;
 }
