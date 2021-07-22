@@ -106,6 +106,7 @@ print component:
     -Done empty the context after changing the variable type
     -Done imageelement class will be replaced by variable when clicked
 
+    -if the problem with variables exist use concact instead of refrence
 
 Before npm publish:
     -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))

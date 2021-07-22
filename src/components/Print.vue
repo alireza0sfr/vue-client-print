@@ -99,7 +99,7 @@
                     "
 										:variable="
                       element.type == 'variable'
-                        ? this.settings.variables.find(
+                        ? settings.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
@@ -132,7 +132,7 @@
                   "
 									:variable="
                     element.type == 'variable'
-                      ? this.settings.variables.find(
+                      ? settings.variables.find(
                           (x) => x.uniqueId == element.options.configs.uniqueId
                         )
                       : {}
@@ -198,7 +198,7 @@
 					},
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
 					defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
-					designName: "nikan",
+					designName: "",
 					orientation: "portrait",
 					pageSize: "a4",
 					pageDirections: "rtl",
@@ -502,7 +502,7 @@
 						}
 						break
 
-					case 'pagecounter':
+					case 'bindingObject':
 						let key = opt.configs.field
 						if (this.bindingObject[key]) {
 							opt.configs.value = this.bindingObject[key]
