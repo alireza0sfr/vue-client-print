@@ -71,7 +71,7 @@
                             variable.uniqueId,
                         },
                       ]"
-                      v-for="variable in settings.variables"
+                      v-for="variable in locals.variables"
                       :key="variable.uniqueId"
                     >
                       <div class="variables-row">
@@ -917,7 +917,7 @@
                     :options="element.options"
                     :variable="
                       element.type == 'variable'
-                        ? settings.variables.find(
+                        ? locals.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
@@ -950,7 +950,7 @@
                     :options="element.options"
                     :variable="
                       element.type == 'variable'
-                        ? settings.variables.find(
+                        ? locals.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
@@ -981,6 +981,7 @@ export default {
   name: "TemplateBuilder",
   props: {
     options: Object,
+    variables: Array,
   },
   components: {
     textelement: TextElement,
@@ -1024,6 +1025,7 @@ export default {
             },
           },
         },
+        variables: [],
         bordersAllDirections: true,
         tabName: 'settings',
         isClicked: false,
@@ -1055,6 +1057,13 @@ export default {
         this.settings = rawSettings
       },
     },
+    variables: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        Object.assign(this.locals.variables, val)
+      },
+    },
   },
   mounted() {
     this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn")
@@ -1073,7 +1082,6 @@ export default {
           height: 0.5,
           footerElements: [],
         },
-        variables: [],
         defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
         defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
         totalHeightOfAPaper: 10.4, // Useable height for body tag
@@ -1131,7 +1139,7 @@ export default {
           height: this.settings.footer.height,
           footerElements: this.settings.footer.footerElements,
         },
-        variables: this.settings.variables,
+        variables: this.locals.variables,
         orientation: this.settings.orientation,
         pageSize: this.settings.pageSize,
         pageDirections: this.settings.pageDirections,
@@ -1479,7 +1487,7 @@ export default {
         type: 'text',
         context: '', 
       }
-      this.settings.variables.push(tmp)
+      this.locals.variables.push(tmp)
     },
 
     /**
@@ -1495,7 +1503,7 @@ export default {
     */
 
     deleteVariable(uniqueId) {
-      let variablesList = this.settings.variables
+      let variablesList = this.locals.variables
       let footerElements = this.settings.footer.footerElements
       let headerElements = this.settings.header.headerElements
 
@@ -1559,7 +1567,7 @@ export default {
           this.locals.selectedElement.options.configs.imageSrc = res
         })
       } else { // Its a variable image
-        let variables = this.settings.variables
+        let variables = this.locals.variables
         let variable
 
         for (let index = 0; index < variables.length; index++) {

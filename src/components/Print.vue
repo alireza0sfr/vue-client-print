@@ -3,6 +3,7 @@
     <TemplateBuilder
       ref="TemplateBuilder"
       :options="locals.templateBuilderData"
+      :variables="variables"
     />
 
     <!-- Data Slots -->
@@ -175,6 +176,7 @@ export default {
   props: {
     options: Object,
     bindingObject: Object,
+    variables: Array,
   },
   components: {
     variable: Variable,
@@ -224,7 +226,7 @@ export default {
       handler(val) {
         Object.assign(this.settings, val)
       },
-    },
+    }
   },
   mounted() {
     this.modalFunc("printModal", "printModalCloseBtn")
