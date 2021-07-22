@@ -14,7 +14,7 @@
     <a @click="templateBuilder()" href="#" title="صفحه ساز"> صفحه ساز </a>
 
     <div></div>
-    <Print ref="print" :options="printOptions" :bindingObject="bindingObject" :variables="variables">
+    <Print ref="print" :bindingObject="bindingObject" :variables="variables" :configuration="configs">
       <template v-slot:printData>
         <table>
           <thead>
@@ -60,7 +60,8 @@ export default {
         name: 'nikan',
         date: "2021/5/6",
       },
-      variables: []
+      variables: [],
+      configs: {}
     }
   },
   methods: {
@@ -70,7 +71,7 @@ export default {
       })
     },
     printPreview() {
-      this.$refs.print.printPreview()
+      this.$refs.print.printPreview(this.printOptions)
     },
   },
 };
