@@ -49,14 +49,14 @@ function resizable(element, resizer) {
  * Adding border and resizer to the clicked element
  */
 
-function click(element, classType) {
+function click(element) {
     element.addEventListener("mousedown", onClick, false)
     function onClick() {
         let selectedElements = document.getElementsByClassName('element selected')
         for (let index = 0; index < selectedElements.length; index++) {
-            selectedElements[index].className = classType + " element"
+            selectedElements[index].classList.remove('selected')
         }
-        element.className = classType + " element selected"
+        element.classList.add('selected')
     }
 
 }

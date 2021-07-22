@@ -112,7 +112,7 @@
                           @dragend="finishedDraggingElement()"
                         >
                           <img
-                            style="cursor: move"
+                            style="height: 20px; width: 15px; cursor: move;"
                             src="./elements/images/drag.png"
                           />
                         </div>
@@ -146,6 +146,7 @@
                         <div class="variables-content-field small">
                           <img
                             @click="deleteVariable(variable.uniqueId)"
+                            style="width: 15px; height: 15px"
                             src="./elements/images/cancel.png"
                           />
                         </div>

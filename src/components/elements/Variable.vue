@@ -5,11 +5,11 @@
     <div
       v-show="variable.type == 'text' ? true : false"
       :id="settings.id"
-      ref="textVariable"
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
       :class="locals.classType + ' element'"
       :style="settings.styles"
+      ref="textVariable"
     >
       {{ variable.context }}
       <div ref="textResizer" class="resizer"></div>
