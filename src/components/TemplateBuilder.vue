@@ -107,6 +107,7 @@
 												<div class="variables-content-field large" v-if="variable.type == 'image'">
 													<input
 														type="file"
+														accept="image/*"
 														@change="onFileChange(variable.uniqueId)"
 														aria-label="Small"
 														aria-describedby="inputGroup-sizing-sm"
@@ -150,7 +151,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="pageSizeControl">نوع صفحه</label>
+											<label for="pageSizeControl">اندازه صفحه</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select
@@ -183,7 +184,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>خط لبه</span>
+											<span>کادر</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input
@@ -431,12 +432,15 @@
 										v-if="locals.selectedElement.type == 'imageelement'"
 									>
 										<label for="elementImageFileControl">فایل تصویر خود را انتخاب کنید.</label>
-										<br />
-										<div style="font-size: 17px">*حداکثر سایز مجاز برای عکس ۱ مگابایت است.</div>
+										<div class="imageelement-text">*حداکثر سایز مجاز ۱ مگابایت</div>
+										<div class="imageelement-text">فرمت فایل های قابل قبول:</div>
+										<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png و *. jpeg</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
 										<input
+											style="margin-right: 21px;"
 											type="file"
+											accept="image/*"
 											@change="onFileChange()"
 											aria-label="Small"
 											aria-describedby="inputGroup-sizing-sm"
@@ -622,7 +626,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>استایل لبه ها</span>
+											<span>کادر</span>
 										</div>
 										<div class="toolbar-content-field" style="text-align: right">
 											<label for="bordersAlldirections">
@@ -639,7 +643,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.bordersAllDirections">
 										<div class="toolbar-content-label">
-											<span>استایل همه لبه ها</span>
+											<span>استایل کادر</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input
@@ -654,7 +658,7 @@
 									<div v-if="locals.bordersAllDirections == false" style="width: 100%">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>لبه بالا</span>
+												<span>کادر بالا</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input
@@ -670,7 +674,7 @@
 										</div>
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>لبه راست</span>
+												<span>کادر راست</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input
@@ -686,7 +690,7 @@
 										</div>
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>لبه پایین</span>
+												<span>کادر پایین</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input
@@ -702,7 +706,7 @@
 										</div>
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>لبه چپ</span>
+												<span>کادر چپ</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input
@@ -966,7 +970,7 @@
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
 					defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
 					totalHeightOfAPaper: 10.4, // Useable height for body tag
-					designName: "nikan",
+					designName: "",
 					orientation: "portrait",
 					pageSize: "a4",
 					pageDirections: "rtl",
@@ -1447,14 +1451,17 @@
 				let maximumFileSize = this.configuration.maximumFileSize * 1000 // Converting Value to bytes because system returns size in byts
 				if (this.locals.selectedElement.type == 'imageelement') {
 					let image = document.getElementById("elementImageFileControl").files[0]
-
-					if (image.size <= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-						this.toBase64(image).then((res) => {
-							this.locals.selectedElement.options.configs.imageSrc = res
-						})
-					} else {
-						alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+					if (image.type !== 'image/jpeg' && image.type !== 'image/png') {
+						return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
 					}
+
+					if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+						return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
+					}
+
+					this.toBase64(image).then((res) => {
+						this.locals.selectedElement.options.configs.imageSrc = res
+					})
 
 				} else { // Its a variable image
 					let variables = this.locals.variables
@@ -1466,15 +1473,14 @@
 						}
 					}
 					let image = document.getElementById("variableImageFileControl").files[0]
-					if (image.size <= maximumFileSize) {
 
-						this.toBase64(image).then((res) => { // Check if the file size is under 1MB the image size value is in bytes
-							variable.context = res
-						})
-					} else {
-						alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+					if (image.type != "image/jpeg" || image.type != "image/png") {
+						return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
 					}
 
+					if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+						return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+					}
 				}
 			},
 

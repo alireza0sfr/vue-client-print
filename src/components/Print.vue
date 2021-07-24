@@ -198,7 +198,7 @@
 					},
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
 					defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
-					designName: "nikan",
+					designName: "",
 					orientation: "portrait",
 					pageSize: "a4",
 					pageDirections: "rtl",
