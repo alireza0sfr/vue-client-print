@@ -99,7 +99,7 @@
                     "
 										:variable="
                       element.type == 'variable'
-                        ? this.settings.variables.find(
+                        ? settings.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
@@ -132,7 +132,7 @@
                   "
 									:variable="
                     element.type == 'variable'
-                      ? this.settings.variables.find(
+                      ? settings.variables.find(
                           (x) => x.uniqueId == element.options.configs.uniqueId
                         )
                       : {}
@@ -266,7 +266,7 @@
 				return (inches * 96).toFixed(2)
 			},
 
-			/** 
+			/**
 			 * Calculate Dynamic sizes from template builder before print
 			 */
 
@@ -438,6 +438,7 @@
 				}
 				this.locals.templateBuilderData.bindingObject = tmp
 				this.$refs.TemplateBuilder.settingsInitFunc()
+				this.$refs.TemplateBuilder.setVariables([...this.variables])				
 				this.$refs.TemplateBuilder.showModal()
 			},
 
@@ -456,7 +457,7 @@
 			},
 
 			/**
-			 *  Triggering editWhileInPreview 
+			 *  Triggering editWhileInPreview
 			 */
 
 			editWhileInPreview() {
@@ -484,7 +485,7 @@
 
 			prepareComponentsOptions(options, type, index) {
 
-				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt 
+				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
 
 				switch (type) {
 
@@ -502,7 +503,7 @@
 						}
 						break
 
-					case 'pagecounter':
+					case 'bindingObject':
 						let key = opt.configs.field
 						if (this.bindingObject[key]) {
 							opt.configs.value = this.bindingObject[key]

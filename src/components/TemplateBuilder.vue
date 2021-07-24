@@ -760,11 +760,17 @@
 
 					<!-- Section 2 (Template)-->
 					<div style="overflow: auto; width: 100%; padding: 20px">
+						<div style="margin:-5px 10px 10px">
+							<img src="./elements/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1"/>
+							<img src="./elements/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1"/>
+						</div>
 						<div
 							class="template-container"
 							:style="{
                 height: settings.defaultHeightOfPaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
+								'transform-origin': 'top right',
+								transform: `scale(${locals.scale})`
               }"
 						>
 							<div
@@ -859,7 +865,6 @@
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
-			variables: Array,
 			configuration: Object,
 		},
 		components: {
@@ -874,6 +879,7 @@
 		data() {
 			return {
 				locals: {
+					scale: 1,
 					pageSizeDictionary: {
 						landscape: {
 							a3: {
@@ -935,19 +941,15 @@
 					Object.assign(rawSettings, val)
 					this.settings = rawSettings
 				},
-			},
-			variables: {
-				deep: true,
-				immediate: true,
-				handler(val) {
-					this.locals.variables = val
-				},
-			},
+			}
 		},
 		mounted() {
 			this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn")
 		},
 		methods: {
+			setVariables(list) {
+				this.locals.variables = list
+			},
 
 			getDefault() {
 				return {
@@ -1077,6 +1079,7 @@
 				setTimeout(() => {
 					this.headerBorderDragFunc()
 					this.footerBorderDragFunc()
+					this.locals.scale = 1
 				}, 100)
 			},
 
@@ -1182,8 +1185,8 @@
 				}
 			},
 
-			/** 
-			 * Swtich between tabs in toolbar 
+			/**
+			 * Swtich between tabs in toolbar
 			 */
 
 			switchTabs(type, tab) {
@@ -1497,7 +1500,7 @@
 			},
 
 			/**
-			 * Adds an event listenner on delete button and then removes the element 
+			 * Adds an event listenner on delete button and then removes the element
 			 */
 
 			deletingElementOnPressingDeleteKey() {
