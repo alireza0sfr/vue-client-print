@@ -105,13 +105,14 @@ print component:
     -Done object assign for props
     -Done empty the context after changing the variable type
     -Done imageelement class will be replaced by variable when clicked
+    -Done fileSRC
 
-    -if the problem with variables exist use concact instead of refrence
 
 Before npm publish:
     -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))
     -sync rtl and ltr with the language
     -add il8n for languages
+    -toast instead of alerts
     -add exmaple code
     -use np to publish
     - :printjs :{} options for printjs like jspdf

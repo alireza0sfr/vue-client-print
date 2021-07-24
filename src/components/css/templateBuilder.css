@@ -6,6 +6,34 @@ shadow {
     box-shadow: -3px 4px 9px 0px #ddd;
 }
 
+.a-btn {
+    font-size: .9375rem;
+    color: #434a54 !important;
+    margin-right: .5rem !important;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+    color: #000;
+    background-color: #d7ecff;
+    border-color: #e6e9ed;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #434a54;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .5rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 3rem;
+    transition: all .18s ease-in-out;
+
+}
+
 /* Template  */
 
 .template {
@@ -55,6 +83,7 @@ shadow {
     color: #aaa;
     border: 1px solid #d4d4d4;
     cursor: pointer;
+    width: 56px;
 }
 
 .tab.selected {

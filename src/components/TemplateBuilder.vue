@@ -29,6 +29,7 @@
 									ref="settings"
 								>تنظیمات</a>
 								<a class="tab" @click="switchTabs('variables', $refs.variables)" ref="variables">متغیر ها</a>
+								<a class="tab" @click="switchTabs('others', $refs.others)" ref="others">سایر</a>
 							</div>
 
 							<!-- Variables Tab -->
@@ -38,13 +39,8 @@
 									<span>لیست متغیر ها</span>
 								</div>
 								<div class="variables-content-wrapper">
-									<div style="text-align: center">
-										<div @click="createVariable()" class="add-section">
-											<span
-												style="font-size: 22px;font-weight: bold;height: 32px;position: absolute;right: 0px;top: -3px;"
-											>+</span>
-											<span>افزودن متغیر</span>
-										</div>
+									<div @click="createVariable()" style="text-align: center; margin-top: 10px">
+										<a class="a-btn">افزودن متغیر</a>
 									</div>
 									<div class="variables">
 										<div
@@ -127,6 +123,34 @@
 								</div>
 							</div>
 
+							<!-- Others Tab  -->
+
+							<div v-show="locals.tabName == 'others'" class="others-tab">
+								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
+									<span>ذخیره</span>
+								</div>
+								<div class="toolbar-content-row">
+									<div style="width: 100%;" class="toolbar-content-field">
+										<a class="a-btn" @click="export2SrcFile()">Export</a>
+									</div>
+								</div>
+								<div class="toolbar-content-row">
+									<div style="width: 100%;" class="toolbar-content-field">
+										<a class="a-btn" @click="clickedOnInput('fileSrcControl')">Import</a>
+									</div>
+								</div>
+								<div style="display:none" class="toolbar-content-row">
+									<div class="variables-content-field">
+										<input
+											type="file"
+											@change="onFileChange()"
+											aria-label="Small"
+											aria-describedby="inputGroup-sizing-sm"
+											id="fileSrcControl"
+										/>
+									</div>
+								</div>
+							</div>
 							<!-- Settings Tab -->
 
 							<div v-show="locals.tabName == 'settings'" class="settings-tab">
@@ -437,6 +461,15 @@
 										<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png و *. jpeg</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
+										<div style="width: 100%;" class="toolbar-content-field">
+											<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">افزودن عکس</a>
+										</div>
+									</div>
+									<div
+										style="display: none;"
+										class="toolbar-content-row"
+										v-if="locals.selectedElement.type == 'imageelement'"
+									>
 										<input
 											style="margin-right: 21px;"
 											type="file"
@@ -859,6 +892,7 @@
 	import PageCounter from "./elements/PageCounter.vue"
 	import ImageElement from "./elements/ImageElement.vue"
 	import TextPattern from "./elements/TextPattern.vue"
+	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -1043,6 +1077,87 @@
 			},
 
 			/**
+			 * Exports Data from given src file
+			 */
+
+			export2SrcFile() {
+				// Syncing headerElements with the user chagnes
+				let headerElements = this.settings.header.headerElements
+				let footerElements = this.settings.footer.footerElements
+
+				for (let index = 0; index < headerElements.length; index++) {
+					let computedStyles = this.getCoordinates(
+						headerElements[index].options.id
+					)
+					let elementStyles = headerElements[index].options.styles
+					Object.assign(elementStyles, computedStyles)
+				}
+
+				for (let index = 0; index < footerElements.length; index++) {
+					let computedStyles = this.getCoordinates(
+						footerElements[index].options.id
+					)
+					let elementStyles = footerElements[index].options.styles
+					Object.assign(elementStyles, computedStyles)
+				}
+
+				this.settings.totalHeightOfAPaper =
+					this.settings.defaultHeightOfPaper -
+					this.settings.header.height -
+					this.settings.footer.height
+
+				if (this.settings.totalHeightOfAPaper < 0) {
+					this.settings.totalHeightOfAPaper = 1.77
+				}
+
+				let tmp = {
+					header: {
+						isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
+						height: this.settings.header.height,
+						headerElements: this.settings.header.headerElements,
+					},
+					footer: {
+						isFooterRepeatable: this.settings.footer.isFooterRepeatable,
+						height: this.settings.footer.height,
+						footerElements: this.settings.footer.footerElements,
+					},
+					variables: this.locals.variables,
+					orientation: this.settings.orientation,
+					pageSize: this.settings.pageSize,
+					pageDirections: this.settings.pageDirections,
+					totalHeightOfAPaper: this.settings.totalHeightOfAPaper,
+					defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
+					defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
+					pageBorder: this.settings.pageBorder,
+					designName: this.settings.designName,
+				}
+
+				tmp = this.encode2Base64(JSON.stringify(tmp)) // encoding the settings to export
+				
+				let designName = this.settings.designName == '' ? 'vue-print' : this.settings.designName
+				var currentdate = new Date()
+				var fileName = designName + "_"
+					+ currentdate.getFullYear() + "_"
+					+ (currentdate.getMonth() + 1) + "_"
+					+ currentdate.getDate() + "_"
+					+ currentdate.getHours() + "_"
+					+ currentdate.getMinutes()
+
+				var blob = new Blob([tmp],
+					{ type: "text/plain;charset=utf-8" })
+				saveAs(blob, `${fileName}.vp`)
+			},
+
+			/**
+			 * Imports settings from src file and assign the settings based of it
+			 */
+
+			importFromSrcFile(srcFile) {
+				this.settings = this.getDefault() // Set the settings to default value
+				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+			},
+
+			/**
 			 * converts given inch to pixel
 			 */
 
@@ -1194,10 +1309,23 @@
 				let slecetdTab = document.getElementsByClassName('tab selected')[0]
 				slecetdTab.classList.remove('selected')
 				tab.classList.add('selected')
-				if (type == 'settings') {
-					this.locals.tabName = 'settings'
-				} else if (type == 'variables') {
-					this.locals.tabName = 'variables'
+
+				switch (type) {
+
+					case 'settings':
+						this.locals.tabName = 'settings'
+						break
+
+					case 'variables':
+						this.locals.tabName = 'variables'
+						break
+
+					case 'others':
+						this.locals.tabName = 'others'
+						break
+
+					default:
+						break
 				}
 			},
 
@@ -1445,40 +1573,73 @@
 			},
 
 			onFileChange(uniqueId) {
-				let maximumFileSize = this.configuration.maximumFileSize * 1000 // Converting Value to bytes because system returns size in byts
-				if (this.locals.selectedElement.type == 'imageelement') {
-					let image = document.getElementById("elementImageFileControl").files[0]
-					if (image.type !== 'image/jpeg' && image.type !== 'image/png') {
-						return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
-					}
+				let maximumFileSize = this.configuration.maximumFileSize * 1000
+				let that = this // Storing this value to be able to use it inside a function
 
-					if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-						return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
-					}
-
-					this.toBase64(image).then((res) => {
-						this.locals.selectedElement.options.configs.imageSrc = res
-					})
-
-				} else { // Its a variable image
-					let variables = this.locals.variables
-					let variable
-
-					for (let index = 0; index < variables.length; index++) {
-						if (variables[index].uniqueId == uniqueId) {
-							variable = variables[index]
+				switch (this.locals.selectedElement.type) {
+					case 'imageelement':
+						let image = document.getElementById("elementImageFileControl").files[0]
+						if (image.type !== 'image/jpeg' && image.type !== 'image/png') {
+							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
 						}
-					}
-					let image = document.getElementById("variableImageFileControl").files[0]
 
-					if (image.type != "image/jpeg" || image.type != "image/png") {
-						return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
-					}
+						if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+							return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
+						}
 
-					if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-						return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
-					}
+						this.toBase64(image).then((res) => {
+							this.locals.selectedElement.options.configs.imageSrc = res
+						})
+
+						break
+
+					case 'variable':
+						let variables = this.locals.variables
+						let variable
+
+						for (let index = 0; index < variables.length; index++) {
+							if (variables[index].uniqueId == uniqueId) {
+								variable = variables[index]
+							}
+						}
+						image = document.getElementById("variableImageFileControl").files[0]
+
+						if (image.type != "image/jpeg" || image.type != "image/png") {
+							return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
+						}
+
+						if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+						}
+
+						this.toBase64(image).then((res) => {
+							variable.context = res
+						})
+
+						break
+
+					default: // if its a source file
+
+						let fileSrc = document.getElementById("fileSrcControl").files[0]
+
+						if (!fileSrc.name.includes('.vp')) { // Checking the file type
+							return alert('فرمت فایل پشتیبانی نمیشود فرمت فایل های قابل قبول: vp.*')
+						}
+
+						if (fileSrc.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+						}
+						var fr = new FileReader()
+						fr.readAsText(fileSrc)
+						fr.onload = function () {
+							that.importFromSrcFile(fr.result)
+						}
+						fr.onerror = function (err) {
+							alert(err)
+						}
+						break
 				}
+
 			},
 
 			/**
@@ -1597,7 +1758,32 @@
 				)
 				return
 			},
+			clickedOnInput(id) {
+				document.getElementById(id).click()
+			},
 
+			/**
+			 * Encode given data to base64
+			 */
+
+			encode2Base64(str) {
+				{
+					return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+						function toSolidBytes(match, p1) {
+							return String.fromCharCode('0x' + p1)
+						}))
+				}
+			},
+
+			/**
+			 * Decode given data from base64
+			 */
+
+			decodeFromBase64(str) {
+				return decodeURIComponent(atob(str).split('').map(function (c) {
+					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+				}).join(''))
+			}
 		},
 	};
 </script>
