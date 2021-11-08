@@ -110,9 +110,13 @@ print component:
 
 Before npm publish:
     -language dropdown (supported language persian english french(bita) indian(discord) chinesse(amin) german(zohre))
+    -replace AD Date with gregorian date
+    -remove nikan logo from image element
     -sync rtl and ltr with the language
     -add il8n for languages
     -toast instead of alerts
     -add exmaple code
     -use np to publish
     - :printjs :{} options for printjs like jspdf
+    -add btc and tether and etc and paypal
+    -vue press for deployment
