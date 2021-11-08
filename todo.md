@@ -120,3 +120,4 @@ Before npm publish:
     - :printjs :{} options for printjs like jspdf
     -add btc and tether and etc and paypal
     -vue press for deployment
+    -use docstrings for props like vue persiandatepicker
