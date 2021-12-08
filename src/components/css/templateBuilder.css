@@ -70,7 +70,6 @@ shadow {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    padding-top: 8px;
     border-bottom: 1px solid #78bfff;
 }
 
@@ -83,7 +82,7 @@ shadow {
     color: #aaa;
     border: 1px solid #d4d4d4;
     cursor: pointer;
-    width: 56px;
+    width: 60px;
 }
 
 .tab.selected {
