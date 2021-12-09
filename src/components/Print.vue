@@ -1,20 +1,13 @@
 <template>
 	<div id="printPage">
-		<TemplateBuilder
-			ref="TemplateBuilder"
-			:options="locals.templateBuilderData"
-			:variables="variables"
-			:configuration="configs"
-		/>
+		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :variables="variables" :configuration="configs" />
 
 		<!-- Data Slots -->
 		<div class="slotWrapper">
-			<div
-				:style="{
+			<div :style="{
           width: settings.defaultWidthOfPaper + 'in',
           padding: '5px',
-        }"
-			>
+        }">
 				<div id="toBeConverted">
 					<slot class="printData" name="printData"></slot>
 				</div>
@@ -62,82 +55,54 @@
 						</div>
 					</div>
 					<div id="printForm">
-						<div
-							class="mainLoop"
-							:style="{
+						<div class="mainLoop" :style="{
                 height: settings.defaultheightofpaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
-              }"
-							v-for="index in locals.totalPages"
-							:key="index"
-						>
-							<div
-								:style="{
+              }" v-for="index in locals.totalPages" :key="index">
+							<div :style="{
                   width: 'auto',
                   border: settings.pageBorder,
                   margin: '5px',
-                }"
-								class="pages"
-							>
-								<div
-									v-if="settings.header.isHeaderRepeatable || index == 1"
-									:style="{
+                }" class="pages">
+								<div v-if="settings.header.isHeaderRepeatable || index == 1" :style="{
                     height: locals.pageHeadersSizes[index - 1] + 'in',
-                  }"
-									class="mainHeader"
-								>
-									<component
-										v-for="element in settings.header.headerElements"
-										:key="element.options.id"
-										:is="element.type"
-										:options="
+                  }" class="mainHeader">
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="
                       prepareComponentsOptions(
                         element.options,
                         element.type,
                         index
                       )
-                    "
-										:variable="
+                    " :variable="
                       element.type == 'variable'
                         ? settings.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
                         : ''
-                    "
-									/>
+                    " />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
-							<div
-								v-if="
+							<div v-if="
                   settings.footer.isFooterRepeatable ||
                   index == locals.totalPages
-                "
-								:style="{
+                " :style="{
                   height: locals.pageFootersSizes[index - 1] + 'in',
-                }"
-								class="mainFooter"
-							>
-								<component
-									v-for="element in settings.footer.footerElements"
-									:key="element.options.id"
-									:is="element.type"
-									:options="
+                }" class="mainFooter">
+								<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="
                     prepareComponentsOptions(
                       element.options,
                       element.type,
                       index
                     )
-                  "
-									:variable="
+                  " :variable="
                     element.type == 'variable'
                       ? settings.variables.find(
                           (x) => x.uniqueId == element.options.configs.uniqueId
                         )
                       : {}
-                  "
-								/>
+                  " />
 							</div>
 						</div>
 					</div>
@@ -213,19 +178,16 @@
 		},
 		methods: {
 			printForm() {
-
-				/**
-				 * Prints the form
-				 */
-
 				printJS({
 					printable: "printForm",
 					type: "html",
 					scanStyles: false, // If true inline styles will be removed
 					style: [
 						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}",
-					],
-				}) // some custom styles needed for print
+					], // some custom styles needed for print
+					onLoadingEnd: (res) => this.$emit('print-success', res),
+					onError: (err) => this.$emit('print-error', err)
+				})
 			},
 
 			/**
@@ -357,49 +319,53 @@
 			 */
 
 			convert2Image() {
-				let transformOrigin = this.settings.pageDirections == 'rtl' ? 'top right' : 'top left'
-				var scale = 2
-				let domNode = document.getElementById("toBeConverted")
-				domtoimage
-					.toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality
-						width: domNode.clientWidth * scale,
-						height: domNode.clientHeight * scale,
-						style: {
-							transform: "scale(" + scale + ")",
-							transformOrigin: transformOrigin,
-						},
-					})
-					.then((res) => {
-						var reader = new FileReader()
-						reader.readAsDataURL(res)
-						reader.onloadend = () => {
-							var result = reader.result
-							let compStyles = window.getComputedStyle(
-								document.getElementById("toBeConverted")
-							)
-							let imgHeight = compStyles.getPropertyValue("height")
-							let totalPagesHeight = this.convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
+				return new Promise((resolve, reject) => {
+					let transformOrigin = this.settings.pageDirections == 'rtl' ? 'top right' : 'top left'
+					var scale = 2
+					let domNode = document.getElementById("toBeConverted")
+					domtoimage
+						.toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality
+							width: domNode.clientWidth * scale,
+							height: domNode.clientHeight * scale,
+							style: {
+								transform: "scale(" + scale + ")",
+								transformOrigin: transformOrigin,
+							},
+						})
+						.then((res) => {
+							var reader = new FileReader()
+							reader.readAsDataURL(res)
+							reader.onloadend = () => {
+								var result = reader.result
+								let compStyles = window.getComputedStyle(
+									document.getElementById("toBeConverted")
+								)
+								let imgHeight = compStyles.getPropertyValue("height")
+								let totalPagesHeight = this.convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
 
-							this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
+								this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
 
-							this.$nextTick(() => {  // Waits till the base template is generated and then appends the children
+								this.$nextTick(() => {  // Waits till the base template is generated and then appends the children
 
-								let convertedElement = document.getElementsByClassName("converted") // Element that children will be appended to
+									let convertedElement = document.getElementsByClassName("converted") // Element that children will be appended to
 
-								// Removing the existing canvas and Appening the results to parents
-								for (let index = 0; index < convertedElement.length; index++) {
+									// Removing the existing canvas and Appening the results to parents
+									for (let index = 0; index < convertedElement.length; index++) {
 
-									this.removeAllChildNodes(convertedElement[index])
+										this.removeAllChildNodes(convertedElement[index])
 
-									let computedSy =
-										index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
-									let finalResult = this.canvasMaker(result, computedSy, index)
-									convertedElement[index].appendChild(finalResult)
-								}
-								document.getElementById('loadingModal').style.display = 'none'
-							})
-						}
-					})
+										let computedSy =
+											index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
+										let finalResult = this.canvasMaker(result, computedSy, index)
+										convertedElement[index].appendChild(finalResult)
+									}
+									document.getElementById('loadingModal').style.display = 'none'
+								})
+							}
+							resolve(res)
+						})
+						.catch(err => reject(err))
+				})
 			},
 
 			/**
@@ -438,7 +404,7 @@
 				}
 				this.locals.templateBuilderData.bindingObject = tmp
 				this.$refs.TemplateBuilder.settingsInitFunc()
-				this.$refs.TemplateBuilder.setVariables([...this.variables])				
+				this.$refs.TemplateBuilder.setVariables([...this.variables])
 				this.$refs.TemplateBuilder.showModal()
 			},
 
@@ -453,6 +419,8 @@
 
 				setTimeout(() => {
 					this.convert2Image()
+						.then(res => this.emit('preview-success', res))
+						.then(err => this.emit('preview-failed', err))
 				}, 100)
 			},
 
