@@ -5,15 +5,16 @@
 			<div class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
-						<span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
+						<a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
+							<img src="./elements/images/floppy-disk.png" />
+						</a>
 					</div>
 					<div>
 						<h3 class="title">طراح چاپ</h3>
 					</div>
+
 					<div>
-						<a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
-							<img src="./elements/images/floppy-disk.png" />
-						</a>
+						<span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
 					</div>
 				</div>
 
@@ -23,11 +24,7 @@
 						<div class="toolbar-content">
 							<!-- Tabs -->
 							<div class="tabs">
-								<a
-									class="tab selected"
-									@click="switchTabs('settings', $refs.settings)"
-									ref="settings"
-								>تنظیمات</a>
+								<a class="tab selected" @click="switchTabs('settings', $refs.settings)" ref="settings">تنظیمات</a>
 								<a class="tab" @click="switchTabs('variables', $refs.variables)" ref="variables">متغیر ها</a>
 								<a class="tab" @click="switchTabs('others', $refs.others)" ref="others">سایر</a>
 							</div>
@@ -43,79 +40,41 @@
 										<a class="a-btn">افزودن متغیر</a>
 									</div>
 									<div class="variables">
-										<div
-											:class="[
+										<div :class="[
                         'variable',
                         {
                           selected:
                             locals.selectedElement.options.configs.uniqueId ==
                             variable.uniqueId,
                         },
-                      ]"
-											v-for="variable in locals.variables"
-											:key="variable.uniqueId"
-										>
+                      ]" v-for="variable in locals.variables" :key="variable.uniqueId">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
-														<input
-															type="text"
-															v-model="variable.name"
-															class="input-form-control"
-															aria-label="Small"
-															placeholder="نام متغیر"
-															aria-describedby="inputGroup-sizing-sm"
-														/>
+														<input type="text" v-model="variable.name" class="input-form-control" aria-label="Small" placeholder="نام متغیر" aria-describedby="inputGroup-sizing-sm" />
 													</div>
 													<div class="variables-content-field" style="width: 40%">
-														<select
-															class="input-form-control"
-															v-model="variable.type"
-															@change="onVariableTypeChange(variable)"
-														>
+														<select class="input-form-control" v-model="variable.type" @change="onVariableTypeChange(variable)">
 															<option value="text">متن</option>
 															<option value="image">عکس</option>
 														</select>
 													</div>
 												</div>
-												<div
-													draggable="true"
-													class="variables-content-field small"
-													@dragstart="
+												<div draggable="true" class="variables-content-field small" @dragstart="
                             startDraggingElement('variable', variable.uniqueId)
-                          "
-													@dragend="finishedDraggingElement()"
-												>
+                          " @dragend="finishedDraggingElement()">
 													<img style="height: 20px; width: 15px; cursor: move;" src="./elements/images/drag.png" />
 												</div>
 											</div>
 											<div class="variables-row">
 												<div v-if="variable.type == 'text'" class="variables-content-field large">
-													<input
-														type="text"
-														v-model="variable.context"
-														class="input-form-control"
-														aria-label="Small"
-														placeholder="متن"
-														aria-describedby="inputGroup-sizing-sm"
-													/>
+													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" placeholder="متن" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 												<div class="variables-content-field large" v-if="variable.type == 'image'">
-													<input
-														type="file"
-														accept="image/*"
-														@change="onFileChange(variable.uniqueId)"
-														aria-label="Small"
-														aria-describedby="inputGroup-sizing-sm"
-														id="variableImageFileControl"
-													/>
+													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
-													<img
-														@click="deleteVariable(variable.uniqueId)"
-														style="width: 15px; height: 15px"
-														src="./elements/images/cancel.png"
-													/>
+													<img @click="deleteVariable(variable.uniqueId)" style="width: 15px; height: 15px" src="./elements/images/cancel.png" />
 												</div>
 											</div>
 										</div>
@@ -141,13 +100,7 @@
 								</div>
 								<div style="display:none" class="toolbar-content-row">
 									<div class="variables-content-field">
-										<input
-											type="file"
-											@change="onFileChange()"
-											aria-label="Small"
-											aria-describedby="inputGroup-sizing-sm"
-											id="fileSrcControl"
-										/>
+										<input type="file" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
 									</div>
 								</div>
 							</div>
@@ -164,13 +117,7 @@
 											<span>نام طرح</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="text"
-												v-model="settings.designName"
-												class="input-form-control"
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											/>
+											<input type="text" v-model="settings.designName" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -178,12 +125,7 @@
 											<label for="pageSizeControl">اندازه صفحه</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select
-												class="input-form-control"
-												v-model="settings.pageSize"
-												@change="syncSizes()"
-												id="pageSizeControl"
-											>
+											<select class="input-form-control" v-model="settings.pageSize" @change="syncSizes()" id="pageSizeControl">
 												<option value="a3">A3</option>
 												<option value="a4">A4</option>
 												<option value="a5">A5</option>
@@ -195,12 +137,7 @@
 											<label for="pageOrientiationsControl">حالت صفحه</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select
-												class="input-form-control"
-												@change="syncSizes()"
-												v-model="settings.orientation"
-												id="pageOrientiationsControl"
-											>
+											<select class="input-form-control" @change="syncSizes()" v-model="settings.orientation" id="pageOrientiationsControl">
 												<option value="portrait">عمودی</option>
 												<option value="landscape">افقی</option>
 											</select>
@@ -211,13 +148,7 @@
 											<span>کادر</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="text"
-												class="input-form-control"
-												v-model="settings.pageBorder"
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											/>
+											<input type="text" class="input-form-control" v-model="settings.pageBorder" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -225,12 +156,7 @@
 											<label for="repeatableHeaderControl">تکرار هدر</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												class="input-form-control"
-												type="checkbox"
-												v-model="settings.header.isHeaderRepeatable"
-												id="repeatableHeaderControl"
-											/>
+											<input class="input-form-control" type="checkbox" v-model="settings.header.isHeaderRepeatable" id="repeatableHeaderControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -238,12 +164,7 @@
 											<label for="repeatableFooterControl">تکرار فوتر</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												class="input-form-control"
-												type="checkbox"
-												v-model="settings.footer.isFooterRepeatable"
-												id="repeatableFooterControl"
-											/>
+											<input class="input-form-control" type="checkbox" v-model="settings.footer.isFooterRepeatable" id="repeatableFooterControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -253,25 +174,13 @@
 										<div class="toolbar-content-field" style="text-align: right">
 											<div>
 												<label for="pageDirections">
-													<input
-														type="radio"
-														name="pageDirections"
-														id="pageDirections"
-														value="rtl"
-														v-model="settings.pageDirections"
-													/>
+													<input type="radio" name="pageDirections" id="pageDirections" value="rtl" v-model="settings.pageDirections" />
 													راست به چپ
 												</label>
 											</div>
 											<div>
 												<label for="pageDirections">
-													<input
-														type="radio"
-														name="pageDirections"
-														id="pageDirections"
-														value="ltr"
-														v-model="settings.pageDirections"
-													/>
+													<input type="radio" name="pageDirections" id="pageDirections" value="ltr" v-model="settings.pageDirections" />
 													چپ به راست
 												</label>
 											</div>
@@ -287,11 +196,7 @@
 								<div class="toolbar-content-wrapper" style="flex-direction: row" id="elementsMenu">
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span
-												draggable="true"
-												@dragstart="startDraggingElement('textelement')"
-												@dragend="finishedDraggingElement()"
-											>
+											<span draggable="true" @dragstart="startDraggingElement('textelement')" @dragend="finishedDraggingElement()">
 												<img src="./elements/images/text.png" alt="متن" />
 												<div class="element-title">متن</div>
 											</span>
@@ -299,11 +204,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span
-												draggable="true"
-												@dragstart="startDraggingElement('datetime')"
-												@dragend="finishedDraggingElement()"
-											>
+											<span draggable="true" @dragstart="startDraggingElement('datetime')" @dragend="finishedDraggingElement()">
 												<img src="./elements/images/timetable.png" alt="تاریخ و ساعت" />
 												<div class="element-title">تاریخ و ساعت</div>
 											</span>
@@ -311,11 +212,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span
-												draggable="true"
-												@dragstart="startDraggingElement('pagecounter')"
-												@dragend="finishedDraggingElement()"
-											>
+											<span draggable="true" @dragstart="startDraggingElement('pagecounter')" @dragend="finishedDraggingElement()">
 												<img src="./elements/images/pages.png" alt="شماره صفحه" />
 												<div class="element-title">شماره صفحه</div>
 											</span>
@@ -323,11 +220,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span
-												draggable="true"
-												@dragstart="startDraggingElement('imageelement')"
-												@dragend="finishedDraggingElement()"
-											>
+											<span draggable="true" @dragstart="startDraggingElement('imageelement')" @dragend="finishedDraggingElement()">
 												<img src="./elements/images/image.png" alt="عکس" />
 												<div class="element-title">عکس</div>
 											</span>
@@ -335,11 +228,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span
-												draggable="true"
-												@dragstart="startDraggingElement('bindingObject')"
-												@dragend="finishedDraggingElement()"
-											>
+											<span draggable="true" @dragstart="startDraggingElement('bindingObject')" @dragend="finishedDraggingElement()">
 												<img src="./elements/images/binding.png" alt="اتصال داده" />
 												<div class="element-title">اتصال داده</div>
 											</span>
@@ -347,11 +236,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span
-												draggable="true"
-												@dragstart="startDraggingElement('textpattern')"
-												@dragend="finishedDraggingElement()"
-											>
+											<span draggable="true" @dragstart="startDraggingElement('textpattern')" @dragend="finishedDraggingElement()">
 												<img src="./elements/images/textpattern.png" alt="متن الگویی" />
 												<div class="element-title">متن الگویی</div>
 											</span>
@@ -371,12 +256,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textelement'">
 										<div class="toolbar-content-field">
-											<textarea
-												v-model="locals.selectedElement.options.configs.text"
-												class="input-form-control"
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											></textarea>
+											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
@@ -384,12 +264,7 @@
 											<label for="hasDateControl">تاریخ</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												class="input-form-control"
-												type="checkbox"
-												v-model="locals.selectedElement.options.configs.hasDate"
-												id="hasDateControl"
-											/>
+											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasDate" id="hasDateControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
@@ -397,12 +272,7 @@
 											<label for="hasTimeControl">ساعت</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												class="input-form-control"
-												type="checkbox"
-												v-model="locals.selectedElement.options.configs.hasTime"
-												id="hasTimeControl"
-											/>
+											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasTime" id="hasTimeControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
@@ -410,14 +280,9 @@
 											<label for="persiaDateControl">تاریخ شمسی</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												class="input-form-control"
-												type="checkbox"
-												v-model="
+											<input class="input-form-control" type="checkbox" v-model="
                           locals.selectedElement.options.configs.persianDate
-                        "
-												id="persiaDateControl"
-											/>
+                        " id="persiaDateControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'pagecounter'">
@@ -425,14 +290,9 @@
 											<label for="persianNumbersControl">اعداد فارسی</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="checkbox"
-												class="input-form-control"
-												v-model="
+											<input type="checkbox" class="input-form-control" v-model="
                           locals.selectedElement.options.configs.persianNumbers
-                        "
-												id="persianNumbersControl"
-											/>
+                        " id="persianNumbersControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'pagecounter'">
@@ -440,21 +300,12 @@
 											<label for="completeFormControl">صفحه از کل</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="checkbox"
-												class="input-form-control"
-												v-model="
+											<input type="checkbox" class="input-form-control" v-model="
                           locals.selectedElement.options.configs.completeForm
-                        "
-												id="completeFormControl"
-											/>
+                        " id="completeFormControl" />
 										</div>
 									</div>
-									<div
-										class="toolbar-content-row"
-										style="flex-direction: column"
-										v-if="locals.selectedElement.type == 'imageelement'"
-									>
+									<div class="toolbar-content-row" style="flex-direction: column" v-if="locals.selectedElement.type == 'imageelement'">
 										<label for="elementImageFileControl">فایل تصویر خود را انتخاب کنید.</label>
 										<div class="imageelement-text">*حداکثر سایز مجاز ۱ مگابایت</div>
 										<div class="imageelement-text">فرمت فایل های قابل قبول:</div>
@@ -465,34 +316,17 @@
 											<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">افزودن عکس</a>
 										</div>
 									</div>
-									<div
-										style="display: none;"
-										class="toolbar-content-row"
-										v-if="locals.selectedElement.type == 'imageelement'"
-									>
-										<input
-											style="margin-right: 21px;"
-											type="file"
-											accept="image/*"
-											@change="onFileChange()"
-											aria-label="Small"
-											aria-describedby="inputGroup-sizing-sm"
-											id="elementImageFileControl"
-										/>
+									<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
+										<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'bindingObject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectPersianNumbersControl">اعداد فارسی</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="checkbox"
-												class="input-form-control"
-												v-model="
+											<input type="checkbox" class="input-form-control" v-model="
                           locals.selectedElement.options.configs.persianNumbers
-                        "
-												id="bindingObjectPersianNumbersControl"
-											/>
+                        " id="bindingObjectPersianNumbersControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'bindingObject'">
@@ -500,11 +334,7 @@
 											<label for="bindingObjectControl">نوع داده</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select
-												class="input-form-control"
-												v-model="locals.selectedElement.options.configs.field"
-												id="bindingObjectControl"
-											>
+											<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
 												<option v-for="option in Object.keys(settings.bindingObject)" :key="option">{{ option }}</option>
 											</select>
 										</div>
@@ -517,12 +347,7 @@
 									</div>
 									<div v-if="locals.selectedElement.type == 'textpattern'">
 										<div class="toolbar-content-field">
-											<textarea
-												v-model="locals.selectedElement.options.configs.text"
-												class="input-form-control"
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											></textarea>
+											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
@@ -530,14 +355,9 @@
 											<label for="textPatternPersianNumbersControl">اعداد فارسی</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="checkbox"
-												class="input-form-control"
-												v-model="
+											<input type="checkbox" class="input-form-control" v-model="
                           locals.selectedElement.options.configs.persianNumbers
-                        "
-												id="textPatternPersianNumbersControl"
-											/>
+                        " id="textPatternPersianNumbersControl" />
 										</div>
 									</div>
 								</div>
@@ -563,13 +383,9 @@
 											<label for="elementTextAlignControl">مکان نوشته</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select
-												v-model="
+											<select v-model="
                           locals.selectedElement.options.styles.textAlign
-                        "
-												class="input-form-control"
-												id="elementTextAlignControl"
-											>
+                        " class="input-form-control" id="elementTextAlignControl">
 												<option value="right">راست</option>
 												<option value="center">وسط</option>
 												<option value="left">چپ</option>
@@ -581,13 +397,7 @@
 											<span>رنگ نوشته</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="color"
-												class="input-form-control"
-												v-model="locals.selectedElement.options.styles.color"
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											/>
+											<input type="color" class="input-form-control" v-model="locals.selectedElement.options.styles.color" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -595,15 +405,9 @@
 											<span>رنگ پس زمینه</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="color"
-												class="input-form-control"
-												v-model="
+											<input type="color" class="input-form-control" v-model="
                           locals.selectedElement.options.styles.backgroundColor
-                        "
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											/>
+                        " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -611,16 +415,8 @@
 											<span>اندازه فونت</span>
 										</div>
 										<div class="toolbar-content-field">
-											<select
-												class="input-form-control"
-												v-model="locals.selectedElement.options.styles.fontSize"
-												id="pageSizeControl"
-											>
-												<option
-													v-for="option in locals.fontSizes"
-													:key="option"
-													:value="option + 'px'"
-												>{{ option }}</option>
+											<select class="input-form-control" v-model="locals.selectedElement.options.styles.fontSize" id="pageSizeControl">
+												<option v-for="option in locals.fontSizes" :key="option" :value="option + 'px'">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -629,13 +425,9 @@
 											<label for="fontWeightControl">نوع نوشته</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select
-												v-model="
+											<select v-model="
                           locals.selectedElement.options.styles.fontWeight
-                        "
-												class="input-form-control"
-												id="elementTextAlignControl"
-											>
+                        " class="input-form-control" id="elementTextAlignControl">
 												<option value="normal">عادی</option>
 												<option value="bold">ضخیم</option>
 											</select>
@@ -646,15 +438,9 @@
 											<span>فونت</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="text"
-												class="input-form-control"
-												v-model="
+											<input type="text" class="input-form-control" v-model="
                           locals.selectedElement.options.styles.fontFamily
-                        "
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											/>
+                        " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -663,13 +449,7 @@
 										</div>
 										<div class="toolbar-content-field" style="text-align: right">
 											<label for="bordersAlldirections">
-												<input
-													class="input-form-control"
-													style="display: inline-block"
-													type="checkbox"
-													v-model="locals.bordersAllDirections"
-													id="bordersAlldirections"
-												/>
+												<input class="input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
 												همه جهات
 											</label>
 										</div>
@@ -679,13 +459,7 @@
 											<span>استایل کادر</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input
-												type="text"
-												class="input-form-control"
-												v-model="locals.selectedElement.options.styles.border"
-												aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm"
-											/>
+											<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div v-if="locals.bordersAllDirections == false" style="width: 100%">
@@ -694,15 +468,9 @@
 												<span>کادر بالا</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input
-													type="text"
-													class="input-form-control"
-													v-model="
+												<input type="text" class="input-form-control" v-model="
                             locals.selectedElement.options.styles.borderTop
-                          "
-													aria-label="Small"
-													aria-describedby="inputGroup-sizing-sm"
-												/>
+                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -710,15 +478,9 @@
 												<span>کادر راست</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input
-													type="text"
-													class="input-form-control"
-													v-model="
+												<input type="text" class="input-form-control" v-model="
                             locals.selectedElement.options.styles.borderRight
-                          "
-													aria-label="Small"
-													aria-describedby="inputGroup-sizing-sm"
-												/>
+                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -726,15 +488,9 @@
 												<span>کادر پایین</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input
-													type="text"
-													class="input-form-control"
-													v-model="
+												<input type="text" class="input-form-control" v-model="
                             locals.selectedElement.options.styles.borderBottom
-                          "
-													aria-label="Small"
-													aria-describedby="inputGroup-sizing-sm"
-												/>
+                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -742,15 +498,9 @@
 												<span>کادر چپ</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input
-													type="text"
-													class="input-form-control"
-													v-model="
+												<input type="text" class="input-form-control" v-model="
                             locals.selectedElement.options.styles.borderLeft
-                          "
-													aria-label="Small"
-													aria-describedby="inputGroup-sizing-sm"
-												/>
+                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>
@@ -761,29 +511,17 @@
 										<div class="toolbar-content-field" style="text-align: right">
 											<label for="elementDirections">
 												<div>
-													<input
-														type="radio"
-														name="elementDirections"
-														id="elementDirections"
-														value="rtl"
-														v-model="
+													<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="
                               locals.selectedElement.options.styles.direction
-                            "
-													/>
+                            " />
 													راست به چپ
 												</div>
 											</label>
 											<label for="elementDirections2">
 												<div>
-													<input
-														type="radio"
-														name="elementDirections"
-														id="elementDirections2"
-														value="ltr"
-														v-model="
+													<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="
                               locals.selectedElement.options.styles.direction
-                            "
-													/>
+                            " />
 													چپ به راست
 												</div>
 											</label>
@@ -798,88 +536,49 @@
 					<!-- Section 2 (Template)-->
 					<div style="overflow: auto; width: 100%; padding: 20px">
 						<div style="margin:-5px 10px 10px">
-							<img src="./elements/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1"/>
-							<img src="./elements/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1"/>
+							<img src="./elements/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
+							<img src="./elements/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 						</div>
-						<div
-							class="template-container"
-							:style="{
+						<div class="template-container" :style="{
                 height: settings.defaultHeightOfPaper + 'in',
                 width: settings.defaultWidthOfPaper + 'in',
 								'transform-origin': 'top right',
 								transform: `scale(${locals.scale})`
-              }"
-						>
-							<div
-								:style="{
+              }">
+							<div :style="{
                   width: '100%',
                   height: '100%',
                   border: settings.pageBorder,
-                }"
-								class="template"
-								@click="deSelectAll"
-							>
-								<div
-									:style="{
+                }" class="template" @click="deSelectAll">
+								<div :style="{
                     height: settings.header.height + 'in',
                     'min-height': '0.15in',
-                  }"
-									id="headerTemplate"
-									class="section header"
-									ref="headerTemplate"
-									@drop="droppedElementOnHeader()"
-									@dragenter.prevent
-									@dragover.prevent
-								>
-									<component
-										v-for="element in settings.header.headerElements"
-										:key="element.options.id"
-										:is="element.type"
-										:options="element.options"
-										:variable="
+                  }" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElementOnHeader()" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="
                       element.type == 'variable'
                         ? locals.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
                         : ''
-                    "
-										@clickedOnElement="clickedOnElement(element)"
-										@finishedEditingElement="finishedEditingElement(element)"
-									/>
+                    " @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 								<div id="bodyTemplate">
 									<div class="watermark">بدنه چاپ</div>
 									<p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
 								</div>
-								<div
-									:style="{
+								<div :style="{
                     height: settings.footer.height + 'in',
                     'min-height': '0.15in',
-                  }"
-									id="footerTemplate"
-									class="section footer"
-									ref="footerTemplate"
-									@drop="droppedElementOnFooter()"
-									@dragenter.prevent
-									@dragover.prevent
-								>
-									<component
-										v-for="element in settings.footer.footerElements"
-										:key="element.options.id"
-										:is="element.type"
-										:options="element.options"
-										:variable="
+                  }" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElementOnFooter()" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="
                       element.type == 'variable'
                         ? locals.variables.find(
                             (x) =>
                               x.uniqueId == element.options.configs.uniqueId
                           )
                         : {}
-                    "
-										@clickedOnElement="clickedOnElement(element)"
-										@finishedEditingElement="finishedEditingElement(element)"
-									/>
+                    " @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 							</div>
 						</div>
@@ -1135,7 +834,7 @@
 				}
 
 				tmp = this.encode2Base64(JSON.stringify(tmp)) // encoding the settings to export
-				
+
 				let designName = this.settings.designName == '' ? 'vue-print' : this.settings.designName
 				var currentdate = new Date()
 				var fileName = designName + "_"
