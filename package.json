@@ -3,19 +3,20 @@
   "version": "1.0.0",
   "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
     "dom-to-image": "^2.6.0",
+    "file-saver": "^2.0.5",
     "print-js": "^1.6.0",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0"
+    "@vitejs/plugin-vue": "^2.2.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "vite": "^2.8.0"
   }
 }

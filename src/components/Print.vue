@@ -114,15 +114,15 @@
 
 <script>
 	import printJS from "print-js"
-	import TemplateBuilder from "./TemplateBuilder.vue"
-	import TextPattern from "./elements/TextPattern.vue"
-	import TextElement from "./elements/TextElement.vue"
-	import DateTime from "./elements/DateTime.vue"
-	import BindingObject from "./elements/BindingObject.vue"
-	import PageCounter from "./elements/PageCounter.vue"
-	import ImageElement from "./elements/ImageElement.vue"
+	import TemplateBuilder from './TemplateBuilder.vue'
+	import TextPattern from './elements/TextPattern.vue'
+	import TextElement from './elements/TextElement.vue'
+	import DateTime from './elements/DateTime.vue'
+	import BindingObject from './elements/BindingObject.vue'
+	import PageCounter from './elements/PageCounter.vue'
+	import ImageElement from './elements/ImageElement.vue'
 	import Variable from './elements/Variable.vue'
-	import domtoimage from "dom-to-image"
+	import domtoimage from 'dom-to-image'
 	export default {
 		name: "Print",
 		props: {

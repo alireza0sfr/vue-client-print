@@ -591,12 +591,12 @@
 
 <script>
 	import Variable from './elements/Variable.vue'
-	import TextElement from "./elements/TextElement.vue"
-	import DateTime from "./elements/DateTime.vue"
-	import BindingObject from "./elements/BindingObject.vue"
-	import PageCounter from "./elements/PageCounter.vue"
-	import ImageElement from "./elements/ImageElement.vue"
-	import TextPattern from "./elements/TextPattern.vue"
+	import TextElement from './elements/TextElement.vue'
+	import DateTime from './elements/DateTime.vue'
+	import BindingObject from './elements/BindingObject.vue'
+	import PageCounter from './elements/PageCounter.vue'
+	import ImageElement from './elements/ImageElement.vue'
+	import TextPattern from './elements/TextPattern.vue'
 	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",
