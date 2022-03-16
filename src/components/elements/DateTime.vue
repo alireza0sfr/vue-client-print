@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import elementUtilities from './js/element-utilities.js'
+import elementUtilities from '~/plugins/element-utilities.js'
 export default {
   name: "DateTime",
   props: {
