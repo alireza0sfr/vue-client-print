@@ -53,7 +53,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          imageSrc: require("./images/logo.png"),
+          imageSrc: require("@/assets/images/logo.png"),
         },
         styles: {},
       },

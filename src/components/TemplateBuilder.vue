@@ -6,7 +6,7 @@
 				<div class="print-modal-header">
 					<div>
 						<a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
-							<img src="../assets/images//floppy-disk.png" />
+							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
 					<div>
@@ -63,7 +63,7 @@
 												<div draggable="true" class="variables-content-field small" @dragstart="
                             startDraggingElement('variable', variable.uniqueId)
                           " @dragend="finishedDraggingElement()">
-													<img style="height: 20px; width: 15px; cursor: move;" src="../assets/images//drag.png" />
+													<img style="height: 20px; width: 15px; cursor: move;" src="@/assets/images/drag.png" />
 												</div>
 											</div>
 											<div class="variables-row">
@@ -74,7 +74,7 @@
 													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
-													<img @click="deleteVariable(variable.uniqueId)" style="width: 15px; height: 15px" src="../assets/images//cancel.png" />
+													<img @click="deleteVariable(variable.uniqueId)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
 												</div>
 											</div>
 										</div>
@@ -197,7 +197,7 @@
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('textelement')" @dragend="finishedDraggingElement()">
-												<img src="../assets/images//text.png" alt="متن" />
+												<img src="@/assets/images/text.png" alt="متن" />
 												<div class="element-title">متن</div>
 											</span>
 										</div>
@@ -205,7 +205,7 @@
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('datetime')" @dragend="finishedDraggingElement()">
-												<img src="../assets/images//timetable.png" alt="تاریخ و ساعت" />
+												<img src="@/assets/images/timetable.png" alt="تاریخ و ساعت" />
 												<div class="element-title">تاریخ و ساعت</div>
 											</span>
 										</div>
@@ -213,7 +213,7 @@
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('pagecounter')" @dragend="finishedDraggingElement()">
-												<img src="../assets/images//pages.png" alt="شماره صفحه" />
+												<img src="@/assets/images/pages.png" alt="شماره صفحه" />
 												<div class="element-title">شماره صفحه</div>
 											</span>
 										</div>
@@ -221,7 +221,7 @@
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('imageelement')" @dragend="finishedDraggingElement()">
-												<img src="../assets/images//image.png" alt="عکس" />
+												<img src="@/assets/images/image.png" alt="عکس" />
 												<div class="element-title">عکس</div>
 											</span>
 										</div>
@@ -229,7 +229,7 @@
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('bindingObject')" @dragend="finishedDraggingElement()">
-												<img src="../assets/images/binding.png" alt="اتصال داده" />
+												<img src="@/assets/images/binding.png" alt="اتصال داده" />
 												<div class="element-title">اتصال داده</div>
 											</span>
 										</div>
@@ -237,7 +237,7 @@
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('textpattern')" @dragend="finishedDraggingElement()">
-												<img src="../assets/images//textpattern.png" alt="متن الگویی" />
+												<img src="@/assets/images/textpattern.png" alt="متن الگویی" />
 												<div class="element-title">متن الگویی</div>
 											</span>
 										</div>
@@ -536,8 +536,8 @@
 					<!-- Section 2 (Template)-->
 					<div style="overflow: auto; width: 100%; padding: 20px">
 						<div style="margin:-5px 10px 10px">
-							<img src="../assets/images//zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
-							<img src="../assets/images//zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
+							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
+							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 						</div>
 						<div class="template-container" :style="{
                 height: settings.defaultHeightOfPaper + 'in',
@@ -1111,7 +1111,7 @@
 							type: classType,
 							options: {
 								id: this.idGenerator(5),
-								configs: { imageSrc: require("../assets/images//logo.png") },
+								configs: { imageSrc: require("@/assets/images/logo.png") },
 								styles: {
 									top: 0,
 									left: 0,
