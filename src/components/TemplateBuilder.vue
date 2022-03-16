@@ -1491,6 +1491,6 @@
 </script>
 
 <style>
-	@import "./css/templateBuilder.css";
-	@import "./css/modal.css";
+	@import "~/assets/styles/templateBuilder.css";
+	@import "~/assets/styles/modal.css";
 </style>

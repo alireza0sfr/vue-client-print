@@ -517,6 +517,6 @@
 </script>
 
 <style>
-	@import "./css/print.css";
-	@import "./css/modal.css";
+	@import "~/assets/styles/print.css";
+	@import "~/assets/styles/modal.css";
 </style>
