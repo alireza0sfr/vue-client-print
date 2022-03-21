@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import elementUtilities from './js/element-utilities.js'
+import elementUtilities from '~/plugins/element-utilities.js'
 export default {
   name: "ImageElement",
   props: {
@@ -53,7 +53,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          imageSrc: require("./images/logo.png"),
+          imageSrc: require("@/assets/images/logo.png"),
         },
         styles: {},
       },

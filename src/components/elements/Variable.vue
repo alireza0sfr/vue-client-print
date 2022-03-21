@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import elementUtilities from './js/element-utilities'
+import elementUtilities from '../../plugins/element-utilities'
 export default {
   name: "Variable",
   props: {

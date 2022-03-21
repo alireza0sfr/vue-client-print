@@ -27,10 +27,10 @@
 					</div>
 					<div style="display: flex">
 						<a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
-							<img src="./elements/images/edit.png" />
+							<img src="@/assets/images/edit.png" />
 						</a>
 						<a href="#" @click="printForm()" title="چاپ" class="modal-icon">
-							<img src="./elements/images/printer.png" />
+							<img src="@/assets/images/printer.png" />
 						</a>
 					</div>
 				</div>
@@ -517,6 +517,6 @@
 </script>
 
 <style>
-	@import "./css/print.css";
-	@import "./css/modal.css";
+	@import "~/assets/styles/print.css";
+	@import "~/assets/styles/modal.css";
 </style>
