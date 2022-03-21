@@ -1,5 +1,5 @@
-{
-  "english": {
+const messages = {
+  "en": {
     "print": {
       "print-preview": "Print Preview",
       "edit": "Edit",
@@ -21,7 +21,7 @@
       "repeat-header": "Repeat Header",
       "repeat-footer": "Repeat Footer",
       "elements": {
-        "name": "Eelements",
+        "name": "Elements",
         "text-box": "Text Box",
         "date-time": "Date & Time",
         "page-counter": "Page Counter",
@@ -71,7 +71,7 @@
       }     
     }
   },
-  "persian": {
+  "fa": {
     "print": {
       "print-preview": "پیش نمایش پرینت",
       "edit": "ویرایش",
@@ -144,3 +144,5 @@
     }
   }
 }
+
+export default messages
