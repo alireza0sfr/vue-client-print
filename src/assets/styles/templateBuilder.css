@@ -82,7 +82,7 @@ shadow {
     color: #aaa;
     border: 1px solid #d4d4d4;
     cursor: pointer;
-    width: 60px;
+    flex-grow: 1;
 }
 
 .tab.selected {
