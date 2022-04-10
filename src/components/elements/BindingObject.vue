@@ -74,8 +74,8 @@ export default {
     return {
       locals: {
         classType: "bindingObject",
-        text: 'اتصال داده: ',
-        text1: 'اتصال فیلد را انتخاب کنید'
+        text: this.$t('template-builder.elements.binding-objects'),
+        text1: this.$t('template-builder.elements.binding-object-text')
       },
       settings: {
         id: 0,

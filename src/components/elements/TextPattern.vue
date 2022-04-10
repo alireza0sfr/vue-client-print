@@ -76,7 +76,7 @@ export default {
         id: 0,
         configs: {
           persianNumbers: false,
-          text: "الگوی خود را وارد کنید",
+          text: this.$t('template-builder.elements.configs.pattern-input'),
           value: null,
         },
         styles: {},

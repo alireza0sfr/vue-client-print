@@ -23,19 +23,19 @@
 						<span id="printModalCloseBtn" class="close-btn">&times;</span>
 					</div>
 					<div>
-						<h3 class="title">پیش نمایش چاپ</h3>
+						<h3 class="title">{{$t('print.print-preview')}}</h3>
 					</div>
 					<div style="display: flex">
-						<a @click="editWhileInPreview()" title="ویرایش" class="modal-icon" href="#">
+						<a @click="editWhileInPreview()" :title="$t('print.edit')" class="modal-icon" href="#">
 							<img src="@/assets/images/edit.png" />
 						</a>
-						<a href="#" @click="printForm()" title="چاپ" class="modal-icon">
+						<a href="#" @click="printForm()" :title="$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
-					<div style="padding-top: 10px; text-align: center">تعداد صفحه: {{ locals.totalPages }}</div>
+					<div style="padding-top: 10px; text-align: center">{{ $t('template-builder.page-count') }}: {{ locals.totalPages }}</div>
 
 					<!-- Loading popup modal -->
 
@@ -50,7 +50,7 @@
 									<div class="sk-chase-dot"></div>
 									<div class="sk-chase-dot"></div>
 								</div>
-								<p style="margin-top: 20px">درحال پردازش...</p>
+								<p style="margin-top: 20px">{{ $t('print.proccessing') }}</p>
 							</div>
 						</div>
 					</div>
@@ -462,7 +462,7 @@
 							if (opt.configs.persianNumbers) {
 								index = this.toPersianNumbers(index)
 								let totalPages = this.toPersianNumbers(this.locals.totalPages)
-								opt.configs.counter = opt.configs.counter.replace('1', `صفحه ${index} از ${totalPages}`)
+								opt.configs.counter = opt.configs.counter.replace('1', this.$t('template-builder.page-counter', { index, totalPages }))
 							} else {
 								opt.configs.counter = opt.configs.counter.replace('1', `page ${index} / ${this.locals.totalPages}`)
 							}

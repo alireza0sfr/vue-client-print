@@ -5,12 +5,12 @@
 			<div class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
-						<a @click="export2Json()" title="ذخیره" class="modal-icon" href="#">
+						<a @click="export2Json()" :title="$t('template-builder.save')" class="modal-icon" href="#">
 							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
 					<div>
-						<h3 class="title">طراح چاپ</h3>
+						<h3 class="title">{{ $t('template-builder.name') }}</h3>
 					</div>
 
 					<div>
@@ -24,20 +24,20 @@
 						<div class="toolbar-content">
 							<!-- Tabs -->
 							<div class="tabs">
-								<a class="tab selected" @click="switchTabs('settings', $refs.settings)" ref="settings">تنظیمات</a>
-								<a class="tab" @click="switchTabs('variables', $refs.variables)" ref="variables">متغیر ها</a>
-								<a class="tab" @click="switchTabs('others', $refs.others)" ref="others">سایر</a>
+								<a class="tab selected" @click="switchTabs('settings', $refs.settings)" ref="settings">{{$t('template-builder.settings')}}</a>
+								<a class="tab" @click="switchTabs('variables', $refs.variables)" ref="variables">{{ $t('template-builder.variables.variables') }}</a>
+								<a class="tab" @click="switchTabs('others', $refs.others)" ref="others">{{ $t('template-builder.others') }}</a>
 							</div>
 
 							<!-- Variables Tab -->
 
 							<div v-show="locals.tabName == 'variables'" class="variables-tab">
 								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
-									<span>لیست متغیر ها</span>
+									<span>{{ $t('template-builder.variables.list') }}</span>
 								</div>
 								<div class="variables-content-wrapper">
 									<div @click="createVariable()" style="text-align: center; margin-top: 10px">
-										<a class="a-btn">افزودن متغیر</a>
+										<a class="a-btn">{{ $t('template-builder.variables.add') }}</a>
 									</div>
 									<div class="variables">
 										<div :class="[
@@ -51,12 +51,12 @@
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
-														<input type="text" v-model="variable.name" class="input-form-control" aria-label="Small" placeholder="نام متغیر" aria-describedby="inputGroup-sizing-sm" />
+														<input type="text" v-model="variable.name" class="input-form-control" aria-label="Small" :placeholder="$t('template-builder.variables.name')" aria-describedby="inputGroup-sizing-sm" />
 													</div>
 													<div class="variables-content-field" style="width: 40%">
 														<select class="input-form-control" v-model="variable.type" @change="onVariableTypeChange(variable)">
-															<option value="text">متن</option>
-															<option value="image">عکس</option>
+															<option value="text">{{ $t('template-builder.variables.text') }}</option>
+															<option value="image">{{ $t('template-builder.variables.image') }}</option>
 														</select>
 													</div>
 												</div>
@@ -68,7 +68,7 @@
 											</div>
 											<div class="variables-row">
 												<div v-if="variable.type == 'text'" class="variables-content-field large">
-													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" placeholder="متن" aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" :placeholder="$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 												<div class="variables-content-field large" v-if="variable.type == 'image'">
 													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
@@ -86,16 +86,16 @@
 
 							<div v-show="locals.tabName == 'others'" class="others-tab">
 								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
-									<span>ذخیره</span>
+									<span>{{$t('template-builder.save')}}</span>
 								</div>
 								<div class="toolbar-content-row">
 									<div style="width: 100%;" class="toolbar-content-field">
-										<a class="a-btn" @click="export2SrcFile()">Export</a>
+										<a class="a-btn" @click="export2SrcFile()">{{$t('template-builder.export')}}</a>
 									</div>
 								</div>
 								<div class="toolbar-content-row">
 									<div style="width: 100%;" class="toolbar-content-field">
-										<a class="a-btn" @click="clickedOnInput('fileSrcControl')">Import</a>
+										<a class="a-btn" @click="clickedOnInput('fileSrcControl')">{{$t('template-builder.import')}}</a>
 									</div>
 								</div>
 								<div style="display:none" class="toolbar-content-row">
@@ -109,12 +109,12 @@
 							<div v-show="locals.tabName == 'settings'" class="settings-tab">
 								<!-- Settings -->
 								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
-									<span>تنظیمات پرینت</span>
+									<span>{{$t('template-builder.print-settings')}}</span>
 								</div>
 								<div class="toolbar-content-wrapper" id="printConfigsMenu">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>نام طرح</span>
+											<span>{{$t('template-builder.template-name')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="text" v-model="settings.designName" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
@@ -122,7 +122,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="pageSizeControl">اندازه صفحه</label>
+											<label for="pageSizeControl">{{$t('template-builder.page-size')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" v-model="settings.pageSize" @change="syncSizes()" id="pageSizeControl">
@@ -134,18 +134,18 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="pageOrientiationsControl">حالت صفحه</label>
+											<label for="pageOrientiationsControl">{{$t('template-builder.page-orientation')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" @change="syncSizes()" v-model="settings.orientation" id="pageOrientiationsControl">
-												<option value="portrait">عمودی</option>
-												<option value="landscape">افقی</option>
+												<option value="portrait">{{$t('template-builder.vertical')}}</option>
+												<option value="landscape">{{$t('template-builder.horizental')}}</option>
 											</select>
 										</div>
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>کادر</span>
+											<span>{{$t('template-builder.page-border')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="text" class="input-form-control" v-model="settings.pageBorder" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
@@ -153,7 +153,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="repeatableHeaderControl">تکرار هدر</label>
+											<label for="repeatableHeaderControl">{{$t('template-builder.repeat-header')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input class="input-form-control" type="checkbox" v-model="settings.header.isHeaderRepeatable" id="repeatableHeaderControl" />
@@ -161,7 +161,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="repeatableFooterControl">تکرار فوتر</label>
+											<label for="repeatableFooterControl">{{$t('template-builder.repeat-footer')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input class="input-form-control" type="checkbox" v-model="settings.footer.isFooterRepeatable" id="repeatableFooterControl" />
@@ -169,19 +169,19 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>جهت صفحه</span>
+											<span>{{$t('template-builder.page-direction')}}</span>
 										</div>
 										<div class="toolbar-content-field" style="text-align: right">
 											<div>
 												<label for="pageDirections">
 													<input type="radio" name="pageDirections" id="pageDirections" value="rtl" v-model="settings.pageDirections" />
-													راست به چپ
+													{{$t('template-builder.elements.styles.right-to-left')}}
 												</label>
 											</div>
 											<div>
 												<label for="pageDirections">
 													<input type="radio" name="pageDirections" id="pageDirections" value="ltr" v-model="settings.pageDirections" />
-													چپ به راست
+													{{$t('template-builder.elements.styles.left-to-right')}}
 												</label>
 											</div>
 										</div>
@@ -191,54 +191,54 @@
 								<!-- Elements -->
 
 								<div class="toolbar-header">
-									<span>المنت ها</span>
+									<span>{{$t('template-builder.elements.name')}}</span>
 								</div>
 								<div class="toolbar-content-wrapper" style="flex-direction: row" id="elementsMenu">
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('textelement')" @dragend="finishedDraggingElement()">
-												<img src="@/assets/images/text.png" alt="متن" />
-												<div class="element-title">متن</div>
+												<img src="@/assets/images/text.png" :alt="$t('template-builder.elements.text-box')" />
+												<div class="element-title">{{$t('template-builder.elements.text-box')}}</div>
 											</span>
 										</div>
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('datetime')" @dragend="finishedDraggingElement()">
-												<img src="@/assets/images/timetable.png" alt="تاریخ و ساعت" />
-												<div class="element-title">تاریخ و ساعت</div>
+												<img src="@/assets/images/timetable.png" :alt="$t('template-builder.elements.date-time')" />
+												<div class="element-title">{{$t('template-builder.elements.date-time')}}</div>
 											</span>
 										</div>
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('pagecounter')" @dragend="finishedDraggingElement()">
-												<img src="@/assets/images/pages.png" alt="شماره صفحه" />
-												<div class="element-title">شماره صفحه</div>
+												<img src="@/assets/images/pages.png" :alt="$t('template-builder.elements.page-counter')" />
+												<div class="element-title">{{$t('template-builder.elements.page-counter')}}</div>
 											</span>
 										</div>
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('imageelement')" @dragend="finishedDraggingElement()">
-												<img src="@/assets/images/image.png" alt="عکس" />
-												<div class="element-title">عکس</div>
+												<img src="@/assets/images/image.png" alt="$t('template-builder.elements.image')" />
+												<div class="element-title">{{$t('template-builder.elements.image')}}</div>
 											</span>
 										</div>
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('bindingObject')" @dragend="finishedDraggingElement()">
-												<img src="@/assets/images/binding.png" alt="اتصال داده" />
-												<div class="element-title">اتصال داده</div>
+												<img src="@/assets/images/binding.png" :alt="$t('template-builder.elements.binding-objects')" />
+												<div class="element-title">{{$t('template-builder.elements.binding-objects')}}</div>
 											</span>
 										</div>
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('textpattern')" @dragend="finishedDraggingElement()">
-												<img src="@/assets/images/textpattern.png" alt="متن الگویی" />
-												<div class="element-title">متن الگویی</div>
+												<img src="@/assets/images/textpattern.png" :alt="$t('template-builder.elements.text-pattern')" />
+												<div class="element-title">{{$t('template-builder.elements.text-pattern')}}</div>
 											</span>
 										</div>
 									</div>
@@ -246,12 +246,12 @@
 								<div class="toolbar-header">
 									<!-- Element's Settings -->
 
-									<span>تنظیمات المنت</span>
+									<span>{{$t('template-builder.elements.settings')}}</span>
 								</div>
 								<div class="toolbar-content-wrapper">
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textelement'">
 										<div style="text-align: center; width: 100%">
-											<span>متن خود را وارد کنید</span>
+											<span>{{$t('template-builder.elements.configs.type-text')}}</span>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textelement'">
@@ -261,7 +261,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
 										<div class="toolbar-content-label">
-											<label for="hasDateControl">تاریخ</label>
+											<label for="hasDateControl">{{$t('template-builder.elements.configs.date')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasDate" id="hasDateControl" />
@@ -269,7 +269,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
 										<div class="toolbar-content-label">
-											<label for="hasTimeControl">ساعت</label>
+											<label for="hasTimeControl">{{$t('template-builder.elements.configs.time')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasTime" id="hasTimeControl" />
@@ -277,7 +277,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
 										<div class="toolbar-content-label">
-											<label for="persiaDateControl">تاریخ شمسی</label>
+											<label for="persiaDateControl">{{$t('template-builder.elements.configs.solar-date')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input class="input-form-control" type="checkbox" v-model="
@@ -287,7 +287,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'pagecounter'">
 										<div class="toolbar-content-label">
-											<label for="persianNumbersControl">اعداد فارسی</label>
+											<label for="persianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="checkbox" class="input-form-control" v-model="
@@ -297,7 +297,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'pagecounter'">
 										<div class="toolbar-content-label">
-											<label for="completeFormControl">صفحه از کل</label>
+											<label for="completeFormControl">{{$t('template-builder.elements.configs.use-complete-format')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="checkbox" class="input-form-control" v-model="
@@ -306,14 +306,14 @@
 										</div>
 									</div>
 									<div class="toolbar-content-row" style="flex-direction: column" v-if="locals.selectedElement.type == 'imageelement'">
-										<label for="elementImageFileControl">فایل تصویر خود را انتخاب کنید.</label>
-										<div class="imageelement-text">*حداکثر سایز مجاز ۱ مگابایت</div>
-										<div class="imageelement-text">فرمت فایل های قابل قبول:</div>
-										<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png و *. jpeg</div>
+										<label for="elementImageFileControl">{{$t('template-builder.elements.configs.upload-image-text')}}</label>
+										<div class="imageelement-text">{{$t('template-builder.elements.configs.maximum-file-size')}}</div>
+										<div class="imageelement-text">{{$t('template-builder.elements.configs.accepted-formats')}}</div>
+										<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png, *. jpeg</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
 										<div style="width: 100%;" class="toolbar-content-field">
-											<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">افزودن عکس</a>
+											<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">{{$t('template-builder.elements.configs.upload-image')}}</a>
 										</div>
 									</div>
 									<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
@@ -321,7 +321,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'bindingObject'">
 										<div class="toolbar-content-label">
-											<label for="bindingObjectPersianNumbersControl">اعداد فارسی</label>
+											<label for="bindingObjectPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="checkbox" class="input-form-control" v-model="
@@ -331,7 +331,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'bindingObject'">
 										<div class="toolbar-content-label">
-											<label for="bindingObjectControl">نوع داده</label>
+											<label for="bindingObjectControl">{{$t('template-builder.elements.configs.data-type')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
@@ -341,8 +341,8 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
 										<div style="text-align: center; width: 100%">
-											<span>متن خود را وارد کنید</span>
-											<p>مثال: سلام {name} خوش آمدید</p>
+											<span>{{$t('template-builder.elements.configs.type-text')}}</span>
+											<p>{{$t('template-builder.elements.configs.text-pattern-example', {name: '{name}'})}}</p>
 										</div>
 									</div>
 									<div v-if="locals.selectedElement.type == 'textpattern'">
@@ -352,7 +352,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
 										<div class="toolbar-content-label">
-											<label for="textPatternPersianNumbersControl">اعداد فارسی</label>
+											<label for="textPatternPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="checkbox" class="input-form-control" v-model="
@@ -363,7 +363,7 @@
 								</div>
 								<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
 									<div class="toolbar-content-label">
-										<label for="textpatternControl">فیلد ها</label>
+										<label for="textpatternControl">{{$t('template-builder.elements.configs.fields')}}</label>
 									</div>
 									<div class="toolbar-content-field">
 										<select class="input-form-control" id="textpatternControl">
@@ -375,26 +375,26 @@
 								<!-- Element's Styles -->
 
 								<div style="margin-top: 15px" class="toolbar-header">
-									<span>استایل المنت</span>
+									<span>{{$t('template-builder.elements.styles.name')}}</span>
 								</div>
 								<div class="toolbar-content-wrapper" id="elementStylesMenu">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="elementTextAlignControl">مکان نوشته</label>
+											<label for="elementTextAlignControl">{{$t('template-builder.elements.styles.text-align')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select v-model="
                           locals.selectedElement.options.styles.textAlign
                         " class="input-form-control" id="elementTextAlignControl">
-												<option value="right">راست</option>
-												<option value="center">وسط</option>
-												<option value="left">چپ</option>
+												<option value="right">{{$t('template-builder.elements.styles.right')}}</option>
+												<option value="center">{{$t('template-builder.elements.styles.center')}}</option>
+												<option value="left">{{$t('template-builder.elements.styles.left')}}</option>
 											</select>
 										</div>
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>رنگ نوشته</span>
+											<span>{{$t('template-builder.elements.styles.text-color')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="color" class="input-form-control" v-model="locals.selectedElement.options.styles.color" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
@@ -402,7 +402,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>رنگ پس زمینه</span>
+											<span>{{$t('template-builder.elements.styles.background-color')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="color" class="input-form-control" v-model="
@@ -412,7 +412,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>اندازه فونت</span>
+											<span>{{$t('template-builder.elements.styles.font-size')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" v-model="locals.selectedElement.options.styles.fontSize" id="pageSizeControl">
@@ -422,20 +422,20 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<label for="fontWeightControl">نوع نوشته</label>
+											<label for="fontWeightControl">{{$t('template-builder.elements.styles.font-weight')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select v-model="
                           locals.selectedElement.options.styles.fontWeight
                         " class="input-form-control" id="elementTextAlignControl">
-												<option value="normal">عادی</option>
-												<option value="bold">ضخیم</option>
+												<option value="normal">{{$t('template-builder.elements.styles.normal')}}</option>
+												<option value="bold">{{$t('template-builder.elements.styles.bold')}}</option>
 											</select>
 										</div>
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>فونت</span>
+											<span>{{$t('template-builder.elements.styles.font-family')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="text" class="input-form-control" v-model="
@@ -445,18 +445,18 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>کادر</span>
+											<span>{{$t('template-builder.elements.styles.borders')}}</span>
 										</div>
 										<div class="toolbar-content-field" style="text-align: right">
 											<label for="bordersAlldirections">
 												<input class="input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
-												همه جهات
+												{{$t('template-builder.elements.styles.border-on-all-directions')}}
 											</label>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.bordersAllDirections">
 										<div class="toolbar-content-label">
-											<span>استایل کادر</span>
+											<span>{{$t('template-builder.elements.styles.border-style')}}</span>
 										</div>
 										<div class="toolbar-content-field">
 											<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
@@ -465,7 +465,7 @@
 									<div v-if="locals.bordersAllDirections == false" style="width: 100%">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>کادر بالا</span>
+												<span>{{$t('template-builder.elements.styles.border-top')}}</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input type="text" class="input-form-control" v-model="
@@ -475,7 +475,7 @@
 										</div>
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>کادر راست</span>
+												<span>{{$t('template-builder.elements.styles.border-right')}}</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input type="text" class="input-form-control" v-model="
@@ -485,7 +485,7 @@
 										</div>
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>کادر پایین</span>
+												<span>{{$t('template-builder.elements.styles.border-bottom')}}</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input type="text" class="input-form-control" v-model="
@@ -495,7 +495,7 @@
 										</div>
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
-												<span>کادر چپ</span>
+												<span>{{$t('template-builder.elements.styles.border-left')}}</span>
 											</div>
 											<div class="toolbar-content-field">
 												<input type="text" class="input-form-control" v-model="
@@ -506,7 +506,7 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
-											<span>جهت نوشته</span>
+											<span>{{$t('template-builder.elements.styles.text-direction')}}</span>
 										</div>
 										<div class="toolbar-content-field" style="text-align: right">
 											<label for="elementDirections">
@@ -514,7 +514,7 @@
 													<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="
                               locals.selectedElement.options.styles.direction
                             " />
-													راست به چپ
+												{{$t('template-builder.elements.styles.right-to-left')}}
 												</div>
 											</label>
 											<label for="elementDirections2">
@@ -522,7 +522,7 @@
 													<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="
                               locals.selectedElement.options.styles.direction
                             " />
-													چپ به راست
+												{{$t('template-builder.elements.styles.left-to-right')}}
 												</div>
 											</label>
 										</div>
@@ -564,8 +564,8 @@
                     " @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 								<div id="bodyTemplate">
-									<div class="watermark">بدنه چاپ</div>
-									<p>محتویات بدنه چاپ به صورت خودکار پر می شود.</p>
+									<div class="watermark">{{$t('template-builder.body')}}</div>
+									<p>{{$t('template-builder.body-msg')}}</p>
 								</div>
 								<div :style="{
                     height: settings.footer.height + 'in',

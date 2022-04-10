@@ -50,7 +50,7 @@ export default {
       settings: {
         id: 0,
         configs: {
-          text: "متن خود را وارد نمایید",
+          text: this.$t('template-builder.elements.configs.type-text'),
         },
         styles: {},
       },

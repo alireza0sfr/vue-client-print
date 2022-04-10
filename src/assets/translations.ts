@@ -1,14 +1,31 @@
-const messages = {
+const messages: object = {
   "en": {
     "print": {
+      "name": "Print",
       "print-preview": "Print Preview",
       "edit": "Edit",
       "proccessing": "Proccessing..."
     },
     "template-builder": {
       "name": "Temeplate Builder",
-      "body": "Body",
-      "body-msg": "The body section will be automaticlly filled.",
+      "variables": {
+        "type": "Type",
+        "variables": "Variables",
+        "name": "Name",
+        "add": "Add Variable",
+        "list": "Variables List",
+        "text": "Text",
+        "image": "Image"
+      },
+      "export": "Export",
+      "page-counter": "page ${index} of ${totalPages}",
+      "print-settings": "Print Settings",
+      "import": "Import",
+      "others": "Others",
+      "page-count": "Page Count",
+      "settings": "Settings",
+      "body": "Print Body",
+      "body-msg": "The body section will be automaticlly filled",
       "save": "Save",
       "print-configs": "Print Configs",
       "template-name": "Template Name",
@@ -21,6 +38,7 @@ const messages = {
       "repeat-header": "Repeat Header",
       "repeat-footer": "Repeat Footer",
       "elements": {
+        "settings": "Element's Settings",
         "name": "Elements",
         "text-box": "Text Box",
         "date-time": "Date & Time",
@@ -30,21 +48,25 @@ const messages = {
         "binding-object-text": "Please Choose Data Field",
         "text-pattern": "Text Pattern",
         "configs": {
+          "data-type": "Data Type",
           "type-text": "Please Type Your Text",
           "date": "Date",
           "time": "Time",
-          "solar-date": "Use Solar Hijri Date",
+          "solar-date": "Use Solar Solar Date",
           "persian-digits": "Use Persian Digits",
           "use-complete-format": "Use Complete Format",
           "upload-image-text": "Please Upload Image",
           "maximum-file-size": "Maximum Image size is 1Mb",
           "accepted-formats": "Accepted Formats:",
+          "upload-image": "Upload Image",
           "width": "Width",
           "height": "Height",
-          "text-pattern-example": "Example: Hello {name}, Welcome!",
-          "fields": "Fields"
+          "text-pattern-example": "Example: Hello {name}, Welcome",
+          "fields": "Fields",
+          "pattern-input": "Please Type Your Pattern"
         },
         "styles": {
+          "name": "Element's styles",
           "text-align": "Text Align",
           "left": "Left",
           "center": "Center",
@@ -52,13 +74,15 @@ const messages = {
           "text-color": "Text Color",
           "background-color": "Background Color",
           "font-size": "Font Size",
+          "font-family": "Font Family",
           "font-weight": "Font Weight",
           "normal": "Normal",
           "bold": "Bold",
           "italic": "Italic",
           "underline": "Underline",
           "borders": "Borders",
-          "border-on-all-directions": "Border on All Directions",
+          "border-style": "Border Style",
+          "border-on-all-directions": "on All Directions",
           "border-top": "Border Top",
           "border-right": "Border Right",
           "border-bottom": "Border Bottom",
@@ -66,21 +90,37 @@ const messages = {
           "text-direction": "Text Direction",
           "left-to-right": "Left To Right",
           "right-to-left": "Right To Left",
-          "pattern-input": "Please Type Your Pattern"
         }
       }     
     }
   },
   "fa": {
     "print": {
+      "name": "چاپ",
       "print-preview": "پیش نمایش پرینت",
       "edit": "ویرایش",
       "proccessing": "در حال ویرایش"
     },
     "template-builder": {
       "name": "طراح چاپ",
+      "settings": "تنظیمات",
+      "variables": {
+        "variables": "متغیرها",
+        "name": "نام",
+        "add": "افزودن متغیر",
+        "list": "لیست متغیرها",
+        "text": "متن",
+        "image": "تصویر",
+        "type": "نوع"
+      },
+      "print-settings": "تنظیمات چاپ",
+      "page-counter": "صفحه ${index} از ${totalPages}",
+      "export": "Export",
+      "import": "Import",
+      "others": "سایر",
+      "page-count": "تعداد صفحه",
       "body": "بدنه چاپ",
-      "body-msg": "محتویات بدنه چاپ به صورت خودکار پر می شود.",
+      "body-msg": "محتویات بدنه چاپ به صورت خودکار پر می شود",
       "save": "ذخیره",
       "print-configs": "تنظیمات پرینت",
       "template-name": "نام طرح",
@@ -93,6 +133,7 @@ const messages = {
       "repeat-header": "تکرار هدر",
       "repeat-footer": "تکرار فوتر",
       "elements": {
+        "settings": "تنظیمات المنت ها",
         "name": "المت ها",
         "text-box": "متن",
         "date-time": "تاریخ و ساعت",
@@ -102,6 +143,7 @@ const messages = {
         "binding-object-text": "لطفا نوع داده خود را اتنخاب کنید.",
         "text-pattern": "متن الکویی",
         "configs": {
+          "data-type": "نوع داده",
           "type-text": "متن خود را وارد کنید.",
           "date": "تاریخ",
           "time": "ساعت",
@@ -111,12 +153,15 @@ const messages = {
           "upload-image-text": "فایل تصویر خود را انتخاب کنید.",
           "maximum-file-size": "*حداکثر سایز مجاز ۱ مگابایت",
           "accepted-formats": "فرمت فایل های قابل قبول:",
+          "upload-image": "افزودن عکس",
           "width": "عرض",
           "height": "ارتفاع",
           "text-pattern-example": "مثال: سلام {name} خوش آمدید",
-          "fields": "فیلد ها"
+          "fields": "فیلد ها",
+          "pattern-input": "الگوی خود را وارد نمایید."
         },
         "styles": {
+          "name": "استایل المنت",
           "text-align": "مکان نوشته",
           "left": "چپ",
           "center": "وسط",
@@ -125,12 +170,14 @@ const messages = {
           "background-color": "رنگ پس زمینه",
           "font-size": "اندازه فونت",
           "font-weight": "نوع نوشته",
+          "font-family": "نوع فونت",
           "normal": "عادی",
           "bold": "ضخیم",
           "italic": "ایتالیک",
           "underline": "خط زیر نوشته",
           "borders": "کادر",
           "border-on-all-directions": "همه جهات",
+          "border-style": "استایل کادر",
           "border-top": "کادر بالا",
           "border-right": "کادر راست",
           "border-bottom": "کادر پایین",
@@ -138,7 +185,6 @@ const messages = {
           "text-direction": "جهت نوشته",
           "left-to-right": "چپ به راست",
           "right-to-left": "راست به چپ",
-          "pattern-input": "الگوی خود را وارد نمایید."
         }
       }     
     }
