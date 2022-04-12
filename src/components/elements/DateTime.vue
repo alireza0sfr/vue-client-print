@@ -1,149 +1,136 @@
 <template>
-  <div
-    :id="settings.id"
-    ref="element"
-    @click="$emit('clickedOnElement')"
-    @finishededitingelement="$emit('finishedEditingElement')"
-    :class="locals.classType + ' element'"
-    :style="settings.styles"
-  >
-    {{ computedValue }}
-    <div ref="resizer" class="resizer"></div>
-  </div>
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		{{ computedValue }}
+		<div ref="resizer" class="resizer"></div>
+	</div>
 </template>
 
 <script>
-import elementUtilities from '~/plugins/element-utilities.js'
-export default {
-  name: "DateTime",
-  props: {
-    options: {
-      type: Object,
-    },
-  },
-  mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-      this.Initialize(
-        this.$refs.element,
-        this.$refs.resizer,
-        this.locals.classType
-      )
-    }
-  },
-  computed: {
-    computedValue() {
+	import elementUtilities from '~/plugins/element-utilities.js'
+	export default {
+		name: "DateTime",
+		props: {
+			options: {
+				type: Object,
+			},
+		},
+		mounted() {
+			if (this.$parent.$options.name === "TemplateBuilder") // Initialize on moutned if its the template builder mode
+				this.Initialize(this.$refs.element, this.$refs.resizer, this.locals.classType)
+		},
+		computed: {
+			computedValue() {
 
-      if (this.settings.configs.hasDate && this.settings.configs.hasTime) {
-        return this.dateToday + ' ' + this.timeToday
+				if (this.settings.configs.hasDate && this.settings.configs.hasTime)
+					return this.dateToday + ' ' + this.timeToday
 
-      } else if (this.settings.configs.hasDate && !this.settings.configs.hasTime) {
-        return this.dateToday
+				else if (this.settings.configs.hasDate && !this.settings.configs.hasTime)
+					return this.dateToday
 
-      } else if (this.settings.configs.hasTime && !this.settings.configs.hasDate) {
-        return this.timeToday
+				else if (this.settings.configs.hasTime && !this.settings.configs.hasDate)
+					return this.timeToday
 
-      } else {
-        return ''
-      }
-    }
-  },
-  watch: {
-    options: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        let tmp = this.options.styles
-        Object.assign(this.settings, val)
-        this.settings.styles = tmp
-        Object.assign(this.settings.styles, val.styles)
-        if (this.settings.configs.persianDate == true) {
-          this.persianDate()
-        } else {
-          this.adDate()
-        }
-      },
-    },
-  },
-  data() {
-    return {
-      dateToday: "",
-      timeToday: "",
-      locals: {
-        classType: "datetime",
-      },
-      settings: {
-        id: 0,
-        configs: {
-          hasDate: true,
-          hasTime: true,
-          persianDate: true,
-        },
-        styles: {}
-      },
-    }
-  },
-  methods: {
-    
-    /**
-     * Initializing the element utilities for the created element
-     */
+				else
+					return ''
+			}
+		},
+		watch: {
+			options: {
+				immediate: true,
+				deep: true,
+				handler(val) {
+					let tmp = this.options.styles
+					Object.assign(this.settings, val)
+					this.settings.styles = tmp
+					Object.assign(this.settings.styles, val.styles)
+					if (this.settings.configs.persianDate) {
+						this.persianDate()
+					} else {
+						this.gregorianDate()
+					}
+				},
+			},
+		},
+		data() {
+			return {
+				dateToday: "",
+				timeToday: "",
+				locals: {
+					classType: "datetime",
+				},
+				settings: {
+					id: 0,
+					configs: {
+						hasDate: true,
+						hasTime: true,
+						persianDate: true,
+					},
+					styles: {}
+				},
+			}
+		},
+		methods: {
 
-    Initialize(element, resizer, classType) {
-      elementUtilities.resizable(element, resizer)
-      elementUtilities.dragable(element, classType)
-      elementUtilities.click(element, classType)
-    },
+			/**
+			 * Initializing the element utilities for the created element
+			 */
 
-   /** 
-    * Returns the date in solar date 
-    */
+			Initialize(element, resizer, classType) {
+				elementUtilities.resizable(element, resizer)
+				elementUtilities.dragable(element, classType)
+				elementUtilities.click(element, classType)
+			},
 
-    persianDate() {
-      let today = new Date().toLocaleDateString("fa-IR")
-      this.dateToday = today
-      this.timeToday = this.toPersianNumbers(this.timeNow())
-    },
+			/** 
+			 * Returns the date in solar date 
+			 */
 
-    /** 
-     * Returns the date in AD date 
-     */
+			persianDate() {
+				let today = new Date().toLocaleDateString("fa-IR")
+				this.dateToday = today
+				this.timeToday = this.toPersianNumbers(this.timeNow())
+			},
 
-    adDate() {
-      var today = new Date()
-      var dd = String(today.getDate()).padStart(2, "0")
-      var mm = String(today.getMonth() + 1).padStart(2, "0") //January is 0!
-      var yyyy = today.getFullYear()
+			/**
+			 * Returns the date in gregorian format.
+			 * @return {Date} - gregorian Date
+			 */
+			gregorianDate() {
+				var today = new Date()
+				var dd = String(today.getDate()).padStart(2, "0")
+				var mm = String(today.getMonth() + 1).padStart(2, "0") //January is 0!
+				var yyyy = today.getFullYear()
 
-      this.dateToday = yyyy + "/" + dd + "/" + mm
-      this.timeToday = this.timeNow()
-    },
+				this.dateToday = yyyy + "/" + dd + "/" + mm
+				this.timeToday = this.timeNow()
+			},
 
-    /** 
-     * Returns the current time 
-     */
+			/** 
+			 * Returns the current time .
+			 * @return {Date} - gregorian Date
+			 */
+			timeNow() {
+				return (
+					new Date().getHours() +
+					":" +
+					new Date().getMinutes() +
+					":" +
+					new Date().getSeconds()
+				)
+			},
 
-    timeNow() {
-      return (
-        new Date().getHours() +
-        ":" +
-        new Date().getMinutes() +
-        ":" +
-        new Date().getSeconds()
-      )
-    },
+			/**
+			 *  Convertes the given number to persian format 
+			 */
 
-    /**
-     *  Convertes the given number to persian format 
-     */
+			toPersianNumbers(n) {
+				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
-    toPersianNumbers(n) {
-      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
+			},
 
-      return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-    },
-    
-  },
-};
+		},
+	};
 </script>
 
 <style>

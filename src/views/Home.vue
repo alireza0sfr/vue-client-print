@@ -39,7 +39,7 @@
 </template>
 
 <script>
-	import Print from '../components/Print.vue'
+	import Print from '~/components/Print.vue'
 	export default {
 		name: "Home",
 		components: {

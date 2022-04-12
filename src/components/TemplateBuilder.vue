@@ -30,8 +30,7 @@
 							</div>
 
 							<!-- Variables Tab -->
-
-							<div v-show="locals.tabName == 'variables'" class="variables-tab">
+							<div v-show="locals.tabName === 'variables'" class="variables-tab">
 								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
 									<span>{{ $t('template-builder.variables.list') }}</span>
 								</div>
@@ -40,14 +39,7 @@
 										<a class="a-btn">{{ $t('template-builder.variables.add') }}</a>
 									</div>
 									<div class="variables">
-										<div :class="[
-                        'variable',
-                        {
-                          selected:
-                            locals.selectedElement.options.configs.uniqueId ==
-                            variable.uniqueId,
-                        },
-                      ]" v-for="variable in locals.variables" :key="variable.uniqueId">
+										<div :class="['variable',{selected:locals.selectedElement.options.configs.uniqueId ===variable.uniqueId}]" v-for="variable in locals.variables" :key="variable.uniqueId">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
@@ -60,17 +52,15 @@
 														</select>
 													</div>
 												</div>
-												<div draggable="true" class="variables-content-field small" @dragstart="
-                            startDraggingElement('variable', variable.uniqueId)
-                          " @dragend="finishedDraggingElement()">
+												<div draggable="true" class="variables-content-field small" @dragstart="startDraggingElement('variable', variable.uniqueId)" @dragend="finishedDraggingElement()">
 													<img style="height: 20px; width: 15px; cursor: move;" src="@/assets/images/drag.png" />
 												</div>
 											</div>
 											<div class="variables-row">
-												<div v-if="variable.type == 'text'" class="variables-content-field large">
+												<div v-if="variable.type === 'text'" class="variables-content-field large">
 													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" :placeholder="$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
 												</div>
-												<div class="variables-content-field large" v-if="variable.type == 'image'">
+												<div class="variables-content-field large" v-if="variable.type === 'image'">
 													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
@@ -83,8 +73,7 @@
 							</div>
 
 							<!-- Others Tab  -->
-
-							<div v-show="locals.tabName == 'others'" class="others-tab">
+							<div v-show="locals.tabName === 'others'" class="others-tab">
 								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
 									<span>{{$t('template-builder.save')}}</span>
 								</div>
@@ -104,9 +93,10 @@
 									</div>
 								</div>
 							</div>
-							<!-- Settings Tab -->
 
-							<div v-show="locals.tabName == 'settings'" class="settings-tab">
+							<!-- Settings Tab -->
+							<div v-show="locals.tabName === 'settings'" class="settings-tab">
+
 								<!-- Settings -->
 								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
 									<span>{{$t('template-builder.print-settings')}}</span>
@@ -189,7 +179,6 @@
 								</div>
 
 								<!-- Elements -->
-
 								<div class="toolbar-header">
 									<span>{{$t('template-builder.elements.name')}}</span>
 								</div>
@@ -244,22 +233,22 @@
 									</div>
 								</div>
 								<div class="toolbar-header">
-									<!-- Element's Settings -->
 
+									<!-- Element's Settings -->
 									<span>{{$t('template-builder.elements.settings')}}</span>
 								</div>
 								<div class="toolbar-content-wrapper">
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textelement'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textelement'">
 										<div style="text-align: center; width: 100%">
 											<span>{{$t('template-builder.elements.configs.type-text')}}</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textelement'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textelement'">
 										<div class="toolbar-content-field">
 											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
 										<div class="toolbar-content-label">
 											<label for="hasDateControl">{{$t('template-builder.elements.configs.date')}}</label>
 										</div>
@@ -267,7 +256,7 @@
 											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasDate" id="hasDateControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
 										<div class="toolbar-content-label">
 											<label for="hasTimeControl">{{$t('template-builder.elements.configs.time')}}</label>
 										</div>
@@ -275,61 +264,53 @@
 											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasTime" id="hasTimeControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'datetime'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
 										<div class="toolbar-content-label">
 											<label for="persiaDateControl">{{$t('template-builder.elements.configs.solar-date')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input class="input-form-control" type="checkbox" v-model="
-                          locals.selectedElement.options.configs.persianDate
-                        " id="persiaDateControl" />
+											<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.persianDate" id="persiaDateControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'pagecounter'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'pagecounter'">
 										<div class="toolbar-content-label">
 											<label for="persianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="checkbox" class="input-form-control" v-model="
-                          locals.selectedElement.options.configs.persianNumbers
-                        " id="persianNumbersControl" />
+											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="persianNumbersControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'pagecounter'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'pagecounter'">
 										<div class="toolbar-content-label">
 											<label for="completeFormControl">{{$t('template-builder.elements.configs.use-complete-format')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="checkbox" class="input-form-control" v-model="
-                          locals.selectedElement.options.configs.completeForm
-                        " id="completeFormControl" />
+											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.completeForm" id="completeFormControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" style="flex-direction: column" v-if="locals.selectedElement.type == 'imageelement'">
+									<div class="toolbar-content-row" style="flex-direction: column" v-if="locals.selectedElement.type === 'imageelement'">
 										<label for="elementImageFileControl">{{$t('template-builder.elements.configs.upload-image-text')}}</label>
 										<div class="imageelement-text">{{$t('template-builder.elements.configs.maximum-file-size')}}</div>
 										<div class="imageelement-text">{{$t('template-builder.elements.configs.accepted-formats')}}</div>
 										<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png, *. jpeg</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'imageelement'">
 										<div style="width: 100%;" class="toolbar-content-field">
 											<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">{{$t('template-builder.elements.configs.upload-image')}}</a>
 										</div>
 									</div>
-									<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type == 'imageelement'">
+									<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === 'imageelement'">
 										<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'bindingObject'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingObject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="checkbox" class="input-form-control" v-model="
-                          locals.selectedElement.options.configs.persianNumbers
-                        " id="bindingObjectPersianNumbersControl" />
+											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'bindingObject'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingObject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectControl">{{$t('template-builder.elements.configs.data-type')}}</label>
 										</div>
@@ -339,29 +320,27 @@
 											</select>
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textpattern'">
 										<div style="text-align: center; width: 100%">
 											<span>{{$t('template-builder.elements.configs.type-text')}}</span>
 											<p>{{$t('template-builder.elements.configs.text-pattern-example', {name: '{name}'})}}</p>
 										</div>
 									</div>
-									<div v-if="locals.selectedElement.type == 'textpattern'">
+									<div v-if="locals.selectedElement.type === 'textpattern'">
 										<div class="toolbar-content-field">
 											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textpattern'">
 										<div class="toolbar-content-label">
 											<label for="textPatternPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="checkbox" class="input-form-control" v-model="
-                          locals.selectedElement.options.configs.persianNumbers
-                        " id="textPatternPersianNumbersControl" />
+											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="textPatternPersianNumbersControl" />
 										</div>
 									</div>
 								</div>
-								<div class="toolbar-content-row" v-if="locals.selectedElement.type == 'textpattern'">
+								<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textpattern'">
 									<div class="toolbar-content-label">
 										<label for="textpatternControl">{{$t('template-builder.elements.configs.fields')}}</label>
 									</div>
@@ -373,7 +352,6 @@
 								</div>
 
 								<!-- Element's Styles -->
-
 								<div style="margin-top: 15px" class="toolbar-header">
 									<span>{{$t('template-builder.elements.styles.name')}}</span>
 								</div>
@@ -383,9 +361,7 @@
 											<label for="elementTextAlignControl">{{$t('template-builder.elements.styles.text-align')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select v-model="
-                          locals.selectedElement.options.styles.textAlign
-                        " class="input-form-control" id="elementTextAlignControl">
+											<select v-model="locals.selectedElement.options.styles.textAlign" class="input-form-control" id="elementTextAlignControl">
 												<option value="right">{{$t('template-builder.elements.styles.right')}}</option>
 												<option value="center">{{$t('template-builder.elements.styles.center')}}</option>
 												<option value="left">{{$t('template-builder.elements.styles.left')}}</option>
@@ -405,9 +381,7 @@
 											<span>{{$t('template-builder.elements.styles.background-color')}}</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="color" class="input-form-control" v-model="
-                          locals.selectedElement.options.styles.backgroundColor
-                        " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<input type="color" class="input-form-control" v-model="locals.selectedElement.options.styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -425,9 +399,7 @@
 											<label for="fontWeightControl">{{$t('template-builder.elements.styles.font-weight')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<select v-model="
-                          locals.selectedElement.options.styles.fontWeight
-                        " class="input-form-control" id="elementTextAlignControl">
+											<select v-model="locals.selectedElement.options.styles.fontWeight" class="input-form-control" id="elementTextAlignControl">
 												<option value="normal">{{$t('template-builder.elements.styles.normal')}}</option>
 												<option value="bold">{{$t('template-builder.elements.styles.bold')}}</option>
 											</select>
@@ -438,9 +410,7 @@
 											<span>{{$t('template-builder.elements.styles.font-family')}}</span>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="text" class="input-form-control" v-model="
-                          locals.selectedElement.options.styles.fontFamily
-                        " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.fontFamily" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -462,15 +432,13 @@
 											<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
-									<div v-if="locals.bordersAllDirections == false" style="width: 100%">
+									<div v-if="locals.bordersAllDirections === false" style="width: 100%">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<span>{{$t('template-builder.elements.styles.border-top')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="
-                            locals.selectedElement.options.styles.borderTop
-                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -478,9 +446,7 @@
 												<span>{{$t('template-builder.elements.styles.border-right')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="
-                            locals.selectedElement.options.styles.borderRight
-                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -488,9 +454,7 @@
 												<span>{{$t('template-builder.elements.styles.border-bottom')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="
-                            locals.selectedElement.options.styles.borderBottom
-                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -498,9 +462,7 @@
 												<span>{{$t('template-builder.elements.styles.border-left')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="
-                            locals.selectedElement.options.styles.borderLeft
-                          " aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>
@@ -511,18 +473,14 @@
 										<div class="toolbar-content-field" style="text-align: right">
 											<label for="elementDirections">
 												<div>
-													<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="
-                              locals.selectedElement.options.styles.direction
-                            " />
-												{{$t('template-builder.elements.styles.right-to-left')}}
+													<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="locals.selectedElement.options.styles.direction" />
+													{{$t('template-builder.elements.styles.right-to-left')}}
 												</div>
 											</label>
 											<label for="elementDirections2">
 												<div>
-													<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="
-                              locals.selectedElement.options.styles.direction
-                            " />
-												{{$t('template-builder.elements.styles.left-to-right')}}
+													<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="locals.selectedElement.options.styles.direction" />
+													{{$t('template-builder.elements.styles.left-to-right')}}
 												</div>
 											</label>
 										</div>
@@ -539,46 +497,17 @@
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 						</div>
-						<div class="template-container" :style="{
-                height: settings.defaultHeightOfPaper + 'in',
-                width: settings.defaultWidthOfPaper + 'in',
-								'transform-origin': 'top right',
-								transform: `scale(${locals.scale})`
-              }">
-							<div :style="{
-                  width: '100%',
-                  height: '100%',
-                  border: settings.pageBorder,
-                }" class="template" @click="deSelectAll">
-								<div :style="{
-                    height: settings.header.height + 'in',
-                    'min-height': '0.15in',
-                  }" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElementOnHeader()" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="
-                      element.type == 'variable'
-                        ? locals.variables.find(
-                            (x) =>
-                              x.uniqueId == element.options.configs.uniqueId
-                          )
-                        : ''
-                    " @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
+						<div class="template-container" :style="{height: settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
+							<div :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
+								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElementOnHeader()" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 								<div id="bodyTemplate">
 									<div class="watermark">{{$t('template-builder.body')}}</div>
 									<p>{{$t('template-builder.body-msg')}}</p>
 								</div>
-								<div :style="{
-                    height: settings.footer.height + 'in',
-                    'min-height': '0.15in',
-                  }" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElementOnFooter()" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="
-                      element.type == 'variable'
-                        ? locals.variables.find(
-                            (x) =>
-                              x.uniqueId == element.options.configs.uniqueId
-                          )
-                        : {}
-                    " @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
+								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElementOnFooter()" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 							</div>
 						</div>
@@ -590,13 +519,13 @@
 </template>
 
 <script>
-	import Variable from './elements/Variable.vue'
-	import TextElement from './elements/TextElement.vue'
-	import DateTime from './elements/DateTime.vue'
-	import BindingObject from './elements/BindingObject.vue'
-	import PageCounter from './elements/PageCounter.vue'
-	import ImageElement from './elements/ImageElement.vue'
-	import TextPattern from './elements/TextPattern.vue'
+	import Variable from '~/components/elements/Variable.vue'
+	import TextElement from '~/components/elements/TextElement.vue'
+	import DateTime from '~/components/elements/DateTime.vue'
+	import BindingObject from '~/components/elements/BindingObject.vue'
+	import PageCounter from '~/components/elements/PageCounter.vue'
+	import ImageElement from '~/components/elements/ImageElement.vue'
+	import TextPattern from '~/components/elements/TextPattern.vue'
 	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",
@@ -662,11 +591,9 @@
 							styles: {},
 						},
 					},
-					fontSizes: [
-						8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74,
-					],
+					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
-				settings: this.getDefault(),
+				settings: this.getDefaultSettings(),
 			}
 		},
 		watch: {
@@ -674,21 +601,30 @@
 				deep: true,
 				immediate: true,
 				handler(val) {
-					let rawSettings = this.getDefault()
+					let rawSettings = this.getDefaultSettings()
 					Object.assign(rawSettings, val)
 					this.settings = rawSettings
 				},
 			}
 		},
 		mounted() {
-			this.modalFunc("templateBuilderModal", "TemplateBuilderModalCloseBtn")
+			this.modalManager('templateBuilderModal', 'TemplateBuilderModalCloseBtn')
 		},
 		methods: {
+
+			/**
+			 * set variable list.
+			 * @param {Array} list - variable list
+			 */
 			setVariables(list) {
 				this.locals.variables = list
 			},
 
-			getDefault() {
+			/**
+			 * sync the given settings with the defaults.
+			 * @return {Object} - returns settings objects
+			 */
+			getDefaultSettings() {
 				return {
 					header: {
 						isHeaderRepeatable: true,
@@ -703,49 +639,41 @@
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
 					defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
 					totalHeightOfAPaper: 10.4, // Useable height for body tag
-					designName: "",
-					orientation: "portrait",
-					pageSize: "a4",
-					pageDirections: "rtl",
+					designName: '',
+					orientation: 'portrait',
+					pageSize: 'a4',
+					pageDirections: 'rtl',
 					bindingObject: {},
-					pageBorder: "",
+					pageBorder: '',
 					maximumFileSize: 1000 // Maximum file size in KB
 				}
 			},
 
 			/**
-			 * Exports all the data to a single json
+			 * Exports settings to json a file.
+			 * @return {Object} - json file
 			 */
-
 			export2Json() {
 				// Syncing headerElements with the user chagnes
 				let headerElements = this.settings.header.headerElements
 				let footerElements = this.settings.footer.footerElements
 
 				for (let index = 0; index < headerElements.length; index++) {
-					let computedStyles = this.getCoordinates(
-						headerElements[index].options.id
-					)
+					let computedStyles = this.getCoordinates(headerElements[index].options.id)
 					let elementStyles = headerElements[index].options.styles
 					Object.assign(elementStyles, computedStyles)
 				}
 
 				for (let index = 0; index < footerElements.length; index++) {
-					let computedStyles = this.getCoordinates(
-						footerElements[index].options.id
-					)
+					let computedStyles = this.getCoordinates(footerElements[index].options.id)
 					let elementStyles = footerElements[index].options.styles
 					Object.assign(elementStyles, computedStyles)
 				}
 
-				this.settings.totalHeightOfAPaper =
-					this.settings.defaultHeightOfPaper -
-					this.settings.header.height -
-					this.settings.footer.height
+				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
-				if (this.settings.totalHeightOfAPaper < 0) {
+				if (this.settings.totalHeightOfAPaper < 0)
 					this.settings.totalHeightOfAPaper = 1.77
-				}
 
 				let tmp = {
 					header: {
@@ -772,44 +700,39 @@
 				// Closing the template builder modal after save
 				document.getElementById("templateBuilderModal").style.display = "none"
 
-				if (this.settings.callback != undefined) {
+				if (!this.settings.callback)
 					this.settings.callback(tmp)
-				}
 			},
 
 			/**
 			 * Exports Data from given src file
 			 */
 
+			/**
+			 * Exports settings to vcp file.
+			 * @return {File} - save settings file in browser
+			 */
 			export2SrcFile() {
 				// Syncing headerElements with the user chagnes
 				let headerElements = this.settings.header.headerElements
 				let footerElements = this.settings.footer.footerElements
 
 				for (let index = 0; index < headerElements.length; index++) {
-					let computedStyles = this.getCoordinates(
-						headerElements[index].options.id
-					)
+					let computedStyles = this.getCoordinates(headerElements[index].options.id)
 					let elementStyles = headerElements[index].options.styles
 					Object.assign(elementStyles, computedStyles)
 				}
 
 				for (let index = 0; index < footerElements.length; index++) {
-					let computedStyles = this.getCoordinates(
-						footerElements[index].options.id
-					)
+					let computedStyles = this.getCoordinates(footerElements[index].options.id)
 					let elementStyles = footerElements[index].options.styles
 					Object.assign(elementStyles, computedStyles)
 				}
 
-				this.settings.totalHeightOfAPaper =
-					this.settings.defaultHeightOfPaper -
-					this.settings.header.height -
-					this.settings.footer.height
+				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
-				if (this.settings.totalHeightOfAPaper < 0) {
+				if (this.settings.totalHeightOfAPaper < 0)
 					this.settings.totalHeightOfAPaper = 1.77
-				}
 
 				let tmp = {
 					header: {
@@ -835,7 +758,7 @@
 
 				tmp = this.encode2Base64(JSON.stringify(tmp)) // encoding the settings to export
 
-				let designName = this.settings.designName == '' ? 'vue-print' : this.settings.designName
+				let designName = this.settings.designName === '' ? 'vue-print' : this.settings.designName
 				var currentdate = new Date()
 				var fileName = designName + "_"
 					+ currentdate.getFullYear() + "_"
@@ -850,70 +773,63 @@
 			},
 
 			/**
-			 * Imports settings from src file and assign the settings based of it
+			 * Imports settings from src file and assign merge with settings.
+			 * @param {srcFile} srcFile - given srcFile
+			 * @return {void} - void
 			 */
-
 			importFromSrcFile(srcFile) {
-				this.settings = this.getDefault() // Set the settings to default value
+				this.settings = this.getDefaultSettings() // Set the settings to default value
 				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
 			},
 
 			/**
-			 * converts given inch to pixel
+			 * converts given inch to pixel.
+			 * @param {Number} inches - inches
+			 * @return {Number} - given inches to pixels
 			 */
-
 			convert2Pixels(inches) {
 				return (inches * 96).toFixed(2)
 			},
 
 			/**
-			 * sync the sizes based upon the selected page orientation and format
+			 * sync the sizes based upon the selected page orientation and format.
+			 * @return {void} - void
 			 */
-
 			syncSizes() {
 
 				const errorValue = 0.2 // Subtracting this value to make the pages more accurate
 
-				this.settings.defaultHeightOfPaper =
-					this.locals.pageSizeDictionary[this.settings.orientation][this.settings.pageSize]["height"] // Gettings the default sizes from the base dic
-
-				this.settings.totalHeightOfAPaper =
-					this.settings.defaultHeightOfPaper -
-					this.settings.footer.height -
-					this.settings.header.height -
-					errorValue
-
-				this.settings.defaultWidthOfPaper =
-					this.locals.pageSizeDictionary[this.settings.orientation][
-					this.settings.pageSize
-					]["width"]
+				this.settings.defaultHeightOfPaper = this.locals.pageSizeDictionary[this.settings.orientation][this.settings.pageSize]["height"] // Gettings the default sizes from the base dic
+				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.footer.height - this.settings.header.height - errorValue
+				this.settings.defaultWidthOfPaper = this.locals.pageSizeDictionary[this.settings.orientation][this.settings.pageSize]["width"]
 			},
 
 			/**
 			 * Initializing dragging settings
 			 */
-
 			settingsInitFunc() {
 				setTimeout(() => {
-					this.headerBorderDragFunc()
-					this.footerBorderDragFunc()
+					this.headerDragManager()
+					this.footerDragManager()
 					this.locals.scale = 1
 				}, 100)
 			},
 
 			/**
-			 * converts given pixel to inch
+			 * converts given pixel to inch.
+			 * @param {Number} pixels - pixels
+			 * @return {Number} - given pixel to intches
 			 */
-
 			convert2Inches(pixels) {
 				return (pixels / 96).toFixed(2)
 			},
 
-			/**
-			 * Adjust the section's height by dragging
-			 */
 
-			headerBorderDragFunc() {
+			/**
+			 * Init drag functionality for header section.
+			 * @return {void} - void
+			 */
+			headerDragManager() {
 				var headerSection = document.getElementsByClassName("section header")[0] // element to make resizable
 
 				var resizer = document.createElement("div")
@@ -924,43 +840,30 @@
 
 				var startY, startHeight
 
-				let that = this // Storing this value to that to be able to use it inside a function
+				let that = this // Storing this value to that to be able to use it inside of the functions
 
 				function initDrag(e) {
 					startY = e.clientY
-					startHeight = parseInt(
-						document.defaultView.getComputedStyle(headerSection).height,
-						10
-					)
+					startHeight = parseInt(document.defaultView.getComputedStyle(headerSection).height, 10)
 					document.documentElement.addEventListener("mousemove", doDrag, false)
 					document.documentElement.addEventListener("mouseup", stopDrag, false)
 				}
 
 				function doDrag(e) {
-					that.settings.header.height = that.convert2Inches(
-						startHeight + e.clientY - startY
-					)
+					that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY)
 				}
 
 				function stopDrag(e) {
-					document.documentElement.removeEventListener(
-						"mousemove",
-						doDrag,
-						false
-					)
-					document.documentElement.removeEventListener(
-						"mouseup",
-						stopDrag,
-						false
-					)
+					document.documentElement.removeEventListener("mousemove", doDrag, false)
+					document.documentElement.removeEventListener("mouseup", stopDrag, false)
 				}
 			},
 
 			/**
-			 * Adjust the section's height by dragging
+			 * Init drag functionality for footer section.
+			 * @return {void} - void
 			 */
-
-			footerBorderDragFunc() {
+			footerDragManager() {
 				var footerSection = document.getElementsByClassName("section footer")[0] // element to make resizable
 
 				var resizer = document.createElement("div")
@@ -971,70 +874,42 @@
 
 				var startY, startHeight
 
-				let that = this // Storing this value to that to be able to use it inside a function
+				let that = this // Storing this value to that to be able to use it inside of the functions
 
 				function initDrag(e) {
 					startY = e.clientY
-					startHeight = parseInt(
-						document.defaultView.getComputedStyle(footerSection).height,
-						10
-					)
+					startHeight = parseInt(document.defaultView.getComputedStyle(footerSection).height, 10)
 					document.documentElement.addEventListener("mousemove", doDrag, false)
 					document.documentElement.addEventListener("mouseup", stopDrag, false)
 				}
 
 				function doDrag(e) {
-					that.settings.footer.height = that.convert2Inches(
-						startHeight - e.clientY + startY
-					)
+					that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY)
 				}
 
 				function stopDrag(e) {
-					document.documentElement.removeEventListener(
-						"mousemove",
-						doDrag,
-						false
-					)
-					document.documentElement.removeEventListener(
-						"mouseup",
-						stopDrag,
-						false
-					)
+					document.documentElement.removeEventListener("mousemove", doDrag, false)
+					document.documentElement.removeEventListener("mouseup", stopDrag, false)
 				}
 			},
 
 			/**
-			 * Swtich between tabs in toolbar
+			 * Swtich between tabs in toolbar.
+			 * @param {String} tabName - tab name
+			 * @param {HTMLElement} tab - selected tab element
+			 * @return {void} - void
 			 */
-
-			switchTabs(type, tab) {
+			switchTabs(tabName, tab) {
 				let slecetdTab = document.getElementsByClassName('tab selected')[0]
 				slecetdTab.classList.remove('selected')
 				tab.classList.add('selected')
-
-				switch (type) {
-
-					case 'settings':
-						this.locals.tabName = 'settings'
-						break
-
-					case 'variables':
-						this.locals.tabName = 'variables'
-						break
-
-					case 'others':
-						this.locals.tabName = 'others'
-						break
-
-					default:
-						break
-				}
+				this.locals.tabName = tabName
 			},
 
 			/**
-			 * Deselect all selected elements
+			 * Deselect all selected elements.
+			 * @return {void} - void
 			 */
-
 			deSelectAll() {
 				if (this.locals.isClicked) {
 					this.locals.isClicked = false
@@ -1048,13 +923,17 @@
 						styles: {},
 					},
 				}
-				let selectedElements =
-					document.getElementsByClassName("element selected")
+				let selectedElements = document.getElementsByClassName("element selected")
 				for (let index = 0; index < selectedElements.length; index++) {
 					selectedElements[index].classList.remove("selected")
 				}
 			},
 
+			/**
+			 * Clicked on element.
+			 * @param {HTMLElement} element - element
+			 * @return {void} - void
+			 */
 			clickedOnElement(element) {
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
@@ -1062,6 +941,11 @@
 				this.locals.isClicked = true
 			},
 
+			/**
+			 * create element.
+			 * @param {HTMLElement} parent - parent
+			 * @return {void} - void
+			 */
 			createElement(parent) {
 				let classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
@@ -1073,7 +957,7 @@
 							type: classType,
 							options: {
 								id: this.idGenerator(5),
-								configs: { text: "متن خود را وارد نمایید" },
+								configs: { text: this.$t('template-builder.elements.configs.type-text') },
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
@@ -1148,7 +1032,7 @@
 								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
-									text: 'الگوی خود را وارد نمایید',
+									text: this.$t('template-builder.elements.configs.pattern-input'),
 									value: null,
 								},
 								styles: {
@@ -1191,9 +1075,9 @@
 			},
 
 			/**
-			* Creates variable in variables tab list
-			*/
-
+			 * Creates variable in variables tab list.
+			 * @return {void} - void
+			 */
 			createVariable() {
 				let tmp = {
 					uniqueId: this.idGenerator(5),
@@ -1205,17 +1089,19 @@
 			},
 
 			/**
-			 * Empty the context on type change
+			 * Delete the variable context on type change.
+			 * @param {variable} variable - variable object
+			 * @return {void} - void
 			 */
-
 			onVariableTypeChange(variable) {
 				variable.context = ''
 			},
 
 			/**
-			* Deletes variable in variables tab list
-			*/
-
+			 * Deletes variable in variables tab list.
+			 * @param {uniqueId} uniqueId - variable unique id
+			 * @return {void} - void
+			 */
 			deleteVariable(uniqueId) {
 				let variablesList = this.locals.variables
 				let footerElements = this.settings.footer.footerElements
@@ -1223,7 +1109,7 @@
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
-						if (headerElements[index].options.configs.uniqueId == uniqueId) {
+						if (headerElements[index].options.configs.uniqueId === uniqueId) {
 							headerElements.splice(index, 1)
 						}
 					}
@@ -1231,7 +1117,7 @@
 
 				function deleteFromFooter() {
 					for (let index = 0; index < footerElements.length; index++) {
-						if (footerElements[index].options.configs.uniqueId == uniqueId) {
+						if (footerElements[index].options.configs.uniqueId === uniqueId) {
 							footerElements.splice(index, 1)
 						}
 					}
@@ -1240,7 +1126,7 @@
 				for (let index = 0; index < variablesList.length; index++) {
 					deleteFromHeader()
 					deleteFromFooter()
-					if (variablesList[index].uniqueId == uniqueId) {
+					if (variablesList[index].uniqueId === uniqueId) {
 						deleteFromHeader() // Checks if there is any variable with specific uniqueId left
 						deleteFromFooter()
 						variablesList.splice(index, 1)
@@ -1248,6 +1134,13 @@
 				}
 			},
 
+
+			/**
+			 * Method that triggers on element drag.
+			 * @param {classType} classType - element unique id
+			 * @param {uniqueId} uniqueId - element unique id
+			 * @return {void} - void
+			 */
 			startDraggingElement(classType, uniqueId) {
 				this.locals.classType = classType
 				this.locals.uniqueId = uniqueId
@@ -1257,16 +1150,25 @@
 				footerSection.className = footerSection.className + " dragged"
 			},
 
+			/**
+			 * Method that triggers on element drop on header.
+			 */
 			droppedElementOnHeader() {
 				let parent = "header"
 				this.createElement(parent)
 			},
 
+			/**
+			 * Method that triggers on element drop on footer.
+			 */
 			droppedElementOnFooter() {
 				let parent = "footer"
 				this.createElement(parent)
 			},
 
+			/**
+			 * Method that triggers when drag is finished
+			 */
 			finishedDraggingElement() {
 				let headerSection = this.$refs.headerTemplate
 				headerSection.classList.remove("dragged")
@@ -1274,6 +1176,11 @@
 				footerSection.classList.remove("dragged")
 			},
 
+			/**
+			 * Method that triggers on file change.
+			 * @param {uniqueId} uniqueId - variable | element unique id
+			 * @return {void} - void
+			 */
 			onFileChange(uniqueId) {
 				let maximumFileSize = this.configuration.maximumFileSize * 1000
 				let that = this // Storing this value to be able to use it inside a function
@@ -1281,18 +1188,16 @@
 				switch (this.locals.selectedElement.type) {
 					case 'imageelement':
 						let image = document.getElementById("elementImageFileControl").files[0]
-						if (image.type !== 'image/jpeg' && image.type !== 'image/png') {
-							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
-						}
 
-						if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+						if (image.type !== 'image/jpeg' && image.type !== 'image/png')
+							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
+
+						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
 							return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
-						}
 
 						this.toBase64(image).then((res) => {
 							this.locals.selectedElement.options.configs.imageSrc = res
 						})
-
 						break
 
 					case 'variable':
@@ -1300,24 +1205,21 @@
 						let variable
 
 						for (let index = 0; index < variables.length; index++) {
-							if (variables[index].uniqueId == uniqueId) {
+							if (variables[index].uniqueId === uniqueId) {
 								variable = variables[index]
 							}
 						}
 						image = document.getElementById("variableImageFileControl").files[0]
 
-						if (image.type != "image/jpeg" || image.type != "image/png") {
+						if (image.type !== "image/jpeg" || image.type !== "image/png")
 							return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
-						}
 
-						if (image.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
+						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
 							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
-						}
 
 						this.toBase64(image).then((res) => {
 							variable.context = res
 						})
-
 						break
 
 					default: // if its a source file
@@ -1345,9 +1247,10 @@
 			},
 
 			/**
-			 * Converts given image to base64
+			 * Converts given image to base64.
+			 * @param {File} file - image
+			 * @return {*} - base64 of image
 			 */
-
 			toBase64(file) {
 				return new Promise((resolve, reject) => {
 					const reader = new FileReader()
@@ -1358,9 +1261,10 @@
 			},
 
 			/**
-			 * Generate a n digit uinique id
+			 * Converts given image to base64.
+			 * @param {Number} n - number of digits
+			 * @return {String} - id
 			 */
-
 			idGenerator(n) {
 				return Math.random().toString(36).substr(2, n)
 			},
@@ -1368,7 +1272,6 @@
 			/**
 			 * Adds an event listenner on delete button and then removes the element
 			 */
-
 			deletingElementOnPressingDeleteKey() {
 				let headerElements = this.settings.header.headerElements
 				let footerElements = this.settings.footer.footerElements
@@ -1378,15 +1281,15 @@
 				let that = this // Storing the value of this to be able to use it inside of the function
 
 				function deleteElement(e) {
-					if (e.code == "Delete") {
+					if (e.code === "Delete") {
 						let id = that.locals.clickedElementId
 						for (let index = 0; index < headerElements.length; index++) {
-							if (headerElements[index].options.id == id) {
+							if (headerElements[index].options.id === id) {
 								headerElements.splice(index, 1)
 							}
 						}
 						for (let index = 0; index < footerElements.length; index++) {
-							if (footerElements[index].options.id == id) {
+							if (footerElements[index].options.id === id) {
 								footerElements.splice(index, 1)
 							}
 						}
@@ -1402,9 +1305,10 @@
 			},
 
 			/**
-			 * Gets coordinates of the given element
+			 * Gets coordinates of the given element.
+			 * @param {Number} id - element id
+			 * @return {Object} - return Coordination
 			 */
-
 			getCoordinates(id) {
 				let tmp = document.getElementById(id)
 				let compStyle = getComputedStyle(tmp)
@@ -1421,10 +1325,12 @@
 			},
 
 			/**
-			 * function for the modal
+			 * Converts the given html to Image and append it to the body tag.
+			 * @param {Number} modalId - modal element id
+			 * @param {Number} closeBtnId - close button element id
+			 * @return {void} - void
 			 */
-
-			modalFunc(modalId, closeBtnId) {
+			modalManager(modalId, closeBtnId) {
 				var modal = document.getElementById(modalId)
 
 				// Get the <span> element that closes the modal
@@ -1436,38 +1342,46 @@
 				}
 			},
 
+			/**
+			 * function to display modal
+			 */
 			showModal() {
 				document.getElementById("templateBuilderModal").style.display = "block"
 			},
 
+			/**
+			 * function that triggers while editing is finished.
+			 * @param {HTMLElment} element - element
+			 * @return {void} - void
+			 */
 			finishedEditingElement(element) {
-				let tmp = this.settings.header.headerElements.find(
-					(x) => x.options.id == element.options.id
-				)
-				if (tmp) {
-					Object.assign(
-						tmp.options.styles,
-						this.getCoordinates(element.options.id)
-					)
+				let tmp = this.settings.header.headerElements.find(x => x.options.id === element.options.id)
+
+				if (tmp) { // its header element
+					Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
 					return
 				}
-				tmp = this.settings.footer.footerElements.find(
-					(x) => x.options.id == element.options.id
-				)
-				Object.assign(
-					tmp.options.styles,
-					this.getCoordinates(element.options.id)
-				)
+
+				tmp = this.settings.footer.footerElements.find(x => x.options.id === element.options.id)
+				
+				Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
 				return
 			},
+
+			/**
+			 * function that triggers when clicked on input.
+			 * @param {Number} id - element id
+			 * @return {void} - void
+			 */
 			clickedOnInput(id) {
 				document.getElementById(id).click()
 			},
 
 			/**
-			 * Encode given data to base64
+			 * encode given string to base64.
+			 * @param {String} str - string
+			 * @return {*} - base64
 			 */
-
 			encode2Base64(str) {
 				{
 					return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
@@ -1478,9 +1392,10 @@
 			},
 
 			/**
-			 * Decode given data from base64
+			 * decode given string to base64.
+			 * @param {String} str - string
+			 * @return {*} - base64
 			 */
-
 			decodeFromBase64(str) {
 				return decodeURIComponent(atob(str).split('').map(function (c) {
 					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)

@@ -22,7 +22,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") { 
+    if (this.$parent.$options.name === "TemplateBuilder") { 
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     computedCounter() {
-      if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+      if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
         if (this.settings.configs.completeForm) {
           if (this.settings.configs.persianNumbers) {
             return this.toPersianNumbers('صفحه ۱ از ۱')

@@ -3,7 +3,7 @@
 
     <!-- If its the template builder mode -->
     <div
-      v-if="$parent.$options.name == 'TemplateBuilder'"
+      v-if="$parent.$options.name === 'TemplateBuilder'"
       :id="settings.id"
       ref="element"
       @click="$emit('clickedOnElement')"
@@ -11,7 +11,7 @@
       :class="locals.classType + ' element'"
       :style="settings.styles"
     >
-      {{ settings.configs.field == "" ? locals.text1 : locals.text + settings.configs.field }}
+      {{ settings.configs.field === "" ? locals.text1 : locals.text + settings.configs.field }}
       <div ref="resizer" class="resizer"></div>
     </div>
 
@@ -39,7 +39,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+    if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.$refs.resizer,

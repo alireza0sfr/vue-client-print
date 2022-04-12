@@ -74,7 +74,7 @@
 </template>
 
 <script>
-	import Print from '~/components/client-print/Print.vue'
+	import Print from '~/components/Print.vue'
 	export default {
 		components: {
 			Print

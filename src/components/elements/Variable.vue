@@ -3,7 +3,7 @@
 
     <!-- If the variable is text -->
     <div
-      v-show="variable.type == 'text' ? true : false"
+      v-show="variable.type === 'text' ? true : false"
       :id="settings.id"
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
@@ -17,7 +17,7 @@
 
     <!-- If the variable is image -->
     <div
-      v-show="variable.type == 'image' ? true : false"
+      v-show="variable.type === 'image' ? true : false"
       :id="settings.id"
       @click="$emit('clickedOnElement')"
       @finishededitingelement="$emit('finishedEditingElement')"
@@ -46,7 +46,7 @@ export default {
     variable: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
+    if (this.$parent.$options.name === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.textVariable,
         this.locals.classType,

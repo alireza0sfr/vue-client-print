@@ -25,7 +25,7 @@ export default {
     options: Object,
   },
   mounted() {
-    if (this.$parent.$options.name == "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+    if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
       this.Initialize(
         this.$refs.element,
         this.locals.classType,
