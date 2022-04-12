@@ -1124,13 +1124,14 @@
 				}
 
 				for (let index = 0; index < variablesList.length; index++) {
+				console.log(variablesList)
 					deleteFromHeader()
 					deleteFromFooter()
-					if (variablesList[index].uniqueId === uniqueId) {
-						deleteFromHeader() // Checks if there is any variable with specific uniqueId left
-						deleteFromFooter()
-						variablesList.splice(index, 1)
-					}
+					// if (variablesList[index].uniqueId === uniqueId) {
+					// 	deleteFromHeader() // Checks if there is any variable with specific uniqueId left
+					// 	deleteFromFooter()
+					// 	variablesList.splice(index, 1)
+					// }
 				}
 			},
 
@@ -1363,7 +1364,7 @@
 				}
 
 				tmp = this.settings.footer.footerElements.find(x => x.options.id === element.options.id)
-				
+
 				Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
 				return
 			},
