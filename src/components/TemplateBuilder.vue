@@ -532,7 +532,7 @@
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
-			configuration: Object,
+			configurations: Object,
 		},
 		components: {
 			textelement: TextElement,
@@ -1174,7 +1174,7 @@
 			 * @return {void} - void
 			 */
 			onFileChange(uniqueId) {
-				let maximumFileSize = this.configuration.maximumFileSize * 1000
+				let maximumFileSize = this.configurations.maximumFileSize * 1000
 				let that = this // Storing this value to be able to use it inside a function
 
 				switch (this.locals.selectedElement.type) {

@@ -1,6 +1,6 @@
 <template>
 	<div id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :variables="variables" :configuration="configs" />
+		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :variables="variables" :configurations="configs" />
 
 		<!-- Data Slots -->
 		<div class="slotWrapper">
@@ -86,7 +86,7 @@
 			options: { type: Object },
 			bindingObject: { type: Object },
 			variables: { type: Array },
-			configuration: { type: Object },
+			configurations: { type: Object },
 		},
 		components: {
 			variable: Variable,
@@ -156,7 +156,7 @@
 					{
 						maximumFileSize: 1000 // Maximum file size in KB
 					}
-					, this.configuration)
+					, this.configurations)
 			},
 
 			/**
