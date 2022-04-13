@@ -1113,29 +1113,24 @@
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
-						if (headerElements[index].options.configs.uniqueId === uniqueId) {
+						if (headerElements[index].options.configs.uniqueId === uniqueId)
 							headerElements.splice(index, 1)
-						}
 					}
 				}
 
 				function deleteFromFooter() {
 					for (let index = 0; index < footerElements.length; index++) {
-						if (footerElements[index].options.configs.uniqueId === uniqueId) {
+						if (footerElements[index].options.configs.uniqueId === uniqueId)
 							footerElements.splice(index, 1)
-						}
 					}
 				}
 
-				for (let index = 0; index < variablesList.length; index++) {
-					deleteFromHeader()
-					deleteFromFooter()
-					// if (variablesList[index].uniqueId === uniqueId) {
-					// 	deleteFromHeader() // Checks if there is any variable with specific uniqueId left
-					// 	deleteFromFooter()
-					// 	variablesList.splice(index, 1)
-					// }
-				}
+				deleteFromHeader()
+				deleteFromFooter()
+
+				let index = variablesList.findIndex(x => x.uniqueId === uniqueId)
+				if (index > -1)
+					variablesList.splice(index, 1)
 			},
 
 
