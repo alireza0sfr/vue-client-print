@@ -701,7 +701,7 @@
 				// Closing the template builder modal after save
 				document.getElementById("templateBuilderModal").style.display = "none"
 
-				if (!this.settings.callback)
+				if (this.settings.callback)
 					this.settings.callback(tmp)
 			},
 
@@ -781,6 +781,9 @@
 			importFromSrcFile(srcFile) {
 				this.settings = this.getDefaultSettings() // Set the settings to default value
 				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+
+				if (this.settings.variables)
+					this.setVariables(this.settings.variables)
 			},
 
 			/**

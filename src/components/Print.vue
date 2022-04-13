@@ -1,6 +1,6 @@
 <template>
 	<div id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :variables="variables" :configurations="configs" />
+		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
 
 		<!-- Data Slots -->
 		<div class="slotWrapper">
@@ -361,7 +361,11 @@
 				}
 				this.locals.templateBuilderData.bindingObject = tmp
 				this.$refs.TemplateBuilder.settingsInitFunc()
-				this.$refs.TemplateBuilder.setVariables([...this.variables])
+
+				let variables = this.variables && this.variables.length ? this.variables : json.variables
+				if (variables)
+					this.$refs.TemplateBuilder.setVariables([...variables])
+
 				this.$refs.TemplateBuilder.showModal()
 			},
 
@@ -440,7 +444,7 @@
 							opt.configs.value = this.bindingObject[key]
 						else
 							opt.configs.value = ''
-							
+
 						break
 
 					case 'textpattern':
