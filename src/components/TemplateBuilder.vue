@@ -952,8 +952,6 @@
 				let uniqueId = this.locals.uniqueId
 				let tmp
 
-				console.log(ImageElement.methods.test())
-				return
 				switch (classType) {
 					case 'textelement':
 						tmp = {
