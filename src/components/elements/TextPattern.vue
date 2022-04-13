@@ -98,7 +98,6 @@ export default {
     /**
      *  Convertes the given number to persian format 
      */
-    
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 

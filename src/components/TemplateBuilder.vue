@@ -499,14 +499,14 @@
 						</div>
 						<div class="template-container" :style="{height: settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElementOnHeader()" @dragenter.prevent @dragover.prevent>
+								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 								<div id="bodyTemplate">
 									<div class="watermark">{{$t('template-builder.body')}}</div>
 									<p>{{$t('template-builder.body-msg')}}</p>
 								</div>
-								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElementOnFooter()" @dragenter.prevent @dragover.prevent>
+								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
 								</div>
 							</div>
@@ -527,6 +527,7 @@
 	import ImageElement from '~/components/elements/ImageElement.vue'
 	import TextPattern from '~/components/elements/TextPattern.vue'
 	import { saveAs } from 'file-saver'
+	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -951,6 +952,8 @@
 				let uniqueId = this.locals.uniqueId
 				let tmp
 
+				console.log(ImageElement.methods.test())
+				return
 				switch (classType) {
 					case 'textelement':
 						tmp = {
@@ -995,7 +998,7 @@
 							type: classType,
 							options: {
 								id: this.idGenerator(5),
-								configs: { imageSrc: require("@/assets/images/logo.png") },
+								configs: { imageSrc: DefaultLogo },
 								styles: {
 									top: 0,
 									left: 0,
@@ -1124,7 +1127,6 @@
 				}
 
 				for (let index = 0; index < variablesList.length; index++) {
-				console.log(variablesList)
 					deleteFromHeader()
 					deleteFromFooter()
 					// if (variablesList[index].uniqueId === uniqueId) {
@@ -1152,18 +1154,9 @@
 			},
 
 			/**
-			 * Method that triggers on element drop on header.
+			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElementOnHeader() {
-				let parent = "header"
-				this.createElement(parent)
-			},
-
-			/**
-			 * Method that triggers on element drop on footer.
-			 */
-			droppedElementOnFooter() {
-				let parent = "footer"
+			droppedElement(parent) {
 				this.createElement(parent)
 			},
 

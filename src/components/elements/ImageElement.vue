@@ -1,77 +1,68 @@
 <template>
-  <div
-    :id="settings.id"
-    @click="$emit('clickedOnElement')"
-    @finishededitingelement="$emit('finishedEditingElement')"
-    :class="locals.classType + ' element'"
-      :style="settings.styles"
-    ref="element"
-  >
-    <img
-      class="image"
-      draggable="false"
-      :src="settings.configs.imageSrc"
-      alt="Image"
-    />
-    <div ref="resizer" class="resizer"></div>
-  </div>
+	<div :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles" ref="element">
+		<img class="image" draggable="false" :src="settings.configs.imageSrc" alt="Image" />
+		<div ref="resizer" class="resizer"></div>
+	</div>
 </template>
 
 <script>
-import elementUtilities from '~/plugins/element-utilities.js'
-export default {
-  name: "ImageElement",
-  props: {
-    options: Object,
-  },
-  mounted() {
-    if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-      this.Initialize(
-        this.$refs.element,
-        this.locals.classType,
-        this.$refs.resizer
-      )
-    }
-  },
-  watch: {
-    options: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        let tmp = this.options.styles
-        Object.assign(this.settings, val)
-        this.settings.styles = tmp
-        Object.assign(this.settings.styles, val.styles)
-      },
-    },
-  },
-  data() {
-    return {
-      locals: {
-        classType: "imageelement",
-      },
-      settings: {
-        id: 0,
-        configs: {
-          imageSrc: require("@/assets/images/logo.png"),
-        },
-        styles: {},
-      },
-    }
-  },
-  methods: {
+	import elementUtilities from '~/plugins/element-utilities.js'
+	import DefaultLogo from '@/assets/images/logo.png'
+	export default {
+		name: "ImageElement",
+		props: {
+			options: Object,
+		},
+		mounted() {
+			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+				this.Initialize(
+					this.$refs.element,
+					this.locals.classType,
+					this.$refs.resizer
+				)
+			}
+		},
+		watch: {
+			options: {
+				immediate: true,
+				deep: true,
+				handler(val) {
+					let tmp = this.options.styles
+					Object.assign(this.settings, val)
+					this.settings.styles = tmp
+					Object.assign(this.settings.styles, val.styles)
+				},
+			},
+		},
+		data() {
+			return {
+				locals: {
+					classType: "imageelement",
+				},
+				settings: {
+					id: 0,
+					configs: {
+						imageSrc: DefaultLogo,
+					},
+					styles: {},
+				},
+			}
+		},
+		methods: {
 
-    /**
-     *  Convertes the given number to persian format 
-     */
-    
-    Initialize(element, classType, resizer) {
-      elementUtilities.resizable(element, resizer)
-      elementUtilities.dragable(element, classType)
-      elementUtilities.click(element, classType)
-    },
-  },
-};
+			/**
+			 *  Convertes the given number to persian format 
+			 */
+			Initialize(element, classType, resizer) {
+				elementUtilities.resizable(element, resizer)
+				elementUtilities.dragable(element, classType)
+				elementUtilities.click(element, classType)
+			},
+      test() {
+        console.log('hi im image');
+      },
+		},
+	};
 </script>
 
 <style>

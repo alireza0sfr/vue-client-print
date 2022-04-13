@@ -93,7 +93,6 @@ export default {
     /**
      * Initializing the element utilities for the created element
      */
-
     Initialize(element, resizer, classType) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
@@ -103,7 +102,6 @@ export default {
     /**
      *  Convertes the given number to persian format 
      */
-    
     toPersianNumbers(n) {
       const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 

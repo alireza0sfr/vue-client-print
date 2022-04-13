@@ -90,7 +90,6 @@ export default {
     /**
      * Initializing the element utilities for the created element
      */
-
     Initialize(element, classType, resizer) {
       elementUtilities.resizable(element, resizer)
       elementUtilities.dragable(element, classType)
