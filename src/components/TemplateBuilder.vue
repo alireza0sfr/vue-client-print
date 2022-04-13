@@ -514,7 +514,7 @@
 													<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="
                               locals.selectedElement.options.styles.direction
                             " />
-													{{$t('template-builder.elements.styles.right-to-left')}}
+												{{$t('template-builder.elements.styles.right-to-left')}}
 												</div>
 											</label>
 											<label for="elementDirections2">
@@ -522,7 +522,7 @@
 													<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="
                               locals.selectedElement.options.styles.direction
                             " />
-													{{$t('template-builder.elements.styles.left-to-right')}}
+												{{$t('template-builder.elements.styles.left-to-right')}}
 												</div>
 											</label>
 										</div>
@@ -677,8 +677,6 @@
 					let rawSettings = this.getDefault()
 					Object.assign(rawSettings, val)
 					this.settings = rawSettings
-					if (val.variables)
-						this.setVariables(val.variables)
 				},
 			}
 		},
@@ -858,9 +856,6 @@
 			importFromSrcFile(srcFile) {
 				this.settings = this.getDefault() // Set the settings to default value
 				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
-				console.log(this.settings.variables)
-				if (this.settings.variables)
-					this.setVariables(this.settings.variables)
 			},
 
 			/**
