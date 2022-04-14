@@ -1,53 +1,54 @@
-/**
- * Making the given element resizeable
- */
+function resizable(element, resizableAreas) {
+    const resizers = document.getElementsByClassName('elem-resizer')
 
-function resizable(element, resizer) {
+    for (let resizer of resizers) {
+        resizer.onmousedown = (e) => initDrag(e, resizer)
+    }
 
-    resizer.addEventListener("mousedown", initDrag, false)
-    element.addEventListener("mousedown", dragable, false)
-
+    element.onmousedown = dragable
     var startX, startY, startWidth, startHeight
-
-    function initDrag(e) {
-        if (e.target.className === 'resizer') { // If Clicking on the resizer
+    function initDrag(e, resizer) {
+        if (e.target.className.includes('elem-resizer')) { // If Clicking on the resizer
             startX = e.clientX
             startY = e.clientY
-            startWidth = parseInt(
-                document.defaultView.getComputedStyle(element).width,
-                10
-            )
-            startHeight = parseInt(
-                document.defaultView.getComputedStyle(element).height,
-                10
-            )
-            document.documentElement.addEventListener("mousemove", doDrag, false)
-            document.documentElement.addEventListener("mouseup", stopDrag, false)
+            startWidth = parseInt(document.defaultView.getComputedStyle(element).width, 10)
+            startHeight = parseInt(document.defaultView.getComputedStyle(element).height, 10)
+            document.onmousemove = (e) => doDrag(e, resizer)
+            document.onmouseup = stopDrag
         }
     }
-    function doDrag(e) {
-        element.style.width = startWidth + e.clientX - startX + "px"
-        element.style.height = startHeight + e.clientY - startY + "px"
+    function doDrag(e, resizer) {
+        var elementREC = element.getBoundingClientRect()
+        console.log(elementREC)
+        if (resizer.className.includes('right'))
+            element.style.width = startWidth + e.clientX - startX + "px"
+
+        if (resizer.className.includes('top')) {
+            var newTop = elementREC.height + startHeight + 'px'
+            element.style.height = startHeight + newTop - startY + "px"
+            element.style.top = newTop + "px"
+        }
+
+        if (resizer.className.includes('bottom'))
+            element.style.height = startHeight + e.clientY - startY + "px"
+
+        if (resizer.className.includes('br')) {
+            element.style.width = startWidth + e.clientX - startX + "px"
+            element.style.height = startHeight + e.clientY - startY + "px"
+        }
+
+        if (resizer.className.includes('tr')) {
+            element.style.width = startWidth + e.clientX - startX + "px"
+            element.style.height = startY + startHeight - e.clientY + "px"
+        }
     }
 
     function stopDrag(e) {
-        document.documentElement.removeEventListener(
-            "mousemove",
-            doDrag,
-            false
-        )
-        document.documentElement.removeEventListener(
-            "mouseup",
-            stopDrag,
-            false
-        )
+        document.onmousemove = null
+        document.onmouseup = null
         element.dispatchEvent(new Event("finishededitingelement"))
     }
 }
-
-/**
- * Adding border and resizer to the clicked element
- */
 
 function click(element) {
     element.addEventListener("mousedown", onClick, false)
@@ -60,10 +61,6 @@ function click(element) {
     }
 
 }
-
-/**
- * Making the given element draggable
- */
 
 function dragable(element, classType) {
 
@@ -80,14 +77,14 @@ function dragable(element, classType) {
             e.target.className.includes('element') ||
             e.target.offsetParent.className.includes('element') &&
             e.target.className === 'image') { // if dragging element or image element/variable
-                e = e || window.event
-                e.preventDefault()
-                // get the mouse cursor position at startup:
-                pos3 = e.clientX
-                pos4 = e.clientY
-                document.onmouseup = closeDragElement
-                // call a function whenever the cursor moves:
-                document.onmousemove = elementDrag
+            e = e || window.event
+            e.preventDefault()
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX
+            pos4 = e.clientY
+            document.onmouseup = closeDragElement
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag
         }
 
         function elementDrag(e) {

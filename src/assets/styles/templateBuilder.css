@@ -271,21 +271,90 @@ shadow {
 
 /* Elements  */
 
-.element.selected .resizer {
+.element.selected .elem-resizer {
     border-top: none !important;
     position: absolute;
-    bottom: 0;
-    top: auto !important;
-    right: -3px;
-    left: auto;
     width: 16px;
     height: 16px;
     background-size: cover;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAxBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjA0MDgxNTZEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjA0MDgxNTVEMzNFMTFFQkI3OTdDNDBEQjIyNzg3RTgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9IjFEMTE1RDY1RUU3RTA0MDA4QTM0QThEMTBFQjcxQjVDIiBzdFJlZjpkb2N1bWVudElEPSIxRDExNUQ2NUVFN0UwNDAwOEEzNEE4RDEwRUI3MUI1QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pi4XKu0AAACWUExURVhYWI2NjZubm46Ojvv7+wQEBPz8/E5OTk1NTQMDA1lZWQEBAVdXV4yMjO3t7cTExBcXF7q6uoKCgpKSkv7+/tPT0/b29p+fn11dXYuLi1JSUsPDw35+flxcXBMTE0dHR4CAgOjo6Ofn58XFxVtbW+Li4p6enmVlZeHh4SUlJezs7CQkJAgICAICAv39/f///wAAAP///+M2NPIAAAAydFJOU/////////////////////////////////////////////////////////////////8ADVCY7wAAANlJREFUeNps0ucSgkAMBODYUFGsYO+94S3v/3KGwB3gHT8cZr7JZidCifNRk2tCbpnieXKSqqGLC7klxtYjp7RAX8cu1eA0FptYYvgsFpkZi/Qem4o09UciMuOthhUq0pptYEx/DfxceliSK63DbzdFlbS+zHQA1JXZJRftm7R60VAuWqSlkpPMUDlNU2lP24iQK20mNSqtswbJYBdweZbSDTJ5jYAD8RcSl26QzbDgTBudFu7Nng9LlNDjjYX8P2oNzKVbGKAVpQ2Pdy+/yDhQ+gMd8u9PgAEARXlsB1h8RU4AAAAASUVORK5CYII=);
 }
 
-.element .resizer:hover,
-.element .resizer:active {
+.element.selected .elem-resizer.tl {
+    left: 0;
+    top: 0;
+    transform: rotate(175deg);
+}
+
+.element.selected .elem-resizer.tl:hover {
+    cursor: nwse-resize;
+}
+
+.element.selected .elem-resizer.top {
+    top: -6px;
+    left: 49%;
+    transform: rotate(225deg);
+}
+
+.element.selected .elem-resizer.top:hover {
+    cursor: ns-resize;
+}
+
+.element.selected .elem-resizer.tr {
+    right: 0;
+    top: 0;
+    transform: rotate(270deg);
+}
+
+.element.selected .elem-resizer.tr:hover {
+    cursor: nesw-resize;
+}
+
+.element.selected .elem-resizer.left {
+    left: -6px;
+    top: 46%;
+    transform: rotate(135deg)
+}
+
+.element.selected .elem-resizer.left:hover {
+    cursor: ew-resize;
+}
+
+.element.selected .elem-resizer.right {
+    top: 46%;
+    right: -6px;
+    transform: rotate(314deg);}
+
+.element.selected .elem-resizer.right:hover {
+    cursor: ew-resize;
+}
+
+.element.selected .elem-resizer.bl {
+    left: 0;
+    transform: rotate(86deg);
+    bottom: 0;
+}
+
+.element.selected .elem-resizer.bl:hover {
+    cursor: nesw-resize;
+}
+
+.element.selected .elem-resizer.bottom {
+    left: 49%;
+    transform: rotate(45deg);
+    bottom: -6px;
+}
+
+.element.selected .elem-resizer.bottom:hover {
+    cursor: ns-resize;
+}
+
+.element.selected .elem-resizer.br {
+    right: 0;
+    bottom: 0;
+}
+
+.element.selected .elem-resizer.br:hover {
     cursor: nwse-resize;
 }
 

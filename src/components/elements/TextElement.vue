@@ -2,7 +2,14 @@
 	<div>
 		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{settings.configs.text}}
-			<div ref="resizer" class="resizer"></div>
+			<div class="elem-resizer tl"></div>
+			<div class="elem-resizer top"></div>
+			<div class="elem-resizer tr"></div>
+			<div class="elem-resizer left"></div>
+			<div class="elem-resizer right"></div>
+			<div class="elem-resizer bl"></div>
+			<div class="elem-resizer bottom"></div>
+			<div class="elem-resizer br"></div>
 		</div>
 	</div>
 </template>
@@ -55,7 +62,11 @@
 			* Initializing the element utilities for the created element
 			*/
 			Initialize(element, resizer, classType) {
-				elementUtilities.resizable(element, resizer)
+				elementUtilities.resizable(element, [
+          'tl', 'top', 'tr',
+          'left', 'right',
+          'bl', 'bottom', 'br'
+          ])
 				elementUtilities.dragable(element, classType)
 				elementUtilities.click(element, classType)
 			},
