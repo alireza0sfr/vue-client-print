@@ -1,101 +1,94 @@
 <template>
-  <div>
-    <div
-      :id="settings.id"
-      ref="element"
-      @click="$emit('clickedOnElement')"
-      @finishededitingelement="$emit('finishedEditingElement')"
-      :class="locals.classType + ' element'"
-      :style="settings.styles"
-    >
-      {{ computedCounter }}
-      <div ref="resizer" class="resizer"></div>
-    </div>
-  </div>
+	<div>
+		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+			{{ computedCounter }}
+			<div ref="resizer" class="resizer"></div>
+		</div>
+	</div>
 </template>
 
 <script>
-import elementUtilities from '~/plugins/element-utilities.js'
-export default {
-  name: "PageCounter",
-  props: {
-    options: Object,
-  },
-  mounted() {
-    if (this.$parent.$options.name === "TemplateBuilder") { 
-      this.Initialize(
-        this.$refs.element,
-        this.$refs.resizer,
-        this.locals.classType
-      )
-    }
-  },
-  computed: {
-    computedCounter() {
-      if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-        if (this.settings.configs.completeForm) {
-          if (this.settings.configs.persianNumbers) {
-            return this.toPersianNumbers('صفحه ۱ از ۱')
-          }
-          return 'page 1 / 1'
-        }
-        if (this.settings.configs.persianNumbers) {
-          return this.toPersianNumbers(this.settings.configs.counter)
-        }
-      }
-      return this.settings.configs.counter
-    }
-  },
-  watch: {
-    options: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        let tmp = this.options.styles
-        Object.assign(this.settings, val)
-        this.settings.styles = tmp
-        Object.assign(this.settings.styles, val.styles)
-      },
-    },
-  },
-  data() {
-    return {
-      locals: {
-        classType: "pagecounter",
-      },
-      settings: {
-        id: 0,
-        configs: {
-          counter: '1',
-          persianNumbers: true,
-          completeForm: true,
-        },
-        styles: {},
-      },
-    }
-  },
-  methods: {
+	import elementUtilities from '~/plugins/element-utilities.js'
+	export default {
+		name: "PageCounter",
+		props: {
+			options: Object,
+		},
+		mounted() {
+			if (this.$parent.$options.name === "TemplateBuilder") {
+				this.Initialize(
+					this.$refs.element,
+					this.$refs.resizer,
+					this.locals.classType
+				)
+			}
+		},
+		computed: {
+			computedCounter() {
+				if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+					if (this.settings.configs.completeForm) {
+						if (this.settings.configs.persianNumbers) {
+							return this.toPersianNumbers('صفحه ۱ از ۱')
+						}
+						return 'page 1 / 1'
+					}
+					if (this.settings.configs.persianNumbers) {
+						return this.toPersianNumbers(this.settings.configs.counter)
+					}
+				}
+				return this.settings.configs.counter
+			}
+		},
+		watch: {
+			options: {
+				immediate: true,
+				deep: true,
+				handler(val) {
+					let tmp = this.options.styles
+					Object.assign(this.settings, val)
+					this.settings.styles = tmp
+					Object.assign(this.settings.styles, val.styles)
+				},
+			},
+		},
+		data() {
+			return {
+				locals: {
+					classType: "pagecounter",
+				},
+				settings: {
+					id: 0,
+					configs: {
+						counter: '1',
+						persianNumbers: true,
+						completeForm: true,
+					},
+					styles: {},
+				},
+			}
+		},
+		methods: {
 
-    /**
-     * Initializing the element utilities for the created element
-     */
-    Initialize(element, resizer, classType) {
-      elementUtilities.resizable(element, resizer)
-      elementUtilities.dragable(element, classType)
-      elementUtilities.click(element, classType)
-    },
+			/**
+			 * Initializing the element utilities for the created element
+			 */
+			Initialize(element, resizer, classType) {
+				elementUtilities.resizable(element, resizer)
+				elementUtilities.dragable(element, classType)
+				elementUtilities.click(element, classType)
+			},
 
-    /**
-     *  Convertes the given number to persian format 
-     */
-    toPersianNumbers(n) {
-      const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+			/**
+			 *  Convertes the given number to persian format 
+			 */
+			toPersianNumbers(n) {
+				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
-      return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-    },
-    
-  },
-};
+				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
+			},
+
+		},
+	};
 </script>
 
 <style>
