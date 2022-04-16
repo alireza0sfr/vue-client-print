@@ -7,7 +7,7 @@ const messages: object = {
       "proccessing": "Proccessing..."
     },
     "template-builder": {
-      "name": "Temeplate Builder",
+      "name": "Template Builder",
       "variables": {
         "type": "Type",
         "variables": "Variables",
