@@ -2,14 +2,7 @@
 	<div>
 		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{settings.configs.text}}
-			<div class="elem-resizer tl"></div>
-			<div class="elem-resizer top"></div>
-			<div class="elem-resizer tr"></div>
-			<div class="elem-resizer left"></div>
-			<div class="elem-resizer right"></div>
-			<div class="elem-resizer bl"></div>
-			<div class="elem-resizer bottom"></div>
-			<div class="elem-resizer br"></div>
+			<div v-for="area in cleanedResizeables" :key="area" :class="`elem-resizer ${area}`"></div>
 		</div>
 	</div>
 </template>
@@ -25,7 +18,6 @@
 			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 				this.Initialize(
 					this.$refs.element,
-					this.$refs.resizer,
 					this.locals.classType
 				)
 			}
@@ -42,8 +34,14 @@
 				},
 			},
 		},
+		computed: {
+			cleanedResizeables() {
+				return this.resizableAreas.filter(x => x && x.length > 1)
+			},
+		},
 		data() {
 			return {
+				resizableAreas: ['br'],
 				locals: {
 					classType: "text",
 				},
@@ -61,12 +59,8 @@
 			/**
 			* Initializing the element utilities for the created element
 			*/
-			Initialize(element, resizer, classType) {
-				elementUtilities.resizable(element, [
-          'tl', 'top', 'tr',
-          'left', 'right',
-          'bl', 'bottom', 'br'
-          ])
+			Initialize(element, classType) {
+				elementUtilities.resizable(element)
 				elementUtilities.dragable(element, classType)
 				elementUtilities.click(element, classType)
 			},

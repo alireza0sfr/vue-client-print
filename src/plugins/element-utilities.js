@@ -1,4 +1,4 @@
-function resizable(element, resizableAreas) {
+function resizable(element) {
     const resizers = document.getElementsByClassName('elem-resizer')
 
     for (let resizer of resizers) {
@@ -6,9 +6,11 @@ function resizable(element, resizableAreas) {
     }
 
     element.onmousedown = dragable
-    var startX, startY, startWidth, startHeight
+    var startX, startY, startWidth, startHeight, originalLeft, originalTop
     function initDrag(e, resizer) {
         if (e.target.className.includes('elem-resizer')) { // If Clicking on the resizer
+            originalLeft = element.offsetLeft
+            originalTop = element.offsetTop
             startX = e.clientX
             startY = e.clientY
             startWidth = parseInt(document.defaultView.getComputedStyle(element).width, 10)
@@ -18,19 +20,21 @@ function resizable(element, resizableAreas) {
         }
     }
     function doDrag(e, resizer) {
-        var elementREC = element.getBoundingClientRect()
-        console.log(elementREC)
         if (resizer.className.includes('right'))
             element.style.width = startWidth + e.clientX - startX + "px"
 
         if (resizer.className.includes('top')) {
-            var newTop = elementREC.height + startHeight + 'px'
-            element.style.height = startHeight + newTop - startY + "px"
-            element.style.top = newTop + "px"
+            element.style.height = startY - (e.clientY - startHeight) + "px"
+            element.style.top = originalTop + (e.clientY - startY) + 'px'
         }
 
         if (resizer.className.includes('bottom'))
             element.style.height = startHeight + e.clientY - startY + "px"
+
+        if (resizer.className.includes('left')) {
+            element.style.width = startWidth - e.clientX + startX + "px"
+            element.style.left = originalLeft + (e.clientX - startX) + 'px'
+        }
 
         if (resizer.className.includes('br')) {
             element.style.width = startWidth + e.clientX - startX + "px"
@@ -39,7 +43,21 @@ function resizable(element, resizableAreas) {
 
         if (resizer.className.includes('tr')) {
             element.style.width = startWidth + e.clientX - startX + "px"
-            element.style.height = startY + startHeight - e.clientY + "px"
+            element.style.height = startY - (e.clientY - startHeight) + "px"
+            element.style.top = originalTop + (e.clientY - startY) + 'px'
+        }
+
+        if (resizer.className.includes('bl')) {
+            element.style.width = startWidth - e.clientX + startX + "px"
+            element.style.height = startHeight + e.clientY - startY + "px"
+            element.style.left = originalLeft + (e.clientX - startX) + 'px'
+        }
+
+        if (resizer.className.includes('tl')) {
+            element.style.height = startY - (e.clientY - startHeight) + "px"
+            element.style.width = startWidth - e.clientX + startX + "px"
+            element.style.left = originalLeft + (e.clientX - startX) + 'px'
+            element.style.top = originalTop + (e.clientY - startY) + 'px'
         }
     }
 
