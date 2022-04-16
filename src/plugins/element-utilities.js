@@ -25,40 +25,41 @@ class Element {
             }
         }
         function doDrag(e, resizer) {
+            debugger
             if (resizer.className.includes('right'))
                 element.style.width = startWidth + e.clientX - startX + "px"
 
-            if (resizer.className.includes('top')) {
+            else if (resizer.className.includes('top')) {
                 element.style.height = startY - (e.clientY - startHeight) + "px"
                 element.style.top = originalTop + (e.clientY - startY) + 'px'
             }
 
-            if (resizer.className.includes('bottom'))
+            else if (resizer.className.includes('bottom'))
                 element.style.height = startHeight + e.clientY - startY + "px"
 
-            if (resizer.className.includes('left')) {
+            else if (resizer.className.includes('left')) {
                 element.style.width = startWidth - e.clientX + startX + "px"
                 element.style.left = originalLeft + (e.clientX - startX) + 'px'
             }
 
-            if (resizer.className.includes('br')) {
+            else if (resizer.className.includes('br')) {
                 element.style.width = startWidth + e.clientX - startX + "px"
                 element.style.height = startHeight + e.clientY - startY + "px"
             }
 
-            if (resizer.className.includes('tr')) {
+            else if (resizer.className.includes('tr')) {
                 element.style.width = startWidth + e.clientX - startX + "px"
                 element.style.height = startY - (e.clientY - startHeight) + "px"
                 element.style.top = originalTop + (e.clientY - startY) + 'px'
             }
 
-            if (resizer.className.includes('bl')) {
+            else if (resizer.className.includes('bl')) {
                 element.style.width = startWidth - e.clientX + startX + "px"
                 element.style.height = startHeight + e.clientY - startY + "px"
                 element.style.left = originalLeft + (e.clientX - startX) + 'px'
             }
 
-            if (resizer.className.includes('tl')) {
+            else if (resizer.className.includes('tl')) {
                 element.style.height = startY - (e.clientY - startHeight) + "px"
                 element.style.width = startWidth - e.clientX + startX + "px"
                 element.style.left = originalLeft + (e.clientX - startX) + 'px'
