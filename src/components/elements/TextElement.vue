@@ -1,25 +1,24 @@
 <template>
-	<div>
-		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
-			{{settings.configs.text}}
-			<div v-for="area in cleanedResizeables" :key="area" :class="`elem-resizer ${area}`"></div>
-		</div>
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		{{settings.configs.text}}
+		<Resizers />
 	</div>
 </template>
 
 <script>
-	import elementUtilities from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.js'
+	import Resizers from './Resizers.vue'
 	export default {
+		components: {
+			Resizers,
+		},
 		name: "TextElement",
 		props: {
 			options: Object,
 		},
 		mounted() {
 			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize(
-					this.$refs.element,
-					this.locals.classType
-				)
+				this.Initialize()
 			}
 		},
 		watch: {
@@ -34,14 +33,8 @@
 				},
 			},
 		},
-		computed: {
-			cleanedResizeables() {
-				return this.resizableAreas.filter(x => x && x.length > 1)
-			},
-		},
 		data() {
 			return {
-				resizableAreas: ['br'],
 				locals: {
 					classType: "text",
 				},
@@ -55,14 +48,14 @@
 			}
 		},
 		methods: {
-
 			/**
 			* Initializing the element utilities for the created element
 			*/
-			Initialize(element, classType) {
-				elementUtilities.resizable(element)
-				elementUtilities.dragable(element, classType)
-				elementUtilities.click(element, classType)
+			Initialize(element = this.$refs.element) {
+				let elem = new ElementClass(element)
+				elem.click()
+				elem.resizable()
+				elem.dragable()
 			},
 		},
 	};

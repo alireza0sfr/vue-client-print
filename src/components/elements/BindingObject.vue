@@ -4,32 +4,32 @@
 		<!-- If its the template builder mode -->
 		<div v-if="$parent.$options.name === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ settings.configs.field === "" ? locals.text1 : locals.text + settings.configs.field }}
-			<div ref="resizer" class="resizer"></div>
+			<Resizers />
 		</div>
 
 		<!-- If its the print mode -->
 		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ computedValue }}
-			<div ref="resizer" class="resizer"></div>
+			<Resizers />
 		</div>
 
 	</div>
 </template>
 
 <script>
-	import elementUtilities from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.js'
+	import Resizers from './Resizers.vue'
 	export default {
 		name: "bindingObject",
 		props: {
 			options: Object,
 		},
+		components: {
+			Resizers,
+		},
 		mounted() {
 			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize(
-					this.$refs.element,
-					this.$refs.resizer,
-					this.locals.classType
-				)
+				this.Initialize()
 			}
 		},
 		computed: {
@@ -78,12 +78,12 @@
 			/**
 			 * Initializing the element utilities for the created element
 			 */
-			Initialize(element, resizer, classType) {
-				elementUtilities.resizable(element, resizer)
-				elementUtilities.dragable(element, classType)
-				elementUtilities.click(element, classType)
+			Initialize(element = this.$refs.element) {
+				let elem = new ElementClass(element)
+				elem.click()
+				elem.resizable()
+				elem.dragable()
 			},
-
 			/**
 			 *  Convertes the given number to persian format 
 			 */

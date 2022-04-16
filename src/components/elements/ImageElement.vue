@@ -1,25 +1,25 @@
 <template>
 	<div :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles" ref="element">
 		<img class="image" draggable="false" :src="settings.configs.imageSrc" alt="Image" />
-		<div ref="resizer" class="resizer"></div>
+		<Resizers />
 	</div>
 </template>
 
 <script>
-	import elementUtilities from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.js'
 	import DefaultLogo from '@/assets/images/logo.png'
+	import Resizers from './Resizers.vue'
 	export default {
+		components: {
+			Resizers,
+		},
 		name: "ImageElement",
 		props: {
 			options: Object,
 		},
 		mounted() {
 			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize(
-					this.$refs.element,
-					this.locals.classType,
-					this.$refs.resizer
-				)
+				this.Initialize()
 			}
 		},
 		watch: {
@@ -53,14 +53,15 @@
 			/**
 			 *  Convertes the given number to persian format 
 			 */
-			Initialize(element, classType, resizer) {
-				elementUtilities.resizable(element, resizer)
-				elementUtilities.dragable(element, classType)
-				elementUtilities.click(element, classType)
+			Initialize(element = this.$refs.element) {
+				let elem = new ElementClass(element)
+				elem.click()
+				elem.resizable()
+				elem.dragable()
 			},
-      test() {
-        console.log('hi im image');
-      },
+			test() {
+				console.log('hi im image')
+			},
 		},
 	};
 </script>
