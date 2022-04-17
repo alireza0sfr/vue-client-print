@@ -1,7 +1,7 @@
 <template>
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 		{{ computedValue }}
-		<Resizers />
+		<Resizers classType="datetime" />
 	</div>
 </template>
 
@@ -80,7 +80,7 @@
 			 */
 
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element)
+				let elem = new ElementClass(element, 'datetime')
 				elem.click()
 				elem.resizable()
 				elem.dragable()

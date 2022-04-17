@@ -2,7 +2,7 @@
 	<div>
 		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ computedCounter }}
-			<Resizers />
+			<Resizers classType="pagecounter"/>
 		</div>
 	</div>
 </template>
@@ -73,7 +73,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element)
+				let elem = new ElementClass(element, 'pagecounter')
 				elem.click()
 				elem.resizable()
 				elem.dragable()
