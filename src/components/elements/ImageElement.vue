@@ -1,7 +1,7 @@
 <template>
 	<div :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles" ref="element">
 		<img class="image" draggable="false" :src="settings.configs.imageSrc" alt="Image" />
-		<Resizers />
+		<Resizers classType="imageelement"/>
 	</div>
 </template>
 
@@ -54,7 +54,7 @@
 			 *  Convertes the given number to persian format 
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element)
+				let elem = new ElementClass(element, 'imageelement')
 				elem.click()
 				elem.resizable()
 				elem.dragable()

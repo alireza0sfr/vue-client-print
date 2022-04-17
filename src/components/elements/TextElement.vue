@@ -1,7 +1,7 @@
 <template>
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 		{{settings.configs.text}}
-		<Resizers />
+		<Resizers classType="text"/>
 	</div>
 </template>
 
@@ -52,7 +52,7 @@
 			* Initializing the element utilities for the created element
 			*/
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element)
+				let elem = new ElementClass(element, 'text')
 				elem.click()
 				elem.resizable()
 				elem.dragable()
