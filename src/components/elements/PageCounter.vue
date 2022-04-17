@@ -2,14 +2,14 @@
 	<div>
 		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ computedCounter }}
-			<Resizers classType="pagecounter"/>
+			<Resizers :query="`pagecounter-${settings.id}`"/>
 		</div>
 	</div>
 </template>
 
 <script>
 	import ElementClass from '~/plugins/element-utilities.js'
-	import Resizers from './Resizers.vue'
+	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {
 			Resizers,
@@ -73,7 +73,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, 'pagecounter')
+				let elem = new ElementClass(element, `pagecounter-${this.settings.id}`)
 				elem.click()
 				elem.resizable()
 				elem.dragable()

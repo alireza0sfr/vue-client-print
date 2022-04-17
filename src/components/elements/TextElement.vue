@@ -1,13 +1,13 @@
 <template>
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 		{{settings.configs.text}}
-		<Resizers classType="text"/>
+		<Resizers :query="`text-${settings.id}`" />
 	</div>
 </template>
 
 <script>
 	import ElementClass from '~/plugins/element-utilities.js'
-	import Resizers from './Resizers.vue'
+	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {
 			Resizers,
@@ -52,7 +52,7 @@
 			* Initializing the element utilities for the created element
 			*/
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, 'text')
+				let elem = new ElementClass(element, `text-${this.settings.id}`)
 				elem.click()
 				elem.resizable()
 				elem.dragable()

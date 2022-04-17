@@ -1,12 +1,12 @@
 class Element {
-    constructor(element, classType) {
+    constructor(element, resizerQuery) {
         this.element = element
-        this.classType = classType
+        this.resizerQuery = resizerQuery
     }
 
     resizable() {
         var element = this.element
-        const resizers = document.querySelectorAll(`.elem-resizer.${this.classType}`)
+        const resizers = document.querySelectorAll(`.elem-resizer.${this.resizerQuery}`)
 
         for (let resizer of resizers) {
             resizer.onmousedown = (e) => initDrag(e, resizer)

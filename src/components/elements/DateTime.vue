@@ -1,13 +1,13 @@
 <template>
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 		{{ computedValue }}
-		<Resizers classType="datetime" />
+		<Resizers :query="`datetime-${settings.id}`" />
 	</div>
 </template>
 
 <script>
 	import ElementClass from '~/plugins/element-utilities.js'
-	import Resizers from './Resizers.vue'
+	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {
 			Resizers,
@@ -80,7 +80,7 @@
 			 */
 
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, 'datetime')
+				let elem = new ElementClass(element, `datetime-${this.settings.id}`)
 				elem.click()
 				elem.resizable()
 				elem.dragable()

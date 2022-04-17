@@ -1,12 +1,12 @@
 <template>
-	<div v-for="area in cleanedResizeables" :key="area" :class="`elem-resizer ${area} ${classType}`"></div>
+	<div v-for="area in cleanedResizeables" :key="area" :class="`elem-resizer ${area} ${query}`"></div>
 </template>
 
 <script>
 	export default {
 		props: {
 			resizers: { type: Array, default: ['br'] },
-			classType: { type: String, required: true }
+			query: { type: String, required: true }
 		},
 		watch: {
 			resizers: {

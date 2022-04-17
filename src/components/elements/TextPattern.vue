@@ -4,13 +4,13 @@
 		<!-- If its the template builder mode -->
 		<div v-if="$parent.$options.name === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ settings.configs.text }}
-			<Resizers classType="textpattern" />
+			<Resizers :query="`textpattern-${settings.id}`" />
 		</div>
 
 		<!-- If its the print mode -->
 		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ computedValue }}
-			<Resizers classType="textpattern" />
+			<Resizers :query="`textpattern-${settings.id}`" />
 		</div>
 
 	</div>
@@ -18,7 +18,7 @@
 
 <script>
 	import ElementClass from '~/plugins/element-utilities.js'
-	import Resizers from './Resizers.vue'
+	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {
 			Resizers,
@@ -74,7 +74,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, 'textpattern')
+				let elem = new ElementClass(element, `textpattern-${this.settings.id}`)
 				elem.click()
 				elem.resizable()
 				elem.dragable()
