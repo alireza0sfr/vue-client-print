@@ -3,7 +3,8 @@ class Element {
         this.element = element
     }
 
-    resizable(element = this.element) {
+    resizable() {
+        var element = this.element
         const resizers = document.getElementsByClassName('elem-resizer')
 
         for (let resizer of resizers) {
@@ -25,7 +26,6 @@ class Element {
             }
         }
         function doDrag(e, resizer) {
-            debugger
             if (resizer.className.includes('right'))
                 element.style.width = startWidth + e.clientX - startX + "px"
 
@@ -74,7 +74,8 @@ class Element {
         }
     }
 
-    click(element = this.element) {
+    click() {
+        var element = this.element
         element.addEventListener("mousedown", onClick, false)
         function onClick() {
             let selectedElements = document.getElementsByClassName('element selected')
@@ -86,7 +87,8 @@ class Element {
 
     }
 
-    dragable(element = this.element) {
+    dragable() {
+        var element = this.element
 
         var pos1 = 0,
             pos2 = 0,
