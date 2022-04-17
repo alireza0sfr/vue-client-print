@@ -231,6 +231,14 @@
 											</span>
 										</div>
 									</div>
+									<div class="toolbar-content-row-elements">
+										<div class="toolbar-content-row-element">
+											<span draggable="true" @dragstart="startDraggingElement('dataset')" @dragend="finishedDraggingElement()">
+												<img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="32" height="32" />
+												<div class="element-title">{{$t('template-builder.elements.dataset')}}</div>
+											</span>
+										</div>
+									</div>
 								</div>
 								<div class="toolbar-header">
 
@@ -526,6 +534,7 @@
 	import PageCounter from '~/components/elements/PageCounter.vue'
 	import ImageElement from '~/components/elements/ImageElement.vue'
 	import TextPattern from '~/components/elements/TextPattern.vue'
+	import DataSet from '~/components/elements/DataSet/DataSet.vue'
 	import { saveAs } from 'file-saver'
 	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
@@ -542,6 +551,7 @@
 			bindingObject: BindingObject,
 			textpattern: TextPattern,
 			variable: Variable,
+			dataset: DataSet
 		},
 		data() {
 			return {
@@ -956,6 +966,19 @@
 				let tmp
 
 				switch (classType) {
+					case 'dataset':
+						tmp = {
+							type: classType,
+							options: {
+								id: this.idGenerator(5),
+								styles: {
+									width: "600px",
+									height: "60px",
+									direction: "rtl",
+								},
+							},
+						}
+						break
 					case 'textelement':
 						tmp = {
 							type: classType,
