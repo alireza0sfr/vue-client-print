@@ -323,7 +323,8 @@ shadow {
 .element.selected .elem-resizer.right {
     top: 46%;
     right: -6px;
-    transform: rotate(314deg);}
+    transform: rotate(314deg);
+}
 
 .element.selected .elem-resizer.right:hover {
     cursor: ew-resize;
@@ -403,6 +404,10 @@ shadow {
     font-size: 12px;
     margin-bottom: 10px;
     margin-top: 10px
+}
+
+.dataset .columns {
+    display: flex;
 }
 
 /* Variables  */

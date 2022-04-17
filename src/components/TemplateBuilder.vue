@@ -972,7 +972,6 @@
 							options: {
 								id: this.idGenerator(5),
 								styles: {
-									width: "600px",
 									height: "60px",
 									direction: "rtl",
 								},
