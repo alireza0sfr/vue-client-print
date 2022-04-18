@@ -113,6 +113,7 @@ shadow {
 }
 
 .toolbar-content {
+    border: 1px ridge #81c3ff;
     display: flex;
     flex-direction: column;
     text-align: center;
