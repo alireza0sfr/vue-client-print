@@ -58,7 +58,7 @@
 		},
 		methods: {
 			templateBuilder() {
-				this.$refs.print.templateBuilder(this.printOptions, (json) => {
+				this.$refs.print.templateBuilder({}, (json) => {
 					console.log('json', json)
 					this.printOptions = json
 				})
