@@ -1,5 +1,5 @@
 <template>
-	<div id="printPage">
+	<div id="printPage" :dir="settings.pageDirections">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
 
 		<!-- Data Slots -->
@@ -15,12 +15,6 @@
 		<div id="printModal" class="print-modal">
 			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
 				<div class="print-modal-header">
-					<div>
-						<span id="printModalCloseBtn" class="close-btn">&times;</span>
-					</div>
-					<div>
-						<h3 class="title">{{$t('print.print-preview')}}</h3>
-					</div>
 					<div style="display: flex">
 						<a @click="editWhileInPreview()" :title="$t('print.edit')" class="modal-icon" href="#">
 							<img src="@/assets/images/edit.png" />
@@ -28,6 +22,12 @@
 						<a href="#" @click="printForm()" :title="$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
+					</div>
+					<div>
+						<h3 class="title">{{$t('print.print-preview')}}</h3>
+					</div>
+					<div>
+						<span id="printModalCloseBtn" class="close-btn">&times;</span>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
