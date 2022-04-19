@@ -76,7 +76,20 @@ class Element {
       document.onmousemove = null
       document.onmouseup = null
       element.dispatchEvent(new Event("finishededitingelement"))
-      element.dispatchEvent(new Event('size-changed', that.cleanedCoordinates(), { element: that.element, resizerQuery: that.resizerQuery }))
+      element.dispatchEvent(
+        new CustomEvent('size-changed', {
+          detail: {
+            oldValue: {
+              height: startHeight,
+              width: startWidth,
+              left: originalLeft,
+              top: originalTop,
+            },
+            newValue: that.cleanedCoordinates(),
+            elementDetails: { element: that.element, resizerQuery: that.resizerQuery }
+          }
+        })
+      )
     }
   }
 
@@ -94,7 +107,13 @@ class Element {
         selectedElements[index].classList.remove('selected')
       }
       element.classList.add('selected')
-      element.dispatchEvent(new Event('click', { element: that.element, resizerQuery: that.resizerQuery }))
+      element.dispatchEvent(
+        new CustomEvent('click', {
+          detail: {
+            elementDetails: { element: that.element, resizerQuery: that.resizerQuery }
+          }
+        })
+      )
     }
 
   }
@@ -147,19 +166,29 @@ class Element {
         document.onmouseup = null
         document.onmousemove = null
         element.dispatchEvent(new Event("finishededitingelement"))
-        // element.dispatchEvent(new Event('drag-end', that.cleanedCoordinates(), { element: that.element, resizerQuery: that.resizerQuery }))
-        element.dispatchEvent(new CustomEvent('drag-end', that.cleanedCoordinates()))
+        element.dispatchEvent(
+          new CustomEvent('drag-end', {
+            detail: {
+              newValue: that.cleanedCoordinates(),
+              elementDetails: { element: that.element, resizerQuery: that.resizerQuery }
+            }
+          })
+        )
       }
     }
   }
 
   cleanedCoordinates() {
     return {
-      height: this.element.style.height,
-      width: this.element.style.width,
-      left: this.element.style.left,
-      top: this.element.style.top,
+      height: this.toFloatValue(this.element.style.height),
+      width: this.toFloatValue(this.element.style.width),
+      left: this.toFloatValue(this.element.style.left),
+      top: this.toFloatValue(this.element.style.top),
     }
+  }
+
+  toFloatValue(value) {
+    return parseFloat(value.split('p')[0])
   }
 
 }

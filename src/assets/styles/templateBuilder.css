@@ -408,7 +408,7 @@ shadow {
 }
 
 .dataset .columns {
-    display: table-row;
+    display: flex
 }
 
 .column.element {
