@@ -79,6 +79,7 @@
 	import PageCounter from '~/components/elements/PageCounter.vue'
 	import ImageElement from '~/components/elements/ImageElement.vue'
 	import Variable from '~/components/elements/Variable.vue'
+	import DataSet from '~/components/elements/DataSet/DataSet.vue'
 	import domtoimage from 'dom-to-image'
 	export default {
 		name: "Print",
@@ -91,6 +92,7 @@
 		components: {
 			variable: Variable,
 			textelement: TextElement,
+			dataset: DataSet,
 			datetime: DateTime,
 			pagecounter: PageCounter,
 			imageelement: ImageElement,
