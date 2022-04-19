@@ -116,7 +116,7 @@
 				var columns = this.settings.configs.columns
 
 				var index = columns.findIndex(x => x.id === id)
-				if (index < 1 || isNaN(newWidth)) // either column is not found or column has no neighbor
+				if (index < 0 && isNaN(newWidth)) // either column is not found or column has no neighbor
 					return
 
 				if (newWidth < 20)
@@ -126,44 +126,30 @@
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
 				const maxWidth = toFloatWidth(this.settings.styles.width) - (this.settings.configs.columns.length * minWidth)
-
+				const secondIndex = index === this.settings.configs.columns.length ? index - 1 : index + 1
 
 				if (diffrence < 0) {
 
-					console.log('diff < 0')
 					if (toFloatWidth(this.settings.configs.columns[index].width) < minWidth)
 						return
 
-					console.log('min < width 1')
-
-					if (maxWidth < toFloatWidth(this.settings.configs.columns[index - 1].width))
+					if (maxWidth < toFloatWidth(this.settings.configs.columns[secondIndex].width))
 						return
-
-					console.log('maxWidth > width 2')
 				}
 
 				if (diffrence > 0) {
-					console.log('diff > 0')
 
 					if (maxWidth < toFloatWidth(this.settings.configs.columns[index].width))
 						return
 
-					console.log('maxWidth > width 1')
-
-					if (toFloatWidth(this.settings.configs.columns[index - 1].width) < minWidth)
+					if (toFloatWidth(this.settings.configs.columns[secondIndex].width) < minWidth)
 						return
-
-					console.log('maxWidth < width 2')
 
 				}
 
-				// if (maxWidth > toFloatWidth(this.settings.configs.columns[index].width) && toFloatWidth(this.settings.configs.columns[index].width) > minWidth)
-				// 	if (maxWidth > toFloatWidth(this.settings.configs.columns[index - 1].width) && toFloatWidth(this.settings.configs.columns[index - 1].width) > minWidth) {
-				console.log('inside')
 				this.settings.configs.columns[index].width = newWidth + 'px'
-				this.settings.configs.columns[index - 1].width = toFloatWidth(this.settings.configs.columns[index - 1].width) - diffrence
-				this.settings.configs.columns[index - 1].width = this.settings.configs.columns[index - 1].width + 'px'
-				// }
+				this.settings.configs.columns[secondIndex].width = toFloatWidth(this.settings.configs.columns[secondIndex].width) - diffrence
+				this.settings.configs.columns[secondIndex].width = this.settings.configs.columns[secondIndex].width + 'px'
 			},
 
 			/**
