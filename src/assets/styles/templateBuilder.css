@@ -408,7 +408,12 @@ shadow {
 }
 
 .dataset .columns {
-    display: flex;
+    display: table-row;
+}
+
+.column.element {
+    min-width: unset !important;
+    min-height: unset !important;
 }
 
 /* Variables  */
