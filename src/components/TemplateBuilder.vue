@@ -1016,7 +1016,7 @@
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 									fontWeight: "",
 								},
 							},
@@ -1074,7 +1074,7 @@
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 								},
 							},
 						}
@@ -1093,7 +1093,7 @@
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 								},
 							},
 						}
@@ -1110,7 +1110,7 @@
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 								},
 							},
 						}
