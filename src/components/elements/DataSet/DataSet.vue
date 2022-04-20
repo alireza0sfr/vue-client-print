@@ -4,10 +4,9 @@
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
-			<Column v-for="(column, index) in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareComponentOptions('column', index !== displaySet.options.configs.columns.length -1, column)" />
+			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareComponentOptions('column', column)" />
 		</div>
 		<Resizers :query="`dataset-${settings.id}`" :resizers="['br']" />
-		<!-- <Resizers :query="`dataset-${settings.id}`" :resizers="['left', 'right', 'top', 'bottom']" /> -->
 	</div>
 </template>
 
@@ -29,9 +28,7 @@
 				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
 			},
 			filteredCols() {
-				this.setTotalWidth()
-				return this.displaySet.options.configs.columns
-				return this.settings.configs.columns.filter(x => !x.isDisabled)
+				return this.setTotalWidth(this.displaySet.options.configs.columns.filter(x => x.isActive))
 			},
 		},
 		mounted() {
@@ -115,9 +112,9 @@
 			/**
 			 * calculate totalWidth based on columns width and set it to DataSet width.
 			 */
-			setTotalWidth() {
+			setTotalWidth(cols) {
 				let width = 0
-				for (let col of this.displaySet.options.configs.columns) {
+				for (let col of cols) {
 
 					if (!col.styles.width)
 						continue
@@ -130,6 +127,7 @@
 
 				}
 				this.settings.styles.width = width + 'px'
+				return cols
 			},
 
 			/**
@@ -187,11 +185,11 @@
 			 @param {Boolean} hasResizer - determine that the column hasResizer or not.
 			 @return {Object} - prepared options 
 			 */
-			prepareComponentOptions(optionsName, hasResizer, column) {
+			prepareComponentOptions(optionsName, column) {
 				let tmp = {
 					column: {
 						grandParent: this.$parent.$options.name,
-						hasResizer: hasResizer,
+						hasResizer: column.hasResizer,
 						id: column.id,
 						configs: {
 							name: column.name

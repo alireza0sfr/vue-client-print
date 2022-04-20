@@ -370,13 +370,16 @@
 									</div>
 								</div>
 
-								<div v-if="locals.selectedElement.type === 'dataset'">
-									<div v-for="(col, index) in locals.selectedElement.options.configs.columns" :key="col.id" class="toolbar-content-row">
-										<div class="toolbar-content-label">
-											<label for="dataSetColumnsControl">{{$t('template-builder.elements.configs.index-column', {index: index+1})}}</label>
+								<div :set="columns = locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" v-if="locals.selectedElement.type === 'dataset'">
+									<div v-for="(col, index) in columns" :key="col.id" class="toolbar-content-row">
+										<div :dir="settings.pageDirections" class="toolbar-content-label">
+											<label style="margin-right: 10px; display:flex" for="dataSetColumnsControl">
+												<input type="checkbox" class="input-form-control" v-model="col.isActive" id="dataSetColumnsControl" />
+												{{$t('template-builder.elements.configs.index-column', {index: index+1})}}
+											</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="text" class="input-form-control" v-model="locals.selectedElement.options.configs.columns[index].name" id="dataSetColumnsName" />
+											<input type="text" :disabled="!col.isActive" class="input-form-control" v-model="col.name" id="dataSetColumnsName" />
 										</div>
 									</div>
 								</div>
@@ -1084,8 +1087,15 @@
 								},
 							},
 						}
+
 						for (let set of keys) {
 							var thisSet = this.dataSets[set]
+
+							for (let col of thisSet.columns) {
+								col.isActive = true
+								col.hasResizer = thisSet.columns.indexOf(col) !== thisSet.columns.length - 1
+							}
+
 							tmp.options.configs.dataSets[set] = {
 								options: {
 									id: thisSet.id,
