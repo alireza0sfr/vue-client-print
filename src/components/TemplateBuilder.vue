@@ -359,6 +359,28 @@
 									</div>
 								</div>
 
+								<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'dataset'">
+									<div class="toolbar-content-label">
+										<label for="dataSetNameControl">{{$t('template-builder.elements.configs.datasets')}}</label>
+									</div>
+									<div class="toolbar-content-field">
+										<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+											<option v-for="option in Object.keys(this.dataSets)" :value="option" :key="option">{{ this.dataSets[option].title }}</option>
+										</select>
+									</div>
+								</div>
+
+								<div v-if="locals.selectedElement.type === 'dataset'">
+									<div v-for="(col, index) in locals.selectedElement.options.configs.columns" :key="col.id" class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetColumnsControl">{{$t('template-builder.elements.configs.index-column', {index: index+1})}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<input type="text" class="input-form-control" v-model="locals.selectedElement.options.configs.columns[index].name" id="dataSetColumnsName" />
+										</div>
+									</div>
+								</div>
+
 								<!-- Element's Styles -->
 								<div style="margin-top: 15px" class="toolbar-header">
 									<span>{{$t('template-builder.elements.styles.name')}}</span>
@@ -555,6 +577,69 @@
 		},
 		data() {
 			return {
+				dataSets: {
+					center: {
+						id: this.idGenerator(5),
+						key: 'Center',
+						title: 'شناور',
+						columns: [
+							{
+								name: 'column 1',
+								width: '70px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 2',
+								width: '50px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 3',
+								width: '50px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 4',
+								width: '40px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 5',
+								width: '90px',
+								id: this.idGenerator(5)
+							},
+						],
+						rows: [],
+					},
+					account: {
+						id: this.idGenerator(5),
+						key: 'Account',
+						title: 'حساب',
+						columns: [
+							{
+								name: 'column 1',
+								width: '70px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 3',
+								width: '50px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 4',
+								width: '40px',
+								id: this.idGenerator(5)
+							},
+							{
+								name: 'column 5',
+								width: '90px',
+								id: this.idGenerator(5)
+							},
+						],
+						rows: [],
+					}
+				},
 				locals: {
 					scale: 1,
 					pageSizeDictionary: {
@@ -967,44 +1052,32 @@
 
 				switch (classType) {
 					case 'dataset':
+						var keys = Object.keys(this.dataSets)
 						tmp = {
 							type: classType,
 							options: {
 								configs: {
-									columns: [
-										{
-											name: 'column 1',
-											width: '70px',
-											id: this.idGenerator(5)
-										},
-										{
-											name: 'column 2',
-											width: '50px',
-											id: this.idGenerator(5)
-										},
-										{
-											name: 'column 3',
-											width: '50px',
-											id: this.idGenerator(5)
-										},
-										{
-											name: 'column 4',
-											width: '40px',
-											id: this.idGenerator(5)
-										},
-										{
-											name: 'column 5',
-											width: '90px',
-											id: this.idGenerator(5)
-										},
-									],
-									rows: []
+									selectedDataSet: keys[0],
+									dataSets: {},
 								},
 								id: this.idGenerator(5),
 								styles: {
 									height: "60px",
 								},
 							},
+						}
+						for (let set of keys) {
+							var thisSet = this.dataSets[set]
+							tmp.options.configs.dataSets[set] = {
+								options: {
+									id: thisSet.id,
+									configs: {
+										rows: thisSet.rows,
+										columns: thisSet.columns,
+									},
+									styles: thisSet.styles || {},
+								}
+							}
 						}
 						break
 					case 'textelement':

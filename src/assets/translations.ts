@@ -49,6 +49,8 @@ const messages: object = {
         "binding-object-text": "Please Choose Data Field",
         "text-pattern": "Text Pattern",
         "configs": {
+          "datasets": "DataSets",
+          "index-column": "Column {index}",
           "data-type": "Data Type",
           "type-text": "Please Type Your Text",
           "date": "Date",
@@ -92,7 +94,7 @@ const messages: object = {
           "left-to-right": "Left To Right",
           "right-to-left": "Right To Left",
         }
-      }     
+      }
     }
   },
   "fa": {
@@ -145,6 +147,8 @@ const messages: object = {
         "binding-object-text": "لطفا نوع داده خود را اتنخاب کنید.",
         "text-pattern": "متن الکویی",
         "configs": {
+          "datasets": "دیتاست",
+          "index-column": "ستون {index}",
           "data-type": "نوع داده",
           "type-text": "متن خود را وارد کنید.",
           "date": "تاریخ",
@@ -188,7 +192,7 @@ const messages: object = {
           "left-to-right": "چپ به راست",
           "right-to-left": "راست به چپ",
         }
-      }     
+      }
     }
   }
 }

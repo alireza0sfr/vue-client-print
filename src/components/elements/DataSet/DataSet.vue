@@ -1,9 +1,10 @@
 <template>
 	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<span class="dataset-name"></span>
 		<div class="columns">
-			<Column v-for="(column, index) in settings.configs.columns" :key="column.id" @width-changed="columnWidthChanged" :options="prepareComponentOptions('column', index !== settings.configs.columns.length -1, column)" />
+			<Column v-for="(column, index) in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareComponentOptions('column', index !== displaySet.options.configs.columns.length -1, column)" />
 		</div>
-		<Resizers :query="`dataset-${this.settings.id}`" :resizers="['left', 'right']" />
+		<Resizers :query="`dataset-${settings.id}`" :resizers="['left', 'right']" />
 	</div>
 </template>
 
@@ -20,11 +21,20 @@
 		props: {
 			options: Object,
 		},
+		computed: {
+			displaySet() {
+				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
+			},
+			filteredCols() {
+				this.setTotalWidth()
+				return this.displaySet.options.configs.columns
+				return this.settings.configs.columns.filter(x => !x.isDisabled)
+			},
+		},
 		mounted() {
 			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 				this.Initialize()
 			}
-			this.setTotalWidth()
 		},
 		watch: {
 			options: {
@@ -46,8 +56,8 @@
 				settings: {
 					id: 0,
 					configs: {
-						columns: [],
-						rows: []
+						selectedSet: '',
+						dataSets: {}
 					},
 					styles: {
 						height: '30px',
@@ -67,7 +77,7 @@
 				const diffrence = e.detail.newValue.width - e.detail.oldValue.width
 				const ratio = diffrence / e.detail.oldValue.width
 
-				for (let col of this.settings.configs.columns) {
+				for (let col of this.displaySet.options.configs.columns) {
 					col.width = toFloatWidth(col.width)
 					col.width += ratio * col.width
 					col.width = col.width + 'px'
@@ -88,7 +98,7 @@
 			 */
 			setTotalWidth() {
 				let width = 0
-				for (let col of this.settings.configs.columns) {
+				for (let col of this.displaySet.options.configs.columns) {
 
 					if (!col.width)
 						continue
@@ -113,7 +123,7 @@
 			columnWidthChanged(newWidth, id) {
 				const toFloatWidth = (width) => parseFloat(parseFloat(width.split('p')[0]).toFixed(2))
 
-				var columns = this.settings.configs.columns
+				var columns = this.displaySet.options.configs.columns
 
 				var index = columns.findIndex(x => x.id === id)
 				if (index < 0 && isNaN(newWidth)) // either column is not found or column has no neighbor
@@ -122,34 +132,36 @@
 				if (newWidth < 20)
 					return
 
-				const startWidth = toFloatWidth(this.settings.configs.columns[index].width) || 0
+				const secondIndex = index === columns.length ? index - 1 : index + 1
+				var thisColumn = columns[index]
+				var seconColumn = columns[secondIndex]
+				const startWidth = toFloatWidth(thisColumn.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
-				const maxWidth = toFloatWidth(this.settings.styles.width) - (this.settings.configs.columns.length * minWidth)
-				const secondIndex = index === this.settings.configs.columns.length ? index - 1 : index + 1
+				const maxWidth = toFloatWidth(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (toFloatWidth(this.settings.configs.columns[index].width) < minWidth)
+					if (toFloatWidth(thisColumn.width) < minWidth)
 						return
 
-					if (maxWidth < toFloatWidth(this.settings.configs.columns[secondIndex].width))
+					if (maxWidth < toFloatWidth(seconColumn.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < toFloatWidth(this.settings.configs.columns[index].width))
+					if (maxWidth < toFloatWidth(thisColumn.width))
 						return
 
-					if (toFloatWidth(this.settings.configs.columns[secondIndex].width) < minWidth)
+					if (toFloatWidth(seconColumn.width) < minWidth)
 						return
 
 				}
 
-				this.settings.configs.columns[index].width = newWidth + 'px'
-				this.settings.configs.columns[secondIndex].width = toFloatWidth(this.settings.configs.columns[secondIndex].width) - diffrence
-				this.settings.configs.columns[secondIndex].width = this.settings.configs.columns[secondIndex].width + 'px'
+				thisColumn.width = newWidth + 'px'
+				seconColumn.width = toFloatWidth(seconColumn.width) - diffrence
+				seconColumn.width = seconColumn.width + 'px'
 			},
 
 			/**
