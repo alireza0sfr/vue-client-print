@@ -253,7 +253,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textelement'">
 										<div class="toolbar-content-field">
-											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+											<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
@@ -336,7 +336,7 @@
 									</div>
 									<div v-if="locals.selectedElement.type === 'textpattern'">
 										<div class="toolbar-content-field">
-											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+											<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textpattern'">
@@ -344,7 +344,7 @@
 											<label for="textPatternPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="textPatternPersianNumbersControl" />
+											<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="textPatternPersianNumbersControl" />
 										</div>
 									</div>
 								</div>
