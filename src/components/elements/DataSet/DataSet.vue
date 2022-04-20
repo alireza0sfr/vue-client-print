@@ -78,9 +78,9 @@
 				const ratio = diffrence / e.detail.oldValue.width
 
 				for (let col of this.displaySet.options.configs.columns) {
-					col.width = toFloatWidth(col.width)
-					col.width += ratio * col.width
-					col.width = col.width + 'px'
+					col.styles.width = toFloatWidth(col.styles.width)
+					col.styles.width += ratio * col.styles.width
+					col.styles.width = col.styles.width + 'px'
 				}
 			},
 			/**
@@ -100,14 +100,14 @@
 				let width = 0
 				for (let col of this.displaySet.options.configs.columns) {
 
-					if (!col.width)
+					if (!col.styles.width)
 						continue
 
-					if (typeof col.width === 'string')
-						width += parseFloat(col.width.split('p')[0])
+					if (typeof col.styles.width === 'string')
+						width += parseFloat(col.styles.width.split('p')[0])
 
 					else
-						width += col.width
+						width += col.styles.width
 
 				}
 				this.settings.styles.width = width + 'px'
@@ -135,33 +135,33 @@
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
 				var seconColumn = columns[secondIndex]
-				const startWidth = toFloatWidth(thisColumn.width) || 0
+				const startWidth = toFloatWidth(thisColumn.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
 				const maxWidth = toFloatWidth(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (toFloatWidth(thisColumn.width) < minWidth)
+					if (toFloatWidth(thisColumn.styles.width) < minWidth)
 						return
 
-					if (maxWidth < toFloatWidth(seconColumn.width))
+					if (maxWidth < toFloatWidth(seconColumn.styles.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < toFloatWidth(thisColumn.width))
+					if (maxWidth < toFloatWidth(thisColumn.styles.width))
 						return
 
-					if (toFloatWidth(seconColumn.width) < minWidth)
+					if (toFloatWidth(seconColumn.styles.width) < minWidth)
 						return
 
 				}
 
-				thisColumn.width = newWidth + 'px'
-				seconColumn.width = toFloatWidth(seconColumn.width) - diffrence
-				seconColumn.width = seconColumn.width + 'px'
+				thisColumn.styles.width = newWidth + 'px'
+				seconColumn.styles.width = toFloatWidth(seconColumn.styles.width) - diffrence
+				seconColumn.styles.width = seconColumn.styles.width + 'px'
 			},
 
 			/**
@@ -184,10 +184,10 @@
 							height: this.settings.styles.height,
 							// display: 'table-cell',
 							resize: 'none',
-							width: column.width
 						},
 					},
 				}
+				Object.assign(tmp[optionsName].styles, column.styles)
 				return tmp[optionsName]
 			}
 		}

@@ -585,27 +585,37 @@
 						columns: [
 							{
 								name: 'column 1',
-								width: '70px',
+								styles: {
+									width: '70px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 2',
-								width: '50px',
+								styles: {
+									width: '50px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 3',
-								width: '50px',
+								styles: {
+									width: '50px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 4',
-								width: '40px',
+								styles: {
+									width: '40px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 5',
-								width: '90px',
+								styles: {
+									width: '90px',
+								},
 								id: this.idGenerator(5)
 							},
 						],
@@ -618,22 +628,30 @@
 						columns: [
 							{
 								name: 'column 1',
-								width: '70px',
+								styles: {
+									width: '70px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 3',
-								width: '50px',
+								styles: {
+									width: '50px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 4',
-								width: '40px',
+								styles: {
+									width: '40px',
+								},
 								id: this.idGenerator(5)
 							},
 							{
 								name: 'column 5',
-								width: '90px',
+								styles: {
+									width: '90px',
+								},
 								id: this.idGenerator(5)
 							},
 						],
