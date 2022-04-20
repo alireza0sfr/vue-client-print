@@ -416,6 +416,11 @@ shadow {
     min-height: unset !important;
 }
 
+.dataset .name {
+    text-align: right;
+    background-color: #f9ffec;
+}
+
 /* Variables  */
 
 .variables-header {

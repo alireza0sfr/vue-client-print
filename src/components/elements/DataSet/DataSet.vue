@@ -1,10 +1,13 @@
 <template>
 	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
-		<span class="dataset-name"></span>
+		<div v-if="$parent.$options.name === 'TemplateBuilder'" class="name">
+			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
+		</div>
 		<div class="columns">
 			<Column v-for="(column, index) in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareComponentOptions('column', index !== displaySet.options.configs.columns.length -1, column)" />
 		</div>
-		<Resizers :query="`dataset-${settings.id}`" :resizers="['left', 'right']" />
+		<Resizers :query="`dataset-${settings.id}`" :resizers="['br']" />
+		<!-- <Resizers :query="`dataset-${settings.id}`" :resizers="['left', 'right', 'top', 'bottom']" /> -->
 	</div>
 </template>
 
@@ -32,7 +35,7 @@
 			},
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+			if (this.$parent.$options.name === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
 				this.Initialize()
 			}
 		},
@@ -60,25 +63,41 @@
 						dataSets: {}
 					},
 					styles: {
-						height: '30px',
+						height: '80px',
 					},
 				},
 			}
 		},
 		methods: {
 			/**
+			 * Calculate column height based on view.
+			 * @return {Number} column height
+			 */
+			calculateColumnHeight() {
+				if (this.$parent.$options.name === 'TemplateBuilder')
+					return this.toFloatWidth(this.settings.styles.height) - 20 + 'px'
+
+				return this.settings.styles.height
+			},
+			/**
+			 * Convert string wdith to float width 2 decimals.
+			 * @param {String} width - width.
+			 * @return {Number} parsed Width
+			 */
+			toFloatWidth(width) {
+				return parseFloat(width.split('p')[0])
+			},
+			/**
 			 * event triggered when dataset width changes
 			 * @param {Event} e - dataset event.
 			 * @return {void} void
 			 */
 			dataSetResized(e) {
-				const toFloatWidth = (width) => parseFloat(width.split('p')[0])
-
 				const diffrence = e.detail.newValue.width - e.detail.oldValue.width
 				const ratio = diffrence / e.detail.oldValue.width
 
 				for (let col of this.displaySet.options.configs.columns) {
-					col.styles.width = toFloatWidth(col.styles.width)
+					col.styles.width = this.toFloatWidth(col.styles.width)
 					col.styles.width += ratio * col.styles.width
 					col.styles.width = col.styles.width + 'px'
 				}
@@ -121,8 +140,6 @@
 			 * @return {void} void
 			 */
 			columnWidthChanged(newWidth, id) {
-				const toFloatWidth = (width) => parseFloat(parseFloat(width.split('p')[0]).toFixed(2))
-
 				var columns = this.displaySet.options.configs.columns
 
 				var index = columns.findIndex(x => x.id === id)
@@ -135,32 +152,32 @@
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
 				var seconColumn = columns[secondIndex]
-				const startWidth = toFloatWidth(thisColumn.styles.width) || 0
+				const startWidth = this.toFloatWidth(thisColumn.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
-				const maxWidth = toFloatWidth(this.settings.styles.width) - (columns.length * minWidth)
+				const maxWidth = this.toFloatWidth(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (toFloatWidth(thisColumn.styles.width) < minWidth)
+					if (this.toFloatWidth(thisColumn.styles.width) < minWidth)
 						return
 
-					if (maxWidth < toFloatWidth(seconColumn.styles.width))
+					if (maxWidth < this.toFloatWidth(seconColumn.styles.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < toFloatWidth(thisColumn.styles.width))
+					if (maxWidth < this.toFloatWidth(thisColumn.styles.width))
 						return
 
-					if (toFloatWidth(seconColumn.styles.width) < minWidth)
+					if (this.toFloatWidth(seconColumn.styles.width) < minWidth)
 						return
 
 				}
 
 				thisColumn.styles.width = newWidth + 'px'
-				seconColumn.styles.width = toFloatWidth(seconColumn.styles.width) - diffrence
+				seconColumn.styles.width = this.toFloatWidth(seconColumn.styles.width) - diffrence
 				seconColumn.styles.width = seconColumn.styles.width + 'px'
 			},
 
@@ -181,9 +198,10 @@
 						},
 						styles: {
 							position: 'relative',
-							height: this.settings.styles.height,
+							height: this.toFloatWidth(this.settings.styles.height) - 20 + 'px',
 							// display: 'table-cell',
 							resize: 'none',
+							height: this.calculateColumnHeight()
 						},
 					},
 				}

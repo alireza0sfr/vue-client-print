@@ -1080,7 +1080,7 @@
 								},
 								id: this.idGenerator(5),
 								styles: {
-									height: "60px",
+									height: "80px",
 								},
 							},
 						}
@@ -1092,6 +1092,8 @@
 									configs: {
 										rows: thisSet.rows,
 										columns: thisSet.columns,
+										title: thisSet.title,
+										key: thisSet.key
 									},
 									styles: thisSet.styles || {},
 								}
