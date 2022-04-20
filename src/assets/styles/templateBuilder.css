@@ -6,6 +6,16 @@ shadow {
     box-shadow: -3px 4px 9px 0px #ddd;
 }
 
+input:disabled {
+    background-color: #cfcdcd;
+}
+
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 3px rgba(70, 150, 203, 0.59);
+    outline: none;
+    border: 1px solid rgba(70, 150, 203, 0.6);
+}
+
 .a-btn {
     font-size: .9375rem;
     color: #434a54 !important;
