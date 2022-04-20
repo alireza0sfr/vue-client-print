@@ -1,5 +1,5 @@
 <template>
-	<div id="printPage" :dir="settings.pageDirections">
+	<div id="printPage">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
 
 		<!-- Data Slots -->
@@ -14,7 +14,7 @@
 		<!-- Print Preview Modal-->
 		<div id="printModal" class="print-modal">
 			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
-				<div class="print-modal-header">
+				<div :dir="settings.pageDirections" class=" print-modal-header">
 					<div style="display: flex">
 						<a @click="editWhileInPreview()" :title="$t('print.edit')" class="modal-icon" href="#">
 							<img src="@/assets/images/edit.png" />
@@ -282,7 +282,7 @@
 			 */
 			convert2Image() {
 				return new Promise((resolve, reject) => {
-					let transformOrigin = this.settings.pageDirections === 'rtl' ? 'top right' : 'top left'
+					let transformOrigin = 'top left'
 					var scale = 2
 					let domNode = document.getElementById("toBeConverted")
 					domtoimage
