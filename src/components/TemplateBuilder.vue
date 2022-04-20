@@ -745,12 +745,12 @@
 				return {
 					header: {
 						isHeaderRepeatable: true,
-						height: 0.5,
+						height: 1,
 						headerElements: [],
 					},
 					footer: {
 						isFooterRepeatable: true,
-						height: 0.5,
+						height: 1,
 						footerElements: [],
 					},
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
