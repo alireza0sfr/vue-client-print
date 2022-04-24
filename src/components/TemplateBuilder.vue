@@ -699,14 +699,7 @@
 					clickedElementId: 0,
 					classType: "",
 					uniqueId: 0,
-					selectedElement: {
-						type: '',
-						options: {
-							id: 0,
-							configs: {},
-							styles: {},
-						},
-					},
+					selectedElement: this.getDefaultSelectedElementObject(),
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
 				settings: this.getDefaultSettings(),
@@ -727,7 +720,20 @@
 			this.modalManager('templateBuilderModal', 'TemplateBuilderModalCloseBtn')
 		},
 		methods: {
-
+			/**
+			 * Creates default element object.
+			 * @param {Object} - returns default selected element object
+			 */
+			getDefaultSelectedElementObject() {
+				return {
+					type: '',
+					parent: 'body',
+					options: {
+						configs: {},
+						styles: {},
+					},
+				}
+			},
 			/**
 			 * set variable list.
 			 * @param {Array} list - variable list
@@ -984,13 +990,7 @@
 					return
 				}
 
-				this.locals.selectedElement = {
-					type: '',
-					options: {
-						configs: {},
-						styles: {},
-					},
-				}
+				this.locals.selectedElement = this.getDefaultSelectedElementObject()
 				let selectedElements = document.getElementsByClassName("element selected")
 				for (let index = 0; index < selectedElements.length; index++) {
 					selectedElements[index].classList.remove("selected")
@@ -1005,7 +1005,7 @@
 			clickedOnElement(element) {
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
-				this.deletingElementOnPressingDeleteKey()
+				this.deleteKeyHandler()
 				this.locals.isClicked = true
 			},
 
@@ -1024,6 +1024,7 @@
 						var keys = Object.keys(this.dataSets)
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
@@ -1061,6 +1062,7 @@
 					case 'textelement':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: { text: this.$t('template-builder.elements.configs.type-text') },
@@ -1077,6 +1079,7 @@
 					case 'datetime':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: { hasDate: true, hasTime: true, persianDate: true },
@@ -1088,6 +1091,7 @@
 					case 'pagecounter':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: { counter: '1', persianNumbers: true, completeForm: true },
@@ -1099,6 +1103,7 @@
 					case 'imageelement':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: { imageSrc: DefaultLogo },
@@ -1115,6 +1120,7 @@
 					case 'bindingObject':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: {
@@ -1134,6 +1140,7 @@
 					case 'textpattern':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: {
@@ -1153,6 +1160,7 @@
 					case 'variable':
 						tmp = {
 							type: classType,
+							parent: parent,
 							options: {
 								id: this.idGenerator(5),
 								configs: {
@@ -1353,36 +1361,22 @@
 			/**
 			 * Adds an event listenner on delete button and then removes the element
 			 */
-			deletingElementOnPressingDeleteKey() {
-				let headerElements = this.settings.header.headerElements
-				let footerElements = this.settings.footer.footerElements
-				document.addEventListener("keydown", deleteElement, false)
-				document.removeEventListener("keyup", deleteElement, false)
-
-				let that = this // Storing the value of this to be able to use it inside of the function
-
-				function deleteElement(e) {
+			deleteKeyHandler() {
+				const deleteElement = (e) => {
 					if (e.code === "Delete") {
-						let id = that.locals.clickedElementId
-						for (let index = 0; index < headerElements.length; index++) {
-							if (headerElements[index].options.id === id) {
-								headerElements.splice(index, 1)
-							}
-						}
-						for (let index = 0; index < footerElements.length; index++) {
-							if (footerElements[index].options.id === id) {
-								footerElements.splice(index, 1)
-							}
-						}
-						that.locals.selectedElement = {
-							type: {},
-							options: {
-								configs: {},
-								styles: {},
-							},
+						let id = this.locals.clickedElementId
+						var parent = this.locals.selectedElement.parent
+						var array = this.settings[parent][`${parent}Elements`]
+						let index = array.findIndex(x => x.options.id === id)
+
+						if (index > -1) {
+							array.splice(index, 1)
+							this.locals.selectedElement = this.getDefaultSelectedElementObject()
 						}
 					}
 				}
+				document.removeEventListener('keyup', deleteElement, false)
+				document.addEventListener('keydown', deleteElement, false)
 			},
 
 			/**
