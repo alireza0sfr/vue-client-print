@@ -97,6 +97,10 @@ textarea:focus {
     flex-grow: 1;
 }
 
+.tab:last-child {
+    border-left: 0 !important;
+}
+
 .tab.selected {
     background-color: rgb(232, 235, 240);
     color: #484848;
@@ -125,7 +129,6 @@ textarea:focus {
 }
 
 .toolbar-content {
-    border: 1px ridge #81c3ff;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -231,7 +234,6 @@ textarea:focus {
 }
 
 .template-container {
-    padding: '5px';
     margin: auto;
     box-shadow: -1px 4px 10px 0px #818181;
 }
