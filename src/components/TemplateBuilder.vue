@@ -370,8 +370,8 @@
 									</div>
 								</div>
 
-								<div :set="columns = locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" v-if="locals.selectedElement.type === 'dataset'">
-									<div v-for="(col, index) in columns" :key="col.id" class="toolbar-content-row">
+								<div v-if="locals.selectedElement.type === 'dataset'">
+									<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.id" class="toolbar-content-row">
 										<div :dir="settings.pageDirections" class="toolbar-content-label">
 											<label style="margin-right: 10px; display:flex" for="dataSetColumnsControl">
 												<input type="checkbox" class="input-form-control" v-model="col.isActive" id="dataSetColumnsControl" />
@@ -531,16 +531,15 @@
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 						</div>
 						<div class="template-container" :style="{height: settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
-							<div :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
+							<div ref="template" :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
+								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element, 'header')" />
 								</div>
-								<div id="bodyTemplate">
-									<div class="watermark">{{$t('template-builder.body')}}</div>
-									<p>{{$t('template-builder.body-msg')}}</p>
+								<div style="min-height: 0.15in" id="bodyTemplate" class="section body" @drop="droppedElement('body')" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element, 'body')" />
 								</div>
-								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
+								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element, 'footer')" />
 								</div>
 							</div>
 						</div>
@@ -748,6 +747,9 @@
 						height: 1,
 						headerElements: [],
 					},
+					body: {
+						bodyElements: []
+					},
 					footer: {
 						isFooterRepeatable: true,
 						height: 1,
@@ -803,6 +805,9 @@
 						height: this.settings.footer.height,
 						footerElements: this.settings.footer.footerElements,
 					},
+					body: {
+						bodyElements: this.settings.body.bodyElements,
+					},
 					variables: this.locals.variables,
 					orientation: this.settings.orientation,
 					pageSize: this.settings.pageSize,
@@ -856,6 +861,9 @@
 						isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
 						height: this.settings.header.height,
 						headerElements: this.settings.header.headerElements,
+					},
+					body: {
+						bodyElements: this.settings.body.bodyElements,
 					},
 					footer: {
 						isFooterRepeatable: this.settings.footer.isFooterRepeatable,
@@ -1222,14 +1230,9 @@
 					default:
 						break
 				}
-				if (parent.includes("header")) {
-					this.settings.header.headerElements.push(tmp)
-				} else if (parent.includes("footer")) {
-					this.settings.footer.footerElements.push(tmp)
-				}
+				this.settings[parent][`${parent}Elements`].push(tmp)
 				this.locals.classType = ""
 				this.locals.uniqueId = 0
-				return
 			},
 
 			/**
@@ -1297,10 +1300,7 @@
 			startDraggingElement(classType, uniqueId) {
 				this.locals.classType = classType
 				this.locals.uniqueId = uniqueId
-				let headerSection = this.$refs.headerTemplate
-				headerSection.className = headerSection.className + " dragged"
-				let footerSection = this.$refs.footerTemplate
-				footerSection.className = footerSection.className + " dragged"
+				this.$refs.template.className += " dragged"
 			},
 
 			/**
@@ -1314,10 +1314,7 @@
 			 * Method that triggers when drag is finished
 			 */
 			finishedDraggingElement() {
-				let headerSection = this.$refs.headerTemplate
-				headerSection.classList.remove("dragged")
-				let footerSection = this.$refs.footerTemplate
-				footerSection.classList.remove("dragged")
+				this.$refs.template.classList.remove("dragged")
 			},
 
 			/**
@@ -1498,18 +1495,9 @@
 			 * @param {HTMLElment} element - element
 			 * @return {void} - void
 			 */
-			finishedEditingElement(element) {
-				let tmp = this.settings.header.headerElements.find(x => x.options.id === element.options.id)
-
-				if (tmp) { // its header element
-					Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
-					return
-				}
-
-				tmp = this.settings.footer.footerElements.find(x => x.options.id === element.options.id)
-
-				Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
-				return
+			finishedEditingElement(element, elementLocation) {
+				let elem = this.settings[elementLocation][`${elementLocation}Elements`].find(x => x.options.id === element.options.id)
+				Object.assign(elem.options.styles, this.getCoordinates(element.options.id))
 			},
 
 			/**

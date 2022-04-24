@@ -68,3 +68,12 @@
     border: 6px solid transparent;
     background-clip: content-box;
 }
+
+table td,
+table th {
+    border: 1px solid black;
+}
+
+table {
+    width: 100%;
+}
