@@ -883,8 +883,7 @@
 			 */
 			settingsInitFunc() {
 				setTimeout(() => {
-					this.headerDragManager()
-					this.footerDragManager()
+					this.dragManager(['header', 'footer'])
 					this.locals.scale = 1
 				}, 100)
 			},
@@ -900,70 +899,45 @@
 
 
 			/**
-			 * Init drag functionality for header section.
+			 * Init drag functionality for sections.
 			 * @return {void} - void
 			 */
-			headerDragManager() {
-				var headerSection = document.getElementsByClassName("section header")[0] // element to make resizable
+			dragManager(sections) {
 
-				var resizer = document.createElement("div")
-				resizer.className = "resizer"
-				resizer.style.height = "10px"
-				headerSection.appendChild(resizer)
-				resizer.addEventListener("mousedown", initDrag, false)
+				for (let sectionName of sections) {
+					var section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
 
-				var startY, startHeight
+					var resizer = document.createElement("div")
+					resizer.className = "resizer"
+					resizer.style.height = "10px"
+					section.appendChild(resizer)
+					resizer.addEventListener("mousedown", initDrag, false)
 
-				let that = this // Storing this value to that to be able to use it inside of the functions
+					var startY, startHeight
 
-				function initDrag(e) {
-					startY = e.clientY
-					startHeight = parseInt(document.defaultView.getComputedStyle(headerSection).height, 10)
-					document.documentElement.addEventListener("mousemove", doDrag, false)
-					document.documentElement.addEventListener("mouseup", stopDrag, false)
-				}
+					let that = this // Storing this value to that to be able to use it inside of the functions
 
-				function doDrag(e) {
-					that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY)
-				}
+					function initDrag(e) {
+						startY = e.clientY
 
-				function stopDrag(e) {
-					document.documentElement.removeEventListener("mousemove", doDrag, false)
-					document.documentElement.removeEventListener("mouseup", stopDrag, false)
-				}
-			},
+						startHeight = parseInt(document.defaultView.getComputedStyle(section).height, 10)
 
-			/**
-			 * Init drag functionality for footer section.
-			 * @return {void} - void
-			 */
-			footerDragManager() {
-				var footerSection = document.getElementsByClassName("section footer")[0] // element to make resizable
+						document.documentElement.addEventListener("mousemove", doDrag, false)
+						document.documentElement.addEventListener("mouseup", stopDrag, false)
+					}
 
-				var resizer = document.createElement("div")
-				resizer.className = "resizer"
-				resizer.style.height = "10px"
-				footerSection.appendChild(resizer)
-				resizer.addEventListener("mousedown", initDrag, false)
+					function doDrag(e) {
+						if (sectionName === 'header')
+							that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY)
+						else
+							that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY)
 
-				var startY, startHeight
+					}
 
-				let that = this // Storing this value to that to be able to use it inside of the functions
-
-				function initDrag(e) {
-					startY = e.clientY
-					startHeight = parseInt(document.defaultView.getComputedStyle(footerSection).height, 10)
-					document.documentElement.addEventListener("mousemove", doDrag, false)
-					document.documentElement.addEventListener("mouseup", stopDrag, false)
-				}
-
-				function doDrag(e) {
-					that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY)
-				}
-
-				function stopDrag(e) {
-					document.documentElement.removeEventListener("mousemove", doDrag, false)
-					document.documentElement.removeEventListener("mouseup", stopDrag, false)
+					function stopDrag(e) {
+						document.documentElement.removeEventListener("mousemove", doDrag, false)
+						document.documentElement.removeEventListener("mouseup", stopDrag, false)
+					}
 				}
 			},
 
