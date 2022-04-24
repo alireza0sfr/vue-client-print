@@ -1012,7 +1012,7 @@
 						}
 
 						for (let set of keys) {
-							var thisSet = this.dataSets[set]
+							var thisSet = JSON.parse(JSON.stringify(this.dataSets[set])) // removing refrence to the original data
 
 							for (let col of thisSet.columns) {
 								col.isActive = true
