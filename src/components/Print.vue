@@ -6,7 +6,7 @@
 		<div class="slotWrapper">
 			<div :style="{width: settings.defaultWidthOfPaper + 'in',padding: '5px'}">
 				<div id="toBeConverted">
-					<div v-if="settings.body && settings.body.bodyElements">
+					<div v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length">
 						<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 					</div>
 					<slot v-else class="printData" name="printData"></slot>
