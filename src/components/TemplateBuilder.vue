@@ -5,7 +5,7 @@
 			<div class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
-						<a @click="export2Json()" :title="$t('template-builder.save')" class="modal-icon" href="#">
+						<a @click="save()" :title="$t('template-builder.save')" class="modal-icon" href="#">
 							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
@@ -769,6 +769,18 @@
 			},
 
 			/**
+			 * Save Changes on TB close.
+			 * @return {Object} - json file
+			 */
+			save() {
+				// Closing the template builder modal after save
+				let tmp = this.export2Json()
+				document.getElementById("templateBuilderModal").style.display = "none"
+
+				if (this.settings.callback)
+					this.settings.callback(tmp)
+			},
+			/**
 			 * Exports settings to json a file.
 			 * @return {Object} - json file
 			 */
@@ -794,36 +806,9 @@
 				if (this.settings.totalHeightOfAPaper < 0)
 					this.settings.totalHeightOfAPaper = 1.77
 
-				let tmp = {
-					header: {
-						isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
-						height: this.settings.header.height,
-						headerElements: this.settings.header.headerElements,
-					},
-					footer: {
-						isFooterRepeatable: this.settings.footer.isFooterRepeatable,
-						height: this.settings.footer.height,
-						footerElements: this.settings.footer.footerElements,
-					},
-					body: {
-						bodyElements: this.settings.body.bodyElements,
-					},
-					variables: this.locals.variables,
-					orientation: this.settings.orientation,
-					pageSize: this.settings.pageSize,
-					pageDirections: this.settings.pageDirections,
-					totalHeightOfAPaper: this.settings.totalHeightOfAPaper,
-					defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
-					defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
-					pageBorder: this.settings.pageBorder,
-					designName: this.settings.designName,
-				}
-
-				// Closing the template builder modal after save
-				document.getElementById("templateBuilderModal").style.display = "none"
-
-				if (this.settings.callback)
-					this.settings.callback(tmp)
+				let tmp = this.settings
+				tmp.variables = this.locals.variables
+				return tmp
 			},
 
 			/**
@@ -835,52 +820,7 @@
 			 * @return {File} - save settings file in browser
 			 */
 			export2SrcFile() {
-				// Syncing headerElements with the user chagnes
-				let headerElements = this.settings.header.headerElements
-				let footerElements = this.settings.footer.footerElements
-
-				for (let index = 0; index < headerElements.length; index++) {
-					let computedStyles = this.getCoordinates(headerElements[index].options.id)
-					let elementStyles = headerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
-				for (let index = 0; index < footerElements.length; index++) {
-					let computedStyles = this.getCoordinates(footerElements[index].options.id)
-					let elementStyles = footerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
-				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
-
-				if (this.settings.totalHeightOfAPaper < 0)
-					this.settings.totalHeightOfAPaper = 1.77
-
-				let tmp = {
-					header: {
-						isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
-						height: this.settings.header.height,
-						headerElements: this.settings.header.headerElements,
-					},
-					body: {
-						bodyElements: this.settings.body.bodyElements,
-					},
-					footer: {
-						isFooterRepeatable: this.settings.footer.isFooterRepeatable,
-						height: this.settings.footer.height,
-						footerElements: this.settings.footer.footerElements,
-					},
-					variables: this.locals.variables,
-					orientation: this.settings.orientation,
-					pageSize: this.settings.pageSize,
-					pageDirections: this.settings.pageDirections,
-					totalHeightOfAPaper: this.settings.totalHeightOfAPaper,
-					defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
-					defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
-					pageBorder: this.settings.pageBorder,
-					designName: this.settings.designName,
-				}
-
+				let tmp = this.export2Json()
 				tmp = this.encode2Base64(JSON.stringify(tmp)) // encoding the settings to export
 
 				let designName = this.settings.designName === '' ? 'vue-print' : this.settings.designName
