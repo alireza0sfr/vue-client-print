@@ -4,9 +4,12 @@
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
-			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareComponentOptions('column', column)" />
+			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" />
 		</div>
-		<Resizers :query="`dataset-${settings.id}`" :resizers="['br']" />
+		<div v-if="$parent.$options.name === 'Print'"  class="rows">
+			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" />
+		</div>
+		<Resizers :query=" `dataset-${settings.id}`" :resizers="['br']" />
 	</div>
 </template>
 
@@ -14,10 +17,12 @@
 	import ElementClass from '~/plugins/element-utilities.js'
 	import Resizers from '~/components/elements/Resizers.vue'
 	import Column from '~/components/elements/DataSet/Column.vue'
+	import Row from '~/components/elements/DataSet/Row.vue'
 	export default {
 		components: {
 			Resizers,
-			Column
+			Column,
+			Row
 		},
 		name: "DataSet",
 		props: {
@@ -30,6 +35,10 @@
 			filteredCols() {
 				return this.setTotalWidth(this.displaySet.options.configs.columns.filter(x => x.isActive))
 			},
+			filteredRows() {
+				console.log(this.displaySet.options.configs.rows)
+				return this.displaySet.options.configs.rows
+			}
 		},
 		mounted() {
 			if (this.$parent.$options.name === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
@@ -180,31 +189,49 @@
 			},
 
 			/**
-			 * Preparing component options
-			 @param {String} optionsName - determine which option is needed.
-			 @param {Boolean} hasResizer - determine that the column hasResizer or not.
+			 * Preparing Col options
+			 @param {Object} Column - Column data.
 			 @return {Object} - prepared options 
 			 */
-			prepareComponentOptions(optionsName, column) {
-				let tmp = {
-					column: {
-						grandParent: this.$parent.$options.name,
-						hasResizer: column.hasResizer,
-						id: column.id,
-						configs: {
-							name: column.name
-						},
-						styles: {
-							position: 'relative',
-							height: this.toFloatWidth(this.settings.styles.height) - 20 + 'px',
-							// display: 'table-cell',
-							resize: 'none',
-							height: this.calculateColumnHeight()
-						},
-					},
+			prepareColOptions(column) {
+				let defaultColStyles = {
+					position: 'relative',
+					resize: 'none',
+					height: this.calculateColumnHeight()
 				}
-				Object.assign(tmp[optionsName].styles, column.styles)
-				return tmp[optionsName]
+				var computedStyles = Object.assign(defaultColStyles, column.styles)
+				let tmp = {
+					grandParent: this.$parent.$options.name,
+					hasResizer: column.hasResizer,
+					id: column.id,
+					configs: {
+						name: column.name
+					},
+					styles: computedStyles,
+				}
+				Object.assign(tmp.styles, column.styles)
+				return tmp
+			},
+			/**
+			 * Preparing Row options
+			 @param {Object} row - Row data.
+			 @return {Object} - prepared options 
+			 */
+			prepareRowOptions(row) {
+				let defaultColStyles = {
+					display: 'flex'
+				}
+				var computedStyles = Object.assign(defaultColStyles, row.styles)
+				let tmp = {
+					grandParent: this.$parent.$options.name,
+					id: row.id,
+					configs: {
+						rows: row.data
+					},
+					styles: computedStyles,
+				}
+				Object.assign(tmp.styles, row.styles)
+				return tmp
 			}
 		}
 	}

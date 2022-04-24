@@ -428,6 +428,20 @@
 
 				switch (type) {
 
+					case 'dataset':
+						options.styles.height = 'auto'
+						var displaySet = options.configs.dataSets[options.configs.selectedDataSet]
+						var columns = displaySet.options.configs.columns
+						var rows = displaySet.options.configs.rows
+						for (let row of rows) {
+							var index = 0
+							for (let data of row.data) {
+								data.styles.width = columns[index].styles.width
+								index += 1
+							}
+						}
+						break
+
 					case 'pagecounter':
 						if (opt.configs.completeForm) {
 							if (opt.configs.persianNumbers) {

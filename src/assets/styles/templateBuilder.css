@@ -422,9 +422,26 @@ textarea:focus {
     display: flex
 }
 
+.dataset.element {
+    border: 1px solid #dbdbdb;
+}
+
 .column.element {
     min-width: unset !important;
     min-height: unset !important;
+}
+
+.rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    border-top: 1px solid #dbdbdb
+}
+
+.label {
+    padding: 10px 0
 }
 
 .dataset .name {

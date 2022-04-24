@@ -621,7 +621,57 @@
 								id: this.idGenerator(5)
 							},
 						],
-						rows: [],
+						rows: [
+							{
+								data: [
+									{
+										name: 'شناور۱',
+										styles: {}
+									},
+									{
+										name: 'شناور2',
+										styles: {}
+									},
+									{
+										name: 'شناور3',
+										styles: {}
+									},
+									{
+										name: 'شناور4',
+										styles: {}
+									},
+									{
+										name: 'شناور5',
+										styles: {}
+									},
+								],
+								id: this.idGenerator(5)
+							},
+							{
+								data: [
+									{
+										name: 'حساب ۱',
+										styles: {}
+									},
+									{
+										name: 'حساب 2',
+										styles: {}
+									},
+									{
+										name: 'حساب 3',
+										styles: {}
+									},
+									{
+										name: 'حساب 4',
+										styles: {}
+									},
+									{
+										name: 'حساب 5',
+										styles: {}
+									}],
+								id: this.idGenerator(5)
+							},
+						],
 					},
 					account: {
 						id: this.idGenerator(5),
