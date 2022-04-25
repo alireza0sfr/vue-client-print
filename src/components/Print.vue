@@ -429,7 +429,8 @@
 				switch (type) {
 
 					case 'dataset':
-						opt.configs.originalHeight = opt.styles.height // storing dataset height in originalHeight to use it for column height
+						opt.configs.originalColumnHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
+						opt.configs.rowsHeight = 30 // setting default rows height
 						opt.styles.height = 'auto'
 						var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
 						var columns = displaySet.options.configs.columns

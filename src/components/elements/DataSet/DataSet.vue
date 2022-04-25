@@ -65,7 +65,7 @@
 					id: 0,
 					configs: {
 						selectedSet: '',
-						dataSets: {}
+						dataSets: {},
 					},
 					styles: {
 						height: '80px',
@@ -82,7 +82,7 @@
 				var height
 
 				if (this.settings.styles.height === 'auto')
-					height = this.settings.configs.originalHeight
+					height = this.settings.configs.originalColumnHeight
 
 				else
 					height = this.settings.styles.height
@@ -226,7 +226,8 @@
 			 */
 			prepareRowOptions(row) {
 				let defaultColStyles = {
-					display: 'flex'
+					display: 'flex',
+					height: this.settings.configs.rowsHeight + 'px'
 				}
 				var computedStyles = Object.assign(defaultColStyles, row.styles)
 				let tmp = {

@@ -50,6 +50,7 @@ const messages: object = {
         "text-pattern": "Text Pattern",
         "configs": {
           "datasets": "DataSets",
+          "rowsHeight": "Rows Height",
           "index-column": "Column {index}",
           "data-type": "Data Type",
           "type-text": "Please Type Your Text",
@@ -148,6 +149,7 @@ const messages: object = {
         "text-pattern": "متن الکویی",
         "configs": {
           "datasets": "دیتاست",
+          "rowsHeight": "ارتفاع ردیف",
           "index-column": "ستون {index}",
           "data-type": "نوع داده",
           "type-text": "متن خود را وارد کنید.",

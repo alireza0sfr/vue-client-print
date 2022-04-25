@@ -359,18 +359,27 @@
 									</div>
 								</div>
 
-								<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'dataset'">
-									<div class="toolbar-content-label">
-										<label for="dataSetNameControl">{{$t('template-builder.elements.configs.datasets')}}</label>
-									</div>
-									<div class="toolbar-content-field">
-										<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-											<option v-for="option in Object.keys(this.dataSets)" :value="option" :key="option">{{ this.dataSets[option].title }}</option>
-										</select>
-									</div>
-								</div>
-
 								<div v-if="locals.selectedElement.type === 'dataset'">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.datasets')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+												<option v-for="option in Object.keys(dataSets)" :value="option" :key="option">{{ dataSets[option].title }}</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.rowsHeight')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<input type="number" class="input-form-control" v-model="locals.selectedElement.options.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										</div>
+									</div>
+
 									<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.id" class="toolbar-content-row">
 										<div :dir="settings.pageDirections" class="toolbar-content-label">
 											<label style="margin-right: 10px; display:flex" for="dataSetColumnsControl">
@@ -647,7 +656,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -672,7 +681,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -697,7 +706,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -722,7 +731,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -747,7 +756,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -772,7 +781,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -797,7 +806,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -822,7 +831,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -847,7 +856,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -872,7 +881,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -897,7 +906,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -922,7 +931,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -947,7 +956,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -972,7 +981,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -997,7 +1006,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1022,7 +1031,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1047,7 +1056,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1072,7 +1081,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1097,7 +1106,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1122,7 +1131,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1147,7 +1156,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1172,7 +1181,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1197,7 +1206,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1222,7 +1231,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1247,7 +1256,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1272,7 +1281,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1297,7 +1306,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1322,7 +1331,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1347,7 +1356,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1372,7 +1381,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
@@ -1397,7 +1406,7 @@
 								],
 								id: this.idGenerator(5)
 							},
-														{
+							{
 								data: [
 									{
 										name: 'شناور۱',
