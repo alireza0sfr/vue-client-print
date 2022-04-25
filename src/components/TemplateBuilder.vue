@@ -1739,19 +1739,19 @@
 			dragManager(sections) {
 
 				for (let sectionName of sections) {
-					var section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
+					let section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
 
 					var resizer = document.createElement("div")
 					resizer.className = "resizer"
 					resizer.style.height = "10px"
 					section.appendChild(resizer)
-					resizer.addEventListener("mousedown", initDrag, false)
+					resizer.addEventListener("mousedown", (e) => initDrag(e, section), false)
 
 					var startY, startHeight
 
 					let that = this // Storing this value to that to be able to use it inside of the functions
 
-					function initDrag(e) {
+					function initDrag(e, section) {
 						startY = e.clientY
 
 						startHeight = parseInt(document.defaultView.getComputedStyle(section).height, 10)
