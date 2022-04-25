@@ -36,7 +36,6 @@
 				return this.setTotalWidth(this.displaySet.options.configs.columns.filter(x => x.isActive))
 			},
 			filteredRows() {
-				console.log(this.displaySet.options.configs.rows)
 				return this.displaySet.options.configs.rows
 			}
 		},

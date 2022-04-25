@@ -438,6 +438,7 @@
 							var index = 0
 							for (let data of row.data) {
 								data.styles.width = columns[index].styles.width
+								data.isActive = columns[index].isActive
 								index += 1
 							}
 						}
