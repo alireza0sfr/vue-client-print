@@ -382,7 +382,6 @@ textarea:focus {
     overflow: hidden;
     min-height: 20px;
     min-width: 20px;
-    color: black;
 }
 
 .element.selected {
