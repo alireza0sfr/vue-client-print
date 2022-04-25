@@ -123,28 +123,22 @@ class Element {
    * @emits {drag-end} call drag-end event and passes cleanedCoordinates, element, queryResizer.
    */
   dragable() {
-    var element = this.element
-    var that = this
-    var pos1 = 0,
-      pos2 = 0,
-      pos3 = 0,
-      pos4 = 0
+    let element = this.element
+    var startX, startY, newLeft, newTop, that = this
 
     // move the DIV from anywhere inside the DIV:
     element.onmousedown = dragMouseDown
 
     function dragMouseDown(e) {
-
       if (e.target.className.includes('resizer'))
         return
 
-      if (
-        e.target.className.includes('element') || e.target.offsetParent.className.includes('element')) { // if dragging element or image element/variable
+      if (e.target.className.includes('element') || e.target.offsetParent.className.includes('element')) { // if dragging element or image element/variable
         e = e || window.event
         e.preventDefault()
         // get the mouse cursor position at startup:
-        pos3 = e.clientX
-        pos4 = e.clientY
+        startX = e.clientX
+        startY = e.clientY
         document.onmouseup = closeDragElement
         // call a function whenever the cursor moves:
         document.onmousemove = elementDrag
@@ -154,13 +148,13 @@ class Element {
         e = e || window.event
         e.preventDefault()
         // calculate the new cursor position:
-        pos1 = pos3 - e.clientX
-        pos2 = pos4 - e.clientY
-        pos3 = e.clientX
-        pos4 = e.clientY
+        newLeft = startX - e.clientX
+        newTop = startY - e.clientY
+        startX = e.clientX
+        startY = e.clientY
         // set the element's new position:
-        element.style.top = element.offsetTop - pos2 + "px"
-        element.style.left = element.offsetLeft - pos1 + "px"
+        element.style.top = element.offsetTop - newTop + "px"
+        element.style.left = element.offsetLeft - newLeft + "px"
       }
 
       function closeDragElement() {
