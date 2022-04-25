@@ -18,7 +18,7 @@ const messages: object = {
         "image": "Image"
       },
       "export": "Export",
-      "page-counter": "page ${index} of ${totalPages}",
+      "page-counter": "page {index} of {totalPages}",
       "print-settings": "Print Settings",
       "import": "Import",
       "others": "Others",
@@ -118,7 +118,7 @@ const messages: object = {
         "type": "نوع"
       },
       "print-settings": "تنظیمات چاپ",
-      "page-counter": "صفحه ${index} از ${totalPages}",
+      "page-counter": "صفحه {index} از {totalPages}",
       "export": "Export",
       "import": "Import",
       "others": "سایر",
