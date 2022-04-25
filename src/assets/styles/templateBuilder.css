@@ -303,9 +303,12 @@ textarea:focus {
 }
 
 .element.selected .elem-resizer.top {
-    top: -6px;
-    left: 49%;
-    transform: rotate(225deg);
+    position: absolute;
+    left: 50%;
+    top: 9px;
+    transform: translate(-50%, -50%);
+    background-image: none;
+    border-top: 2px solid #545454 !important;
 }
 
 .element.selected .elem-resizer.top:hover {
@@ -323,9 +326,12 @@ textarea:focus {
 }
 
 .element.selected .elem-resizer.left {
-    left: -6px;
-    top: 46%;
-    transform: rotate(135deg)
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-image: none;
+    border-left: 2px solid #545454 !important;
 }
 
 .element.selected .elem-resizer.left:hover {
@@ -333,9 +339,12 @@ textarea:focus {
 }
 
 .element.selected .elem-resizer.right {
-    top: 46%;
-    right: -6px;
-    transform: rotate(314deg);
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-image: none;
+    border-right: 2px solid #545454 !important;
 }
 
 .element.selected .elem-resizer.right:hover {
@@ -353,9 +362,32 @@ textarea:focus {
 }
 
 .element.selected .elem-resizer.bottom {
-    left: 49%;
-    transform: rotate(45deg);
-    bottom: -6px;
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    transform: translate(-50%, -50%);
+    background-image: none;
+    border-bottom: 2px solid #545454 !important;
+}
+
+.elem-resizer.right.resizer-large,
+.elem-resizer.left.resizer-large {
+    height: 100% !important
+}
+
+.elem-resizer.right.resizer-small,
+.elem-resizer.left.resizer-small {
+    height: 5% !important
+}
+
+.elem-resizer.top.resizer-large,
+.elem-resizer.bottom.resizer-large {
+    width: 100% !important
+}
+
+.elem-resizer.top.resizer-small,
+.elem-resizer.bottom.resizer-small {
+    width: 5% !important
 }
 
 .element.selected .elem-resizer.bottom:hover {

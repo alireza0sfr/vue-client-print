@@ -1,7 +1,7 @@
 <template>
 	<div :id="settings.id" ref="element" :class="locals.classType + ' element label'" :style="settings.styles">
 		<span>{{settings.configs.name}}</span>
-		<Resizers v-if="settings.hasResizer" :query="`column-${settings.id}`" :resizers="['right']" />
+		<Resizers v-if="settings.hasResizer" :query="`column-${settings.id}`" :resizers="['right']" size="large" />
 	</div>
 </template>
 
