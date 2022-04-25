@@ -134,10 +134,12 @@ class Element {
     element.onmousedown = dragMouseDown
 
     function dragMouseDown(e) {
+
+      if (e.target.className.includes('resizer'))
+        return
+
       if (
-        e.target.className.includes('element') ||
-        e.target.offsetParent.className.includes('element') &&
-        e.target.className === 'image') { // if dragging element or image element/variable
+        e.target.className.includes('element') || e.target.offsetParent.className.includes('element')) { // if dragging element or image element/variable
         e = e || window.event
         e.preventDefault()
         // get the mouse cursor position at startup:
