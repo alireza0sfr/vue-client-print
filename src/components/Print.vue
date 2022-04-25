@@ -429,8 +429,9 @@
 				switch (type) {
 
 					case 'dataset':
-						options.styles.height = 'auto'
-						var displaySet = options.configs.dataSets[options.configs.selectedDataSet]
+						opt.configs.originalHeight = opt.styles.height // storing dataset height in originalHeight to use it for column height
+						opt.styles.height = 'auto'
+						var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
 						var columns = displaySet.options.configs.columns
 						var rows = displaySet.options.configs.rows
 						for (let row of rows) {

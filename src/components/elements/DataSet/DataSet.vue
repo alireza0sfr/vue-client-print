@@ -6,7 +6,7 @@
 		<div class="columns">
 			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" />
 		</div>
-		<div v-if="$parent.$options.name === 'Print'"  class="rows">
+		<div v-if="$parent.$options.name === 'Print'" class="rows">
 			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" />
 		</div>
 		<Resizers :query=" `dataset-${settings.id}`" :resizers="['br']" />
@@ -80,10 +80,18 @@
 			 * @return {Number} column height
 			 */
 			calculateColumnHeight() {
-				if (this.$parent.$options.name === 'TemplateBuilder')
-					return this.toFloatWidth(this.settings.styles.height) - 20 + 'px'
+				var height
 
-				return this.settings.styles.height
+				if (this.settings.styles.height === 'auto')
+					height = this.settings.configs.originalHeight
+
+				else
+					height = this.settings.styles.height
+
+				if (this.$parent.$options.name === 'TemplateBuilder')
+					return this.toFloatWidth(height) - 20 + 'px'
+
+				return height
 			},
 			/**
 			 * Convert string wdith to float width 2 decimals.
