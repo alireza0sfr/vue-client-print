@@ -1832,8 +1832,8 @@
 						var keys = Object.keys(this.dataSets)
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: {},
@@ -1870,9 +1870,9 @@
 					case 'textelement':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
 								id: this.idGenerator(5),
+								parent: parent,
 								configs: { text: this.$t('template-builder.elements.configs.type-text') },
 								styles: {
 									whiteSpace: "pre",
@@ -1887,8 +1887,8 @@
 					case 'datetime':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								id: this.idGenerator(5),
 								configs: { hasDate: true, hasTime: true, persianDate: true },
 								styles: { width: "150px" },
@@ -1899,8 +1899,8 @@
 					case 'pagecounter':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								id: this.idGenerator(5),
 								configs: { counter: '1', persianNumbers: true, completeForm: true },
 								styles: {},
@@ -1911,8 +1911,8 @@
 					case 'imageelement':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								id: this.idGenerator(5),
 								configs: { imageSrc: DefaultLogo },
 								styles: {
@@ -1928,8 +1928,8 @@
 					case 'bindingObject':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
@@ -1948,8 +1948,8 @@
 					case 'textpattern':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
@@ -1968,8 +1968,8 @@
 					case 'variable':
 						tmp = {
 							type: classType,
-							parent: parent,
 							options: {
+								parent: parent,
 								id: this.idGenerator(5),
 								configs: {
 									uniqueId: uniqueId,
@@ -2173,7 +2173,7 @@
 				const deleteElement = (e) => {
 					if (e.code === "Delete") {
 						let id = this.locals.clickedElementId
-						var parent = this.locals.selectedElement.parent
+						var parent = this.locals.selectedElement.options.parent
 						var array = this.settings[parent][`${parent}Elements`]
 						let index = array.findIndex(x => x.options.id === id)
 
