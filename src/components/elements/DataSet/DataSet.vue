@@ -212,7 +212,7 @@
 					hasResizer: column.hasResizer,
 					id: column.id,
 					configs: {
-						name: column.name
+						title: column.title
 					},
 					styles: computedStyles,
 				}

@@ -388,7 +388,7 @@
 											</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="text" :disabled="!col.isActive" class="input-form-control" v-model="col.name" id="dataSetColumnsName" />
+											<input type="text" :disabled="!col.isActive" class="input-form-control" v-model="col.title" id="dataSetColumnsName" />
 										</div>
 									</div>
 								</div>
@@ -595,35 +595,35 @@
 						title: 'شناور',
 						columns: [
 							{
-								name: 'column 1',
+								title: 'column 1',
 								styles: {
 									width: '70px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 2',
+								title: 'column 2',
 								styles: {
 									width: '50px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 3',
+								title: 'column 3',
 								styles: {
 									width: '50px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 4',
+								title: 'column 4',
 								styles: {
 									width: '40px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 5',
+								title: 'column 5',
 								styles: {
 									width: '90px',
 								},
@@ -1463,28 +1463,28 @@
 						title: 'حساب',
 						columns: [
 							{
-								name: 'column 1',
+								title: 'column 1',
 								styles: {
 									width: '70px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 3',
+								title: 'column 3',
 								styles: {
 									width: '50px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 4',
+								title: 'column 4',
 								styles: {
 									width: '40px',
 								},
 								id: this.idGenerator(5)
 							},
 							{
-								name: 'column 5',
+								title: 'column 5',
 								styles: {
 									width: '90px',
 								},
