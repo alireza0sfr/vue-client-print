@@ -5,7 +5,7 @@ import translations from './assets/translations'
 import mixins from './plugins/mixins'
 
 const i18n = createI18n({
-  locale: 'en',
+  locale: 'fa',
   fallbackLocale: 'en',
   messages: translations
 })

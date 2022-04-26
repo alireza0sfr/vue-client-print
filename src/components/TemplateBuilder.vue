@@ -599,35 +599,30 @@
 								styles: {
 									width: '70px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 2',
 								styles: {
 									width: '50px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 3',
 								styles: {
 									width: '50px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 4',
 								styles: {
 									width: '40px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 5',
 								styles: {
 									width: '90px',
 								},
-								id: this.idGenerator(5)
 							},
 						],
 						rows: [
@@ -1467,28 +1462,24 @@
 								styles: {
 									width: '70px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 3',
 								styles: {
 									width: '50px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 4',
 								styles: {
 									width: '40px',
 								},
-								id: this.idGenerator(5)
 							},
 							{
 								title: 'column 5',
 								styles: {
 									width: '90px',
 								},
-								id: this.idGenerator(5)
 							},
 						],
 						rows: [],
@@ -1850,6 +1841,7 @@
 
 							for (let col of thisSet.columns) {
 								col.isActive = true
+								col.id = this.idGenerator(5)
 								col.hasResizer = thisSet.columns.indexOf(col) !== thisSet.columns.length - 1
 							}
 
