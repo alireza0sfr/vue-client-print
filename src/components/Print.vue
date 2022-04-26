@@ -1,12 +1,11 @@
 <template>
 	<div id="printPage">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
-
 		<!-- Data Slots -->
 		<div class="slotWrapper">
 			<div :style="{width: settings.defaultWidthOfPaper + 'in',padding: '5px'}">
 				<div id="toBeConverted">
-					<div v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length">
+					<div id="componentsParent" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length">
 						<component v-for="(element, index) in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 					</div>
 					<slot v-else class="printData" name="printData"></slot>
@@ -55,7 +54,7 @@
 					</div>
 					<div id="printForm">
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultheightofpaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
-							<div :style="{width: 'auto',border: settings.pageBorder,margin: '5px'}" class="pages">
+							<div :style="{width: 'auto', border: settings.pageBorder, margin: '5px'}">
 								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="{height: locals.pageHeadersSizes[index - 1] + 'in'}" class="mainHeader">
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 								</div>
@@ -139,6 +138,29 @@
 			this.modalManager('printModal', 'printModalCloseBtn')
 		},
 		methods: {
+
+			/**
+			 * set body elements parent components height.
+			 * @return {void} - void
+			 */
+			setBodyWithElementsHeight() {
+				const parent = document.getElementById('componentsParent')
+				var maxBottom = 0
+				var elementWithMaxBottom
+
+				for (let child of parent.children) {
+					if (child.getBoundingClientRect().bottom > maxBottom) {
+						maxBottom = child.getBoundingClientRect().bottom
+						elementWithMaxBottom = child
+					}
+				}
+				parent.style.height = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height + 'px'
+			},
+
+			/**
+			 * print calculated output to pdf
+			 * @return {void} - void
+			 */
 			printForm() {
 				printJS({
 					printable: 'printForm',
@@ -288,6 +310,10 @@
 					let transformOrigin = 'top left'
 					var scale = 2
 					let domNode = document.getElementById("toBeConverted")
+
+					if (this.settings.body && this.settings.body.bodyElements && this.settings.body.bodyElements.length)
+						this.setBodyWithElementsHeight()
+
 					domtoimage
 						.toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality
 							width: domNode.clientWidth * scale,

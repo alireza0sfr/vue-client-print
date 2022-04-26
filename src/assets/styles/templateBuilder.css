@@ -409,7 +409,7 @@ textarea:focus {
 
 .element {
     text-align: center;
-    position: relative;
+    position: absolute;
     width: 100px;
     overflow: hidden;
     min-height: 20px;
