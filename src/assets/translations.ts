@@ -138,7 +138,7 @@ const messages: object = {
       "repeat-footer": "تکرار فوتر",
       "elements": {
         "settings": "تنظیمات المنت ها",
-        "name": "المت ها",
+        "name": "المنت ها",
         "text-box": "متن",
         "date-time": "تاریخ و ساعت",
         "dataset": "لیست داده ها",
