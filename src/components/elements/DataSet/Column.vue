@@ -56,7 +56,7 @@
 			*/
 			Initialize() {
 				let elem = new ElementClass(this.$refs.element, `column-${this.settings.id}`)
-				elem.click()
+				elem.clickable()
 				this.resizable()
 			},
 

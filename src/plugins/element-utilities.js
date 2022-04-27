@@ -97,7 +97,7 @@ class Element {
    * element click handler 
    * @emits {click} call click event and passes element, queryResizer.
    */
-  click() {
+  clickable() {
     var element = this.element
     var that = this
     element.addEventListener("mousedown", onClick, false)

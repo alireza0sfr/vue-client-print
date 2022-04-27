@@ -67,7 +67,7 @@
 			 */
 			Initialize(element) {
 				let elem = new ElementClass(element, 'variable')
-				elem.click()
+				elem.clickable()
 				elem.resizable()
 				elem.dragable()
 

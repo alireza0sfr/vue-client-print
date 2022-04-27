@@ -74,7 +74,7 @@
 			 */
 			Initialize(element = this.$refs.element) {
 				let elem = new ElementClass(element, `pagecounter-${this.settings.id}`)
-				elem.click()
+				elem.clickable()
 				elem.resizable()
 				elem.dragable()
 			},
