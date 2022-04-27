@@ -234,7 +234,7 @@
 					grandParent: this.$parent.$options.name,
 					id: row.id,
 					configs: {
-						rows: row.data
+						rows: row
 					},
 					styles: computedStyles,
 				}

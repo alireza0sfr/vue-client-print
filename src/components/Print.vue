@@ -462,21 +462,21 @@
 						var columns = displaySet.options.configs.columns
 						var rows = displaySet.options.configs.rows
 						for (let row of rows) {
-							var index = 0
-							for (let data of row.data) {
-								data.styles.width = columns[index].options.styles.width
-								data.styles.textAlign = columns[index].options.styles.textAlign
-								data.styles.fontWeight = columns[index].options.styles.fontWeight
-								data.styles.fontFamily = columns[index].options.styles.fontFamily
-								data.styles.fontSize = columns[index].options.styles.fontSize
-								data.styles.border = columns[index].options.styles.border
-								data.styles.borderTop = columns[index].options.styles.borderTop
-								data.styles.borderBottom = columns[index].options.styles.borderBottom
-								data.styles.borderLeft = columns[index].options.styles.borderLeft
-								data.styles.borderRight = columns[index].options.styles.borderRight
+							var objectKeys = Object.keys(row)
+							for (let index = 0; index < objectKeys.length; index++) {
+								let data = row[objectKeys[index]]
+								data.options.styles.width = columns[index].options.styles.width
+								data.options.styles.textAlign = columns[index].options.styles.textAlign
+								data.options.styles.fontWeight = columns[index].options.styles.fontWeight
+								data.options.styles.fontFamily = columns[index].options.styles.fontFamily
+								data.options.styles.fontSize = columns[index].options.styles.fontSize
+								data.options.styles.border = columns[index].options.styles.border
+								data.options.styles.borderTop = columns[index].options.styles.borderTop
+								data.options.styles.borderBottom = columns[index].options.styles.borderBottom
+								data.options.styles.borderLeft = columns[index].options.styles.borderLeft
+								data.options.styles.borderRight = columns[index].options.styles.borderRight
 
 								data.isActive = columns[index].isActive
-								index += 1
 							}
 						}
 						break

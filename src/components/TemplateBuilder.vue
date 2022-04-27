@@ -596,6 +596,7 @@
 						columns: [
 							{
 								title: 'column 1',
+								key: 'center',
 								options: {
 									styles: {
 										width: '70px',
@@ -604,6 +605,7 @@
 							},
 							{
 								title: 'column 2',
+								key: 'account',
 								options: {
 									styles: {
 										width: '50px',
@@ -612,6 +614,7 @@
 							},
 							{
 								title: 'column 3',
+								key: 'date',
 								options: {
 									styles: {
 										width: '50px',
@@ -620,6 +623,7 @@
 							},
 							{
 								title: 'column 4',
+								key: 'balance',
 								options: {
 									styles: {
 										width: '40px',
@@ -628,6 +632,7 @@
 							},
 							{
 								title: 'column 5',
+								key: 'type',
 								options: {
 									styles: {
 										width: '90px',
@@ -637,829 +642,44 @@
 						],
 						rows: [
 							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
+								center: 'center 1',
+								account: 'account 1',
+								date: 'date 1',
+								balance: 'balance 1',
+								type: 'type 1',
 							},
 							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
+								center: 'center 2',
+								account: 'account 2',
+								date: 'date 2',
+								balance: 'حسابهای دریافتنی نجاری بانکهای ارزی بانک سامان',
+								type: 'type 2',
 							},
 							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
+								center: 'center 3',
+								account: 'account 3',
+								date: 'date 3',
+								balance: 'balance 3',
+								type: 'type 3',
 							},
 							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
+								center: 'center 4',
+								account: 'account 4',
+								date: 'date 4',
+								balance: 'balance 4',
+								type: 'type 4',
 							},
 							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
+								center: 'center 5',
+								account: 'account 5',
+								date: 'date 5',
+								balance: 'balance 5',
+								type: 'type 5',
 							},
 							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'شناور۱',
-										styles: {}
-									},
-									{
-										name: 'شناور2',
-										styles: {}
-									},
-									{
-										name: 'شناور3',
-										styles: {}
-									},
-									{
-										name: 'شناور4',
-										styles: {}
-									},
-									{
-										name: 'شناور5',
-										styles: {}
-									},
-								],
-								id: this.idGenerator(5)
-							},
-							{
-								data: [
-									{
-										name: 'حساب ۱',
-										styles: {}
-									},
-									{
-										name: 'حساب 2',
-										styles: {}
-									},
-									{
-										name: 'حساب 3',
-										styles: {}
-									},
-									{
-										name: 'حساب 4',
-										styles: {}
-									},
-									{
-										name: 'حساب 5',
-										styles: {}
-									}],
-								id: this.idGenerator(5)
-							},
+								center: 'center 6',
+								account: 'account 6',
+							}
 						],
 					},
 					account: {
@@ -1469,6 +689,7 @@
 						columns: [
 							{
 								title: 'column 1',
+								key: 'center',
 								options: {
 									styles: {
 										width: '70px',
@@ -1476,15 +697,17 @@
 								}
 							},
 							{
-								title: 'column 3',
+								title: 'column 2',
+								key: 'account',
 								options: {
 									styles: {
 										width: '50px',
-									},
+									}
 								}
 							},
 							{
 								title: 'column 4',
+								key: 'balance',
 								options: {
 									styles: {
 										width: '40px',
@@ -1493,6 +716,7 @@
 							},
 							{
 								title: 'column 5',
+								key: 'type',
 								options: {
 									styles: {
 										width: '90px',
@@ -1863,6 +1087,41 @@
 								col.hasResizer = thisSet.columns.indexOf(col) !== thisSet.columns.length - 1
 								col.type = 'column'
 								col.options.parent = parent
+							}
+
+
+							/**
+							 * [{
+							 * test: 'test1'
+							 * }]
+							 * 
+							 * [{
+							 * data: {
+							 * 	id:
+							 * value:
+							 * styles:
+							 * isActive
+							 * }
+							 * }]
+							 */
+
+							for (let row of thisSet.rows) {
+								var objectKeys = Object.keys(row)
+								for (let key of objectKeys) {
+									let tmp = {
+										type: 'row',
+										isActive: true,
+										options: {
+											id: this.idGenerator(5),
+											styles: {},
+											parent: parent,
+											configs: {
+												value: row[key]
+											},
+										}
+									}
+									row[key] = tmp
+								}
 							}
 
 							tmp.options.configs.dataSets[set] = {

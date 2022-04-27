@@ -1,6 +1,6 @@
 <template>
 	<div :id="settings.id" ref="element" :class="locals.classType" :style="settings.styles">
-		<span v-for="row in filteredRows" :key="row" class="label" :style="row.styles">{{row.name}}</span>
+		<span v-for="row in filteredRows" :key="row" class="label" :style="row.options.styles">{{row.options.configs.value}}</span>
 	</div>
 </template>
 
@@ -12,7 +12,14 @@
 		},
 		computed: {
 			filteredRows() {
-				return this.settings.configs.rows.filter(x => x.isActive)
+				var filtered = []
+				var rows = this.settings.configs.rows
+				var objectKeys = Object.keys(rows)
+				objectKeys.filter(x => {
+					if (rows[x].isActive)
+						filtered.push(rows[x])
+				})
+				return filtered
 			},
 		},
 		watch: {
