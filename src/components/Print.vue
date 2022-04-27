@@ -457,8 +457,7 @@
 					case 'dataset':
 						opt.configs.originalColumnHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
 						opt.configs.rowsHeight = 'auto' // setting default rows height
-						opt.styles.height = parseFloat(opt.styles.height.split('p')[0]) - 20
-						opt.styles.height = opt.styles.height + 'px'
+						opt.styles.height = 'auto'
 						var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
 						var columns = displaySet.options.configs.columns
 						var rows = displaySet.options.configs.rows
