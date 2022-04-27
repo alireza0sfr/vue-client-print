@@ -456,7 +456,7 @@
 
 					case 'dataset':
 						opt.configs.originalColumnHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
-						opt.configs.rowsHeight = 30 // setting default rows height
+						opt.configs.rowsHeight = 'auto' // setting default rows height
 						opt.styles.height = 'auto'
 						var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
 						var columns = displaySet.options.configs.columns
@@ -464,7 +464,17 @@
 						for (let row of rows) {
 							var index = 0
 							for (let data of row.data) {
-								data.styles.width = columns[index].styles.width
+								data.styles.width = columns[index].options.styles.width
+								data.styles.textAlign = columns[index].options.styles.textAlign
+								data.styles.fontWeight = columns[index].options.styles.fontWeight
+								data.styles.fontFamily = columns[index].options.styles.fontFamily
+								data.styles.fontSize = columns[index].options.styles.fontSize
+								data.styles.border = columns[index].options.styles.border
+								data.styles.borderTop = columns[index].options.styles.borderTop
+								data.styles.borderBottom = columns[index].options.styles.borderBottom
+								data.styles.borderLeft = columns[index].options.styles.borderLeft
+								data.styles.borderRight = columns[index].options.styles.borderRight
+
 								data.isActive = columns[index].isActive
 								index += 1
 							}

@@ -4,7 +4,7 @@
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
-			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" />
+			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
 		<div v-if="$parent.$options.name === 'Print'" class="rows">
 			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" />
@@ -110,9 +110,9 @@
 				const ratio = diffrence / e.detail.oldValue.width
 
 				for (let col of this.displaySet.options.configs.columns) {
-					col.styles.width = this.toFloatWidth(col.styles.width)
-					col.styles.width += ratio * col.styles.width
-					col.styles.width = col.styles.width + 'px'
+					col.options.styles.width = this.toFloatWidth(col.options.styles.width)
+					col.options.styles.width += ratio * col.options.styles.width
+					col.options.styles.width = col.options.styles.width + 'px'
 				}
 			},
 			/**
@@ -132,14 +132,14 @@
 				let width = 0
 				for (let col of cols) {
 
-					if (!col.styles.width)
+					if (!col.options.styles.width)
 						continue
 
-					if (typeof col.styles.width === 'string')
-						width += parseFloat(col.styles.width.split('p')[0])
+					if (typeof col.options.styles.width === 'string')
+						width += parseFloat(col.options.styles.width.split('p')[0])
 
 					else
-						width += col.styles.width
+						width += col.options.styles.width
 
 				}
 				this.settings.styles.width = width + 'px'
@@ -166,33 +166,33 @@
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
 				var seconColumn = columns[secondIndex]
-				const startWidth = this.toFloatWidth(thisColumn.styles.width) || 0
+				const startWidth = this.toFloatWidth(thisColumn.options.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
 				const maxWidth = this.toFloatWidth(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (this.toFloatWidth(thisColumn.styles.width) < minWidth)
+					if (this.toFloatWidth(thisColumn.options.styles.width) < minWidth)
 						return
 
-					if (maxWidth < this.toFloatWidth(seconColumn.styles.width))
+					if (maxWidth < this.toFloatWidth(seconColumn.options.styles.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < this.toFloatWidth(thisColumn.styles.width))
+					if (maxWidth < this.toFloatWidth(thisColumn.options.styles.width))
 						return
 
-					if (this.toFloatWidth(seconColumn.styles.width) < minWidth)
+					if (this.toFloatWidth(seconColumn.options.styles.width) < minWidth)
 						return
 
 				}
 
-				thisColumn.styles.width = newWidth + 'px'
-				seconColumn.styles.width = this.toFloatWidth(seconColumn.styles.width) - diffrence
-				seconColumn.styles.width = seconColumn.styles.width + 'px'
+				thisColumn.options.styles.width = newWidth + 'px'
+				seconColumn.options.styles.width = this.toFloatWidth(seconColumn.options.styles.width) - diffrence
+				seconColumn.options.styles.width = seconColumn.options.styles.width + 'px'
 			},
 
 			/**
@@ -206,7 +206,7 @@
 					resize: 'none',
 					height: this.calculateColumnHeight()
 				}
-				var computedStyles = Object.assign(defaultColStyles, column.styles)
+				var computedStyles = Object.assign(defaultColStyles, column.options.styles)
 				let tmp = {
 					grandParent: this.$parent.$options.name,
 					hasResizer: column.hasResizer,
@@ -216,7 +216,7 @@
 					},
 					styles: computedStyles,
 				}
-				Object.assign(tmp.styles, column.styles)
+				Object.assign(tmp.styles, column.options.styles)
 				return tmp
 			},
 			/**

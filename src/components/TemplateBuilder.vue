@@ -382,8 +382,8 @@
 
 									<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.id" class="toolbar-content-row">
 										<div :dir="settings.pageDirections" class="toolbar-content-label">
-											<label style="margin-right: 10px; display:flex" for="dataSetColumnsControl">
-												<input type="checkbox" class="input-form-control" v-model="col.isActive" id="dataSetColumnsControl" />
+											<label style="margin-right: 10px; display:flex" :for="`dataSetColumnsControl${index}`">
+												<input type="checkbox" class="input-form-control" v-model="col.isActive" :id="`dataSetColumnsControl${index}`" />
 												{{$t('template-builder.elements.configs.index-column', {index: index+1})}}
 											</label>
 										</div>
@@ -542,13 +542,13 @@
 						<div class="template-container" :style="{height: settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element, 'header')" />
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'header')" />
 								</div>
 								<div style="min-height: 0.15in" id="bodyTemplate" class="section body" @drop="droppedElement('body')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element, 'body')" />
+									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'body')" />
 								</div>
 								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element, 'footer')" />
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) =>clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'footer')" />
 								</div>
 							</div>
 						</div>
@@ -596,33 +596,43 @@
 						columns: [
 							{
 								title: 'column 1',
-								styles: {
-									width: '70px',
-								},
+								options: {
+									styles: {
+										width: '70px',
+									},
+								}
 							},
 							{
 								title: 'column 2',
-								styles: {
-									width: '50px',
-								},
+								options: {
+									styles: {
+										width: '50px',
+									}
+								}
 							},
 							{
 								title: 'column 3',
-								styles: {
-									width: '50px',
-								},
+								options: {
+									styles: {
+										width: '50px',
+									},
+								}
 							},
 							{
 								title: 'column 4',
-								styles: {
-									width: '40px',
-								},
+								options: {
+									styles: {
+										width: '40px',
+									},
+								}
 							},
 							{
 								title: 'column 5',
-								styles: {
-									width: '90px',
-								},
+								options: {
+									styles: {
+										width: '90px',
+									},
+								}
 							},
 						],
 						rows: [
@@ -1459,27 +1469,35 @@
 						columns: [
 							{
 								title: 'column 1',
-								styles: {
-									width: '70px',
-								},
+								options: {
+									styles: {
+										width: '70px',
+									},
+								}
 							},
 							{
 								title: 'column 3',
-								styles: {
-									width: '50px',
-								},
+								options: {
+									styles: {
+										width: '50px',
+									},
+								}
 							},
 							{
 								title: 'column 4',
-								styles: {
-									width: '40px',
-								},
+								options: {
+									styles: {
+										width: '40px',
+									},
+								}
 							},
 							{
 								title: 'column 5',
-								styles: {
-									width: '90px',
-								},
+								options: {
+									styles: {
+										width: '90px',
+									},
+								}
 							},
 						],
 						rows: [],
@@ -1843,6 +1861,8 @@
 								col.isActive = true
 								col.id = this.idGenerator(5)
 								col.hasResizer = thisSet.columns.indexOf(col) !== thisSet.columns.length - 1
+								col.type = 'column'
+								col.options.parent = parent
 							}
 
 							tmp.options.configs.dataSets[set] = {
@@ -2164,14 +2184,22 @@
 			deleteKeyHandler() {
 				const deleteElement = (e) => {
 					if (e.code === "Delete") {
-						let id = this.locals.clickedElementId
 						var parent = this.locals.selectedElement.options.parent
 						var array = this.settings[parent][`${parent}Elements`]
-						let index = array.findIndex(x => x.options.id === id)
 
-						if (index > -1) {
-							array.splice(index, 1)
-							this.locals.selectedElement = this.getDefaultSelectedElementObject()
+						if (this.locals.selectedElement.type === 'column')  // it's column
+							this.locals.selectedElement.isActive = false
+
+						else { // it's normal elements
+							let id = this.locals.clickedElementId
+							if (!parent)
+								return
+							let index = array.findIndex(x => x.options.id === id)
+
+							if (index > -1) {
+								array.splice(index, 1)
+								this.locals.selectedElement = this.getDefaultSelectedElementObject()
+							}
 						}
 					}
 				}

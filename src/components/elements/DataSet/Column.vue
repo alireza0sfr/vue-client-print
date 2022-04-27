@@ -7,6 +7,7 @@
 
 <script>
 	import Resizers from '~/components/elements/Resizers.vue'
+	import ElementClass from '~/plugins/element-utilities.js'
 	export default {
 		components: {
 			Resizers,
@@ -40,6 +41,7 @@
 				settings: {
 					grandParent: 'TemplateBuilder',
 					hasResizer: true,
+					isActive: true,
 					id: 0,
 					configs: {
 						title: 'Column'
@@ -53,6 +55,8 @@
 			* Initializing the element utilities for the created element
 			*/
 			Initialize() {
+				let elem = new ElementClass(this.$refs.element, `column-${this.settings.id}`)
+				elem.click()
 				this.resizable()
 			},
 
