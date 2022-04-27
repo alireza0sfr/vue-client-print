@@ -1127,19 +1127,23 @@
 							}
 
 
-							/**
-							 * [{
-							 * test: 'test1'
-							 * }]
+							/** converting normal row object to dataset row objects
+							 * [
+							 *   {
+								*   center: 'center 1'
+								*  }
+								* ]
 							 * 
-							 * [{
-							 * data: {
-							 * 	id:
-							 * value:
-							 * styles:
-							 * isActive
-							 * }
-							 * }]
+							 * [
+							 *  {
+							 *   data: {
+							 * 	  id: 
+							 *    value: 'center 1'
+							 *    styles:
+							 *    isActive
+							 *   }
+							 *  }
+							 *  ]
 							 */
 
 							for (let row of thisSet.rows) {
