@@ -4,7 +4,7 @@
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
-			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
+			<Column v-for="column in filteredCols" :key="column.options.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
 		<div v-if="$parent.$options.name === 'Print'" class="rows">
 			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" />
@@ -210,7 +210,7 @@
 				let tmp = {
 					grandParent: this.$parent.$options.name,
 					hasResizer: column.hasResizer,
-					id: column.id,
+					id: column.options.id,
 					configs: {
 						title: column.title
 					},

@@ -380,7 +380,7 @@
 										</div>
 									</div>
 
-									<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.id" class="toolbar-content-row">
+									<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
 										<div :dir="settings.pageDirections" class="toolbar-content-label">
 											<label style="margin-right: 10px; display:flex" :for="`dataSetColumnsControl${index}`">
 												<input type="checkbox" class="input-form-control" v-model="col.isActive" :id="`dataSetColumnsControl${index}`" />
@@ -728,6 +728,7 @@
 					}
 				},
 				locals: {
+					copiedElement: null,
 					scale: 1,
 					pageSizeDictionary: {
 						landscape: {
@@ -784,9 +785,43 @@
 			}
 		},
 		mounted() {
+			this.initCopyPaste()
 			this.modalManager('templateBuilderModal', 'TemplateBuilderModalCloseBtn')
 		},
 		methods: {
+			/**
+			 * Init copy paste listenners.
+			 */
+			initCopyPaste() {
+				document.addEventListener("keydown", this.copyCurrentElement, false)
+				document.addEventListener("keyup", this.pasteCopiedElement, false)
+			},
+			/**
+			 * Terminate copy paste listenners.
+			 */
+			terminateCopyPaste() {
+				document.removeEventListener("keydown", this.copyCurrentElement, false)
+				document.removeEventListener("keyup", this.pasteCopiedElement, false)
+			},
+			/**
+			 * Copy selected element..
+			 */
+			copyCurrentElement(e) {
+				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
+					this.locals.copiedElement = JSON.parse(JSON.stringify(this.locals.selectedElement))
+			},
+			/**
+			 * Paste copied element.
+			 */
+			pasteCopiedElement(e) {
+				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
+					var parent = this.locals.selectedElement.options.parent
+					var array = this.settings[parent][`${parent}Elements`]
+					this.locals.copiedElement.options.id = this.idGenerator(5)
+					this.locals.copiedElement.options.styles.top = '0px'
+					array.push(this.locals.copiedElement)
+				}
+			},
 			/**
 			 * Creates default element object.
 			 * @param {Object} - returns default selected element object
@@ -849,6 +884,8 @@
 				// Closing the template builder modal after save
 				let tmp = this.export2Json()
 				document.getElementById("templateBuilderModal").style.display = "none"
+
+				this.terminateCopyPaste()
 
 				if (this.settings.callback)
 					this.settings.callback(tmp)
@@ -1083,7 +1120,7 @@
 
 							for (let col of thisSet.columns) {
 								col.isActive = true
-								col.id = this.idGenerator(5)
+								col.options.id = this.idGenerator(5)
 								col.hasResizer = thisSet.columns.indexOf(col) !== thisSet.columns.length - 1
 								col.type = 'column'
 								col.options.parent = parent
