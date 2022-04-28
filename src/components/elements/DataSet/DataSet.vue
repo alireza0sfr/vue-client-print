@@ -225,21 +225,13 @@
 			 @return {Object} - prepared options 
 			 */
 			prepareRowOptions(row) {
+				row.options.grandParent = this.$parent.$options.name
 				let defaultColStyles = {
 					display: 'flex',
 					height: this.settings.configs.rowsHeight + 'px'
 				}
-				var computedStyles = Object.assign(defaultColStyles, row.styles)
-				let tmp = {
-					grandParent: this.$parent.$options.name,
-					id: row.id,
-					configs: {
-						rows: row
-					},
-					styles: computedStyles,
-				}
-				Object.assign(tmp.styles, row.styles)
-				return tmp
+				row.options.styles = Object.assign(row.options.styles, defaultColStyles)
+				return row.options
 			}
 		}
 	}

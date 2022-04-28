@@ -885,7 +885,7 @@
 				let tmp = this.export2Json()
 				document.getElementById("templateBuilderModal").style.display = "none"
 
-				this.terminateCopyPaste()
+				// this.terminateCopyPaste()
 
 				if (this.settings.callback)
 					this.settings.callback(tmp)
@@ -1128,46 +1128,74 @@
 
 
 							/** converting normal row object to dataset row objects
+							 * Sample Row:
 							 * [
 							 *   {
 								*   center: 'center 1'
 								*  }
 								* ]
 							 * 
+							 * Sample Converted Row:
+							 * 
 							 * [
 							 *  {
-							 *   data: {
-							 * 	  id: 
-							 *    value: 'center 1'
-							 *    styles:
-							 *    isActive
-							 *   }
-							 *  }
+							 *	type: 'row',
+									options: {
+										id: this.idGenerator(5),
+										parent: parent,
+										styles: {},
+									},
+										configs: {
+											center : {
+												type: 'cell',
+												isActive: true,
+												options: {
+													id: this.idGenerator(5),
+													styles: {},
+													parent: parent,
+													configs: {
+														value: 'center1'
+													},
+												}
+											}
+										}
+									}
 							 *  ]
 							 */
+							for (let index = 0; index < thisSet.rows.length; index++) {
+								var objectKeys = Object.keys(thisSet.rows[index])
+								var tempRow = {
+									type: 'row',
+									options: {
+										id: this.idGenerator(5),
+										parent: parent,
+										styles: {},
+										configs: {
+											rows: {}
+										}
+									},
+								}
 
-							for (let row of thisSet.rows) {
-								var objectKeys = Object.keys(row)
 								for (let key of objectKeys) {
-									let tmp = {
-										type: 'row',
+									tempRow.options.configs.rows[key] = {
+										type: 'cell',
 										isActive: true,
 										options: {
 											id: this.idGenerator(5),
 											styles: {},
 											parent: parent,
 											configs: {
-												value: row[key]
+												value: thisSet.rows[index][key]
 											},
 										}
 									}
-									row[key] = tmp
 								}
+								thisSet.rows[index] = tempRow
 							}
-
 							tmp.options.configs.dataSets[set] = {
 								options: {
 									id: thisSet.id,
+									parent: parent,
 									configs: {
 										rows: thisSet.rows,
 										columns: thisSet.columns,

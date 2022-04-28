@@ -45,9 +45,7 @@
 					grandParent: 'Print',
 					id: 0,
 					configs: {
-						rows: {
-							name: 'Row1'
-						}
+						rows: {}
 					},
 					styles: {},
 				},
