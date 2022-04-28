@@ -156,7 +156,7 @@
 			columnWidthChanged(newWidth, id) {
 				var columns = this.displaySet.options.configs.columns
 
-				var index = columns.findIndex(x => x.id === id)
+				var index = columns.findIndex(x => x.options.id === id)
 				if (index < 0 && isNaN(newWidth)) // either column is not found or column has no neighbor
 					return
 
