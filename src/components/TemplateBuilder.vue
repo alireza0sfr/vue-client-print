@@ -1571,22 +1571,31 @@
 			deleteKeyHandler() {
 				const deleteElement = (e) => {
 					if (e.code === "Delete") {
+						debugger
+
+						if (this.locals.selectedElement.type === 'column') {  // it's a column.
+							this.locals.selectedElement.isActive = false
+							return
+						}
+
+						if (this.locals.selectedElement.type === 'row')  // it's a row.
+							return
+
 						var parent = this.locals.selectedElement.options.parent
 						var array = this.settings[parent][`${parent}Elements`]
 
-						if (this.locals.selectedElement.type === 'column')  // it's column
-							this.locals.selectedElement.isActive = false
+						if (!parent)
+							return
 
-						else { // it's normal elements
-							let id = this.locals.clickedElementId
-							if (!parent)
-								return
-							let index = array.findIndex(x => x.options.id === id)
 
-							if (index > -1) {
-								array.splice(index, 1)
-								this.locals.selectedElement = this.getDefaultSelectedElementObject()
-							}
+						// it's a normal element.
+						let id = this.locals.clickedElementId
+
+						let index = array.findIndex(x => x.options.id === id)
+
+						if (index > -1) {
+							array.splice(index, 1)
+							this.locals.selectedElement = this.getDefaultSelectedElementObject()
 						}
 					}
 				}
