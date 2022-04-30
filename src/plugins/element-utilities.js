@@ -101,7 +101,8 @@ class Element {
     var element = this.element
     var that = this
     element.addEventListener("mousedown", onClick, false)
-    function onClick() {
+    function onClick(e) {
+      e.stopPropagation() // prevent event to call parent events aswell
       let selectedElements = document.getElementsByClassName('element selected')
       for (let index = 0; index < selectedElements.length; index++) {
         selectedElements[index].classList.remove('selected')

@@ -416,8 +416,7 @@ textarea:focus {
     min-width: 20px;
 }
 
-.element.selected {
-    width: 100px;
+.element.selected, .row.selected {
     border: 1px #aaa dashed !important;
     border-radius: 4px;
 }
