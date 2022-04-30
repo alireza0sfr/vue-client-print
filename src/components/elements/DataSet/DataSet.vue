@@ -93,6 +93,10 @@
 			}
 		},
 		methods: {
+			/**
+			 * event triggered style target dropdown changes
+			 * @return {void} void
+			 */
 			stylesTargetChanged(target) {
 				this.settings.configs.stylesTarget = target
 			},
