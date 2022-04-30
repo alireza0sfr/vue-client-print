@@ -164,7 +164,7 @@ const messages: object = {
           "date": "تاریخ",
           "time": "ساعت",
           "solar-date": "تاریخ شمسی",
-          "persian-digits": "استفاده از اعداد فارسی",
+          "persian-digits": "اعداد فارسی",
           "use-complete-format": "نمایش حالت کامل",
           "upload-image-text": "فایل تصویر خود را انتخاب کنید.",
           "maximum-file-size": "*حداکثر سایز مجاز ۱ مگابایت",
