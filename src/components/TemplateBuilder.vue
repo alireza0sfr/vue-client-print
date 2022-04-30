@@ -359,6 +359,19 @@
 									</div>
 								</div>
 
+								<div v-if="locals.selectedElement.type === 'row'">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.stylesTarget')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
+												<option v-for="option in locals.rowStylesTargets" :value="option.key" :key="option.id">{{ option.title }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
 								<div v-if="locals.selectedElement.type === 'dataset'">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
@@ -728,6 +741,23 @@
 					}
 				},
 				locals: {
+					rowStylesTargets: [
+						{
+							key: 'all',
+							id: this.idGenerator(5),
+							title: this.$t('template-builder.elements.configs.all')
+						},
+						{
+							key: 'even',
+							id: this.idGenerator(5),
+							title: this.$t('template-builder.elements.configs.even')
+						},
+						{
+							key: 'odd',
+							id: this.idGenerator(5),
+							title: this.$t('template-builder.elements.configs.odd')
+						},
+					],
 					copiedElement: null,
 					scale: 1,
 					pageSizeDictionary: {
@@ -804,7 +834,7 @@
 				document.removeEventListener("keyup", this.pasteCopiedElement, false)
 			},
 			/**
-			 * Copy selected element..
+			 * Copy selected element.
 			 */
 			copyCurrentElement(e) {
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
@@ -1081,6 +1111,10 @@
 			 * @return {void} - void
 			 */
 			clickedOnElement(element) {
+				console.log(element)
+				if (element.type === 'dataset' || element.type === 'row' || element.type === 'column')
+					element.options.class
+				
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
 				this.deleteKeyHandler()
@@ -1107,10 +1141,37 @@
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: {},
+									stylesTarget: 'all',
+									defaultRow: [
+										{
+											type: 'row',
+											options: {
+												id: this.idGenerator(5),
+												parent: this.options.parent,
+												styles: {},
+												configs: {
+													cells: {
+														center: {
+															type: 'cell',
+															isActive: true,
+															options: {
+																id: this.idGenerator(5),
+																styles: {},
+																parent: this.options.parent,
+																configs: {
+																	value: ''
+																},
+															}
+														}
+													}
+												}
+											}
+										},
+									]
 								},
 								id: this.idGenerator(5),
 								styles: {
-									height: "80px",
+									height: "100px",
 								},
 							},
 						}
@@ -1146,16 +1207,18 @@
 										styles: {},
 									},
 										configs: {
-											center : {
-												type: 'cell',
-												isActive: true,
-												options: {
-													id: this.idGenerator(5),
-													styles: {},
-													parent: parent,
-													configs: {
-														value: 'center1'
-													},
+											cells: {
+												center : {
+													type: 'cell',
+													isActive: true,
+													options: {
+														id: this.idGenerator(5),
+														styles: {},
+														parent: parent,
+														configs: {
+															value: ''
+														},
+													}
 												}
 											}
 										}

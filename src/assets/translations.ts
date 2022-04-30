@@ -50,6 +50,10 @@ const messages: object = {
         "text-pattern": "Text Pattern",
         "configs": {
           "datasets": "DataSets",
+          "stylesTarget": "Row Styles Target",
+          "even": 'Even',
+          "odd": "Odd",
+          "all": "All",
           "rowsHeight": "Rows Height",
           "index-column": "Column {index}",
           "data-type": "Data Type",
@@ -148,6 +152,10 @@ const messages: object = {
         "binding-object-text": "لطفا نوع داده خود را اتنخاب کنید.",
         "text-pattern": "متن الکویی",
         "configs": {
+          "stylesTarget": "اعمال استایل روی",
+          "even": 'زوج',
+          "odd": "فرد",
+          "all": "همه",
           "datasets": "دیتاست",
           "rowsHeight": "ارتفاع ردیف",
           "index-column": "ستون {index}",

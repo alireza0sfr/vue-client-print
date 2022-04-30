@@ -1,13 +1,13 @@
 <template>
-	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + settings.class + ' element'" :style="settings.styles">
 		<div v-if="$parent.$options.name === 'TemplateBuilder'" class="name">
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
 			<Column v-for="column in filteredCols" :key="column.options.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
-		<div v-if="$parent.$options.name === 'Print'" class="rows">
-			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" />
+		<div class="rows">
+			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" @click.stop="$emit('clickedOnElement', row)" @styles-target-changed="stylesTargetChanged" /> <!-- Row is only clickable on TB and row['center'] is the default row on TB -->
 		</div>
 		<Resizers :query=" `dataset-${settings.id}`" :resizers="['br']" />
 	</div>
@@ -36,6 +36,22 @@
 				return this.setTotalWidth(this.displaySet.options.configs.columns.filter(x => x.isActive))
 			},
 			filteredRows() {
+				if (this.$parent.$options.name === 'TemplateBuilder')
+					return this.locals.defaultRow
+
+				var index = 1
+				var stylesTarget = this.settings.configs.stylesTarget
+				for (let row of this.displaySet.options.configs.rows) {
+
+					if (
+						stylesTarget === 'even' && index % 2 === 0 || // index is even
+						stylesTarget === 'odd' && index % 2 === 1 || // index is odd
+						stylesTarget === 'all'
+					)
+						row.options.styles = Object.assign(row.options.styles, this.locals.defaultRow[0].options.styles)
+
+					index += 1
+				}
 				return this.displaySet.options.configs.rows
 			}
 		},
@@ -60,10 +76,13 @@
 			return {
 				locals: {
 					classType: 'dataset',
+					defaultRow: this.options.configs.defaultRow
 				},
 				settings: {
 					id: 0,
+					class: '',
 					configs: {
+						stylesTarget: 'all',
 						selectedSet: '',
 						dataSets: {},
 					},
@@ -74,6 +93,9 @@
 			}
 		},
 		methods: {
+			stylesTargetChanged(target) {
+				this.settings.configs.stylesTarget = target
+			},
 			/**
 			 * Calculate column height based on view.
 			 * @return {Number} column height
@@ -88,7 +110,7 @@
 					height = this.settings.styles.height
 
 				if (this.$parent.$options.name === 'TemplateBuilder')
-					return this.toFloatWidth(height) - 20 + 'px'
+					return this.toFloatWidth(height) - 45 + 'px'
 
 				return height
 			},
@@ -224,8 +246,10 @@
 			 @param {Object} row - Row data.
 			 @return {Object} - prepared options 
 			 */
+
 			prepareRowOptions(row) {
 				row.options.grandParent = this.$parent.$options.name
+				row.options.configs.stylesTarget = this.settings.configs.stylesTarget
 				let defaultColStyles = {
 					display: 'flex',
 					height: this.settings.configs.rowsHeight + 'px'
