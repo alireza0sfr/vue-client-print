@@ -74,6 +74,8 @@ textarea:focus {
 .template-builder-container {
     display: flex;
     flex-direction: row;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
 /* Tabs */
@@ -236,6 +238,8 @@ textarea:focus {
 .template-container {
     margin: auto;
     box-shadow: -1px 4px 10px 0px #818181;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 /* Sections */
@@ -416,7 +420,8 @@ textarea:focus {
     min-width: 20px;
 }
 
-.element.selected, .row.selected {
+.element.selected,
+.row.selected {
     border: 1px #aaa dashed !important;
     border-radius: 4px;
 }

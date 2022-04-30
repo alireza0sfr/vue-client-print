@@ -53,7 +53,7 @@
 						</div>
 					</div>
 					<div id="printForm">
-						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultheightofpaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
+						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder, margin: '5px'}">
 								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="{height: locals.pageHeadersSizes[index - 1] + 'in'}" class="mainHeader">
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />

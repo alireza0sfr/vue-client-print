@@ -20,7 +20,7 @@
 
 				<!-- Section 1 (Template Builder) -->
 				<div class="template-builder-container">
-					<div :style="{ height: settings.defaultHeightOfPaper + 'in' }" class="toolbar-container">
+					<div class="toolbar-container">
 						<div class="toolbar-content">
 							<!-- Tabs -->
 							<div class="tabs">
@@ -552,7 +552,7 @@
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 						</div>
-						<div class="template-container" :style="{height: settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
+						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'header')" />
