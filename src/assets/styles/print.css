@@ -36,7 +36,7 @@
 
 .slotWrapper {
     position: fixed;
-    left: 5000px;
+    left: 10000px;
 }
 
 .converted canvas {
