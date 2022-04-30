@@ -1171,13 +1171,13 @@
 										parent: parent,
 										styles: {},
 										configs: {
-											rows: {}
+											cells: {}
 										}
 									},
 								}
 
 								for (let key of objectKeys) {
-									tempRow.options.configs.rows[key] = {
+									tempRow.options.configs.cells[key] = {
 										type: 'cell',
 										isActive: true,
 										options: {

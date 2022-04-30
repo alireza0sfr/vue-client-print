@@ -462,9 +462,9 @@
 						var columns = displaySet.options.configs.columns
 						var rows = displaySet.options.configs.rows
 						for (let row of rows) {
-							var objectKeys = Object.keys(row.options.configs.rows)
+							var objectKeys = Object.keys(row.options.configs.cells)
 							for (let index = 0; index < objectKeys.length; index++) {
-								let data = row.options.configs.rows[objectKeys[index]]
+								let data = row.options.configs.cells[objectKeys[index]]
 								data.options.styles.width = columns[index].options.styles.width
 								data.options.styles.textAlign = columns[index].options.styles.textAlign
 								data.options.styles.fontWeight = columns[index].options.styles.fontWeight

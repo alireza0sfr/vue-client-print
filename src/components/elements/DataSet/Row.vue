@@ -1,6 +1,6 @@
 <template>
 	<div :id="settings.id" ref="element" :class="locals.classType" :style="settings.styles">
-		<span v-for="row in filteredRows" :key="row" class="label" :style="row.options.styles">{{row.options.configs.value}}</span>
+		<span v-for="row in filteredcells" :key="row" class="label" :style="row.options.styles">{{row.options.configs.value}}</span>
 	</div>
 </template>
 
@@ -11,13 +11,13 @@
 			options: Object,
 		},
 		computed: {
-			filteredRows() {
+			filteredcells() {
 				var filtered = []
-				var rows = this.settings.configs.rows
-				var objectKeys = Object.keys(rows)
+				var cells = this.settings.configs.cells
+				var objectKeys = Object.keys(cells)
 				objectKeys.filter(x => {
-					if (rows[x].isActive)
-						filtered.push(rows[x])
+					if (cells[x].isActive)
+						filtered.push(cells[x])
 				})
 				return filtered
 			},
@@ -45,7 +45,7 @@
 					grandParent: 'Print',
 					id: 0,
 					configs: {
-						rows: {}
+						cells: {}
 					},
 					styles: {},
 				},
