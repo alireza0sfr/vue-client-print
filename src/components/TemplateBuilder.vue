@@ -370,6 +370,15 @@
 											</select>
 										</div>
 									</div>
+
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.rowsHeight')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<input type="number" class="input-form-control" v-model="locals.selectedElement.options.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										</div>
+									</div>
 								</div>
 
 								<div v-if="locals.selectedElement.type === 'dataset'">
@@ -381,15 +390,6 @@
 											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
 												<option v-for="option in Object.keys(dataSets)" :value="option" :key="option">{{ dataSets[option].title }}</option>
 											</select>
-										</div>
-									</div>
-
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
-											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.rowsHeight')}}</label>
-										</div>
-										<div class="toolbar-content-field">
-											<input type="number" class="input-form-control" v-model="locals.selectedElement.options.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 
@@ -1111,10 +1111,6 @@
 			 * @return {void} - void
 			 */
 			clickedOnElement(element) {
-				console.log(element)
-				if (element.type === 'dataset' || element.type === 'row' || element.type === 'column')
-					element.options.class
-				
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
 				this.deleteKeyHandler()

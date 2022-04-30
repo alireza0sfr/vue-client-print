@@ -252,7 +252,6 @@
 				row.options.configs.stylesTarget = this.settings.configs.stylesTarget
 				let defaultColStyles = {
 					display: 'flex',
-					height: this.settings.configs.rowsHeight + 'px'
 				}
 				row.options.styles = Object.assign(row.options.styles, defaultColStyles)
 				return row.options
