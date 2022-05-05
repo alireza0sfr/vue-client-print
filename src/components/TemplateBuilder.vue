@@ -388,7 +388,7 @@
 										</div>
 										<div class="toolbar-content-field">
 											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-												<option v-for="option in Object.keys(dataSets)" :value="option" :key="option">{{ dataSets[option].title }}</option>
+												<option v-for="option in Object.keys(settings.dataSets)" :value="option" :key="option">{{ settings.dataSets[option].title }}</option>
 											</select>
 										</div>
 									</div>
@@ -601,145 +601,6 @@
 		},
 		data() {
 			return {
-				dataSets: {
-					center: {
-						id: this.idGenerator(5),
-						key: 'Center',
-						title: 'شناور',
-						columns: [
-							{
-								title: 'column 1',
-								key: 'center',
-								options: {
-									styles: {
-										width: '70px',
-									},
-								}
-							},
-							{
-								title: 'column 2',
-								key: 'account',
-								options: {
-									styles: {
-										width: '50px',
-									}
-								}
-							},
-							{
-								title: 'column 3',
-								key: 'date',
-								options: {
-									styles: {
-										width: '50px',
-									},
-								}
-							},
-							{
-								title: 'column 4',
-								key: 'balance',
-								options: {
-									styles: {
-										width: '40px',
-									},
-								}
-							},
-							{
-								title: 'column 5',
-								key: 'type',
-								options: {
-									styles: {
-										width: '90px',
-									},
-								}
-							},
-						],
-						rows: [
-							{
-								center: 'center 1',
-								account: 'account 1',
-								date: 'date 1',
-								balance: 'balance 1',
-								type: 'type 1',
-							},
-							{
-								center: 'center 2',
-								account: 'account 2',
-								date: 'date 2',
-								balance: 'حسابهای دریافتنی نجاری بانکهای ارزی بانک سامان',
-								type: 'type 2',
-							},
-							{
-								center: 'center 3',
-								account: 'account 3',
-								date: 'date 3',
-								balance: 'balance 3',
-								type: 'type 3',
-							},
-							{
-								center: 'center 4',
-								account: 'account 4',
-								date: 'date 4',
-								balance: 'balance 4',
-								type: 'type 4',
-							},
-							{
-								center: 'center 5',
-								account: 'account 5',
-								date: 'date 5',
-								balance: 'balance 5',
-								type: 'type 5',
-							},
-							{
-								center: 'center 6',
-								account: 'account 6',
-							}
-						],
-					},
-					account: {
-						id: this.idGenerator(5),
-						key: 'Account',
-						title: 'حساب',
-						columns: [
-							{
-								title: 'column 1',
-								key: 'center',
-								options: {
-									styles: {
-										width: '70px',
-									},
-								}
-							},
-							{
-								title: 'column 2',
-								key: 'account',
-								options: {
-									styles: {
-										width: '50px',
-									}
-								}
-							},
-							{
-								title: 'column 4',
-								key: 'balance',
-								options: {
-									styles: {
-										width: '40px',
-									},
-								}
-							},
-							{
-								title: 'column 5',
-								key: 'type',
-								options: {
-									styles: {
-										width: '90px',
-									},
-								}
-							},
-						],
-						rows: [],
-					}
-				},
 				locals: {
 					rowStylesTargets: [
 						{
@@ -902,6 +763,7 @@
 					pageSize: 'a4',
 					pageDirections: 'rtl',
 					bindingObject: {},
+					dataSets: {},
 					pageBorder: '',
 					maximumFileSize: 1000 // Maximum file size in KB
 				}
@@ -1129,7 +991,7 @@
 
 				switch (classType) {
 					case 'dataset':
-						var keys = Object.keys(this.dataSets)
+						var keys = Object.keys(this.settings.dataSets)
 						tmp = {
 							type: classType,
 							options: {
@@ -1173,7 +1035,7 @@
 						}
 
 						for (let set of keys) {
-							var thisSet = JSON.parse(JSON.stringify(this.dataSets[set])) // removing refrence to the original data
+							var thisSet = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data
 
 							for (let col of thisSet.columns) {
 								col.isActive = true
