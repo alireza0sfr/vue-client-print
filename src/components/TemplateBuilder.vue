@@ -817,6 +817,7 @@
 		mounted() {
 			this.initCopyPaste()
 			this.modalManager('templateBuilderModal', 'TemplateBuilderModalCloseBtn')
+			this.keyboardHandler()
 		},
 		methods: {
 			/**
@@ -1113,7 +1114,6 @@
 			clickedOnElement(element) {
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
-				this.deleteKeyHandler()
 				this.locals.isClicked = true
 			},
 
@@ -1568,10 +1568,19 @@
 			/**
 			 * Adds an event listenner on delete button and then removes the element
 			 */
-			deleteKeyHandler() {
-				const deleteElement = (e) => {
-					if (e.code === "Delete") {
-						debugger
+			keyboardHandler() {
+				const toFloatVal = (val) => {
+					if (val)
+						return parseFloat(val.split('p')[0])
+				}
+				const elementStyleChanger = (style, operator, e) => {
+					e.preventDefault()
+					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style])
+					this.locals.selectedElement.options.styles[style] = eval(`${this.locals.selectedElement.options.styles[style]} ${operator} 1`)
+					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
+				}
+				const keyBinds = (e) => {
+					if (e.code === "Delete") { // element delete
 
 						if (this.locals.selectedElement.type === 'column') {  // it's a column.
 							this.locals.selectedElement.isActive = false
@@ -1598,9 +1607,28 @@
 							this.locals.selectedElement = this.getDefaultSelectedElementObject()
 						}
 					}
+					else if (e.ctrlKey) { // element resize
+						if (e.code === 'ArrowRight')
+							elementStyleChanger('width', '+', e)
+						else if (e.code === 'ArrowLeft')
+							elementStyleChanger('width', '-', e)
+						else if (e.code === 'ArrowUp')
+							elementStyleChanger('height', '-', e)
+						else if (e.code === 'ArrowDown')
+							elementStyleChanger('height', '+', e)
+					}
+					else if (e.code === 'ArrowRight') { // element drag
+						elementStyleChanger('left', '+', e)
+					}
+					else if (e.code === 'ArrowLeft')
+						elementStyleChanger('left', '-', e)
+					else if (e.code === 'ArrowUp')
+						elementStyleChanger('top', '-', e)
+					else if (e.code === 'ArrowDown')
+						elementStyleChanger('top', '+', e)
 				}
-				document.removeEventListener('keyup', deleteElement, false)
-				document.addEventListener('keydown', deleteElement, false)
+				document.removeEventListener('keyup', keyBinds, false)
+				document.addEventListener('keydown', keyBinds, false)
 			},
 
 			/**
