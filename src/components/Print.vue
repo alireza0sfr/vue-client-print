@@ -88,6 +88,7 @@
 		props: {
 			options: { type: Object },
 			bindingObject: { type: Object },
+			dataSets: { type: Object },
 			variables: { type: Array },
 			configurations: { type: Object },
 		},
@@ -128,6 +129,7 @@
 					orientation: 'portrait',
 					pageSize: 'a4',
 					pageDirections: 'rtl',
+					dataSets: {},
 					bindingObject: {},
 					pageBorder: '0px',
 				},
@@ -390,6 +392,7 @@
 				for (let key in tmp) {
 					tmp[key] = null
 				}
+				this.locals.templateBuilderData.dataSets = this.dataSets
 				this.locals.templateBuilderData.bindingObject = tmp
 				this.$refs.TemplateBuilder.settingsInitFunc()
 

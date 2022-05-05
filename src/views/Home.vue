@@ -6,7 +6,7 @@
 		|
 		<a @click="templateBuilder()" href="#" :title="$t('template-builder.name')">{{ $t('template-builder.name') }}</a>
 
-		<Print ref="print" :bindingObject="bindingObject" :variables="variables" :configuration="configs">
+		<Print ref="print" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configuration="configs">
 			<template v-slot:printData>
 				<table>
 					<thead>
@@ -47,6 +47,145 @@
 		},
 		data() {
 			return {
+				dataSets: {
+					center: {
+						id: this.idGenerator(5),
+						key: 'Center',
+						title: 'شناور',
+						columns: [
+							{
+								title: 'column 1',
+								key: 'center',
+								options: {
+									styles: {
+										width: '70px',
+									},
+								}
+							},
+							{
+								title: 'column 2',
+								key: 'account',
+								options: {
+									styles: {
+										width: '50px',
+									}
+								}
+							},
+							{
+								title: 'column 3',
+								key: 'date',
+								options: {
+									styles: {
+										width: '50px',
+									},
+								}
+							},
+							{
+								title: 'column 4',
+								key: 'balance',
+								options: {
+									styles: {
+										width: '40px',
+									},
+								}
+							},
+							{
+								title: 'column 5',
+								key: 'type',
+								options: {
+									styles: {
+										width: '90px',
+									},
+								}
+							},
+						],
+						rows: [
+							{
+								center: 'center 1',
+								account: 'account 1',
+								date: 'date 1',
+								balance: 'balance 1',
+								type: 'type 1',
+							},
+							{
+								center: 'center 2',
+								account: 'account 2',
+								date: 'date 2',
+								balance: 'حسابهای دریافتنی نجاری بانکهای ارزی بانک سامان',
+								type: 'type 2',
+							},
+							{
+								center: 'center 3',
+								account: 'account 3',
+								date: 'date 3',
+								balance: 'balance 3',
+								type: 'type 3',
+							},
+							{
+								center: 'center 4',
+								account: 'account 4',
+								date: 'date 4',
+								balance: 'balance 4',
+								type: 'type 4',
+							},
+							{
+								center: 'center 5',
+								account: 'account 5',
+								date: 'date 5',
+								balance: 'balance 5',
+								type: 'type 5',
+							},
+							{
+								center: 'center 6',
+								account: 'account 6',
+							}
+						],
+					},
+					account: {
+						id: this.idGenerator(5),
+						key: 'Account',
+						title: 'حساب',
+						columns: [
+							{
+								title: 'column 1',
+								key: 'center',
+								options: {
+									styles: {
+										width: '70px',
+									},
+								}
+							},
+							{
+								title: 'column 2',
+								key: 'account',
+								options: {
+									styles: {
+										width: '50px',
+									}
+								}
+							},
+							{
+								title: 'column 4',
+								key: 'balance',
+								options: {
+									styles: {
+										width: '40px',
+									},
+								}
+							},
+							{
+								title: 'column 5',
+								key: 'type',
+								options: {
+									styles: {
+										width: '90px',
+									},
+								}
+							},
+						],
+						rows: [],
+					}
+				},
 				printOptions: {},
 				bindingObject: {
 					name: 'nikan',
