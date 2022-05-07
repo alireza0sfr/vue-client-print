@@ -26,6 +26,7 @@
     "@vitejs/plugin-vue": "^2.2.4",
     "@vitest/ui": "^0.6.1",
     "@vue/compiler-sfc": "^3.2.31",
+    "cz-conventional-changelog": "^3.3.0",
     "less": "^4.1.2",
     "vite": "^2.8.6"
   }
