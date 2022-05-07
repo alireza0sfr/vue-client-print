@@ -996,6 +996,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: {},
@@ -1117,6 +1118,7 @@
 								options: {
 									id: thisSet.id,
 									parent: parent,
+									grandParent: 'TemplateBuilder',
 									configs: {
 										rows: thisSet.rows,
 										columns: thisSet.columns,
@@ -1134,6 +1136,7 @@
 							options: {
 								id: this.idGenerator(5),
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								configs: { text: this.$t('template-builder.elements.configs.type-text') },
 								styles: {
 									whiteSpace: "pre",
@@ -1150,6 +1153,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								id: this.idGenerator(5),
 								configs: { hasDate: true, hasTime: true, persianDate: true },
 								styles: { width: "150px" },
@@ -1162,6 +1166,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								id: this.idGenerator(5),
 								configs: { counter: '1', persianNumbers: true, completeForm: true },
 								styles: {},
@@ -1174,6 +1179,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								id: this.idGenerator(5),
 								configs: { imageSrc: DefaultLogo },
 								styles: {
@@ -1191,6 +1197,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
@@ -1211,6 +1218,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
@@ -1231,6 +1239,7 @@
 							type: classType,
 							options: {
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								id: this.idGenerator(5),
 								configs: {
 									uniqueId: uniqueId,

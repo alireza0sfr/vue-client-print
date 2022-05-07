@@ -454,7 +454,7 @@
 			prepareComponentsOptions(options, type, index) {
 
 				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
-
+				opt.grandParent = 'Print'
 				switch (type) {
 
 					case 'dataset':
