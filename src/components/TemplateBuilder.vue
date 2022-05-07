@@ -1025,7 +1025,7 @@
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: this.settings.dataSets,
-									appendedElements: []
+									appendedElements: {}
 								},
 								styles: {
 									width: '600px',
@@ -1381,8 +1381,9 @@
 				var computedParent = parentElement ? grandParent : parent
 				let elem = this.createElement(computedParent)
 
-				if (parentElement) {// Element is dropped on another element.
-					parentElement.options.configs.appendedElements.push(elem)
+				if (parentElement) { // Element is dropped on another element.
+					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet] = []
+					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
 				}
 				else
 					this.settings[parent][`${parent}Elements`].push(elem)
