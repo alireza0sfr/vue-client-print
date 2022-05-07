@@ -414,6 +414,19 @@
 									</div>
 								</div>
 
+								<div v-if="locals.selectedElement.type === 'repeator'">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.datasets')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+												<option v-for="option in Object.keys(settings.dataSets)" :value="option" :key="option">{{ settings.dataSets[option].title }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
 								<!-- Element's Styles -->
 								<div style="margin-top: 15px" class="toolbar-header">
 									<span>{{$t('template-builder.elements.styles.name')}}</span>
@@ -998,6 +1011,7 @@
 			createElement(parent) {
 				let classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
+				var keys = Object.keys(this.settings.dataSets)
 				let tmp
 
 				switch (classType) {
@@ -1009,14 +1023,18 @@
 								parent: parent,
 								grandParent: 'TemplateBuilder',
 								configs: {
+									selectedDataSet: keys[0],
+									dataSets: this.settings.dataSets,
 									appendedElements: []
 								},
-								styles: {}
+								styles: {
+									width: '600px',
+									height: '60px'
+								}
 							}
 						}
 						break
 					case 'dataset':
-						var keys = Object.keys(this.settings.dataSets)
 						tmp = {
 							type: classType,
 							options: {

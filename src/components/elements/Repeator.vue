@@ -1,5 +1,8 @@
 <template>
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div v-if="settings.grandParent === 'TemplateBuilder'" class="name">
+			<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+		</div>
 		<div style="display: flex">
 			<component v-for="element in settings.configs.appendedElements" :key="element.options.id" :is="element.type" :options="element.options" @click.stop="$emit('clickedOnElement', element)" />
 		</div>
@@ -34,8 +37,12 @@
 		props: {
 			options: Object,
 		},
+		computed: {
+			displaySet() {
+				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
+			},
+		},
 		mounted() {
-			console.log(this.settings)
 			if (this.settings.grandParent === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
 				this.Initialize()
 			}
@@ -61,6 +68,8 @@
 					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
+						datasets: [],
+						selectedDataSet: '',
 						appenedElements: []
 					},
 					styles: {},

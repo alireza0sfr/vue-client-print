@@ -484,6 +484,11 @@ textarea:focus {
     background-color: #ffdc79;
 }
 
+.repeator .name {
+    text-align: right;
+    background-color: #ffdc79;
+}
+
 /* Variables  */
 
 .variables-header {
