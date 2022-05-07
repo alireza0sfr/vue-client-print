@@ -19,7 +19,7 @@
 			},
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder") // Initialize on moutned if its the template builder mode
+			if (this.settings.grandParent === "TemplateBuilder") // Initialize on moutned if its the template builder mode
 				this.Initialize()
 		},
 		computed: {
@@ -63,6 +63,7 @@
 					classType: "datetime",
 				},
 				settings: {
+					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
 						hasDate: true,

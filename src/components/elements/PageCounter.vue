@@ -19,13 +19,13 @@
 			options: Object,
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder") {
+			if (this.settings.grandParent === "TemplateBuilder") {
 				this.Initialize()
 			}
 		},
 		computed: {
 			computedCounter() {
-				if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+				if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 					if (this.settings.configs.completeForm) {
 						if (this.settings.configs.persianNumbers) {
 							return this.toPersianNumbers('صفحه ۱ از ۱')
@@ -57,6 +57,7 @@
 					classType: "pagecounter",
 				},
 				settings: {
+					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
 						counter: '1',

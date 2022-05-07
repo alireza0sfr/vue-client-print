@@ -2,7 +2,7 @@
 	<div>
 
 		<!-- If its the template builder mode -->
-		<div v-if="$parent.$options.name === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ settings.configs.text }}
 			<Resizers :query="`textpattern-${settings.id}`" />
 		</div>
@@ -28,7 +28,7 @@
 			options: Object,
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 				this.Initialize()
 			}
 		},
@@ -58,6 +58,7 @@
 					classType: "textpattern",
 				},
 				settings: {
+					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
 						persianNumbers: false,

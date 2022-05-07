@@ -29,7 +29,7 @@
 			variable: Object,
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
+			if (this.settings.grandParent === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
 				this.Initialize(this.$refs.textVariable)
 				this.Initialize(this.$refs.imageVariable)
 			}
@@ -52,6 +52,7 @@
 					classType: "variable",
 				},
 				settings: {
+					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
 						uniqueId: '',

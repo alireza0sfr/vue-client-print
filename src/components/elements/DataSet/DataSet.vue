@@ -1,6 +1,6 @@
 <template>
 	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + settings.class + ' element'" :style="settings.styles">
-		<div v-if="$parent.$options.name === 'TemplateBuilder'" class="name">
+		<div v-if="settings.grandParent === 'TemplateBuilder'" class="name">
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
@@ -36,7 +36,7 @@
 				return this.setTotalWidth(this.displaySet.options.configs.columns.filter(x => x.isActive))
 			},
 			filteredRows() {
-				if (this.$parent.$options.name === 'TemplateBuilder')
+				if (this.settings.grandParent === 'TemplateBuilder')
 					return this.locals.defaultRow
 
 				var index = 1
@@ -56,7 +56,7 @@
 			}
 		},
 		mounted() {
-			if (this.$parent.$options.name === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
+			if (this.settings.grandParent === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
 				this.Initialize()
 			}
 		},
@@ -79,6 +79,7 @@
 					defaultRow: this.options.configs.defaultRow
 				},
 				settings: {
+					grandParent: 'TemplateBuilder',
 					id: 0,
 					class: '',
 					configs: {
@@ -113,7 +114,7 @@
 				else
 					height = this.settings.styles.height
 
-				if (this.$parent.$options.name === 'TemplateBuilder')
+				if (this.settings.grandParent === 'TemplateBuilder')
 					return this.toFloatWidth(height) - 45 + 'px'
 
 				return height
@@ -234,7 +235,7 @@
 				}
 				var computedStyles = Object.assign(defaultColStyles, column.options.styles)
 				let tmp = {
-					grandParent: this.$parent.$options.name,
+					grandParent: this.settings.grandParent,
 					hasResizer: column.hasResizer,
 					id: column.options.id,
 					configs: {
@@ -252,7 +253,7 @@
 			 */
 
 			prepareRowOptions(row) {
-				row.options.grandParent = this.$parent.$options.name
+				row.options.grandParent = this.settings.grandParent
 				row.options.configs.stylesTarget = this.settings.configs.stylesTarget
 				let defaultColStyles = {
 					display: 'flex',

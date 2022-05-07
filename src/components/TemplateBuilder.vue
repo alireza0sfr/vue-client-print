@@ -1007,6 +1007,7 @@
 							options: {
 								id: this.idGenerator(5),
 								parent: parent,
+								grandParent: 'TemplateBuilder',
 								configs: {
 									appendedElements: []
 								},
