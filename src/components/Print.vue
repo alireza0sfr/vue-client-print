@@ -82,6 +82,7 @@
 	import ImageElement from '~/components/elements/ImageElement.vue'
 	import Variable from '~/components/elements/Variable.vue'
 	import DataSet from '~/components/elements/DataSet/DataSet.vue'
+	import Repeator from '~/components/elements/Repeator.vue'
 	import domtoimage from 'dom-to-image'
 	export default {
 		name: "Print",
@@ -101,6 +102,7 @@
 			imageelement: ImageElement,
 			bindingObject: BindingObject,
 			textpattern: TextPattern,
+			repeator: Repeator,
 			TemplateBuilder,
 		},
 		data() {

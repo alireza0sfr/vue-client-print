@@ -239,6 +239,14 @@
 											</span>
 										</div>
 									</div>
+									<div class="toolbar-content-row-elements">
+										<div class="toolbar-content-row-element">
+											<span draggable="true" @dragstart="startDraggingElement('repeator')" @dragend="finishedDraggingElement()">
+												<img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="32" height="32" />
+												<div class="element-title">{{$t('template-builder.elements.repeator')}}</div>
+											</span>
+										</div>
+									</div>
 								</div>
 								<div class="toolbar-header">
 
@@ -555,13 +563,13 @@
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'header')" />
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="droppedElement('element', element, 'header')" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finishedEditingElement="finishedEditingElement(element, 'header')" />
 								</div>
 								<div style="min-height: 0.15in" id="bodyTemplate" class="section body" @drop="droppedElement('body')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'body')" />
+									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="droppedElement('element', element, 'body')" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finishedEditingElement="finishedEditingElement(element, 'body')" />
 								</div>
 								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) =>clickedOnElement(column ? column : element)" @finishedEditingElement="finishedEditingElement(element, 'footer')" />
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="droppedElement('element', element, 'footer')" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finishedEditingElement="finishedEditingElement(element, 'footer')" />
 								</div>
 							</div>
 						</div>
@@ -583,6 +591,7 @@
 	import DataSet from '~/components/elements/DataSet/DataSet.vue'
 	import { saveAs } from 'file-saver'
 	import DefaultLogo from '@/assets/images/logo.png'
+	import Repeator from '~/components/elements/Repeator.vue'
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -597,7 +606,8 @@
 			bindingObject: BindingObject,
 			textpattern: TextPattern,
 			variable: Variable,
-			dataset: DataSet
+			dataset: DataSet,
+			repeator: Repeator
 		},
 		data() {
 			return {
@@ -974,6 +984,7 @@
 			 * @return {void} - void
 			 */
 			clickedOnElement(element) {
+				console.log(element)
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
 				this.locals.isClicked = true
@@ -990,6 +1001,19 @@
 				let tmp
 
 				switch (classType) {
+					case 'repeator':
+						tmp = {
+							type: classType,
+							options: {
+								id: this.idGenerator(5),
+								parent: parent,
+								configs: {
+									appendedElements: []
+								},
+								styles: {}
+							}
+						}
+						break
 					case 'dataset':
 						var keys = Object.keys(this.settings.dataSets)
 						tmp = {
@@ -1256,9 +1280,7 @@
 					default:
 						break
 				}
-				this.settings[parent][`${parent}Elements`].push(tmp)
-				this.locals.classType = ""
-				this.locals.uniqueId = 0
+				return tmp
 			},
 
 			/**
@@ -1319,7 +1341,7 @@
 
 			/**
 			 * Method that triggers on element drag.
-			 * @param {classType} classType - element unique id
+			 * @param {classType} classType - element classType
 			 * @param {uniqueId} uniqueId - element unique id
 			 * @return {void} - void
 			 */
@@ -1332,8 +1354,22 @@
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent) {
-				this.createElement(parent)
+			droppedElement(parent, parentElement, grandParent) {
+
+				if (!this.locals.classType)
+					return
+
+				var computedParent = parentElement ? grandParent : parent
+				let elem = this.createElement(computedParent)
+
+				if (parentElement) {// Element is dropped on another element.
+					parentElement.options.configs.appendedElements.push(elem)
+				}
+				else
+					this.settings[parent][`${parent}Elements`].push(elem)
+
+				this.locals.classType = ""
+				this.locals.uniqueId = 0
 			},
 
 			/**

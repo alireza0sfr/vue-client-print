@@ -40,6 +40,7 @@ const messages: object = {
       "elements": {
         "settings": "Element's Settings",
         "name": "Elements",
+        "repeator": "Repeator",
         "text-box": "Text Box",
         "date-time": "Date & Time",
         "page-counter": "Page Counter",
@@ -142,6 +143,7 @@ const messages: object = {
       "repeat-footer": "تکرار فوتر",
       "elements": {
         "settings": "تنظیمات المنت ها",
+        "repeator": "تکرار شونده",
         "name": "المنت ها",
         "text-box": "متن",
         "date-time": "تاریخ و ساعت",
