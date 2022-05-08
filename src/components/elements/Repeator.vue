@@ -77,6 +77,11 @@
 			}
 		},
 		methods: {
+			/**
+			 * Prepare elements options.
+			 * @param {Object} options - preview settings
+			 * @return {Object} - computed options
+			 */
 			prepareElementsOptions(options) {
 				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
 				opt.grandParent = this.settings.grandParent
