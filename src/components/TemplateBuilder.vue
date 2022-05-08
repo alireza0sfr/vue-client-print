@@ -1600,7 +1600,20 @@
 			 * @return {void} - void
 			 */
 			finishedEditingElement(element, elementLocation) {
-				let elem = this.settings[elementLocation][`${elementLocation}Elements`].find(x => x.options.id === element.options.id)
+				var array = this.settings[elementLocation][`${elementLocation}Elements`]
+
+				if (this.locals.selectedElement.options.isChild) { // it's a repeator.
+					let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId)
+					if (index > -1) {
+						let repeator = array[index]
+						var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
+						index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
+						if (index > -1)
+							children[index].options.styles = this.merge(children[index].options.styles, this.getCoordinates(children[index].options.id))
+					}
+				}
+
+				let elem = array.find(x => x.options.id === element.options.id)
 				Object.assign(elem.options.styles, this.getCoordinates(element.options.id))
 			},
 

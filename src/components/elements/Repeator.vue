@@ -4,7 +4,7 @@
 			<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 		</div>
 		<div style="display: flex">
-			<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options)" @click.stop="$emit('clickedOnElement', element)" />
+			<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishedEditingElement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options)" @click.stop="$emit('clickedOnElement', element)" />
 		</div>
 		<Resizers :query="`repeator-${settings.id}`" />
 	</div>
