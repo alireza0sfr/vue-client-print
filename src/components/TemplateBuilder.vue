@@ -1033,6 +1033,10 @@
 								}
 							}
 						}
+
+						for (let key of keys)
+							tmp.options.configs.appendedElements[key] = []
+
 						break
 					case 'dataset':
 						tmp = {
@@ -1381,10 +1385,8 @@
 				var computedParent = parentElement ? grandParent : parent
 				let elem = this.createElement(computedParent)
 
-				if (parentElement) { // Element is dropped on another element.
-					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet] = []
+				if (parentElement) // Element is dropped on another element.
 					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
-				}
 				else
 					this.settings[parent][`${parent}Elements`].push(elem)
 
