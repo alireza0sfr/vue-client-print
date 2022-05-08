@@ -3,7 +3,7 @@
 
 		<!-- If its the template builder mode -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
-			{{ settings.configs.field === "" ? locals.text1 : locals.text + settings.configs.field }}
+			{{ settings.configs.field === "" ? locals.text1 : locals.text + ' ' + settings.configs.field }}
 			<Resizers :query="`bindingObject-${settings.id}`" />
 		</div>
 
