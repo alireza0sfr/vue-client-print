@@ -1473,19 +1473,19 @@
 			 * Adds an event listenner on delete button and then removes the element
 			 */
 			keyboardHandler() {
-				const toFloatVal = (val) => {
+				const toFloatVal = (val, elementId, style) => {
 					if (val)
 						return parseFloat(val.split('p')[0])
+
+					return document.defaultView.getComputedStyle(document.getElementById(elementId))[style]
 				}
 				const elementStyleChanger = (style, operator, e) => {
-					debugger
 					e.preventDefault()
-					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style])
+					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style], this.locals.selectedElement.options.id, style)
 					this.locals.selectedElement.options.styles[style] = eval(`${this.locals.selectedElement.options.styles[style]} ${operator} 1`)
 					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
 				}
 				const keyBinds = (e) => {
-					debugger
 					if (e.code === "Delete") { // element delete
 
 						if (this.locals.selectedElement.type === 'column') {  // it's a column.
