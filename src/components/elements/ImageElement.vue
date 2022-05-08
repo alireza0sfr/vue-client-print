@@ -1,5 +1,5 @@
 <template>
-	<div :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles" ref="element">
+	<div :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles" ref="element">
 		<img class="image" draggable="false" :src="settings.configs.imageSrc" alt="Image" />
 		<Resizers :query="`imageelement-${settings.id}`" />
 	</div>

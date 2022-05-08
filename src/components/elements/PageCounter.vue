@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ computedCounter }}
 			<Resizers :query="`pagecounter-${settings.id}`"/>
 		</div>

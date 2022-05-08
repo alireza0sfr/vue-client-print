@@ -2,7 +2,7 @@
 	<div>
 
 		<!-- If its the template builder mode -->
-		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ settings.configs.text }}
 			<Resizers :query="`textpattern-${settings.id}`" />
 		</div>

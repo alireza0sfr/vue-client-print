@@ -2,13 +2,13 @@
 	<div v-if="variable">
 
 		<!-- If the variable is text -->
-		<div v-show="variable.type === 'text' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles" ref="textVariable">
+		<div v-show="variable.type === 'text' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles" ref="textVariable">
 			{{ variable.context }}
 			<Resizers classType="variable" />
 		</div>
 
 		<!-- If the variable is image -->
-		<div v-show="variable.type === 'image' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles" ref="imageVariable">
+		<div v-show="variable.type === 'image' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles" ref="imageVariable">
 			<img class="image" draggable="false" :src="variable.context" alt="Image" />
 			<Resizers classType="variable" />
 		</div>
