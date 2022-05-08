@@ -52,7 +52,7 @@
 			 *  Convertes the given number to persian format 
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `imageelement-${this.settings.id}`)
+				let elem = new ElementClass(element, `imageelement-${this.settings.id}`, this.settings)
 				elem.clickable()
 				elem.resizable()
 				elem.dragable()

@@ -78,7 +78,7 @@
 			 */
 
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `datetime-${this.settings.id}`)
+				let elem = new ElementClass(element, `datetime-${this.settings.id}`, this.settings)
 				elem.clickable()
 				elem.resizable()
 				elem.dragable()

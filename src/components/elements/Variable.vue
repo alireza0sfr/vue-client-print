@@ -4,13 +4,13 @@
 		<!-- If the variable is text -->
 		<div v-show="variable.type === 'text' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles" ref="textVariable">
 			{{ variable.context }}
-			<Resizers classType="variable" />
+			<Resizers :query="`variable-${this.settings.id}`" />
 		</div>
 
 		<!-- If the variable is image -->
 		<div v-show="variable.type === 'image' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles" ref="imageVariable">
 			<img class="image" draggable="false" :src="variable.context" alt="Image" />
-			<Resizers classType="variable" />
+			<Resizers :query="`variable-${this.settings.id}`" />
 		</div>
 
 	</div>
@@ -64,7 +64,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize(element) {
-				let elem = new ElementClass(element, 'variable')
+				let elem = new ElementClass(element, `variable-${this.settings.id}`, this.settings)
 				elem.clickable()
 				elem.resizable()
 				elem.dragable()

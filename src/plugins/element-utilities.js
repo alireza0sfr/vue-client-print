@@ -1,7 +1,8 @@
 class Element {
-  constructor(element, resizerQuery) {
-    this.element = element
+  constructor($el, resizerQuery, element) {
+    this.$el = $el
     this.resizerQuery = resizerQuery
+    this.element = element
   }
 
   /**
@@ -9,7 +10,7 @@ class Element {
    * @emits {size-changed} call size-changed event and passes cleanedCoordinates, element, queryResizer.
    */
   resizable() {
-    var element = this.element
+    var element = this.$el
     const resizers = document.querySelectorAll(`.elem-resizer.${this.resizerQuery}`)
 
     for (let resizer of resizers) {
@@ -86,7 +87,7 @@ class Element {
               top: originalTop,
             },
             newValue: that.cleanedCoordinates(),
-            elementDetails: { element: that.element, resizerQuery: that.resizerQuery }
+            elementDetails: { $el: that.$el, resizerQuery: that.resizerQuery, element: that.element }
           }
         })
       )
@@ -98,7 +99,7 @@ class Element {
    * @emits {click} call click event and passes element, queryResizer.
    */
   clickable() {
-    var element = this.element
+    var element = this.$el
     var that = this
     element.addEventListener("mousedown", onClick, false)
     function onClick(e) {
@@ -111,7 +112,7 @@ class Element {
       element.dispatchEvent(
         new CustomEvent('click', {
           detail: {
-            elementDetails: { element: that.element, resizerQuery: that.resizerQuery }
+            elementDetails: { $el: that.$el, resizerQuery: that.resizerQuery, element: that.element }
           }
         })
       )
@@ -124,7 +125,7 @@ class Element {
    * @emits {drag-end} call drag-end event and passes cleanedCoordinates, element, queryResizer.
    */
   dragable() {
-    let element = this.element
+    let element = this.$el
     var startX, startY, newLeft, newTop, that = this
 
     // move the DIV from anywhere inside the DIV:
@@ -167,7 +168,7 @@ class Element {
           new CustomEvent('drag-end', {
             detail: {
               newValue: that.cleanedCoordinates(),
-              elementDetails: { element: that.element, resizerQuery: that.resizerQuery }
+              elementDetails: { $el: that.$el, resizerQuery: that.resizerQuery, element: that.element }
             }
           })
         )
@@ -177,10 +178,10 @@ class Element {
 
   cleanedCoordinates() {
     return {
-      height: this.toFloatValue(this.element.style.height),
-      width: this.toFloatValue(this.element.style.width),
-      left: this.toFloatValue(this.element.style.left),
-      top: this.toFloatValue(this.element.style.top),
+      height: this.toFloatValue(this.$el.style.height),
+      width: this.toFloatValue(this.$el.style.width),
+      left: this.toFloatValue(this.$el.style.left),
+      top: this.toFloatValue(this.$el.style.top),
     }
   }
 

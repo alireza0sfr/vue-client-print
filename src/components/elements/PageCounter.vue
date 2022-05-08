@@ -71,7 +71,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `pagecounter-${this.settings.id}`)
+				let elem = new ElementClass(element, `pagecounter-${this.settings.id}`, this.settings)
 				elem.clickable()
 				elem.resizable()
 				elem.dragable()

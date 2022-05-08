@@ -48,7 +48,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize() {
-				let elem = new ElementClass(this.$refs.element, `column-${this.settings.id}`)
+				let elem = new ElementClass(this.$refs.element, `column-${this.settings.id}`, this.settings)
 				elem.clickable()
 			},
 		},
