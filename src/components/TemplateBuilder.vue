@@ -1385,8 +1385,11 @@
 				var computedParent = parentElement ? grandParent : parent
 				let elem = this.createElement(computedParent)
 
-				if (parentElement) // Element is dropped on another element.
+				if (parentElement) {// Element is dropped on another element.
+					elem.options.isChild = true
+					elem.options.repeatorId = parentElement.options.id
 					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
+				}
 				else
 					this.settings[parent][`${parent}Elements`].push(elem)
 
@@ -1516,7 +1519,7 @@
 							return
 						}
 
-						if (this.locals.selectedElement.type === 'row')  // it's a row.
+						if (this.locals.selectedElement.type === 'row')  // it's a row (row is not deletable).
 							return
 
 						var parent = this.locals.selectedElement.options.parent
@@ -1525,6 +1528,18 @@
 						if (!parent)
 							return
 
+						if (this.locals.selectedElement.options.isChild) { // it's a repeator.
+							let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId)
+							if (index > -1) {
+								let elem = array[index]
+								var children = elem.options.configs.appendedElements[elem.options.configs.selectedDataSet]
+								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
+
+								if (index > -1)
+									children.splice(index, 1)
+							}
+							return
+						}
 
 						// it's a normal element.
 						let id = this.locals.clickedElementId
