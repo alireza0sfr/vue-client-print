@@ -692,9 +692,7 @@
 				deep: true,
 				immediate: true,
 				handler(val) {
-					let rawSettings = this.getDefaultSettings()
-					Object.assign(rawSettings, val)
-					this.settings = rawSettings
+					this.settings = this.merge(this.getDefaultSettings(), val)
 				},
 			}
 		},

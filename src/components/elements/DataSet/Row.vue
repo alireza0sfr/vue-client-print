@@ -28,16 +28,13 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					
+
 					var rowsHeight = typeof (this.settings.configs.rowsHeight) === 'number' ? this.settings.configs.rowsHeight + 'px' : 'auto'
 					this.settings.styles.height = rowsHeight
-					
+
 					this.$emit('styles-target-changed', val.configs.stylesTarget)
-					
-					let tmp = this.options.styles
-					Object.assign(this.settings, val)
-					this.settings.styles = tmp
-					Object.assign(this.settings.styles, val.styles)
+
+					this.settings = this.merge(this.settings, val)
 				},
 			},
 		},

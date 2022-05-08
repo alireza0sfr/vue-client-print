@@ -27,10 +27,7 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					let tmp = this.options.styles
-					Object.assign(this.settings, val)
-					this.settings.styles = tmp
-					Object.assign(this.settings.styles, val.styles)
+					this.settings = this.merge(this.settings, val)
 				},
 			},
 		},
