@@ -1477,7 +1477,7 @@
 					if (val)
 						return parseFloat(val.split('p')[0])
 
-					return document.defaultView.getComputedStyle(document.getElementById(elementId))[style]
+					return this.getCoordinates(elementId)[style]
 				}
 				const elementStyleChanger = (style, operator, e) => {
 					e.preventDefault()
@@ -1486,6 +1486,10 @@
 					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
 				}
 				const keyBinds = (e) => {
+
+					if (!this.locals.selectedElement.type)
+						return
+
 					if (e.code === "Delete") { // element delete
 
 						if (this.locals.selectedElement.type === 'column') {  // it's a column.
@@ -1557,15 +1561,11 @@
 			getCoordinates(id) {
 				let tmp = document.getElementById(id)
 				let compStyle = getComputedStyle(tmp)
-				let top = compStyle.getPropertyValue("top")
-				let left = compStyle.getPropertyValue("left")
-				let height = compStyle.getPropertyValue("height")
-				let width = compStyle.getPropertyValue("width")
 				return {
-					top: top,
-					left: left,
-					height: height,
-					width: width,
+					top: compStyle.getPropertyValue("top"),
+					left: compStyle.getPropertyValue("left"),
+					height: compStyle.getPropertyValue("height"),
+					width: compStyle.getPropertyValue("width"),
 				}
 			},
 
