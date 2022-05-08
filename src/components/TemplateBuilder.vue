@@ -1013,15 +1013,19 @@
 				let uniqueId = this.locals.uniqueId
 				var keys = Object.keys(this.settings.dataSets)
 				let tmp
+				var defaultElementObject = {
+					type: classType,
+					options: {
+						id: this.idGenerator(5),
+						parent: parent,
+						grandParent: 'TemplateBuilder',
+					}
+				}
 
 				switch (classType) {
 					case 'repeator':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
-								parent: parent,
-								grandParent: 'TemplateBuilder',
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: this.settings.dataSets,
@@ -1040,10 +1044,7 @@
 						break
 					case 'dataset':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: {},
@@ -1075,7 +1076,6 @@
 										},
 									]
 								},
-								id: this.idGenerator(5),
 								styles: {
 									height: "100px",
 								},
@@ -1179,11 +1179,7 @@
 						break
 					case 'textelement':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
-								parent: parent,
-								grandParent: 'TemplateBuilder',
 								configs: { text: this.$t('template-builder.elements.configs.type-text') },
 								styles: {
 									whiteSpace: "pre",
@@ -1197,11 +1193,7 @@
 
 					case 'datetime':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
-								id: this.idGenerator(5),
 								configs: { hasDate: true, hasTime: true, persianDate: true },
 								styles: { width: "150px" },
 							},
@@ -1210,11 +1202,7 @@
 
 					case 'pagecounter':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
-								id: this.idGenerator(5),
 								configs: { counter: '1', persianNumbers: true, completeForm: true },
 								styles: {},
 							},
@@ -1223,11 +1211,7 @@
 
 					case 'imageelement':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
-								id: this.idGenerator(5),
 								configs: { imageSrc: DefaultLogo },
 								styles: {
 									top: 0,
@@ -1241,11 +1225,7 @@
 
 					case 'bindingObject':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
-								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
 									field: "",
@@ -1262,11 +1242,7 @@
 
 					case 'textpattern':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
-								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
 									text: this.$t('template-builder.elements.configs.pattern-input'),
@@ -1283,11 +1259,7 @@
 
 					case 'variable':
 						tmp = {
-							type: classType,
 							options: {
-								parent: parent,
-								grandParent: 'TemplateBuilder',
-								id: this.idGenerator(5),
 								configs: {
 									uniqueId: uniqueId,
 								},
@@ -1303,7 +1275,7 @@
 					default:
 						break
 				}
-				return tmp
+				return this.merge(defaultElementObject, tmp)
 			},
 
 			/**
@@ -1506,12 +1478,14 @@
 						return parseFloat(val.split('p')[0])
 				}
 				const elementStyleChanger = (style, operator, e) => {
+					debugger
 					e.preventDefault()
 					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style])
 					this.locals.selectedElement.options.styles[style] = eval(`${this.locals.selectedElement.options.styles[style]} ${operator} 1`)
 					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
 				}
 				const keyBinds = (e) => {
+					debugger
 					if (e.code === "Delete") { // element delete
 
 						if (this.locals.selectedElement.type === 'column') {  // it's a column.
