@@ -112,7 +112,7 @@
 					height = this.settings.styles.height
 
 				if (this.settings.grandParent === 'TemplateBuilder')
-					return this.toFloatWidth(height) - 45 + 'px'
+					return this.toFloatVal(height) - 45 + 'px'
 
 				return height
 			},
@@ -121,7 +121,7 @@
 			 * @param {String} width - width.
 			 * @return {Number} parsed Width
 			 */
-			toFloatWidth(width) {
+			toFloatVal(width) {
 				return parseFloat(width.split('p')[0])
 			},
 			/**
@@ -134,7 +134,7 @@
 				const ratio = diffrence / e.detail.oldValue.width
 
 				for (let col of this.displaySet.options.configs.columns) {
-					col.options.styles.width = this.toFloatWidth(col.options.styles.width)
+					col.options.styles.width = this.toFloatVal(col.options.styles.width)
 					col.options.styles.width += ratio * col.options.styles.width
 					col.options.styles.width = col.options.styles.width + 'px'
 				}
@@ -190,32 +190,32 @@
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
 				var seconColumn = columns[secondIndex]
-				const startWidth = this.toFloatWidth(thisColumn.options.styles.width) || 0
+				const startWidth = this.toFloatVal(thisColumn.options.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
-				const maxWidth = this.toFloatWidth(this.settings.styles.width) - (columns.length * minWidth)
+				const maxWidth = this.toFloatVal(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (this.toFloatWidth(thisColumn.options.styles.width) < minWidth)
+					if (this.toFloatVal(thisColumn.options.styles.width) < minWidth)
 						return
 
-					if (maxWidth < this.toFloatWidth(seconColumn.options.styles.width))
+					if (maxWidth < this.toFloatVal(seconColumn.options.styles.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < this.toFloatWidth(thisColumn.options.styles.width))
+					if (maxWidth < this.toFloatVal(thisColumn.options.styles.width))
 						return
 
-					if (this.toFloatWidth(seconColumn.options.styles.width) < minWidth)
+					if (this.toFloatVal(seconColumn.options.styles.width) < minWidth)
 						return
 
 				}
 
 				thisColumn.options.styles.width = newWidth + 'px'
-				seconColumn.options.styles.width = this.toFloatWidth(seconColumn.options.styles.width) - diffrence
+				seconColumn.options.styles.width = this.toFloatVal(seconColumn.options.styles.width) - diffrence
 				seconColumn.options.styles.width = seconColumn.options.styles.width + 'px'
 			},
 
