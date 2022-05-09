@@ -1,26 +1,29 @@
 <template>
-
-	<!-- Template Builder -->
-	<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
-		<div class="name">
-			<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
-		</div>
-		<div style="display: flex">
-			<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options)" @click.stop="$emit('clickedOnElement', element)" />
-		</div>
-		<Resizers :query="`repeator-${settings.id}`" />
-	</div>
-
-	<!-- Print Preview -->
-	<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="computedStyles">
-		<div v-for="(row, index) in displaySet.rows" :key="row" :style="settings.styles">
+	<div>
+		<!-- Template Builder -->
+		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+			<div class="name">
+				<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+			</div>
 			<div style="display: flex">
-				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options, index)" @click.stop="$emit('clickedOnElement', element)" />
+				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options, element.type, null)" @click.stop="$emit('clickedOnElement', element)" />
 			</div>
 			<Resizers :query="`repeator-${settings.id}`" />
 		</div>
-	</div>
 
+		<!-- Print Preview -->
+		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="computedStyles">
+			<div v-for="(row, index) in displaySet.rows" :key="row" :style="settings.styles">
+				<div class="name">
+					<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+				</div>
+				<div style="display: flex">
+					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options, element.type, index)" @click.stop="$emit('clickedOnElement', element)" />
+				</div>
+				<Resizers :query="`repeator-${settings.id}`" />
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -56,7 +59,9 @@
 				var width = this.displaySet.rows.length * this.toFloatVal(this.settings.styles.width)
 				return {
 					height: height + 'px',
-					width: width + 'px'
+					width: width + 'px',
+					top: this.settings.styles.top,
+					left: this.settings.styles.left
 				}
 			},
 			displaySet() {
@@ -110,9 +115,34 @@
 			 * @param {Object} options - preview settings
 			 * @return {Object} - computed options
 			 */
-			prepareElementsOptions(options) {
+			prepareElementsOptions(options, type, index) {
 				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
 				opt.grandParent = this.settings.grandParent
+
+				switch (type) {
+
+					case 'bindingobject':
+						let key = opt.configs.field
+						var bindingObject = opt.configs.bindingObject
+
+						if (bindingObject[key]) {
+
+							if (Array.isArray(bindingObject[key]))
+								opt.configs.value = bindingObject[key][index]
+
+							else
+								opt.configs.value = bindingObject[key]
+
+						}
+						else
+							opt.configs.value = ''
+
+						break
+
+					default:
+						break
+				}
+
 				return opt
 			},
 			/**
