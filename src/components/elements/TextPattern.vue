@@ -35,7 +35,7 @@
 		computed: {
 			computedValue() {
 				if (this.settings.configs.persianNumbers) {
-					return this.toPersianNumbers(this.settings.configs.value)
+					return this.toPersianDigits(this.settings.configs.value)
 				}
 				return this.settings.configs.value
 			}
@@ -78,16 +78,7 @@
 				elem.resizable()
 				elem.dragable()
 			},
-
-			/**
-			 *  Convertes the given number to persian format 
-			 */
-			toPersianNumbers(n) {
-				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-			},
-		},
+		}
 	};
 </script>
 

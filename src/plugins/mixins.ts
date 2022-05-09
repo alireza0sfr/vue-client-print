@@ -10,6 +10,18 @@ var mixins: object = {
     },
 
     /**
+     * Converts the given number to persian digits.
+     * @param {Number} n - given number
+     * @return {string} - converted number
+     */
+    toPersianDigits(n: number): string {
+      console.log('n', n)
+      const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
+
+      return n.toString().replace(/\d/g, (x) => persianDigits[x])
+    },
+
+    /**
      * Check weather given item is object.
      * @param {any} item - given item to check.
      * @return {Boolean} - true if item is object.

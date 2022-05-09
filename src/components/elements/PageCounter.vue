@@ -28,12 +28,12 @@
 				if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 					if (this.settings.configs.completeForm) {
 						if (this.settings.configs.persianNumbers) {
-							return this.toPersianNumbers('صفحه ۱ از ۱')
+							return this.toPersianDigits('صفحه ۱ از ۱')
 						}
 						return 'page 1 / 1'
 					}
 					if (this.settings.configs.persianNumbers) {
-						return this.toPersianNumbers(this.settings.configs.counter)
+						return this.toPersianDigits(this.settings.configs.counter)
 					}
 				}
 				return this.settings.configs.counter
@@ -76,16 +76,6 @@
 				elem.resizable()
 				elem.dragable()
 			},
-
-			/**
-			 *  Convertes the given number to persian format 
-			 */
-			toPersianNumbers(n) {
-				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-			},
-
 		},
 	};
 </script>

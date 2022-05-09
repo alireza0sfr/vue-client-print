@@ -430,18 +430,6 @@
 					this.printPreview()
 				})
 			},
-
-			/**
-			 * Covertes the given number to persian fotmat.
-			 * @param {Number} n - given number
-			 * @return {Number} - converted number
-			 */
-			toPersianNumbers(n) {
-				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-			},
-
 			/**
 			 * Prepare elements options before previewing in print preview.
 			 * @param {Object} options - preview settings
@@ -484,8 +472,8 @@
 					case 'pagecounter':
 						if (opt.configs.completeForm) {
 							if (opt.configs.persianNumbers) {
-								index = this.toPersianNumbers(index)
-								let totalPages = this.toPersianNumbers(this.locals.totalPages)
+								index = this.toPersianDigits(index)
+								let totalPages = this.toPersianDigits(this.locals.totalPages)
 								opt.configs.counter = opt.configs.counter.replace('1', this.$t('template-builder.page-counter', { index, totalPages }))
 							} else {
 								opt.configs.counter = opt.configs.counter.replace('1', `page ${index} / ${this.locals.totalPages}`)

@@ -91,7 +91,7 @@
 			persianDate() {
 				let today = new Date().toLocaleDateString("fa-IR")
 				this.dateToday = today
-				this.timeToday = this.toPersianNumbers(this.timeNow())
+				this.timeToday = this.toPersianDigits(this.timeNow())
 			},
 
 			/**
@@ -121,16 +121,6 @@
 					new Date().getSeconds()
 				)
 			},
-
-			/**
-			 *  Convertes the given number to persian format 
-			 */
-			toPersianNumbers(n) {
-				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-			},
-
 		},
 	};
 </script>
