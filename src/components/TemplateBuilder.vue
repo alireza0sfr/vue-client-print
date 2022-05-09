@@ -1353,10 +1353,29 @@
 				if (!this.locals.classType)
 					return
 
+				const prepareBindingObjcts = (data) => {
+					let tmp = {}
+					for (let row of data) {
+						for (let key of Object.keys(row)) {
+
+							if (!Array.isArray(tmp[key]))
+								tmp[key] = []
+
+							tmp[key].push(row[key])
+						}
+					}
+					return tmp
+				}
+
 				var computedParent = parentElement ? grandParent : parent
-				let elem = this.createElement(computedParent)
+				var elem = this.createElement(computedParent)
 
 				if (parentElement) {// Element is dropped on another element.
+					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+
+					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
+						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjcts(displaySet.rows))
+
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
 					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
@@ -1506,28 +1525,28 @@
 							return
 
 						if (this.locals.selectedElement.options.isChild) { // it's a repeator.
-							
+
 							let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId) // repeator index in elements array
-							
+
 							if (index > -1) {
 								let repeator = array[index]
 								var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
-								
+
 								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id) // child index in repeator children array
-								
+
 								if (index > -1) {
-									
+
 									if (children[index].type === 'dataset') { // It's a dataset..
 										let columnEl = document.getElementsByClassName('column element selected')[0]
-										
+
 										if (columnEl) { //  Delete is triggered on a column.
-											
+
 											let columns = children[index].options.configs.dataSets[children[index].options.configs.selectedDataSet].options.configs.columns
 											index = columns.findIndex(x => x.options.id === columnEl.id) // column index in dataset columns array
-											
+
 											if (index > -1)
 												columns[index].isActive = false
-										
+
 											return
 										} // Else normal splice will delete dataset.
 									}
