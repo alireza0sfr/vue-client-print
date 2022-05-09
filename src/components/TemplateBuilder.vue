@@ -616,7 +616,7 @@
 			datetime: DateTime,
 			pagecounter: PageCounter,
 			imageelement: ImageElement,
-			bindingObject: BindingObject,
+			bindingobject: BindingObject,
 			textpattern: TextPattern,
 			variable: Variable,
 			dataset: DataSet,
