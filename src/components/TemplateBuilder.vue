@@ -1505,22 +1505,33 @@
 							return
 
 						if (this.locals.selectedElement.options.isChild) { // it's a repeator.
-							let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId)
+							
+							let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId) // repeator index in elements array
+							
 							if (index > -1) {
-								let elem = array[index]
-								var children = elem.options.configs.appendedElements[elem.options.configs.selectedDataSet]
-								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
-
+								let repeator = array[index]
+								var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
+								
+								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id) // child index in repeator children array
+								
 								if (index > -1) {
-									if (children[index].type === 'dataset') { // it's a dataset and delete is triggered on a column.
+									
+									if (children[index].type === 'dataset') { // It's a dataset..
 										let columnEl = document.getElementsByClassName('column element selected')[0]
-										let columns = children[index].options.configs.dataSets[children[index].options.configs.selectedDataSet].options.configs.columns
-										index = columns.findIndex(x => x.options.id === columnEl.id)
-										if (index > -1)
-											columns[index].isActive = false
+										
+										if (columnEl) { //  Delete is triggered on a column.
+											
+											let columns = children[index].options.configs.dataSets[children[index].options.configs.selectedDataSet].options.configs.columns
+											index = columns.findIndex(x => x.options.id === columnEl.id) // column index in dataset columns array
+											
+											if (index > -1)
+												columns[index].isActive = false
+										
+											return
+										} // Else normal splice will delete dataset.
 									}
-									else
-										children.splice(index, 1)
+
+									children.splice(index, 1)
 								}
 							}
 							return
