@@ -1511,8 +1511,17 @@
 								var children = elem.options.configs.appendedElements[elem.options.configs.selectedDataSet]
 								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
 
-								if (index > -1)
-									children.splice(index, 1)
+								if (index > -1) {
+									if (children[index].type === 'dataset') { // it's a dataset and delete is triggered on a column.
+										let columnEl = document.getElementsByClassName('column element selected')[0]
+										let columns = children[index].options.configs.dataSets[children[index].options.configs.selectedDataSet].options.configs.columns
+										index = columns.findIndex(x => x.options.id === columnEl.id)
+										if (index > -1)
+											columns[index].isActive = false
+									}
+									else
+										children.splice(index, 1)
+								}
 							}
 							return
 						}
