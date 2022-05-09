@@ -101,16 +101,6 @@
 		},
 		methods: {
 			/**
-			 * Convert string val to float.
-			 * @param {String} val - val.
-			 * @return {Number} parsed val
-			 */
-			toFloatVal(val) {
-				if (!val)
-					return 0
-				return parseFloat(val.split('p')[0])
-			},
-			/**
 			 * Prepare elements options.
 			 * @param {Object} options - preview settings
 			 * @return {Object} - computed options

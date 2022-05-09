@@ -8,7 +8,16 @@ var mixins: object = {
     idGenerator(n: number): string {
       return Math.random().toString(36).substr(2, n)
     },
-
+    /**
+     * Convert string val to float.
+     * @param {String} val - val.
+     * @return {Number} parsed val
+     */
+    toFloatVal(val: string): number {
+      if (!val)
+        return 0
+      return parseFloat(val.split('p')[0])
+    },
     /**
      * Converts the given number to persian digits.
      * @param {Number} n - given number

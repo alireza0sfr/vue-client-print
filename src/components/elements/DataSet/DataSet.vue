@@ -117,14 +117,6 @@
 				return height
 			},
 			/**
-			 * Convert string wdith to float width 2 decimals.
-			 * @param {String} width - width.
-			 * @return {Number} parsed Width
-			 */
-			toFloatVal(width) {
-				return parseFloat(width.split('p')[0])
-			},
-			/**
 			 * event triggered when dataset width changes
 			 * @param {Event} e - dataset event.
 			 * @return {void} void
