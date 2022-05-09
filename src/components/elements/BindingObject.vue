@@ -28,7 +28,6 @@
 			Resizers,
 		},
 		mounted() {
-			console.log(this.settings);
 			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 				this.Initialize()
 			}

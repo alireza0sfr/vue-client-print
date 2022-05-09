@@ -1,6 +1,8 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
-		<div v-if="settings.grandParent === 'TemplateBuilder'" class="name">
+
+	<!-- Template Builder -->
+	<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div class="name">
 			<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 		</div>
 		<div style="display: flex">
@@ -8,6 +10,17 @@
 		</div>
 		<Resizers :query="`repeator-${settings.id}`" />
 	</div>
+
+	<!-- Print Preview -->
+	<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="computedStyles">
+		<div v-for="(row, index) in displaySet.rows" :key="row" :style="settings.styles">
+			<div style="display: flex">
+				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options, index)" @click.stop="$emit('clickedOnElement', element)" />
+			</div>
+			<Resizers :query="`repeator-${settings.id}`" />
+		</div>
+	</div>
+
 </template>
 
 <script>
@@ -38,6 +51,14 @@
 			options: Object,
 		},
 		computed: {
+			computedStyles() {
+				var height = this.displaySet.rows.length * this.toFloatVal(this.settings.styles.height)
+				var width = this.displaySet.rows.length * this.toFloatVal(this.settings.styles.width)
+				return {
+					height: height + 'px',
+					width: width + 'px'
+				}
+			},
 			displaySet() {
 				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
 			},
@@ -74,6 +95,16 @@
 			}
 		},
 		methods: {
+			/**
+			 * Convert string val to float.
+			 * @param {String} val - val.
+			 * @return {Number} parsed val
+			 */
+			toFloatVal(val) {
+				if (!val)
+					return 0
+				return parseFloat(val.split('p')[0])
+			},
 			/**
 			 * Prepare elements options.
 			 * @param {Object} options - preview settings
