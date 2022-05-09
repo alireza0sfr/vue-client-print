@@ -332,7 +332,7 @@
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
-												<option v-for="option in Object.keys(settings.bindingObject)" :key="option">{{ option }}</option>
+												<option v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObject)" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -362,7 +362,7 @@
 									</div>
 									<div class="toolbar-content-field">
 										<select class="input-form-control" id="textpatternControl">
-											<option v-for="option in Object.keys(settings.bindingObject)" :key="option">{{ option }}</option>
+											<option v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObject)" :key="option">{{ option }}</option>
 										</select>
 									</div>
 								</div>
@@ -1227,7 +1227,7 @@
 								configs: {
 									persianNumbers: false,
 									field: "",
-									bindingObject: {},
+									bindingObject: this.settings.bindingObject,
 								},
 								styles: {
 									whiteSpace: "pre",
@@ -1245,6 +1245,7 @@
 									persianNumbers: false,
 									text: this.$t('template-builder.elements.configs.pattern-input'),
 									value: null,
+									bindingObject: this.settings.bindingObject,
 								},
 								styles: {
 									whiteSpace: "pre",

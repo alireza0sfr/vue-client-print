@@ -390,12 +390,8 @@
 			templateBuilder(json, callback) {
 				json.callback = callback
 				this.locals.templateBuilderData = json
-				let tmp = JSON.parse(JSON.stringify(this.bindingObject))
-				for (let key in tmp) {
-					tmp[key] = null
-				}
 				this.locals.templateBuilderData.dataSets = this.dataSets
-				this.locals.templateBuilderData.bindingObject = tmp
+				this.locals.templateBuilderData.bindingObject = this.bindingObject
 				this.$refs.TemplateBuilder.settingsInitFunc()
 
 				let variables = this.variables && this.variables.length ? this.variables : json.variables
@@ -501,15 +497,17 @@
 
 					case 'bindingobject':
 						let key = opt.configs.field
+						var bindingObject = opt.configs.bindingObject
 
-						if (this.bindingObject[key])
-							opt.configs.value = this.bindingObject[key]
+						if (bindingObject[key])
+							opt.configs.value = bindingObject[key]
 						else
 							opt.configs.value = ''
 
 						break
 
 					case 'textpattern':
+						var bindingObject = opt.configs.bindingObject
 						let matches = [], // an array to collect the strings that are matches
 							types = [],
 							regex = /{([^{]*?\w)(?=\})}/gim,
@@ -524,7 +522,7 @@
 						for (let index = 0; index < types.length; index++) {
 							text = text.replace(
 								"{" + types[index] + "}",
-								this.bindingObject[types[index]]
+								bindingObject[types[index]]
 							)
 						}
 						opt.configs.value = text
