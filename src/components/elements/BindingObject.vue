@@ -4,13 +4,13 @@
 		<!-- If its the template builder mode -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ settings.configs.field === "" ? locals.text1 : locals.text + ' ' + settings.configs.field }}
-			<Resizers :query="`bindingObject-${settings.id}`" />
+			<Resizers :query="`bindingobject-${settings.id}`" />
 		</div>
 
 		<!-- If its the print mode -->
 		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" :class="locals.classType + ' element'" :style="settings.styles">
 			{{ computedValue }}
-			<Resizers :query="`bindingObject-${settings.id}`" />
+			<Resizers :query="`bindingobject-${settings.id}`" />
 		</div>
 
 	</div>
@@ -20,7 +20,7 @@
 	import ElementClass from '~/plugins/element-utilities.js'
 	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
-		name: "bindingObject",
+		name: "bindingobject",
 		props: {
 			options: Object,
 		},
@@ -55,7 +55,7 @@
 		data() {
 			return {
 				locals: {
-					classType: "bindingObject",
+					classType: "bindingobject",
 					text: this.$t('template-builder.elements.binding-objects'),
 					text1: this.$t('template-builder.elements.binding-object-text')
 				},
@@ -77,7 +77,7 @@
 			 * Initializing the element utilities for the created element
 			 */
 			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `bindingObject-${this.settings.id}`, this.settings)
+				let elem = new ElementClass(element, `bindingobject-${this.settings.id}`, this.settings)
 				elem.clickable()
 				elem.resizable()
 				elem.dragable()

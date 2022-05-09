@@ -217,7 +217,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('bindingObject')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement('bindingobject')" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/binding.png" :alt="$t('template-builder.elements.binding-objects')" />
 												<div class="element-title">{{$t('template-builder.elements.binding-objects')}}</div>
 											</span>
@@ -318,7 +318,7 @@
 									<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === 'imageelement'">
 										<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingObject'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
@@ -326,7 +326,7 @@
 											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingObject'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectControl">{{$t('template-builder.elements.configs.data-type')}}</label>
 										</div>
@@ -1221,7 +1221,7 @@
 						}
 						break
 
-					case 'bindingObject':
+					case 'bindingobject':
 						tmp = {
 							options: {
 								configs: {

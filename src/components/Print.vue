@@ -499,7 +499,7 @@
 						}
 						break
 
-					case 'bindingObject':
+					case 'bindingobject':
 						let key = opt.configs.field
 
 						if (this.bindingObject[key])
