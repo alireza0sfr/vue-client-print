@@ -1353,15 +1353,16 @@
 				if (!this.locals.classType)
 					return
 
-				const prepareBindingObjcts = (data) => {
+				const prepareBindingObjcts = (data, title) => {
+					debugger
 					let tmp = {}
 					for (let row of data) {
 						for (let key of Object.keys(row)) {
 
 							if (!Array.isArray(tmp[key]))
-								tmp[key] = []
+								tmp[`${title}-${key}`] = []
 
-							tmp[key].push(row[key])
+							tmp[`${title}-${key}`].push(row[key])
 						}
 					}
 					return tmp
@@ -1374,7 +1375,7 @@
 					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
-						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjcts(displaySet.rows))
+						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjcts(displaySet.rows, displaySet.title))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
