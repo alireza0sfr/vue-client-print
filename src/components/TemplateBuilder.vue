@@ -1358,11 +1358,13 @@
 					let tmp = {}
 					for (let row of data) {
 						for (let key of Object.keys(row)) {
+							
+							var name = `${title}-${key}`
+							
+							if (!Array.isArray(tmp[name]))
+								tmp[name] = []
 
-							if (!Array.isArray(tmp[key]))
-								tmp[`${title}-${key}`] = []
-
-							tmp[`${title}-${key}`].push(row[key])
+							tmp[name].push(row[key])
 						}
 					}
 					return tmp
