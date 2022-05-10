@@ -86,6 +86,14 @@ var mixins: object = {
       opt.grandParent = 'Print'
       switch (type) {
 
+        case 'repeator':
+          opt.configs.originalHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
+          opt.styles.height = 'auto'
+          // var height = this.toFloatVal(this.settings.styles.height)
+          // var displaySet = this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
+          // height *= displaySet.rows.length
+          // this.settings.styles.height = height + 'px'
+          break
         case 'dataset':
           opt.configs.originalColumnHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
           opt.styles.height = 'auto'

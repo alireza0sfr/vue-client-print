@@ -12,8 +12,8 @@
 		</div>
 
 		<!-- Print Preview -->
-		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="computedStyles">
-			<div v-for="(row, index) in displaySet.rows" :key="row" :style="settings.styles">
+		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+			<div v-for="(row, index) in displaySet.rows" :key="row" :style="computedStyles">
 				<div class="name">
 					<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 				</div>
@@ -55,14 +55,7 @@
 		},
 		computed: {
 			computedStyles() {
-				var height = this.displaySet.rows.length * this.toFloatVal(this.settings.styles.height)
-				var width = this.displaySet.rows.length * this.toFloatVal(this.settings.styles.width)
-				return {
-					height: height + 'px',
-					width: width + 'px',
-					top: this.settings.styles.top,
-					left: this.settings.styles.left
-				}
+				return { height: this.settings.configs.originalHeight }
 			},
 			displaySet() {
 				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
@@ -94,6 +87,7 @@
 						datasets: [],
 						selectedDataSet: '',
 						appenedElements: {},
+						originalHeight: '0'
 					},
 					styles: {},
 				},
