@@ -1027,7 +1027,8 @@
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: this.settings.dataSets,
-									appendedElements: {}
+									appendedElements: {},
+									variables: this.locals.variables,
 								},
 								styles: {
 									width: '600px',
