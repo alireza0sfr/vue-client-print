@@ -6,7 +6,7 @@
 				<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex">
-				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options, element.type, null)" @click.stop="$emit('clickedOnElement', element)" />
+				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @click.stop="$emit('clickedOnElement', element)" />
 			</div>
 			<Resizers :query="`repeator-${settings.id}`" />
 		</div>
@@ -18,7 +18,7 @@
 					<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 				</div>
 				<div style="display: flex">
-					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareElementsOptions(element.options, element.type, index)" @click.stop="$emit('clickedOnElement', element)" />
+					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index, bindingObjectCallback)" @click.stop="$emit('clickedOnElement', element)" />
 				</div>
 				<Resizers :query="`repeator-${settings.id}`" />
 			</div>
@@ -100,41 +100,29 @@
 			}
 		},
 		methods: {
+
 			/**
-			 * Prepare elements options.
-			 * @param {Object} options - preview settings
-			 * @return {Object} - computed options
+			 * Callback function for bindingobject case on preapreComponentsElements in mixins.
+			 * @param {Object} options - Preview settings
+			 * @param {Object} bindingObject - BindingObject
+			 * @param {String} key - Selected field from bindingObject
+			 * @param {Number} index - Component rendring loop index
+			 * @return {void} - void
 			 */
-			prepareElementsOptions(options, type, index) {
-				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
-				opt.grandParent = this.settings.grandParent
+			bindingObjectCallback(opt, bindingObject, key, index) {
+				if (bindingObject[key]) {
 
-				switch (type) {
+					if (Array.isArray(bindingObject[key]))
+						opt.configs.value = bindingObject[key][index]
 
-					case 'bindingobject':
-						let key = opt.configs.field
-						var bindingObject = opt.configs.bindingObject
+					else
+						opt.configs.value = bindingObject[key]
 
-						if (bindingObject[key]) {
-
-							if (Array.isArray(bindingObject[key]))
-								opt.configs.value = bindingObject[key][index]
-
-							else
-								opt.configs.value = bindingObject[key]
-
-						}
-						else
-							opt.configs.value = ''
-
-						break
-
-					default:
-						break
 				}
-
-				return opt
+				else
+					opt.configs.value = ''
 			},
+
 			/**
 			* Initializing the element utilities for the created element
 			*/

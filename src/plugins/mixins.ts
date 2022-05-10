@@ -77,7 +77,10 @@ var mixins: object = {
      * @param {Number} index - loop index
      * @return {Object} - Prepared options
      */
-    prepareComponentsOptions(options: object, type: string, index: number): object {
+    prepareComponentsOptions(options: object, type: string, index: number, callback: (opt: object, bindingObject: object, key: string, index: number) => void): object {
+
+      if (this.settings.grandParent === 'TemplateBuilder')
+        return options
 
       let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
       opt.grandParent = 'Print'
@@ -127,11 +130,16 @@ var mixins: object = {
           let key = opt.configs.field
           var bindingObject = opt.configs.bindingObject
 
-          if (bindingObject[key])
-            opt.configs.value = bindingObject[key]
-          else
-            opt.configs.value = ''
+          if (callback)
+            callback(opt, bindingObject, key, index)
 
+          else {
+
+            if (bindingObject[key])
+              opt.configs.value = bindingObject[key]
+            else
+              opt.configs.value = ''
+          }
           break
 
         case 'textpattern':
