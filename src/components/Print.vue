@@ -146,7 +146,7 @@
 			 * set body elements parent components height.
 			 * @return {void} - void
 			 */
-			setBodyWithElementsHeight() {
+			setTotalHieghtBasedOnElementsHeight() {
 				const parent = document.getElementById('componentsParent')
 				var maxBottom = 0
 				var elementWithMaxBottom
@@ -315,7 +315,7 @@
 					let domNode = document.getElementById("toBeConverted")
 
 					if (this.settings.body && this.settings.body.bodyElements && this.settings.body.bodyElements.length)
-						this.setBodyWithElementsHeight()
+						this.setTotalHieghtBasedOnElementsHeight()
 
 					domtoimage
 						.toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality

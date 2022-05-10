@@ -1,7 +1,8 @@
 <template>
-	<div>
-		<!-- Template Builder -->
-		<div v-if="settings.grandParent === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+	
+	<!-- Template Builder -->
+		<div v-if="settings.grandParent === 'TemplateBuilder'">
 			<div class="name">
 				<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
@@ -12,7 +13,7 @@
 		</div>
 
 		<!-- Print Preview -->
-		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div v-else>
 			<div v-for="(row, index) in displaySet.rows" :key="row" :style="computedStyles">
 				<div class="name">
 					<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
@@ -23,6 +24,7 @@
 				<Resizers :query="`repeator-${settings.id}`" />
 			</div>
 		</div>
+		
 	</div>
 </template>
 
