@@ -719,6 +719,7 @@
 				immediate: true,
 				handler(val) {
 					this.settings = this.merge(this.getDefaultSettings(), val)
+					this.preapreDataSets()
 				},
 			}
 		},
@@ -733,11 +734,13 @@
 			 * @param {String} key - dataset key.
 			 * @return {Object} - Prepared dataset.
 			 */
-			preapreDataSet(set, key) {
-				set.id = this.idGenerator(5)
-				set.key = key
-				set.title = key
-				return set
+			preapreDataSets(sets = this.settings.dataSets) {
+				for (let key of Object.keys(sets)) {
+					var set = this.settings.dataSets[key]
+					set.id = this.idGenerator(5)
+					set.key = key
+					set.title = key
+				}
 			},
 			/** converting normal row object to dataset row objects
 			 * Sample Row:
@@ -1204,10 +1207,7 @@
 						}
 
 						for (let set of keys) {
-							var thisSet = this.settings.dataSets[set]
-							
-							// Preparing raw dataset object and removing refrence to the original data.
-							thisSet = JSON.parse(JSON.stringify(this.preapreDataSet(thisSet, set)))
+							var thisSet = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data.
 
 							tmp.options.configs.dataSets[set] = {
 								options: {
