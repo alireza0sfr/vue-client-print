@@ -49,56 +49,6 @@
 			return {
 				dataSets: {
 					center: {
-						id: this.idGenerator(5),
-						key: 'Center',
-						title: 'شناور',
-						columns: [
-							{
-								title: 'column 1',
-								key: 'center',
-								options: {
-									styles: {
-										width: '70px',
-									},
-								}
-							},
-							{
-								title: 'column 2',
-								key: 'account',
-								options: {
-									styles: {
-										width: '50px',
-									}
-								}
-							},
-							{
-								title: 'column 3',
-								key: 'date',
-								options: {
-									styles: {
-										width: '50px',
-									},
-								}
-							},
-							{
-								title: 'column 4',
-								key: 'balance',
-								options: {
-									styles: {
-										width: '40px',
-									},
-								}
-							},
-							{
-								title: 'column 5',
-								key: 'type',
-								options: {
-									styles: {
-										width: '90px',
-									},
-								}
-							},
-						],
 						rows: [
 							{
 								center: 'center 1',
@@ -142,47 +92,6 @@
 						],
 					},
 					account: {
-						id: this.idGenerator(5),
-						key: 'Account',
-						title: 'حساب',
-						columns: [
-							{
-								title: 'column 1',
-								key: 'center',
-								options: {
-									styles: {
-										width: '70px',
-									},
-								}
-							},
-							{
-								title: 'column 2',
-								key: 'account',
-								options: {
-									styles: {
-										width: '50px',
-									}
-								}
-							},
-							{
-								title: 'column 4',
-								key: 'balance',
-								options: {
-									styles: {
-										width: '40px',
-									},
-								}
-							},
-							{
-								title: 'column 5',
-								key: 'type',
-								options: {
-									styles: {
-										width: '90px',
-									},
-								}
-							},
-						],
 						rows: [],
 					}
 				},

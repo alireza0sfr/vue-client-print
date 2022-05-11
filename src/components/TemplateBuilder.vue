@@ -728,6 +728,17 @@
 			this.keyboardHandler()
 		},
 		methods: {
+			/**
+			 * @param {Object} set - Raw dataset.
+			 * @param {String} key - dataset key.
+			 * @return {Object} - Prepared dataset.
+			 */
+			preapreDataSet(set, key) {
+				set.id = this.idGenerator(5)
+				set.key = key
+				set.title = key
+				return set
+			},
 			/** converting normal row object to dataset row objects
 			 * Sample Row:
 			 * [
@@ -808,13 +819,33 @@
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared columns.
 			 */
-			prepareDataSetColumns(columns, parent) {
-				for (let col of columns) {
-					col.isActive = true
-					col.options.id = this.idGenerator(5)
-					col.hasResizer = columns.indexOf(col) !== columns.length - 1
-					col.type = 'column'
-					col.options.parent = parent
+			prepareDataSetColumns(columns, parent, row) {
+				let tmp
+
+				if (!row)
+					return []
+
+				if (!columns)
+					columns = Object.keys(row)
+
+				for (let index = 0; index < columns.length; index++) {
+					var col = columns[index]
+
+					tmp = {
+						title: col.title ? col.title : col, // If columns object is filled use given title else use row key.
+						key: col.key ? col.key : (col.title ? col.title : col),
+						isActive: true,
+						hasResizer: columns.indexOf(col) !== columns.length - 1,
+						type: 'column',
+						options: {
+							parent: parent,
+							id: this.idGenerator(5),
+							styles: {
+								width: '70px',
+							},
+						}
+					}
+					columns[index] = tmp
 				}
 				return columns
 			},
@@ -1173,15 +1204,19 @@
 						}
 
 						for (let set of keys) {
-							var thisSet = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data
+							var thisSet = this.settings.dataSets[set]
+							
+							// Preparing raw dataset object and removing refrence to the original data.
+							thisSet = JSON.parse(JSON.stringify(this.preapreDataSet(thisSet, set)))
+
 							tmp.options.configs.dataSets[set] = {
 								options: {
 									id: thisSet.id,
 									parent: parent,
 									grandParent: 'TemplateBuilder',
 									configs: {
+										columns: this.prepareDataSetColumns(thisSet.columns, parent, thisSet.rows[0]),
 										rows: this.prepareDataSetRows(thisSet.rows, parent),
-										columns: this.prepareDataSetColumns(thisSet.columns, parent),
 										title: thisSet.title,
 										key: thisSet.key
 									},
