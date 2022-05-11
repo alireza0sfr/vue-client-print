@@ -396,7 +396,7 @@
 										</div>
 										<div class="toolbar-content-field">
 											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-												<option v-for="option in Object.keys(settings.dataSets)" :value="option" :key="option">{{ settings.dataSets[option].title }}</option>
+												<option v-for="option in Object.keys(locals.selectedElement.options.configs.dataSets)" :value="option" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -413,7 +413,6 @@
 										</div>
 									</div>
 								</div>
-
 								<div v-if="locals.selectedElement.type === 'repeator'">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
@@ -421,7 +420,7 @@
 										</div>
 										<div class="toolbar-content-field">
 											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-												<option v-for="option in Object.keys(settings.dataSets)" :value="option" :key="option">{{ settings.dataSets[option].title }}</option>
+												<option v-for="option in Object.keys(locals.selectedElement.options.configs.dataSets)" :value="option" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -719,7 +718,7 @@
 				immediate: true,
 				handler(val) {
 					this.settings = this.merge(this.getDefaultSettings(), val)
-					this.preapreDataSets()
+					this.prepareDataSets()
 				},
 			}
 		},
@@ -734,7 +733,7 @@
 			 * @param {String} key - dataset key.
 			 * @return {Object} - Prepared dataset.
 			 */
-			preapreDataSets(sets = this.settings.dataSets) {
+			prepareDataSets(sets = this.settings.dataSets) {
 				for (let key of Object.keys(sets)) {
 					var set = this.settings.dataSets[key]
 					set.id = this.idGenerator(5)
@@ -1419,6 +1418,20 @@
 					return tmp
 				}
 
+				const updateDataSets = (data, title) => {
+					debugger
+					let tmp = {}
+					for (let row of data) {
+
+						var name = `${title}-1`
+
+						if (Array.isArray(row)) {
+							tmp[name] = this.prepareDataSetRows(row)
+						}
+					}
+					return tmp
+				}
+
 				var computedParent = parentElement ? grandParent : parent
 				var elem = this.createElement(computedParent)
 
@@ -1427,6 +1440,9 @@
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
 						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.rows, displaySet.title))
+
+					if (elem.type === 'dataset')
+						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, updateDataSets(displaySet.rows, displaySet.title))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
