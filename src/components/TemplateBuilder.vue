@@ -625,6 +625,32 @@
 		data() {
 			return {
 				locals: {
+					dataSetDefaultRow: [
+						{
+							type: 'row',
+							options: {
+								id: this.idGenerator(5),
+								parent: this.options.parent,
+								styles: {},
+								configs: {
+									cells: {
+										center: {
+											type: 'cell',
+											isActive: true,
+											options: {
+												id: this.idGenerator(5),
+												styles: {},
+												parent: this.options.parent,
+												configs: {
+													value: ''
+												},
+											}
+										}
+									}
+								}
+							}
+						},
+					],
 					rowStylesTargets: [
 						{
 							key: 'all',
@@ -702,6 +728,96 @@
 			this.keyboardHandler()
 		},
 		methods: {
+			/** converting normal row object to dataset row objects
+			 * Sample Row:
+			 * [
+			 *   {
+				*   center: 'center 1'
+				*  }
+				* ]
+			 * 
+			 * Sample Converted Row:
+			 * 
+			 * [
+			 *  {
+			 *	type: 'row',
+					options: {
+						id: this.idGenerator(5),
+						parent: parent,
+						styles: {},
+					},
+						configs: {
+							cells: {
+								center : {
+									type: 'cell',
+									isActive: true,
+									options: {
+										id: this.idGenerator(5),
+										styles: {},
+										parent: parent,
+										configs: {
+											value: ''
+										},
+									}
+								}
+							}
+						}
+					}
+			 *  ]
+			 * @param {Object} rows - Raw rows.
+			 * @param {String} parent - Parent name.
+			 * @return {Object} - Prepared rows.
+			 */
+			prepareDataSetRows(rows, parent) {
+				for (let index = 0; index < rows.length; index++) {
+					var objectKeys = Object.keys(rows[index])
+					var tempRow = {
+						type: 'row',
+						options: {
+							id: this.idGenerator(5),
+							parent: parent,
+							styles: {},
+							configs: {
+								cells: {}
+							}
+						},
+					}
+
+					for (let key of objectKeys) {
+						tempRow.options.configs.cells[key] = {
+							type: 'cell',
+							isActive: true,
+							options: {
+								id: this.idGenerator(5),
+								styles: {},
+								parent: parent,
+								configs: {
+									value: rows[index][key]
+								},
+							}
+						}
+					}
+					rows[index] = tempRow
+				}
+				return rows
+			},
+
+			/**
+			 * Preparing columns for dataset element.
+			 * @param {Object} columns - Raw columns.
+			 * @param {String} parent - Parent name.
+			 * @return {Object} - Prepared columns.
+			 */
+			prepareDataSetColumns(columns, parent) {
+				for (let col of columns) {
+					col.isActive = true
+					col.options.id = this.idGenerator(5)
+					col.hasResizer = columns.indexOf(col) !== columns.length - 1
+					col.type = 'column'
+					col.options.parent = parent
+				}
+				return columns
+			},
 			/**
 			 * Init copy paste listenners.
 			 */
@@ -1048,32 +1164,7 @@
 									selectedDataSet: keys[0],
 									dataSets: {},
 									stylesTarget: 'all',
-									defaultRow: [
-										{
-											type: 'row',
-											options: {
-												id: this.idGenerator(5),
-												parent: this.options.parent,
-												styles: {},
-												configs: {
-													cells: {
-														center: {
-															type: 'cell',
-															isActive: true,
-															options: {
-																id: this.idGenerator(5),
-																styles: {},
-																parent: this.options.parent,
-																configs: {
-																	value: ''
-																},
-															}
-														}
-													}
-												}
-											}
-										},
-									]
+									defaultRow: this.locals.dataSetDefaultRow
 								},
 								styles: {
 									height: "100px",
@@ -1083,91 +1174,14 @@
 
 						for (let set of keys) {
 							var thisSet = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data
-
-							for (let col of thisSet.columns) {
-								col.isActive = true
-								col.options.id = this.idGenerator(5)
-								col.hasResizer = thisSet.columns.indexOf(col) !== thisSet.columns.length - 1
-								col.type = 'column'
-								col.options.parent = parent
-							}
-
-
-							/** converting normal row object to dataset row objects
-							 * Sample Row:
-							 * [
-							 *   {
-								*   center: 'center 1'
-								*  }
-								* ]
-							 * 
-							 * Sample Converted Row:
-							 * 
-							 * [
-							 *  {
-							 *	type: 'row',
-									options: {
-										id: this.idGenerator(5),
-										parent: parent,
-										styles: {},
-									},
-										configs: {
-											cells: {
-												center : {
-													type: 'cell',
-													isActive: true,
-													options: {
-														id: this.idGenerator(5),
-														styles: {},
-														parent: parent,
-														configs: {
-															value: ''
-														},
-													}
-												}
-											}
-										}
-									}
-							 *  ]
-							 */
-							for (let index = 0; index < thisSet.rows.length; index++) {
-								var objectKeys = Object.keys(thisSet.rows[index])
-								var tempRow = {
-									type: 'row',
-									options: {
-										id: this.idGenerator(5),
-										parent: parent,
-										styles: {},
-										configs: {
-											cells: {}
-										}
-									},
-								}
-
-								for (let key of objectKeys) {
-									tempRow.options.configs.cells[key] = {
-										type: 'cell',
-										isActive: true,
-										options: {
-											id: this.idGenerator(5),
-											styles: {},
-											parent: parent,
-											configs: {
-												value: thisSet.rows[index][key]
-											},
-										}
-									}
-								}
-								thisSet.rows[index] = tempRow
-							}
 							tmp.options.configs.dataSets[set] = {
 								options: {
 									id: thisSet.id,
 									parent: parent,
 									grandParent: 'TemplateBuilder',
 									configs: {
-										rows: thisSet.rows,
-										columns: thisSet.columns,
+										rows: this.prepareDataSetRows(thisSet.rows, parent),
+										columns: this.prepareDataSetColumns(thisSet.columns, parent),
 										title: thisSet.title,
 										key: thisSet.key
 									},
@@ -1358,9 +1372,9 @@
 					let tmp = {}
 					for (let row of data) {
 						for (let key of Object.keys(row)) {
-							
+
 							var name = `${title}-${key}`
-							
+
 							if (!Array.isArray(tmp[name]))
 								tmp[name] = []
 
