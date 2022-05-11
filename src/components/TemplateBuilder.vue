@@ -718,7 +718,7 @@
 				immediate: true,
 				handler(val) {
 					this.settings = this.merge(this.getDefaultSettings(), val)
-					this.prepareDataSets()
+					this.settings.dataSets = this.prepareDataSets()
 				},
 			}
 		},
@@ -735,11 +735,12 @@
 			 */
 			prepareDataSets(sets = this.settings.dataSets) {
 				for (let key of Object.keys(sets)) {
-					var set = this.settings.dataSets[key]
+					var set = sets[key]
 					set.id = this.idGenerator(5)
 					set.key = key
 					set.title = key
 				}
+				return sets
 			},
 			/** converting normal row object to dataset row objects
 			 * Sample Row:
@@ -821,8 +822,16 @@
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared columns.
 			 */
-			prepareDataSetColumns(columns, parent, row) {
+			prepareDataSetColumns(columns, parent, rows) {
 				let tmp
+				var row = null
+
+				for (let i of rows) { // Find first row object and use it's keys as columns key.
+					if (this.isObject(i)) {
+						row = i
+						break
+					}
+				}
 
 				if (!row)
 					return []
@@ -1214,7 +1223,7 @@
 									parent: parent,
 									grandParent: 'TemplateBuilder',
 									configs: {
-										columns: this.prepareDataSetColumns(thisSet.columns, parent, thisSet.rows[0]),
+										columns: this.prepareDataSetColumns(thisSet.columns, parent, thisSet.rows),
 										rows: this.prepareDataSetRows(thisSet.rows, parent),
 										title: thisSet.title,
 										key: thisSet.key
@@ -1418,17 +1427,25 @@
 					return tmp
 				}
 
-				const updateDataSets = (data, title) => {
-					debugger
-					let tmp = {}
-					for (let row of data) {
-
-						var name = `${title}-1`
-
+				const prepareDataSets = (rows, title, parent) => {
+					var tmp = {}
+					for (let row of rows)
 						if (Array.isArray(row)) {
-							tmp[name] = this.prepareDataSetRows(row)
+							var name = `${title}-1`
+							tmp[name] = {
+								options: {
+									grandParent: 'TemplateBuilder',
+									id: this.idGenerator(5),
+									parent: parent,
+									styles: {},
+									configs: {
+										title: name,
+										key: name,
+										rows: row
+									}
+								}
+							}
 						}
-					}
 					return tmp
 				}
 
@@ -1442,7 +1459,7 @@
 						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.rows, displaySet.title))
 
 					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, updateDataSets(displaySet.rows, displaySet.title))
+						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.rows, displaySet.title, grandParent))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
