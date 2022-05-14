@@ -30,4 +30,8 @@ interface ISettings {
   maximumFileSize: string
 }
 
-export { ISettings }
+interface IConfigs {
+  maximumFileSize: number
+}
+
+export { ISettings, IConfigs }

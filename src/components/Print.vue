@@ -71,7 +71,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+	// @ts-ignore
+	import { IVariable } from '~/interfaces/elements.ts'
+	// @ts-ignore
+	import { ISettings, IConfigs } from '~/interfaces/general.ts'
 	import printJS from "print-js"
 	import TemplateBuilder from '~/components/TemplateBuilder.vue'
 	import TextPattern from '~/components/elements/TextPattern.vue'
@@ -146,11 +150,11 @@
 			 * set body elements parent components height.
 			 * @return {void} - void
 			 */
-			setTotalHieghtBasedOnElementsHeight() {
+			setTotalHieghtBasedOnElementsHeight(): void {
 				const parent = document.getElementById('componentsParent')
 				var maxBottom = 0
 				var elementWithMaxBottom
-
+				// @ts-ignore
 				for (let child of parent.children) {
 					if (child.getBoundingClientRect().bottom > maxBottom) {
 						maxBottom = child.getBoundingClientRect().bottom
@@ -164,7 +168,8 @@
 			 * print calculated output to pdf
 			 * @return {void} - void
 			 */
-			printForm() {
+			printForm(): void {
+				// @ts-ignore
 				printJS({
 					printable: 'printForm',
 					type: 'html',
@@ -181,7 +186,7 @@
 			 * sync the given configs with the defaults.
 			 * @return {Object} - returns configs objects
 			 */
-			getDefaultConfigs() {
+			getDefaultConfigs(): IConfigs {
 				return Object.assign(
 					{
 						maximumFileSize: 1000 // Maximum file size in KB
@@ -194,7 +199,7 @@
 			 * @param {HTMLElement} parent - parent
 			 * @return {void} - void
 			 */
-			removeAllChildNodes(parent) {
+			removeAllChildNodes(parent: HTMLElement): void {
 				while (parent.firstChild) {
 					parent.removeChild(parent.firstChild)
 				}
@@ -203,18 +208,18 @@
 			/**
 			 * converts given pixel to inch.
 			 * @param {Number} pixels - pixels
-			 * @return {Number} - given pixel to intches
+			 * @return {String} - given pixel to intches
 			 */
-			convert2Inches(pixels) {
+			convert2Inches(pixels: number): string {
 				return (pixels / 96).toFixed(2)
 			},
 
 			/**
 			 * converts given inch to pixel.
 			 * @param {Number} inches - inches
-			 * @return {Number} - given inches to pixels
+			 * @return {String} - given inches to pixels
 			 */
-			convert2Pixels(inches) {
+			convert2Pixels(inches: number): string {
 				return (inches * 96).toFixed(2)
 			},
 
@@ -223,7 +228,7 @@
 			 * @param {Number} totalPagesHeight - totalPagesHeight in inches
 			 * @return {void} - void
 			 */
-			calculateSizes(totalPagesHeight) {
+			calculateSizes(totalPagesHeight: number): void {
 
 				const errorValue = 0.01 // Subtractable value to make the pages height more accurate
 
@@ -280,7 +285,7 @@
 			 * @param {Number} totalPagesHeight - totalPagesHeight in inches
 			 * @return {HTMLElement} - canvas
 			 */
-			canvasMaker(imgBase64, sy, index) {
+			canvasMaker(imgBase64: string, sy: number, index: number): CanvasImageSource {
 				let scale = 2
 				let img = new Image()
 				let canvas = document.createElement("canvas")
@@ -308,7 +313,7 @@
 			 * Converts the given html to Image and append it to the body tag.
 			 * @return {Promise} - Promise void
 			 */
-			convert2Image() {
+			convert2Image(): Promise<ImageData> {
 				return new Promise((resolve, reject) => {
 					let transformOrigin = 'top left'
 					var scale = 2
@@ -357,11 +362,12 @@
 
 			/**
 			 * Converts the given html to Image and append it to the body tag.
-			 * @param {Number} modalId - modal element id
-			 * @param {Number} closeBtnId - close button element id
+			 * @param {String} modalId - modal element id
+			 * @param {String} closeBtnId - close button element id
 			 * @return {void} - void
 			 */
-			modalManager(modalId, closeBtnId) {
+			// TODO move modal manager convert and etc to mixins
+			modalManager(modalId: string, closeBtnId: string): void {
 				var modal = document.getElementById(modalId)
 
 				// Get the <span> element that closes the modal
@@ -386,14 +392,14 @@
 			 * @param {Function} callback - callback function
 			 * @return {void} - void
 			 */
-			templateBuilder(json, callback) {
+			templateBuilder(json: ISettings, callback: Function): void {
 				json.callback = callback
 				this.locals.templateBuilderData = json
 				this.locals.templateBuilderData.dataSets = this.dataSets
 				this.locals.templateBuilderData.bindingObject = this.bindingObject
 				this.$refs.TemplateBuilder.settingsInitFunc()
 
-				let variables = this.variables && this.variables.length ? this.variables : json.variables
+				let variables: IVariable[] = this.variables && this.variables.length ? this.variables : json.variables
 				if (variables)
 					this.$refs.TemplateBuilder.setVariables([...variables])
 
@@ -405,7 +411,7 @@
 			 * @param {object} json - settings json
 			 * @return {void} - void
 			 */
-			printPreview(json) {
+			printPreview(json: ISettings): void {
 				Object.assign(this.settings, json)
 				document.getElementById("printModal").style.display = "block"
 				document.getElementById('loadingModal').style.display = 'block'
@@ -421,7 +427,7 @@
 			 * Shows template builder in print preview.
 			 * @return {void} - void
 			 */
-			editWhileInPreview() {
+			editWhileInPreview(): void {
 				let printModal = document.getElementById("printModal")
 				printModal.style.display = "none"
 				this.templateBuilder(this.settings, (val) => {
