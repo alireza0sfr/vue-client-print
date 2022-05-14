@@ -745,7 +745,7 @@
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared rows.
 			 */
-			prepareDataSetRows(rows: object[]): IRow {
+			prepareDataSetRows(rows: object[]): IRow[] {
 				for (let index = 0; index < rows.length; index++) {
 					var objectKeys = Object.keys(rows[index])
 					var tempRow: IRow = {
