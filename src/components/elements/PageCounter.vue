@@ -8,7 +8,6 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.ts'
 	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {
@@ -20,7 +19,7 @@
 		},
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") {
-				this.Initialize()
+				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		computed: {
@@ -64,18 +63,6 @@
 					styles: {},
 				},
 			}
-		},
-		methods: {
-
-			/**
-			 * Initializing the element utilities for the created element
-			 */
-			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `pagecounter-${this.settings.id}`, this.settings)
-				elem.clickable()
-				elem.resizable()
-				elem.dragable()
-			},
 		},
 	};
 </script>

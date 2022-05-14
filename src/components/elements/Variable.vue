@@ -17,7 +17,6 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.ts'
 	import Resizers from './Resizers.vue'
 	export default {
 		components: {
@@ -30,8 +29,8 @@
 		},
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
-				this.Initialize(this.$refs.textVariable)
-				this.Initialize(this.$refs.imageVariable)
+				this.Initialize(this.$refs.imageVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
+				this.Initialize(this.$refs.textVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		watch: {
@@ -57,20 +56,6 @@
 					styles: {},
 				},
 			}
-		},
-		methods: {
-
-			/**
-			 * Initializing the element utilities for the created element
-			 */
-			Initialize(element) {
-				let elem = new ElementClass(element, `variable-${this.settings.id}`, this.settings)
-				elem.clickable()
-				elem.resizable()
-				elem.dragable()
-
-			},
-
 		},
 	};
 </script>

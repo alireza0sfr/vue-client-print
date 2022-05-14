@@ -6,7 +6,6 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.ts'
 	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {
@@ -20,7 +19,7 @@
 		},
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") // Initialize on moutned if its the template builder mode
-				this.Initialize()
+				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 		},
 		computed: {
 			computedValue() {
@@ -44,7 +43,7 @@
 				deep: true,
 				handler(val) {
 					this.settings = this.merge(this.settings, val)
-					
+
 					if (this.settings.configs.persianDate)
 						this.persianDate()
 					else
@@ -72,18 +71,6 @@
 			}
 		},
 		methods: {
-
-			/**
-			 * Initializing the element utilities for the created element
-			 */
-
-			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `datetime-${this.settings.id}`, this.settings)
-				elem.clickable()
-				elem.resizable()
-				elem.dragable()
-			},
-
 			/** 
 			 * Returns the date in solar date 
 			 */

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.ts'
 	import DefaultLogo from '@/assets/images/logo.png'
 	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
@@ -19,7 +18,7 @@
 		},
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize()
+				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		watch: {
@@ -45,21 +44,6 @@
 					styles: {},
 				},
 			}
-		},
-		methods: {
-
-			/**
-			 *  Convertes the given number to persian format 
-			 */
-			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `imageelement-${this.settings.id}`, this.settings)
-				elem.clickable()
-				elem.resizable()
-				elem.dragable()
-			},
-			test() {
-				console.log('hi im image')
-			},
 		},
 	};
 </script>

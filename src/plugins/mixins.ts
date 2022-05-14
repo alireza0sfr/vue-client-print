@@ -1,5 +1,24 @@
+// @ts-ignore
+import ElementClass from '~/plugins/element-utilities.ts'
+// @ts-ignore
+import { IElement } from '~/interfaces/elements.ts'
+
 var mixins: object = {
   methods: {
+
+    /**
+     * Initializing the element utilities for the created element
+     * @param {HTMLElement} $el - element's html
+     * @param {String} resizerQuery - resizers query
+     * @param {Object} element - element's settings
+     * @return {Void} - void
+     */
+    Initialize($el: HTMLElement, resizerQuery: string, element: IElement): void {
+      let elem = new ElementClass($el, resizerQuery, element)
+      elem.clickable()
+      elem.resizable()
+      elem.dragable()
+    },
 
     /**
      * Converts given image to base64.

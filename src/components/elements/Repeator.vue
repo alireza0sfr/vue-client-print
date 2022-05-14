@@ -29,7 +29,6 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.ts'
 	import Resizers from '~/components/elements/Resizers.vue'
 	import Variable from '~/components/elements/Variable.vue'
 	import TextElement from '~/components/elements/TextElement.vue'
@@ -65,7 +64,7 @@
 		},
 		mounted() {
 			if (this.settings.grandParent === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
-				this.Initialize()
+				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		watch: {
@@ -117,16 +116,6 @@
 				}
 				else
 					opt.configs.value = ''
-			},
-
-			/**
-			* Initializing the element utilities for the created element
-			*/
-			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `repeator-${this.settings.id}`, this.settings)
-				elem.clickable()
-				elem.resizable()
-				elem.dragable()
 			},
 		},
 	}
