@@ -206,24 +206,6 @@
 			},
 
 			/**
-			 * converts given pixel to inch.
-			 * @param {Number} pixels - pixels
-			 * @return {String} - given pixel to intches
-			 */
-			convert2Inches(pixels: number): string {
-				return (pixels / 96).toFixed(2)
-			},
-
-			/**
-			 * converts given inch to pixel.
-			 * @param {Number} inches - inches
-			 * @return {String} - given inches to pixels
-			 */
-			convert2Pixels(inches: number): string {
-				return (inches * 96).toFixed(2)
-			},
-
-			/**
 			 * Calculate Dynamic sizes from template builder before print.
 			 * @param {Number} totalPagesHeight - totalPagesHeight in inches
 			 * @return {void} - void
@@ -358,32 +340,6 @@
 						})
 						.catch(err => reject(err))
 				})
-			},
-
-			/**
-			 * Converts the given html to Image and append it to the body tag.
-			 * @param {String} modalId - modal element id
-			 * @param {String} closeBtnId - close button element id
-			 * @return {void} - void
-			 */
-			// TODO move modal manager convert and etc to mixins
-			modalManager(modalId: string, closeBtnId: string): void {
-				var modal = document.getElementById(modalId)
-
-				// Get the <span> element that closes the modal
-				var span = document.getElementById(closeBtnId)
-
-				// When the user clicks on <span> (x), close the modal
-				span.onclick = function () {
-					modal.style.display = "none"
-				}
-
-				// When the user clicks anywhere outside of the modal, close it
-				window.onclick = function (event) {
-					if (event.target === modal) {
-						modal.style.display = "none"
-					}
-				}
 			},
 
 			/**

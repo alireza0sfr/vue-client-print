@@ -11,6 +11,42 @@ var mixins: object = {
     },
 
     /**
+     * converts given pixel to inch.
+     * @param {Number} pixels - pixels
+     * @return {String} - given pixel to intches
+     */
+    convert2Inches(pixels: number): string {
+      return (pixels / 96).toFixed(2)
+    },
+
+    /**
+     * converts given inch to pixel.
+     * @param {Number} inches - inches
+     * @return {String} - given inches to pixels
+     */
+    convert2Pixels(inches: number): string {
+      return (inches * 96).toFixed(2)
+    },
+
+    /**
+     * Converts the given html to Image and append it to the body tag.
+     * @param {String} modalId - modal element id
+     * @param {String} closeBtnId - close button element id
+     * @return {void} - void
+     */
+    modalManager(modalId: string, closeBtnId: string): void {
+      var modal = document.getElementById(modalId)
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementById(closeBtnId)
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none"
+      }
+    },
+
+    /**
      * Convert string val to float.
      * @param {String} val - val.
      * @return {Number} parsed val
