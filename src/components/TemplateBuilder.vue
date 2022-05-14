@@ -592,7 +592,13 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+	// @ts-ignore
+	import { IRawDataset, IRawColumn, IDataset, IRow, IColumn, classType } from '~/interfaces/datasets.ts'
+	// @ts-ignore
+	import { IElement, IVariable } from '~/interfaces/elements.ts'
+	// @ts-ignore
+	import { ISettings } from '~/interfaces/general.ts'
 	import Variable from '~/components/elements/Variable.vue'
 	import TextElement from '~/components/elements/TextElement.vue'
 	import DateTime from '~/components/elements/DateTime.vue'
@@ -733,59 +739,22 @@
 			 * @param {String} key - dataset key.
 			 * @return {Object} - Prepared dataset.
 			 */
-			prepareDataSets(sets = this.settings.dataSets) {
+			// TODO dataset should be fully prepared here
+			prepareDataSets(sets: IRawDataset = this.settings.dataSets): IDataset {
 				for (let key of Object.keys(sets)) {
-					var set = sets[key]
-					set.id = this.idGenerator(5)
-					set.key = key
-					set.title = key
+					sets[key].id = this.idGenerator(5)
 				}
 				return sets
 			},
 			/** converting normal row object to dataset row objects
-			 * Sample Row:
-			 * [
-			 *   {
-				*   center: 'center 1'
-				*  }
-				* ]
-			 * 
-			 * Sample Converted Row:
-			 * 
-			 * [
-			 *  {
-			 *	type: 'row',
-					options: {
-						id: this.idGenerator(5),
-						parent: parent,
-						styles: {},
-					},
-						configs: {
-							cells: {
-								center : {
-									type: 'cell',
-									isActive: true,
-									options: {
-										id: this.idGenerator(5),
-										styles: {},
-										parent: parent,
-										configs: {
-											value: ''
-										},
-									}
-								}
-							}
-						}
-					}
-			 *  ]
 			 * @param {Object} rows - Raw rows.
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared rows.
 			 */
-			prepareDataSetRows(rows, parent) {
+			prepareDataSetRows(rows: object[], parent: string): IRow {
 				for (let index = 0; index < rows.length; index++) {
 					var objectKeys = Object.keys(rows[index])
-					var tempRow = {
+					var tempRow: IRow = {
 						type: 'row',
 						options: {
 							id: this.idGenerator(5),
@@ -822,7 +791,7 @@
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared columns.
 			 */
-			prepareDataSetColumns(columns, parent, rows) {
+			prepareDataSetColumns(columns: IRawColumn[], parent: string, rows: object[]): IColumn {
 				let tmp
 				var row = null
 
@@ -863,28 +832,28 @@
 			/**
 			 * Init copy paste listenners.
 			 */
-			initCopyPaste() {
+			initCopyPaste(): void {
 				document.addEventListener("keydown", this.copyCurrentElement, false)
 				document.addEventListener("keyup", this.pasteCopiedElement, false)
 			},
 			/**
 			 * Terminate copy paste listenners.
 			 */
-			terminateCopyPaste() {
+			terminateCopyPaste(): void {
 				document.removeEventListener("keydown", this.copyCurrentElement, false)
 				document.removeEventListener("keyup", this.pasteCopiedElement, false)
 			},
 			/**
 			 * Copy selected element.
 			 */
-			copyCurrentElement(e) {
+			copyCurrentElement(e: any): void {
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
 					this.locals.copiedElement = JSON.parse(JSON.stringify(this.locals.selectedElement))
 			},
 			/**
 			 * Paste copied element.
 			 */
-			pasteCopiedElement(e) {
+			pasteCopiedElement(e: any): void {
 				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
 					var parent = this.locals.selectedElement.options.parent
 					var array = this.settings[parent][`${parent}Elements`]
@@ -897,9 +866,11 @@
 			 * Creates default element object.
 			 * @param {Object} - returns default selected element object
 			 */
-			getDefaultSelectedElementObject() {
+			getDefaultSelectedElementObject(): IElement {
 				return {
+					id: -1,
 					type: '',
+					grandParent: 'TemplateBuilder',
 					parent: 'body',
 					options: {
 						configs: {},
@@ -911,7 +882,7 @@
 			 * set variable list.
 			 * @param {Array} list - variable list
 			 */
-			setVariables(list) {
+			setVariables(list: IVariable[]): void {
 				this.locals.variables = list
 			},
 
@@ -919,7 +890,7 @@
 			 * sync the given settings with the defaults.
 			 * @return {Object} - returns settings objects
 			 */
-			getDefaultSettings() {
+			getDefaultSettings(): ISettings {
 				return {
 					header: {
 						isHeaderRepeatable: true,
@@ -952,24 +923,24 @@
 			 * Save Changes on TB close.
 			 * @return {Object} - json file
 			 */
-			save() {
+			save(): void {
 				// Closing the template builder modal after save
-				let tmp = this.export2Json()
+				let settings: ISettings = this.export2Json()
 				document.getElementById("templateBuilderModal").style.display = "none"
 
 				// this.terminateCopyPaste()
 
 				if (this.settings.callback)
-					this.settings.callback(tmp)
+					this.settings.callback(settings)
 			},
 			/**
 			 * Exports settings to json a file.
 			 * @return {Object} - json file
 			 */
-			export2Json() {
+			export2Json(): ISettings {
 				// Syncing headerElements with the user chagnes
-				let headerElements = this.settings.header.headerElements
-				let footerElements = this.settings.footer.footerElements
+				let headerElements: IElement[] = this.settings.header.headerElements
+				let footerElements: IElement[] = this.settings.footer.footerElements
 
 				for (let index = 0; index < headerElements.length; index++) {
 					let computedStyles = this.getCoordinates(headerElements[index].options.id)
@@ -1001,9 +972,9 @@
 			 * Exports settings to vcp file.
 			 * @return {File} - save settings file in browser
 			 */
-			export2SrcFile() {
-				let tmp = this.export2Json()
-				tmp = this.encode2Base64(JSON.stringify(tmp)) // encoding the settings to export
+			export2SrcFile(): void {
+				let settings: ISettings = this.export2Json()
+				settings = this.encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
 				let designName = this.settings.designName === '' ? 'vue-print' : this.settings.designName
 				var currentdate = new Date()
@@ -1014,7 +985,7 @@
 					+ currentdate.getHours() + "_"
 					+ currentdate.getMinutes()
 
-				var blob = new Blob([tmp],
+				var blob = new Blob([settings],
 					{ type: "text/plain;charset=utf-8" })
 				saveAs(blob, `${fileName}.vp`)
 			},
@@ -1024,7 +995,7 @@
 			 * @param {srcFile} srcFile - given srcFile
 			 * @return {void} - void
 			 */
-			importFromSrcFile(srcFile) {
+			importFromSrcFile(srcFile: File): void {
 				this.settings = this.getDefaultSettings() // Set the settings to default value
 				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
 
@@ -1035,9 +1006,9 @@
 			/**
 			 * converts given inch to pixel.
 			 * @param {Number} inches - inches
-			 * @return {Number} - given inches to pixels
+			 * @return {string} - given inches to pixels
 			 */
-			convert2Pixels(inches) {
+			convert2Pixels(inches: number): string {
 				return (inches * 96).toFixed(2)
 			},
 
@@ -1045,7 +1016,7 @@
 			 * sync the sizes based upon the selected page orientation and format.
 			 * @return {void} - void
 			 */
-			syncSizes() {
+			syncSizes(): void {
 
 				const errorValue = 0.2 // Subtracting this value to make the pages more accurate
 
@@ -1057,7 +1028,7 @@
 			/**
 			 * Initializing dragging settings
 			 */
-			settingsInitFunc() {
+			settingsInitFunc(): void {
 				setTimeout(() => {
 					this.dragManager(['header', 'footer'])
 					this.locals.scale = 1
@@ -1067,9 +1038,9 @@
 			/**
 			 * converts given pixel to inch.
 			 * @param {Number} pixels - pixels
-			 * @return {Number} - given pixel to intches
+			 * @return {String} - given pixel to intches
 			 */
-			convert2Inches(pixels) {
+			convert2Inches(pixels: number): string {
 				return (pixels / 96).toFixed(2)
 			},
 
@@ -1078,7 +1049,7 @@
 			 * Init drag functionality for sections.
 			 * @return {void} - void
 			 */
-			dragManager(sections) {
+			dragManager(sections: string[]): void {
 
 				for (let sectionName of sections) {
 					let section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
@@ -1123,7 +1094,7 @@
 			 * @param {HTMLElement} tab - selected tab element
 			 * @return {void} - void
 			 */
-			switchTabs(tabName, tab) {
+			switchTabs(tabName: string, tab: HTMLElement): void {
 				let slecetdTab = document.getElementsByClassName('tab selected')[0]
 				slecetdTab.classList.remove('selected')
 				tab.classList.add('selected')
@@ -1134,7 +1105,7 @@
 			 * Deselect all selected elements.
 			 * @return {void} - void
 			 */
-			deSelectAll() {
+			deSelectAll(): void {
 				if (this.locals.isClicked) {
 					this.locals.isClicked = false
 					return
@@ -1149,10 +1120,10 @@
 
 			/**
 			 * Clicked on element.
-			 * @param {HTMLElement} element - element
+			 * @param {Object} element - element
 			 * @return {void} - void
 			 */
-			clickedOnElement(element) {
+			clickedOnElement(element: IElement): void {
 				console.log(element)
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
@@ -1161,15 +1132,15 @@
 
 			/**
 			 * create element.
-			 * @param {HTMLElement} parent - parent
+			 * @param {String} parent - element parent
 			 * @return {void} - void
 			 */
-			createElement(parent) {
-				let classType = this.locals.classType
+			createElement(parent: string): IElement {
+				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
 				var keys = Object.keys(this.settings.dataSets)
 				let tmp
-				var defaultElementObject = {
+				var defaultElementObject: IElement = {
 					type: classType,
 					options: {
 						id: this.idGenerator(5),
@@ -1215,7 +1186,7 @@
 						}
 
 						for (let set of keys) {
-							var thisSet = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data.
+							var thisSet: IDataset = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data.
 
 							tmp.options.configs.dataSets[set] = {
 								options: {
@@ -1339,8 +1310,8 @@
 			 * Creates variable in variables tab list.
 			 * @return {void} - void
 			 */
-			createVariable() {
-				let tmp = {
+			createVariable(): void {
+				let tmp: IVariable = {
 					uniqueId: this.idGenerator(5),
 					name: '',
 					type: 'text',
@@ -1354,19 +1325,19 @@
 			 * @param {variable} variable - variable object
 			 * @return {void} - void
 			 */
-			onVariableTypeChange(variable) {
+			onVariableTypeChange(variable: IVariable): void {
 				variable.context = ''
 			},
 
 			/**
 			 * Deletes variable in variables tab list.
-			 * @param {uniqueId} uniqueId - variable unique id
+			 * @param {string} uniqueId - variable unique id
 			 * @return {void} - void
 			 */
-			deleteVariable(uniqueId) {
-				let variablesList = this.locals.variables
-				let footerElements = this.settings.footer.footerElements
-				let headerElements = this.settings.header.headerElements
+			deleteVariable(uniqueId: string): void {
+				let variablesList: IVariable[] = this.locals.variables
+				let footerElements: IElement[] = this.settings.footer.footerElements
+				let headerElements: IElement[] = this.settings.header.headerElements
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
@@ -1397,7 +1368,7 @@
 			 * @param {uniqueId} uniqueId - element unique id
 			 * @return {void} - void
 			 */
-			startDraggingElement(classType, uniqueId) {
+			startDraggingElement(classType: classType, uniqueId: string) {
 				this.locals.classType = classType
 				this.locals.uniqueId = uniqueId
 				this.$refs.template.className += " dragged"
@@ -1406,7 +1377,7 @@
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent, parentElement, grandParent) {
+			droppedElement(parent: string, parentElement: IElement, grandParent: string) {
 
 				if (!this.locals.classType)
 					return
@@ -1427,7 +1398,7 @@
 					return tmp
 				}
 
-				const prepareDataSets = (rows, title, parent) => {
+				const prepareDataSets = (rows: object[], title: string, parent: string): IDataset => {
 					var tmp = {}
 					for (let row of rows)
 						if (Array.isArray(row)) {
@@ -1450,10 +1421,10 @@
 				}
 
 				var computedParent = parentElement ? grandParent : parent
-				var elem = this.createElement(computedParent)
+				var elem: IElement = this.createElement(computedParent)
 
 				if (parentElement) {// Element is dropped on another element.
-					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
 						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.rows, displaySet.title))
@@ -1475,7 +1446,7 @@
 			/**
 			 * Method that triggers when drag is finished
 			 */
-			finishedDraggingElement() {
+			finishedDraggingElement(): void {
 				this.$refs.template.classList.remove("dragged")
 			},
 
@@ -1484,13 +1455,14 @@
 			 * @param {uniqueId} uniqueId - variable | element unique id
 			 * @return {void} - void
 			 */
-			onFileChange(uniqueId) {
+			onFileChange(uniqueId: string): void {
 				let maximumFileSize = this.configurations.maximumFileSize * 1000
 				let that = this // Storing this value to be able to use it inside a function
 
 				switch (this.locals.selectedElement.type) {
 					case 'imageelement':
-						let image = document.getElementById("elementImageFileControl").files[0]
+						let image = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
+
 
 						if (image.type !== 'image/jpeg' && image.type !== 'image/png')
 							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
@@ -1504,7 +1476,7 @@
 						break
 
 					case 'variable':
-						let variables = this.locals.variables
+						let variables: IVariable[] = this.locals.variables
 						let variable
 
 						for (let index = 0; index < variables.length; index++) {
@@ -1512,8 +1484,9 @@
 								variable = variables[index]
 							}
 						}
-						image = document.getElementById("variableImageFileControl").files[0]
+						image = (<HTMLInputElement>document.getElementById('variableImageFileControl')).files[0]
 
+						// @ts-ignore
 						if (image.type !== "image/jpeg" || image.type !== "image/png")
 							return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
 
@@ -1527,7 +1500,7 @@
 
 					default: // if its a source file
 
-						let fileSrc = document.getElementById("fileSrcControl").files[0]
+						let fileSrc = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
 						if (!fileSrc.name.includes('.vp')) { // Checking the file type
 							return alert('فرمت فایل پشتیبانی نمیشود فرمت فایل های قابل قبول: vp.*')
@@ -1554,7 +1527,7 @@
 			 * @param {File} file - image
 			 * @return {*} - base64 of image
 			 */
-			toBase64(file) {
+			toBase64(file: File): Promise<string | ArrayBuffer> {
 				return new Promise((resolve, reject) => {
 					const reader = new FileReader()
 					reader.readAsDataURL(file)
@@ -1564,31 +1537,22 @@
 			},
 
 			/**
-			 * Converts given image to base64.
-			 * @param {Number} n - number of digits
-			 * @return {String} - id
-			 */
-			idGenerator(n) {
-				return Math.random().toString(36).substr(2, n)
-			},
-
-			/**
 			 * Adds an event listenner on delete button and then removes the element
 			 */
-			keyboardHandler() {
-				const toFloatVal = (val, elementId, style) => {
+			keyboardHandler(): void {
+				const toFloatVal = (val: string, elementId: string, style: string): number => {
 					if (val)
 						return parseFloat(val.split('p')[0])
 
 					return this.getCoordinates(elementId)[style]
 				}
-				const elementStyleChanger = (style, operator, e) => {
+				const elementStyleChanger = (style: string, operator: string, e: any): void => {
 					e.preventDefault()
 					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style], this.locals.selectedElement.options.id, style)
 					this.locals.selectedElement.options.styles[style] = eval(`${this.locals.selectedElement.options.styles[style]} ${operator} 1`)
 					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
 				}
-				const keyBinds = (e) => {
+				const keyBinds = (e: any): void => {
 
 					if (!this.locals.selectedElement.type)
 						return
@@ -1678,10 +1642,10 @@
 
 			/**
 			 * Gets coordinates of the given element.
-			 * @param {Number} id - element id
+			 * @param {String} id - element id
 			 * @return {Object} - return Coordination
 			 */
-			getCoordinates(id) {
+			getCoordinates(id: string): object {
 				let tmp = document.getElementById(id)
 				let compStyle = getComputedStyle(tmp)
 				return {
@@ -1694,11 +1658,11 @@
 
 			/**
 			 * Converts the given html to Image and append it to the body tag.
-			 * @param {Number} modalId - modal element id
-			 * @param {Number} closeBtnId - close button element id
+			 * @param {String} modalId - modal element id
+			 * @param {String} closeBtnId - close button element id
 			 * @return {void} - void
 			 */
-			modalManager(modalId, closeBtnId) {
+			modalManager(modalId: string, closeBtnId: string): void {
 				var modal = document.getElementById(modalId)
 
 				// Get the <span> element that closes the modal
@@ -1713,16 +1677,16 @@
 			/**
 			 * function to display modal
 			 */
-			showModal() {
+			showModal(): void {
 				document.getElementById("templateBuilderModal").style.display = "block"
 			},
 
 			/**
 			 * function that triggers while editing is finished.
-			 * @param {HTMLElment} element - element
+			 * @param {Object} element - element
 			 * @return {void} - void
 			 */
-			finishedEditingElement(element, elementLocation) {
+			finishedEditingElement(element: IElement, elementLocation: string): void {
 				var array = this.settings[elementLocation][`${elementLocation}Elements`]
 
 				if (this.locals.selectedElement.options.isChild) { // it's a repeator.
@@ -1742,22 +1706,24 @@
 
 			/**
 			 * function that triggers when clicked on input.
-			 * @param {Number} id - element id
+			 * @param {string} id - element id
 			 * @return {void} - void
 			 */
-			clickedOnInput(id) {
+			clickedOnInput(id: string): void {
 				document.getElementById(id).click()
 			},
 
 			/**
 			 * encode given string to base64.
-			 * @param {String} str - string
+			 * @param {String} str - given string
 			 * @return {*} - base64
 			 */
-			encode2Base64(str) {
+			encode2Base64(str: string): string {
 				{
 					return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
 						function toSolidBytes(match, p1) {
+
+							// @ts-ignore
 							return String.fromCharCode('0x' + p1)
 						}))
 				}
@@ -1765,10 +1731,10 @@
 
 			/**
 			 * decode given string to base64.
-			 * @param {String} str - string
+			 * @param {String} str - given string
 			 * @return {*} - base64
 			 */
-			decodeFromBase64(str) {
+			decodeFromBase64(str: string): string {
 				return decodeURIComponent(atob(str).split('').map(function (c) {
 					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
 				}).join(''))

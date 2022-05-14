@@ -47,9 +47,8 @@
 		},
 		data() {
 			return {
-				dataSets: {
+					dataSets: {
 					center: {
-						id: this.idGenerator(5),
 						key: 'Center',
 						title: 'شناور',
 						columns: [
@@ -100,20 +99,6 @@
 							},
 						],
 						rows: [
-							[{
-								center: 'center 1',
-								account: 'account 1',
-								date: 'date 1',
-								balance: 'balance 1',
-								type: 'type 1',
-							},
-							{
-								center: 'center 2',
-								account: 'account 2',
-								date: 'date 2',
-								balance: 'حسابهای دریافتنی نجاری بانکهای ارزی بانک سامان',
-								type: 'type 2',
-							},],
 							{
 								center: 'center 1',
 								account: 'account 1',
@@ -156,7 +141,6 @@
 						],
 					},
 					account: {
-						id: this.idGenerator(5),
 						key: 'Account',
 						title: 'حساب',
 						columns: [
