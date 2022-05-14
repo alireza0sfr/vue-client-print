@@ -19,12 +19,8 @@ interface IRawColumn {
   columns?: IRawColumn[]
 }
 
-interface IDataset {
-  readonly key: string
+interface IDataset extends IRawDataset {
   readonly id: number
-  title: string
-  columns: Array<IColumn>,
-  rows: Array<IRow>
 }
 
 
@@ -56,15 +52,12 @@ interface IRow {
   }
 }
 
-interface IColumn {
+interface IColumn extends IRawColumn {
   readonly id: string
-  readonly key: string
   readonly type: string
   hasResizer: boolean
   isActive: boolean
   options: object
-  title: string
-  columns?: Array<IColumn>
 }
 
 export { IRawDataset, IRawColumn, IDataset, ICell, IRow, IColumn, IRawDatasets, IDatasets }
