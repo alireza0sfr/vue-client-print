@@ -15,15 +15,7 @@
 
 <script>
 	import ElementClass from '~/plugins/element-utilities.ts'
-	import Resizers from '~/components/elements/Resizers.vue'
-	import Column from '~/components/elements/DataSet/Column.vue'
-	import Row from '~/components/elements/DataSet/Row.vue'
 	export default {
-		components: {
-			Resizers,
-			Column,
-			Row
-		},
 		name: "DataSet",
 		props: {
 			options: Object,

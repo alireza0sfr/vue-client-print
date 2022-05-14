@@ -8,11 +8,7 @@
 </template>
 
 <script>
-	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
-		components: {
-			Resizers,
-		},
 		name: "PageCounter",
 		props: {
 			options: Object,

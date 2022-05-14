@@ -29,27 +29,7 @@
 </template>
 
 <script>
-	import Resizers from '~/components/elements/Resizers.vue'
-	import Variable from '~/components/elements/Variable.vue'
-	import TextElement from '~/components/elements/TextElement.vue'
-	import DateTime from '~/components/elements/DateTime.vue'
-	import BindingObject from '~/components/elements/BindingObject.vue'
-	import PageCounter from '~/components/elements/PageCounter.vue'
-	import ImageElement from '~/components/elements/ImageElement.vue'
-	import TextPattern from '~/components/elements/TextPattern.vue'
-	import DataSet from '~/components/elements/DataSet/DataSet.vue'
 	export default {
-		components: {
-			Resizers,
-			textelement: TextElement,
-			datetime: DateTime,
-			pagecounter: PageCounter,
-			imageelement: ImageElement,
-			bindingobject: BindingObject,
-			textpattern: TextPattern,
-			variable: Variable,
-			dataset: DataSet,
-		},
 		name: "Repeator",
 		props: {
 			options: Object,

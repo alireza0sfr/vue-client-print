@@ -77,16 +77,6 @@
 	// @ts-ignore
 	import { ISettings, IConfigs } from '~/interfaces/general.ts'
 	import printJS from "print-js"
-	import TemplateBuilder from '~/components/TemplateBuilder.vue'
-	import TextPattern from '~/components/elements/TextPattern.vue'
-	import TextElement from '~/components/elements/TextElement.vue'
-	import DateTime from '~/components/elements/DateTime.vue'
-	import BindingObject from '~/components/elements/BindingObject.vue'
-	import PageCounter from '~/components/elements/PageCounter.vue'
-	import ImageElement from '~/components/elements/ImageElement.vue'
-	import Variable from '~/components/elements/Variable.vue'
-	import DataSet from '~/components/elements/DataSet/DataSet.vue'
-	import Repeator from '~/components/elements/Repeator.vue'
 	import domtoimage from 'dom-to-image'
 	export default {
 		name: "Print",
@@ -96,18 +86,6 @@
 			dataSets: { type: Object },
 			variables: { type: Array },
 			configurations: { type: Object },
-		},
-		components: {
-			variable: Variable,
-			textelement: TextElement,
-			dataset: DataSet,
-			datetime: DateTime,
-			pagecounter: PageCounter,
-			imageelement: ImageElement,
-			bindingobject: BindingObject,
-			textpattern: TextPattern,
-			repeator: Repeator,
-			TemplateBuilder,
 		},
 		data() {
 			return {

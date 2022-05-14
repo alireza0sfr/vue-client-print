@@ -17,14 +17,10 @@
 </template>
 
 <script>
-	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		name: "bindingobject",
 		props: {
 			options: Object,
-		},
-		components: {
-			Resizers,
 		},
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode

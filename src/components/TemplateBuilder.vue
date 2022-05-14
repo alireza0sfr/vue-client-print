@@ -599,33 +599,13 @@
 	import { IElement, IVariable } from '~/interfaces/elements.ts'
 	// @ts-ignore
 	import { ISettings } from '~/interfaces/general.ts'
-	import Variable from '~/components/elements/Variable.vue'
-	import TextElement from '~/components/elements/TextElement.vue'
-	import DateTime from '~/components/elements/DateTime.vue'
-	import BindingObject from '~/components/elements/BindingObject.vue'
-	import PageCounter from '~/components/elements/PageCounter.vue'
-	import ImageElement from '~/components/elements/ImageElement.vue'
-	import TextPattern from '~/components/elements/TextPattern.vue'
-	import DataSet from '~/components/elements/DataSet/DataSet.vue'
 	import { saveAs } from 'file-saver'
 	import DefaultLogo from '@/assets/images/logo.png'
-	import Repeator from '~/components/elements/Repeator.vue'
 	export default {
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
 			configurations: Object,
-		},
-		components: {
-			textelement: TextElement,
-			datetime: DateTime,
-			pagecounter: PageCounter,
-			imageelement: ImageElement,
-			bindingobject: BindingObject,
-			textpattern: TextPattern,
-			variable: Variable,
-			dataset: DataSet,
-			repeator: Repeator
 		},
 		data() {
 			return {

@@ -17,11 +17,7 @@
 </template>
 
 <script>
-	import Resizers from './Resizers.vue'
 	export default {
-		components: {
-			Resizers,
-		},
 		name: "Variable",
 		props: {
 			options: Object,

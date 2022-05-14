@@ -7,11 +7,7 @@
 
 <script>
 	import DefaultLogo from '@/assets/images/logo.png'
-	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
-		components: {
-			Resizers,
-		},
 		name: "ImageElement",
 		props: {
 			options: Object,
