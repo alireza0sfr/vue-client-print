@@ -5,7 +5,7 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.ts'
 	export default {
 		name: "Row",
 		props: {

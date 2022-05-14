@@ -14,7 +14,7 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.ts'
 	import Resizers from '~/components/elements/Resizers.vue'
 	import Column from '~/components/elements/DataSet/Column.vue'
 	import Row from '~/components/elements/DataSet/Row.vue'

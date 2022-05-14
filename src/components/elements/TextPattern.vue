@@ -17,7 +17,7 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.ts'
 	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
 		components: {

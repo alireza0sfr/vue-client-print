@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.ts'
 	import DefaultLogo from '@/assets/images/logo.png'
 	import Resizers from '~/components/elements/Resizers.vue'
 	export default {

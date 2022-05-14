@@ -23,7 +23,7 @@ class Element {
 
     for (let resizer of resizers)
       // @ts-ignore
-      resizer.onmousedown = (e) => initDrag(e, resizer)
+      resizer.onmousedown = (e: any) => initDrag(e, resizer)
 
     element.onmousedown = this.dragable
 

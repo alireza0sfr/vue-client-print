@@ -7,7 +7,7 @@
 
 <script>
 	import Resizers from '~/components/elements/Resizers.vue'
-	import ElementClass from '~/plugins/element-utilities.js'
+	import ElementClass from '~/plugins/element-utilities.ts'
 	export default {
 		components: {
 			Resizers,
