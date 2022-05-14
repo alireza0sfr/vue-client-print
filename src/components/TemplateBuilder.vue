@@ -723,6 +723,9 @@
 				var tmp: object = {}
 				var keys: string[] = Object.keys(sets)
 
+				if (sets[keys[0]] && sets[keys[0]].options && sets[keys[0]].options.id) // if dataset has id it means it's already prepared
+					return
+
 				for (let set of keys) {
 					var thisSet: IRawDataset = JSON.parse(JSON.stringify(sets[set])) // removing refrence to the original data.
 					tmp = {
@@ -793,7 +796,6 @@
 						title: col.title,
 						key: col.key,
 						isActive: true,
-						columns: col.columns,
 						hasResizer: columns.indexOf(col) !== columns.length - 1,
 						type: 'column',
 						options: {
@@ -803,6 +805,10 @@
 							},
 						}
 					}
+					if (col.columns)
+						// @ts-ignore
+						tmp.columns = col.columns
+
 					columns[index] = tmp
 				}
 				return columns
