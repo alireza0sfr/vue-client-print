@@ -594,7 +594,7 @@
 
 <script lang="ts">
 	// @ts-ignore
-	import { IRawDataset, IRawColumn, IDataset, IRow, IColumn, classType } from '~/interfaces/datasets.ts'
+	import { IRawDataset, IRawColumn, IDataset, IDatasets, IRawDatasets, IRow, IColumn, classType } from '~/interfaces/datasets.ts'
 	// @ts-ignore
 	import { IElement, IVariable } from '~/interfaces/elements.ts'
 	// @ts-ignore
@@ -739,10 +739,10 @@
 			 * @param {String} key - dataset key.
 			 * @return {Object} - Prepared dataset.
 			 */
-			// TODO dataset should be fully prepared here
-			prepareDataSets(sets: IRawDataset = this.settings.dataSets): IDataset {
+			prepareDataSets(sets: IRawDatasets = this.settings.dataSets): IDatasets {
 				for (let key of Object.keys(sets)) {
-					sets[key].id = this.idGenerator(5)
+					var thisSet: IRawDataset = sets[key]
+					thisSet.id = this.idGenerator(5)
 				}
 				return sets
 			},
@@ -1398,7 +1398,7 @@
 					return tmp
 				}
 
-				const prepareDataSets = (rows: object[], title: string, parent: string): IDataset => {
+				const prepareDataSets = (rows: object[], title: string, parent: string): IDatasets => {
 					var tmp = {}
 					for (let row of rows)
 						if (Array.isArray(row)) {

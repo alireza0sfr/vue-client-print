@@ -5,6 +5,14 @@ interface IRawDataset {
   rows?: object[]
 }
 
+interface IRawDatasets {
+  [key: string]: IRawDataset
+}
+
+interface IDatasets {
+  [key: string]: IDataset
+}
+
 interface IRawColumn {
   readonly key: string
   title: string
@@ -59,4 +67,4 @@ interface IColumn {
   columns?: Array<IColumn>
 }
 
-export { IRawDataset, IRawColumn, IDataset, ICell, IRow, IColumn }
+export { IRawDataset, IRawColumn, IDataset, ICell, IRow, IColumn, IRawDatasets, IDatasets }
