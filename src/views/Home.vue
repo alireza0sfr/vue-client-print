@@ -47,7 +47,7 @@
 		},
 		data() {
 			return {
-					dataSets: {
+				dataSets: {
 					center: {
 						key: 'Center',
 						title: 'شناور',
@@ -59,7 +59,27 @@
 									styles: {
 										width: '70px',
 									},
-								}
+								},
+								columns: [
+									{
+										title: 'column child 1',
+										key: 'center child',
+										options: {
+											styles: {
+												width: '70px',
+											},
+										}
+									},
+									{
+										title: 'column child 2',
+										key: 'account child',
+										options: {
+											styles: {
+												width: '50px',
+											}
+										}
+									},
+								]
 							},
 							{
 								title: 'column 2',

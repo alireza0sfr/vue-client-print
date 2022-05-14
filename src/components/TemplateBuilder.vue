@@ -720,9 +720,23 @@
 			 * @return {Object} - Prepared dataset.
 			 */
 			prepareDataSets(sets: IRawDatasets = this.settings.dataSets): IDatasets {
-				for (let key of Object.keys(sets)) {
-					var thisSet: IRawDataset = sets[key]
-					thisSet.id = this.idGenerator(5)
+				var tmp: object = {}
+				var keys: string[] = Object.keys(sets)
+
+				for (let set of keys) {
+					var thisSet: IRawDataset = JSON.parse(JSON.stringify(sets[set])) // removing refrence to the original data.
+					tmp = {
+						options: {
+							id: this.idGenerator(5),
+							configs: {
+								columns: this.prepareDataSetColumns(thisSet.columns),
+								rows: this.prepareDataSetRows(thisSet.rows),
+								title: thisSet.title,
+								key: thisSet.key
+							},
+						}
+					}
+					sets[set] = tmp
 				}
 				return sets
 			},
@@ -731,14 +745,13 @@
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared rows.
 			 */
-			prepareDataSetRows(rows: object[], parent: string): IRow {
+			prepareDataSetRows(rows: object[]): IRow {
 				for (let index = 0; index < rows.length; index++) {
 					var objectKeys = Object.keys(rows[index])
 					var tempRow: IRow = {
 						type: 'row',
 						options: {
 							id: this.idGenerator(5),
-							parent: parent,
 							styles: {},
 							configs: {
 								cells: {}
@@ -753,7 +766,6 @@
 							options: {
 								id: this.idGenerator(5),
 								styles: {},
-								parent: parent,
 								configs: {
 									value: rows[index][key]
 								},
@@ -771,37 +783,23 @@
 			 * @param {String} parent - Parent name.
 			 * @return {Object} - Prepared columns.
 			 */
-			prepareDataSetColumns(columns: IRawColumn[], parent: string, rows: object[]): IColumn {
-				let tmp
-				var row = null
-
-				for (let i of rows) { // Find first row object and use it's keys as columns key.
-					if (this.isObject(i)) {
-						row = i
-						break
-					}
-				}
-
-				if (!row)
-					return []
-
-				if (!columns)
-					columns = Object.keys(row)
+			prepareDataSetColumns(columns: IRawColumn[]): IColumn {
+				let tmp: object = {}
 
 				for (let index = 0; index < columns.length; index++) {
 					var col = columns[index]
 
 					tmp = {
-						title: col.title ? col.title : col, // If columns object is filled use given title else use row key.
-						key: col.key ? col.key : (col.title ? col.title : col),
+						title: col.title,
+						key: col.key,
 						isActive: true,
+						columns: col.columns,
 						hasResizer: columns.indexOf(col) !== columns.length - 1,
 						type: 'column',
 						options: {
-							parent: parent,
 							id: this.idGenerator(5),
 							styles: {
-								width: '70px',
+								width: col.options.styles.width ? col.options.styles.width : '70px',
 							},
 						}
 					}
@@ -1146,7 +1144,7 @@
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
-									dataSets: {},
+									dataSets: this.settings.dataSets,
 									stylesTarget: 'all',
 									defaultRow: this.locals.dataSetDefaultRow
 								},
@@ -1154,25 +1152,6 @@
 									height: "100px",
 								},
 							},
-						}
-
-						for (let set of keys) {
-							var thisSet: IDataset = JSON.parse(JSON.stringify(this.settings.dataSets[set])) // removing refrence to the original data.
-
-							tmp.options.configs.dataSets[set] = {
-								options: {
-									id: thisSet.id,
-									parent: parent,
-									grandParent: 'TemplateBuilder',
-									configs: {
-										columns: this.prepareDataSetColumns(thisSet.columns, parent, thisSet.rows),
-										rows: this.prepareDataSetRows(thisSet.rows, parent),
-										title: thisSet.title,
-										key: thisSet.key
-									},
-									styles: thisSet.styles || {},
-								}
-							}
 						}
 						break
 					case 'textelement':
@@ -1353,41 +1332,49 @@
 				if (!this.locals.classType)
 					return
 
-				const prepareBindingObjects = (data, title) => {
+				/**
+				 * prepare bindingObjects data based on repeator's selected dataset
+				 * @param {Array} columns - element's raw columns
+				 * @param {String} title - selected dataset's name
+				 * @return {Object} - preapred bindingObject options
+				 */
+				const prepareBindingObjects = (columns: IRawColumn[], title: string): object => {
 					let tmp = {}
-					for (let row of data) {
-						for (let key of Object.keys(row)) {
+					for (let col of columns) {
 
-							var name = `${title}-${key}`
-
-							if (!Array.isArray(tmp[name]))
-								tmp[name] = []
-
-							tmp[name].push(row[key])
-						}
+						var name = `${title}-${col.key}`
+						tmp[name] = []
 					}
 					return tmp
 				}
 
-				const prepareDataSets = (rows: object[], title: string, parent: string): IDatasets => {
+
+				/**
+				 * prepare datasets data based on repeator's selected dataset
+				 * @param {Array} columns - element's raw columns
+				 * @param {String} title - selected dataset's name
+				 * @param {String} parent - selected dataset's parent
+				 * @return {Object} - preapred bindingObject options
+				 */
+				const prepareDataSets = (columns: IColumn[], title: string): IDatasets => {
 					var tmp = {}
-					for (let row of rows)
-						if (Array.isArray(row)) {
-							var name = `${title}-1`
+					for (let col of columns) {
+
+						if (col.columns) {
+							var name = `${title}-${col.title}`
 							tmp[name] = {
 								options: {
-									grandParent: 'TemplateBuilder',
 									id: this.idGenerator(5),
-									parent: parent,
-									styles: {},
 									configs: {
-										title: name,
-										key: name,
-										rows: row
+										title: col.title,
+										key: col.key,
+										rows: [],
+										columns: this.prepareDataSetColumns(col.columns),
 									}
 								}
 							}
 						}
+					}
 					return tmp
 				}
 
@@ -1398,10 +1385,10 @@
 					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
-						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.rows, displaySet.title))
+						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.options.configs.columns, displaySet.options.configs.title))
 
 					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.rows, displaySet.title, grandParent))
+						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.options.configs.columns, displaySet.options.configs.title))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id

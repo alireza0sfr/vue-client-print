@@ -1,10 +1,10 @@
 <template>
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
-	
-	<!-- Template Builder -->
+
+		<!-- Template Builder -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'">
 			<div class="name">
-				<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+				<span>{{displaySet.options.configs.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex">
 				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
@@ -14,9 +14,9 @@
 
 		<!-- Print Preview -->
 		<div v-else>
-			<div v-for="(row, index) in displaySet.rows" :key="row" :style="computedStyles">
+			<div v-for="(row, index) in displaySet.options.configs.rows" :key="row" :style="computedStyles">
 				<div class="name">
-					<span>{{displaySet.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+					<span>{{displaySet.options.configs.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 				</div>
 				<div style="display: flex">
 					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index, bindingObjectCallback)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
@@ -24,7 +24,7 @@
 				<Resizers :query="`repeator-${settings.id}`" />
 			</div>
 		</div>
-		
+
 	</div>
 </template>
 
@@ -65,9 +65,9 @@
 					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
-						datasets: [],
+						dataSets: {},
 						selectedDataSet: '',
-						appenedElements: {},
+						appendedElements: {},
 						originalHeight: '0'
 					},
 					styles: {},
