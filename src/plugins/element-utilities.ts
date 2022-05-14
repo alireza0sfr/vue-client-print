@@ -1,5 +1,13 @@
+// @ts-ignore
+import { IElement } from '~/interfaces/elements.ts'
+
 class Element {
-  constructor($el, resizerQuery, element) {
+
+  element: IElement
+  resizerQuery: string
+  $el: HTMLElement
+
+  constructor($el: HTMLElement, resizerQuery: string, element: IElement) {
     this.$el = $el
     this.resizerQuery = resizerQuery
     this.element = element
@@ -9,17 +17,19 @@ class Element {
    * make element resiable
    * @emits {size-changed} call size-changed event and passes cleanedCoordinates, element, queryResizer.
    */
-  resizable() {
+  resizable(): void {
     var element = this.$el
     const resizers = document.querySelectorAll(`.elem-resizer.${this.resizerQuery}`)
 
-    for (let resizer of resizers) {
+    for (let resizer of resizers)
+      // @ts-ignore
       resizer.onmousedown = (e) => initDrag(e, resizer)
-    }
 
     element.onmousedown = this.dragable
-    var startX, startY, startWidth, startHeight, originalLeft, originalTop, that = this
-    function initDrag(e, resizer) {
+
+    var startX: number, startY: number, startWidth: number, startHeight: number, originalLeft: number, originalTop: number, that = this
+
+    function initDrag(e: any, resizer: HTMLElement): void {
       if (e.target.className.includes('elem-resizer')) { // If Clicking on the resizer
         originalLeft = element.offsetLeft
         originalTop = element.offsetTop
@@ -31,7 +41,7 @@ class Element {
         document.onmouseup = stopDrag
       }
     }
-    function doDrag(e, resizer) {
+    function doDrag(e: any, resizer: HTMLElement): void {
       if (resizer.className.includes('right'))
         element.style.width = startWidth + e.clientX - startX + "px"
 
@@ -73,7 +83,7 @@ class Element {
       }
     }
 
-    function stopDrag(e) {
+    function stopDrag(e: any): void {
       document.onmousemove = null
       document.onmouseup = null
       element.dispatchEvent(new Event("finishededitingelement"))
@@ -98,11 +108,11 @@ class Element {
    * element click handler 
    * @emits {click} call click event and passes element, queryResizer.
    */
-  clickable() {
+  clickable(): void {
     var element = this.$el
     var that = this
     element.addEventListener("mousedown", onClick, false)
-    function onClick(e) {
+    function onClick(e: any) {
       e.stopPropagation() // prevent event to call parent events aswell
       let selectedElements = document.getElementsByClassName('element selected')
       for (let index = 0; index < selectedElements.length; index++) {
@@ -124,14 +134,14 @@ class Element {
    * make element dragable
    * @emits {drag-end} call drag-end event and passes cleanedCoordinates, element, queryResizer.
    */
-  dragable() {
+  dragable(): void {
     let element = this.$el
-    var startX, startY, newLeft, newTop, that = this
+    var startX: number, startY: number, newLeft: number, newTop: number, that = this
 
     // move the DIV from anywhere inside the DIV:
     element.onmousedown = dragMouseDown
 
-    function dragMouseDown(e) {
+    function dragMouseDown(e: any): void {
       if (e.target.className.includes('resizer'))
         return
 
@@ -146,7 +156,7 @@ class Element {
         document.onmousemove = elementDrag
       }
 
-      function elementDrag(e) {
+      function elementDrag(e: any): void {
         e = e || window.event
         e.preventDefault()
         // calculate the new cursor position:
@@ -159,7 +169,7 @@ class Element {
         element.style.left = element.offsetLeft - newLeft + "px"
       }
 
-      function closeDragElement() {
+      function closeDragElement(): void {
         // stop moving when mouse button is released:
         document.onmouseup = null
         document.onmousemove = null
@@ -176,7 +186,7 @@ class Element {
     }
   }
 
-  cleanedCoordinates() {
+  cleanedCoordinates(): object {
     return {
       height: this.toFloatValue(this.$el.style.height),
       width: this.toFloatValue(this.$el.style.width),
@@ -185,7 +195,7 @@ class Element {
     }
   }
 
-  toFloatValue(value) {
+  toFloatValue(value: string): number {
     return parseFloat(value.split('p')[0])
   }
 
