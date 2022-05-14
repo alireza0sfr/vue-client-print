@@ -4,7 +4,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true
   }
 }
