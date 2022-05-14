@@ -27,7 +27,6 @@ export default function componentRegisterer(App: any): void {
   App.component('textpattern', TextPattern)
   App.component('repeator', Repeator)
   App.component('dataset', DataSet)
-  App.component('textelement', TextElement)
   App.component('Column', Column)
   App.component('Row', Row)
 
