@@ -186,13 +186,10 @@ var mixins: object = {
         case 'repeator':
           var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
           var rows = this.dataSets[opt.configs.selectedDataSet].rows // removing refrence to prevent recursion
-          var elements = opt.configs.appendedElements[opt.configs.selectedDataSet]
 
           opt.configs.originalHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
           opt.styles.height = 'auto'
           opt.styles.position = 'relative'
-          // for (let elem of elements)
-          //   elem.options.styles.position = 'relative'
 
           rows = JSON.parse(JSON.stringify(rows))
           displaySet.options.configs.rows = rows
@@ -207,8 +204,8 @@ var mixins: object = {
           var dataSets = opt.repeatorId ? this.settings.configs.dataSets : this.dataSets
 
           // if selectedDataSet contains "-" it means repeator's rows contains array therfore dataset should connect to child array
-          const parentDataSetKey = selectedDataSet.split('-')[0]
-          const childDataSetKey = selectedDataSet.split('-')[1]
+          var parentDataSetKey = selectedDataSet.split('-')[0]
+          var childDataSetKey = selectedDataSet.split('-')[1]
 
           // repeator's rows contains array therfore dataset should connect to child array
           if (childDataSetKey)
@@ -267,16 +264,29 @@ var mixins: object = {
           break
 
         case 'bindingobject':
-          let key = opt.configs.field
+          let field = opt.configs.field
+          var selectedDataSet = this.settings.configs.selectedDataSet
           var bindingObject = opt.configs.bindingObject
+          var dataSets = opt.repeatorId ? this.settings.configs.dataSets : this.dataSets
+          var displaySet = dataSets[selectedDataSet]
+
+          // if its called from repeator's methods therefore rows are in configs else get it's called from print's methods therefore rows are in displaySet
+          var rows = opt.repeatorId ? dataSets[selectedDataSet].options.configs.rows : displaySet.rows
+
+          // preapring bindingobject data
+          for (let key of Object.keys(bindingObject)) {
+            let childDataSetKey = key.split('-')[1]
+            if (childDataSetKey)
+              for (let row of rows)
+                bindingObject[key].push(row[childDataSetKey])
+          }
 
           if (callback)
-            callback(opt, bindingObject, key, index)
+            callback(opt, bindingObject, field, index)
 
           else {
-
-            if (bindingObject[key])
-              opt.configs.value = bindingObject[key]
+            if (bindingObject[field])
+              opt.configs.value = bindingObject[field]
             else
               opt.configs.value = ''
           }

@@ -1308,12 +1308,15 @@
 				 * @param {String} title - selected dataset's name
 				 * @return {Object} - preapred bindingObject options
 				 */
-				//TODO do the same for bindingobject
-				const prepareBindingObjects = (columns: IRawColumn[], title: string): object => {
+				const prepareBindingObjects = (columns: IRawColumn[], key: string): object => {
 					let tmp = {}
 					for (let col of columns) {
+						
+						// if columns contains child columns it means row data will be array and cant be assigned to bindingobject
+						if (col.columns)
+							continue
 
-						var name = `${title}-${col.key}`
+						var name = `${key}-${col.key}`
 						tmp[name] = []
 					}
 					return tmp
@@ -1356,7 +1359,7 @@
 					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
-						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.options.configs.columns, displaySet.options.configs.title))
+						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					if (elem.type === 'dataset')
 						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.options.configs.columns, displaySet.options.configs.key))
