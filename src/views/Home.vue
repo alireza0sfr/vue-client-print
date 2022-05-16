@@ -57,6 +57,20 @@
 								date: 'child date',
 								balance: 'child balance',
 								type: 'child type',
+							},
+							{
+								center: 'child center',
+								account: 'child account',
+								date: 'child date',
+								balance: 'child balance',
+								type: 'child type',
+							},
+							{
+								center: 'child center',
+								account: 'child account',
+								date: 'child date',
+								balance: 'child balance',
+								type: 'child type',
 							}
 						],
 						date: 'date 1',

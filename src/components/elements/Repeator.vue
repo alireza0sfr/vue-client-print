@@ -14,7 +14,7 @@
 
 		<!-- Print Preview -->
 		<div v-else>
-			<div v-for="index in displaySet.options.configs.rows" :key="index" :style="computedStyles">
+			<div v-for="(row, index) in displaySet.options.configs.rows" :key="row" :style="computedStyles">
 				<div style="display: flex; position: absolute;">
 					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index, bindingObjectCallback)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 				</div>
