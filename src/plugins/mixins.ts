@@ -169,6 +169,8 @@ var mixins: object = {
      * this method can be called from Repeators.vue & Print.vue
      * therefore, scope of this and settings can be diffrent.
      * in TB rows are unavailable and it will be set in Print Preview.
+     * if print calls this method 'this.settings' points to Print.vue's settings and 'opt' points to element options.
+     * if repeator calls this method 'this.settings' points to Repeator.vue's settings and 'opt' points to repeator's child's options.
      * @param {Object} options - preview settings
      * @param {String} type - element type
      * @param {Number} index - loop index
@@ -186,6 +188,12 @@ var mixins: object = {
         case 'repeator':
           var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
           var rows = this.dataSets[opt.configs.selectedDataSet].rows // removing refrence to prevent recursion
+
+          // it's normal repeator element and not a repeator of repeator
+          if (!opt.repeatorId) {
+            opt.configs.totalPages = this.locals.totalPages
+            opt.configs.currentPage = index
+          }
 
           opt.configs.originalHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
           opt.styles.height = 'auto'
@@ -250,10 +258,20 @@ var mixins: object = {
           break
 
         case 'pagecounter':
+          // if it's print.vue index is the main loop's index else currentPage is in repeator's options
+          var currentPage = this.settings.configs ? this.settings.configs.currentPage + 1 : index
+          var totalPages = this.settings.configs ? this.settings.configs.totalPages : this.locals.totalPages
+
+          if (currentPage === 0)
+            currentPage = 1
+
+          if (totalPages === 0)
+            totalPages = 1
+
           if (opt.configs.completeForm) {
             if (opt.configs.persianNumbers) {
-              var currentPage = index ? this.toPersianDigits(index) : 1
-              let totalPages = this.locals.totalPages ? this.toPersianDigits(this.locals.totalPages) : 1
+              currentPage = this.toPersianDigits(currentPage)
+              totalPages = this.toPersianDigits(totalPages)
               opt.configs.counter = opt.configs.counter.replace('1', this.$t('template-builder.page-counter', { currentPage, totalPages }))
             } else {
               opt.configs.counter = opt.configs.counter.replace('1', `page ${currentPage} / ${this.locals.totalPages}`)
