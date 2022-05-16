@@ -190,9 +190,9 @@ var mixins: object = {
 
           opt.configs.originalHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
           opt.styles.height = 'auto'
-
-          for (let elem of elements)
-            elem.options.styles.position = 'static'
+          opt.styles.position = 'relative'
+          // for (let elem of elements)
+          //   elem.options.styles.position = 'relative'
 
           rows = JSON.parse(JSON.stringify(rows))
           displaySet.options.configs.rows = rows
