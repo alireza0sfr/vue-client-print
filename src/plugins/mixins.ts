@@ -283,20 +283,22 @@ var mixins: object = {
 
         case 'bindingobject':
           let field = opt.configs.field
-          var selectedDataSet = this.settings.configs.selectedDataSet
           var bindingObject = opt.configs.bindingObject
-          var dataSets = opt.repeatorId ? this.settings.configs.dataSets : this.dataSets
-          var displaySet = dataSets[selectedDataSet]
 
-          // if its called from repeator's methods therefore rows are in configs else get it's called from print's methods therefore rows are in displaySet
-          var rows = opt.repeatorId ? dataSets[selectedDataSet].options.configs.rows : displaySet.rows
+          // if it's repeator's bindingObject
+          if (opt.repeatorId) {
+            var dataSets = this.settings.configs.dataSets
+            var selectedDataSet = this.settings.configs.selectedDataSet
+            var displaySet = dataSets[selectedDataSet]
+            var rows = dataSets[selectedDataSet].options.configs.rows
 
-          // preapring bindingobject data
-          for (let key of Object.keys(bindingObject)) {
-            let childDataSetKey = key.split('-')[1]
-            if (childDataSetKey)
-              for (let row of rows)
-                bindingObject[key].push(row[childDataSetKey])
+            // prepare bindingobject's data based on rows
+            for (let key of Object.keys(bindingObject)) {
+              let childDataSetKey = key.split('-')[1]
+              if (childDataSetKey)
+                for (let row of rows)
+                  bindingObject[key].push(row[childDataSetKey])
+            }
           }
 
           if (callback)
