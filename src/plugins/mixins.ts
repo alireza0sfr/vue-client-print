@@ -2,9 +2,48 @@
 import ElementClass from '~/plugins/element-utilities.ts'
 // @ts-ignore
 import { IElement } from '~/interfaces/elements.ts'
+// @ts-ignore
+import { IRow } from '~/interfaces/datasets.ts'
 
 var mixins: object = {
   methods: {
+
+    /** converting normal row object to dataset row objects
+     * @param {Object} rows - Raw rows.
+     * @param {String} parent - Parent name.
+     * @return {Object} - Prepared rows.
+     */
+    prepareDataSetRows(rows: object[]): IRow[] {
+      for (let index = 0; index < rows.length; index++) {
+        var objectKeys = Object.keys(rows[index])
+        var tempRow: IRow = {
+          type: 'row',
+          options: {
+            id: this.idGenerator(5),
+            styles: {},
+            configs: {
+              cells: {}
+            }
+          },
+        }
+
+        for (let key of objectKeys) {
+          tempRow.options.configs.cells[key] = {
+            type: 'cell',
+            isActive: true,
+            options: {
+              id: this.idGenerator(5),
+              styles: {},
+              configs: {
+                value: rows[index][key]
+              },
+            }
+          }
+        }
+        rows[index] = tempRow
+      }
+      return rows
+    },
 
     /**
      * Initializing the element utilities for the created element
@@ -126,7 +165,10 @@ var mixins: object = {
     },
 
     /**
-     * Prepare element options before rendering.
+     * Prepare element options before rendering
+     * this method can be called from Repeators.vue & Print.vue
+     * therefore, scope of this and settings can be diffrent.
+     * in TB rows are unavailable and it will be set in Print Preview.
      * @param {Object} options - preview settings
      * @param {String} type - element type
      * @param {Number} index - loop index
@@ -142,22 +184,57 @@ var mixins: object = {
       switch (type) {
 
         case 'repeator':
+          var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
+          var rows = this.dataSets[opt.configs.selectedDataSet].rows // removing refrence to prevent recursion
+          var elements = opt.configs.appendedElements[opt.configs.selectedDataSet]
+
           opt.configs.originalHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
           opt.styles.height = 'auto'
-          // var height = this.toFloatVal(this.settings.styles.height)
-          // var displaySet = this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
-          // height *= displaySet.rows.length
-          // this.settings.styles.height = height + 'px'
+
+          for (let elem of elements)
+            elem.options.styles.position = 'static'
+
+          rows = JSON.parse(JSON.stringify(rows))
+          displaySet.options.configs.rows = rows
           break
         case 'dataset':
-          opt.configs.originalColumnHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
-          opt.styles.height = 'auto'
-          var displaySet = opt.configs.dataSets[opt.configs.selectedDataSet]
+          var selectedDataSet = opt.configs.selectedDataSet
+          var displaySet = opt.configs.dataSets[selectedDataSet]
           var columns = displaySet.options.configs.columns
-          var rows = displaySet.options.configs.rows
+          var rows
+
+          // if its called from repeator's methods therefore  dataset is in repeators options else get it's called from print's methods therefore dataset is in props
+          var dataSets = opt.repeatorId ? this.settings.configs.dataSets : this.dataSets
+
+          // if selectedDataSet contains "-" it means repeator's rows contains array therfore dataset should connect to child array
+          const parentDataSetKey = selectedDataSet.split('-')[0]
+          const childDataSetKey = selectedDataSet.split('-')[1]
+
+          // repeator's rows contains array therfore dataset should connect to child array
+          if (childDataSetKey)
+            rows = dataSets[parentDataSetKey].options.configs.rows[index][childDataSetKey]
+
+          // it's dataset appended to a repeator
+          else if (opt.repeatorId)
+            rows = dataSets[selectedDataSet].options.configs.rows
+
+          // it's normal dataset element
+          else
+            rows = dataSets[selectedDataSet].rows
+
+          // removing refrence to prevent recursion
+          rows = JSON.parse(JSON.stringify(rows))
+          displaySet.options.configs.rows = this.prepareDataSetRows(rows)
+
+          // storing dataset height in originalColumnHeight to use it for column height
+          opt.configs.originalColumnHeight = opt.styles.height
+          opt.styles.height = 'auto'
+
           for (let row of rows) {
             var objectKeys = Object.keys(row.options.configs.cells)
             for (let index = 0; index < objectKeys.length; index++) {
+
+              // select styles manually to prevent some columns styles to be overwritten
               let data = row.options.configs.cells[objectKeys[index]]
               data.options.styles.width = columns[index].options.styles.width
               data.options.styles.textAlign = columns[index].options.styles.textAlign

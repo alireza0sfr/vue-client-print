@@ -743,42 +743,6 @@
 				}
 				return sets
 			},
-			/** converting normal row object to dataset row objects
-			 * @param {Object} rows - Raw rows.
-			 * @param {String} parent - Parent name.
-			 * @return {Object} - Prepared rows.
-			 */
-			prepareDataSetRows(rows: object[]): IRow[] {
-				for (let index = 0; index < rows.length; index++) {
-					var objectKeys = Object.keys(rows[index])
-					var tempRow: IRow = {
-						type: 'row',
-						options: {
-							id: this.idGenerator(5),
-							styles: {},
-							configs: {
-								cells: {}
-							}
-						},
-					}
-
-					for (let key of objectKeys) {
-						tempRow.options.configs.cells[key] = {
-							type: 'cell',
-							isActive: true,
-							options: {
-								id: this.idGenerator(5),
-								styles: {},
-								configs: {
-									value: rows[index][key]
-								},
-							}
-						}
-					}
-					rows[index] = tempRow
-				}
-				return rows
-			},
 
 			/**
 			 * Preparing columns for dataset element.
@@ -1344,6 +1308,7 @@
 				 * @param {String} title - selected dataset's name
 				 * @return {Object} - preapred bindingObject options
 				 */
+				//TODO do the same for bindingobject
 				const prepareBindingObjects = (columns: IRawColumn[], title: string): object => {
 					let tmp = {}
 					for (let col of columns) {
@@ -1362,12 +1327,12 @@
 				 * @param {String} parent - selected dataset's parent
 				 * @return {Object} - preapred bindingObject options
 				 */
-				const prepareDataSets = (columns: IColumn[], title: string): IDatasets => {
+				const prepareDataSets = (columns: IColumn[], key: string): IDatasets => {
 					var tmp = {}
 					for (let col of columns) {
 
 						if (col.columns) {
-							var name = `${title}-${col.title}`
+							var name = `${key}-${col.key}`
 							tmp[name] = {
 								options: {
 									id: this.idGenerator(5),
@@ -1394,7 +1359,7 @@
 						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.options.configs.columns, displaySet.options.configs.title))
 
 					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.options.configs.columns, displaySet.options.configs.title))
+						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
