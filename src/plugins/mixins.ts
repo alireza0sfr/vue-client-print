@@ -272,9 +272,9 @@ var mixins: object = {
             if (opt.configs.persianNumbers) {
               currentPage = this.toPersianDigits(currentPage)
               totalPages = this.toPersianDigits(totalPages)
-              opt.configs.counter = opt.configs.counter.replace('1', this.$t('template-builder.page-counter', { currentPage, totalPages }))
+              opt.configs.counter = this.$t('template-builder.page-counter', { currentPage, totalPages })
             } else {
-              opt.configs.counter = opt.configs.counter.replace('1', `page ${currentPage} / ${this.locals.totalPages}`)
+              opt.configs.counter = `page ${currentPage} / ${this.locals.totalPages}`
             }
           } else {
             opt.configs.counter = currentPage
