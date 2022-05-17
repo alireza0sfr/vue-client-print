@@ -195,7 +195,10 @@ var mixins: object = {
             opt.configs.currentPage = index
           }
 
-          opt.configs.originalHeight = opt.styles.height // storing dataset height in originalColumnHeight to use it for column height
+          // storing repeator's element's height in originalColumnHeight before settings whole element's height to auto to use it for each repeators height
+          opt.styles.height = this.toFloatVal(opt.styles.height)
+          // subtracting repeator's title's height from total height '24' is hard coded height for title
+          opt.configs.originalHeight = opt.styles.height - 24 + 'px'
           opt.styles.height = 'auto'
           opt.styles.position = 'relative'
 

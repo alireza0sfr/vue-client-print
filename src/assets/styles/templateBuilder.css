@@ -487,6 +487,7 @@ textarea:focus {
 .repeator .name {
     text-align: right;
     background-color: #ffdc79;
+    height: 24px;
 }
 
 /* Variables  */
