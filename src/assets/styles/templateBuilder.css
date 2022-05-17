@@ -323,6 +323,7 @@ textarea:focus {
 .element.selected .elem-resizer.left {
     left: 0;
     top: 50%;
+    transform: translate(0px, -4px);
 }
 
 .element.selected .elem-resizer.left:hover {
@@ -332,6 +333,7 @@ textarea:focus {
 .element.selected .elem-resizer.right {
     right: 0;
     top: 50%;
+    transform: translate(0px, -4px);
 }
 
 .element.selected .elem-resizer.right:hover {
