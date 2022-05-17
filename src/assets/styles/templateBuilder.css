@@ -288,8 +288,8 @@ textarea:focus {
 
 .element.selected .elem-resizer {
     position: absolute;
-    height: 8px;
-    width: 8px;
+    height: 6px;
+    width: 6px;
     background-image: url('~/assets/images/resizer.svg');
 }
 
