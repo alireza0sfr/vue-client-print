@@ -9,7 +9,7 @@
 		<div class="rows">
 			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" @click.stop="$emit('clickedOnElement', row)" @styles-target-changed="stylesTargetChanged" /> <!-- Row is only clickable on TB and row['center'] is the default row on TB -->
 		</div>
-		<Resizers :query=" `dataset-${settings.id}`" :resizers="['br']" />
+		<Resizers :query=" `dataset-${settings.id}`" />
 	</div>
 </template>
 
