@@ -12,7 +12,6 @@ class Element {
     this.$el = $el
     this.resizerQuery = resizerQuery
     this.element = element
-    this.pageCoordinates = document.getElementById(`${this.element.parent}Template`).getBoundingClientRect()
   }
 
   /**
@@ -138,7 +137,7 @@ class Element {
    */
   dragable(): void {
     let element = this.$el
-    let pageCoordinates = this.pageCoordinates
+    var elementSettings = this.element
     var startX: number, startY: number, newLeft: number, newTop: number, that = this
 
     // move the DIV from anywhere inside the DIV:
@@ -160,6 +159,8 @@ class Element {
       }
 
       function elementDrag(e: any): void {
+        var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
+
         e = e || window.event
         e.preventDefault()
         // calculate the new cursor position:
@@ -168,28 +169,24 @@ class Element {
         startX = e.clientX
         startY = e.clientY
 
-        // set the element's new position
+        // if element doesn't go out of page from left
+        if (element.offsetLeft - newLeft > 0)
+          // if element doesn't go out of page from right
+          if (element.offsetLeft + element.offsetWidth - newLeft < pageCoordinates.width)
+            // if element is on top of element or containg section
+            if (document.elementFromPoint(e.clientX, e.clientY).id === elementSettings.id || document.elementFromPoint(e.clientX, e.clientY).id === `${elementSettings.parent}Template`)
+              // then drag element  
+              element.style.left = element.offsetLeft - newLeft + "px"
 
-        // prevent element to go out of page from right
-        if (element.offsetLeft + element.offsetWidth > pageCoordinates.width)
-          element.style.left = pageCoordinates.width - element.offsetWidth + "px"
+        // if element doesn't go out of page from top
+        if (element.offsetTop - newTop > 0)
+          // if element doesn't go out of page from bottom
+          if (element.offsetTop + element.offsetHeight - newTop < pageCoordinates.height)
+            // if element is on top of element or containg section
+            if (document.elementFromPoint(e.clientX, e.clientY).id === elementSettings.id || document.elementFromPoint(e.clientX, e.clientY).id === `${elementSettings.parent}Template`)
+              // then drag element  
+              element.style.top = element.offsetTop - newTop + "px"
 
-        // prevent element to go out of page from left
-        if (element.offsetLeft < 0)
-          element.style.left = 0 + "px"
-
-        // prevent element to go out of page from top
-        if (element.offsetTop < 0)
-          element.style.top = 0 + "px"
-
-        // prevent element to go out of page from bottom
-        if (element.offsetTop + element.offsetHeight > pageCoordinates.height)
-          element.style.top = pageCoordinates.height - element.offsetHeight + "px"
-
-        // if (element.offsetTop + element.offset < 0)
-        //   element.style. = pageCoordinates.width - element.offsetWidth + "px"
-        element.style.top = element.offsetTop - newTop + "px"
-        element.style.left = element.offsetLeft - newLeft + "px"
       }
 
       function closeDragElement(): void {
