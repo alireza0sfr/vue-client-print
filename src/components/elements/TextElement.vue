@@ -1,6 +1,8 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
-		{{settings.configs.text}}
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+		<div class="content">
+			{{settings.configs.text}}
+		</div>
 		<Resizers :query="`text-${settings.id}`" />
 	</div>
 </template>

@@ -445,6 +445,18 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
+											<label for="elementTextAlignControl">{{$t('template-builder.elements.styles.align-items')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.styles.alignItems" class="input-form-control" id="elementTextAlignControl">
+												<option value="flex-start">{{$t('template-builder.elements.styles.top')}}</option>
+												<option value="center">{{$t('template-builder.elements.styles.center')}}</option>
+												<option value="flex-end">{{$t('template-builder.elements.styles.bottom')}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
 											<span>{{$t('template-builder.elements.styles.text-color')}}</span>
 										</div>
 										<div class="toolbar-content-field">
@@ -1317,7 +1329,7 @@
 				const prepareBindingObjects = (columns: IRawColumn[], key: string): object => {
 					let tmp = {}
 					for (let col of columns) {
-            
+
 						// if columns contains child columns it means row data will be array and cant be assigned to bindingobject
 						if (col.columns)
 							continue

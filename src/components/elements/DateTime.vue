@@ -1,6 +1,8 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
-		{{ computedValue }}
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+		<span class="content">
+			{{ computedValue }}
+		</span>
 		<Resizers :query="`datetime-${settings.id}`" />
 	</div>
 </template>

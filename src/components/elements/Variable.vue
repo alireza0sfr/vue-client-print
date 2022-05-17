@@ -2,8 +2,10 @@
 	<div v-if="variable">
 
 		<!-- If the variable is text -->
-		<div v-show="variable.type === 'text' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles" ref="textVariable">
-			{{ variable.context }}
+		<div v-show="variable.type === 'text' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles" ref="textVariable">
+			<span class="content">
+				{{ variable.context }}
+			</span>
 			<Resizers :query="`variable-${this.settings.id}`" />
 		</div>
 

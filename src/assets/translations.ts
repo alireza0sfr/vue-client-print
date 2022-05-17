@@ -74,7 +74,10 @@ const messages: object = {
         },
         "styles": {
           "name": "Element's styles",
-          "text-align": "Text Align",
+          "text-align": "Text Horizental Align",
+          "align-items": "Text Vertical Align",
+          "top": "Top",
+          "bottom": "Bottom",
           "left": "Left",
           "center": "Center",
           "right": "Right",
@@ -176,7 +179,10 @@ const messages: object = {
         },
         "styles": {
           "name": "استایل المنت",
-          "text-align": "مکان نوشته",
+          "text-align": "مکان نوشته افقی",
+          "align-items": "مکان نوشته عمودی",
+          "top": "بالا",
+          "bottom": "پایین",
           "left": "چپ",
           "center": "وسط",
           "right": "راست",

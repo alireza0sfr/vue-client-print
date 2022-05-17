@@ -391,6 +391,15 @@ textarea:focus {
     cursor: pointer;
 }
 
+.content-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.content {
+    flex-grow: 1;
+}
+
 .element {
     background-color: #ffffff;
     text-align: center;
@@ -403,9 +412,9 @@ textarea:focus {
 
 /* .element.selected,
 .row.selected { */
-    /* box-shadow: inset 0px 0px 4px 2px #c3c3c3; */
+/* box-shadow: inset 0px 0px 4px 2px #c3c3c3; */
 
-    /* border: 1px #aaa dashed !important;
+/* border: 1px #aaa dashed !important;
     border-radius: 4px; */
 /* } */
 

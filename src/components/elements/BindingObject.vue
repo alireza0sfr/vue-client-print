@@ -1,9 +1,11 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
 
 		<!-- If its the template builder mode -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'">
-			{{ settings.configs.field === "" ? locals.text1 : locals.text + ' ' + settings.configs.field }}
+			<span class="content">
+				{{ settings.configs.field === "" ? locals.text1 : locals.text + ' ' + settings.configs.field }}
+			</span>
 			<Resizers :query="`bindingobject-${settings.id}`" />
 		</div>
 
