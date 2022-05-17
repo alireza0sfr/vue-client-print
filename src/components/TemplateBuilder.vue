@@ -807,7 +807,13 @@
 					var array = this.settings[parent][`${parent}Elements`]
 					this.locals.copiedElement.options.id = this.idGenerator(5)
 					this.locals.copiedElement.options.styles.top = '0px'
-					array.push(this.locals.copiedElement)
+
+					if (this.locals.copiedElement.options.repeatorId) {
+						var repeator = array.find(x => x.options.id === this.locals.copiedElement.options.repeatorId)
+						repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet].push(this.locals.copiedElement)
+					}
+					else
+						array.push(this.locals.copiedElement)
 				}
 			},
 			/**
@@ -1311,7 +1317,7 @@
 				const prepareBindingObjects = (columns: IRawColumn[], key: string): object => {
 					let tmp = {}
 					for (let col of columns) {
-						
+            
 						// if columns contains child columns it means row data will be array and cant be assigned to bindingobject
 						if (col.columns)
 							continue
