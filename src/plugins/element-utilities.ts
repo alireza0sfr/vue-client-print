@@ -6,11 +6,13 @@ class Element {
   element: IElement
   resizerQuery: string
   $el: HTMLElement
+  pageCoordinates: object
 
   constructor($el: HTMLElement, resizerQuery: string, element: IElement) {
     this.$el = $el
     this.resizerQuery = resizerQuery
     this.element = element
+    this.pageCoordinates = document.getElementById(`${this.element.parent}Template`).getBoundingClientRect()
   }
 
   /**
@@ -136,6 +138,7 @@ class Element {
    */
   dragable(): void {
     let element = this.$el
+    let pageCoordinates = this.pageCoordinates
     var startX: number, startY: number, newLeft: number, newTop: number, that = this
 
     // move the DIV from anywhere inside the DIV:
@@ -164,7 +167,27 @@ class Element {
         newTop = startY - e.clientY
         startX = e.clientX
         startY = e.clientY
-        // set the element's new position:
+
+        // set the element's new position
+
+        // prevent element to go out of page from right
+        if (element.offsetLeft + element.offsetWidth > pageCoordinates.width)
+          element.style.left = pageCoordinates.width - element.offsetWidth + "px"
+
+        // prevent element to go out of page from left
+        if (element.offsetLeft < 0)
+          element.style.left = 0 + "px"
+
+        // prevent element to go out of page from top
+        if (element.offsetTop < 0)
+          element.style.top = 0 + "px"
+
+        // prevent element to go out of page from bottom
+        if (element.offsetTop + element.offsetHeight > pageCoordinates.height)
+          element.style.top = pageCoordinates.height - element.offsetHeight + "px"
+
+        // if (element.offsetTop + element.offset < 0)
+        //   element.style. = pageCoordinates.width - element.offsetWidth + "px"
         element.style.top = element.offsetTop - newTop + "px"
         element.style.left = element.offsetLeft - newLeft + "px"
       }
