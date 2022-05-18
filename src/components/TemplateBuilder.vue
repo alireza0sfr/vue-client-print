@@ -904,22 +904,6 @@
 			 * @return {Object} - json file
 			 */
 			export2Json(): ISettings {
-				// Syncing headerElements with the user chagnes
-				let headerElements: IElement[] = this.settings.header.headerElements
-				let footerElements: IElement[] = this.settings.footer.footerElements
-
-				for (let index = 0; index < headerElements.length; index++) {
-					let computedStyles = this.getCoordinates(headerElements[index].options.id)
-					let elementStyles = headerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
-				for (let index = 0; index < footerElements.length; index++) {
-					let computedStyles = this.getCoordinates(footerElements[index].options.id)
-					let elementStyles = footerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
 				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
 				if (this.settings.totalHeightOfAPaper < 0)
@@ -962,11 +946,15 @@
 			 * @return {void} - void
 			 */
 			importFromSrcFile(srcFile: File): void {
+				var callback = this.settings.callback || null
 				this.settings = this.getDefaultSettings() // Set the settings to default value
 				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
 
 				if (this.settings.variables)
 					this.setVariables(this.settings.variables)
+
+				if (callback)
+					this.settings.callback = callback
 			},
 
 			/**
