@@ -586,14 +586,14 @@
 						</div>
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="droppedElement('element', element, 'header')" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finishededitingelement="finishedEditingElement(element, 'header')" />
+								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finishededitingelement="finishedEditingElement(element, 'header')" />
 								</div>
-								<div style="min-height: 0.15in" id="bodyTemplate" class="section body" @drop="droppedElement('body')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="droppedElement('element', element, 'body')" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finishededitingelement="finishedEditingElement(element, 'body')" />
+								<div style="min-height: 0.15in" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finishededitingelement="finishedEditingElement(element, 'body')" />
 								</div>
-								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="droppedElement('element', element, 'footer')" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finishededitingelement="finishedEditingElement(element, 'footer')" />
+								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finishededitingelement="finishedEditingElement(element, 'footer')" />
 								</div>
 							</div>
 						</div>
@@ -1092,19 +1092,25 @@
 			 * @param {String} parent - element parent
 			 * @return {void} - void
 			 */
-			createElement(parent: string): IElement {
+			createElement(parent: string, e: any): IElement {
 				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
 				var keys = Object.keys(this.settings.dataSets)
 				let tmp
+
 				var defaultElementObject: IElement = {
 					type: classType,
 					options: {
 						id: this.idGenerator(5),
 						parent: parent,
 						grandParent: 'TemplateBuilder',
+						styles: {
+							top: e.offsetY ? e.offsetY + 'px' : 0,
+							left: e.offsetX ? e.offsetX + 'px' : 0
+						}
 					}
 				}
+				console.log('1', e, defaultElementObject)
 
 				switch (classType) {
 					case 'repeator':
@@ -1315,7 +1321,8 @@
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent: string, parentElement: IElement, grandParent: string) {
+			droppedElement(parent: string, parentElement: IElement, grandParent: string, e: any) {
+				console.log(e)
 
 				if (!this.locals.classType)
 					return
@@ -1370,8 +1377,37 @@
 					return tmp
 				}
 
+				/** Controls if added element is outside page borders and adjust if so.
+				 * @param {Object} element - element object
+				 * @param {String} sectionId - section id that element is dropped to (parent)
+				 * @return {Object} element - adjusted element
+				 */
+				const adjustElementToPage = (element: any, sectionId: string): object => {
+					let elementWidth = element.options.styles.width || '30px'
+					let elementHeight = element.options.styles.height || '30px'
+					let containerRec = document.getElementById(sectionId).getBoundingClientRect()
+					let sectionWidth = containerRec.width
+					let sectionHeight = containerRec.height
+
+					if (element.options.repeatorId)
+						sectionHeight -= 20
+
+					elementWidth = this.toFloatVal(elementWidth)
+					elementHeight = this.toFloatVal(elementHeight)
+
+					if (elementWidth + this.toFloatVal(element.options.styles.left) > sectionWidth)
+						element.options.styles.left = sectionWidth - elementWidth + 'px'
+
+					if (elementHeight + this.toFloatVal(element.options.styles.top) > sectionHeight)
+						element.options.styles.top = sectionHeight - elementHeight + 'px'
+
+					return element
+				}
+
 				var computedParent = parentElement ? grandParent : parent
-				var elem: IElement = this.createElement(computedParent)
+				var elem: IElement = this.createElement(computedParent, e)
+				var parentId = parentElement ? parentElement.options.id : `${parent}Template`
+
 
 				if (parentElement) {// Element is dropped on another element.
 					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
@@ -1389,6 +1425,7 @@
 				else
 					this.settings[parent][`${parent}Elements`].push(elem)
 
+				elem = adjustElementToPage(elem, parentId)
 				this.locals.classType = ""
 				this.locals.uniqueId = 0
 			},
