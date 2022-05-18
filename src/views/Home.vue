@@ -1,7 +1,6 @@
 <template>
 	<div class="home">
 		<!-- Test Section -->
-		<button @click="test1">Update Rows</button>
 		<a @click="printPreview()" id="printModalOpenBtn" href="#" :title="$t('print.print-preview')">{{$t('print.print-preview')}}</a>
 		|
 		<a @click="templateBuilder()" href="#" :title="$t('template-builder.name')">{{ $t('template-builder.name') }}</a>
@@ -47,109 +46,6 @@
 		},
 		data() {
 			return {
-				rows: [
-					{
-						center: 'center 1',
-						account: [
-							{
-								center: 'child center',
-								account: 'child account',
-								date: 'child date',
-								balance: 'child balance',
-								type: 'child type',
-							},
-							{
-								center: 'child center',
-								account: 'child account',
-								date: 'child date',
-								balance: 'child balance',
-								type: 'child type',
-							},
-							{
-								center: 'child center',
-								account: 'child account',
-								date: 'child date',
-								balance: 'child balance',
-								type: 'child type',
-							}
-						],
-						date: 'date 1',
-						balance: 'balance 1',
-						type: 'type 1',
-					},
-					{
-						center: 'center 2',
-						account: [
-							{
-								center: 'child center 2',
-								account: 'child account 2',
-								date: 'child date 2',
-								balance: 'child balance 2',
-								type: 'child type 2',
-							}
-						],
-						date: 'date 2',
-						balance: 'حسابهای دریافتنی نجاری بانکهای ارزی بانک سامان',
-						type: 'type 2',
-					},
-					{
-						center: 'center 3',
-						account: [
-							{
-								center: 'child center 3',
-								account: 'child account 3',
-								date: 'child date 3',
-								balance: 'child balance 3',
-								type: 'child type 4',
-							}
-						],
-						date: 'date 3',
-						balance: 'balance 3',
-						type: 'type 3',
-					},
-					{
-						center: 'center 4',
-						account: [
-							{
-								center: 'child center 4',
-								account: 'child account 4',
-								date: 'child date 4',
-								balance: 'child balance 4',
-								type: 'child type 4',
-							}
-						],
-						date: 'date 4',
-						balance: 'balance 4',
-						type: 'type 4',
-					},
-					{
-						center: 'center 5',
-						account: [
-							{
-								center: 'child center 5',
-								account: 'child account 5',
-								date: 'child date 5',
-								balance: 'child balance 5',
-								type: 'child type 5',
-							}
-						],
-						date: 'date 5',
-						balance: 'balance 5',
-						type: 'type 5',
-					},
-					{
-						center: 'center 6',
-						account: [
-							{
-								center: 'child center 6',
-								account: 'child account 6',
-								date: 'child date 6',
-								balance: 'child balance 6',
-								type: 'child type 6',
-							}
-						],
-					}
-				],
 				dataSets: {
 					center: {
 						key: 'center',
@@ -248,7 +144,109 @@
 								}
 							},
 						],
-						rows: []
+						rows: [
+							{
+								center: 'center 1',
+								account: [
+									{
+										center: 'child center',
+										account: 'child account',
+										date: 'child date',
+										balance: 'child balance',
+										type: 'child type',
+									},
+									{
+										center: 'child center',
+										account: 'child account',
+										date: 'child date',
+										balance: 'child balance',
+										type: 'child type',
+									},
+									{
+										center: 'child center',
+										account: 'child account',
+										date: 'child date',
+										balance: 'child balance',
+										type: 'child type',
+									}
+								],
+								date: 'date 1',
+								balance: 'balance 1',
+								type: 'type 1',
+							},
+							{
+								center: 'center 2',
+								account: [
+									{
+										center: 'child center 2',
+										account: 'child account 2',
+										date: 'child date 2',
+										balance: 'child balance 2',
+										type: 'child type 2',
+									}
+								],
+								date: 'date 2',
+								balance: 'حسابهای دریافتنی نجاری بانکهای ارزی بانک سامان',
+								type: 'type 2',
+							},
+							{
+								center: 'center 3',
+								account: [
+									{
+										center: 'child center 3',
+										account: 'child account 3',
+										date: 'child date 3',
+										balance: 'child balance 3',
+										type: 'child type 4',
+									}
+								],
+								date: 'date 3',
+								balance: 'balance 3',
+								type: 'type 3',
+							},
+							{
+								center: 'center 4',
+								account: [
+									{
+										center: 'child center 4',
+										account: 'child account 4',
+										date: 'child date 4',
+										balance: 'child balance 4',
+										type: 'child type 4',
+									}
+								],
+								date: 'date 4',
+								balance: 'balance 4',
+								type: 'type 4',
+							},
+							{
+								center: 'center 5',
+								account: [
+									{
+										center: 'child center 5',
+										account: 'child account 5',
+										date: 'child date 5',
+										balance: 'child balance 5',
+										type: 'child type 5',
+									}
+								],
+								date: 'date 5',
+								balance: 'balance 5',
+								type: 'type 5',
+							},
+							{
+								center: 'center 6',
+								account: [
+									{
+										center: 'child center 6',
+										account: 'child account 6',
+										date: 'child date 6',
+										balance: 'child balance 6',
+										type: 'child type 6',
+									}
+								],
+							}
+						],
 					},
 					account: {
 						key: 'account',
@@ -304,9 +302,6 @@
 			}
 		},
 		methods: {
-			test1() {
-				this.dataSets['center'].rows = this.rows
-			},
 			templateBuilder() {
 				this.$refs.print.templateBuilder(this.printOptions, (json) => {
 					console.log('json', json)
