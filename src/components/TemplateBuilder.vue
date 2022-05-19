@@ -1123,6 +1123,25 @@
 
 						break
 					case 'dataset':
+
+						/**
+						 * calculate totalWidth based on columns width.
+						 */
+						let width = 0
+						for (let index = 0; index < clonedDataset[keys[0]].options.configs.columns.length; index++) {
+							var col = clonedDataset[keys[0]].options.configs.columns[index]
+
+							if (!col.options.styles.width)
+								col.options.styles.width = 70
+
+							if (typeof col.options.styles.width === 'string')
+								width += parseFloat(col.options.styles.width.split('p')[0])
+
+							else
+								width += col.options.styles.width
+
+						}
+
 						tmp = {
 							options: {
 								configs: {
@@ -1133,6 +1152,7 @@
 								},
 								styles: {
 									height: "100px",
+									width: width + 'px'
 								},
 							},
 						}
@@ -1376,6 +1396,7 @@
 					let sectionWidth = containerRec.width
 					let sectionHeight = containerRec.height
 
+					// subtracting repeator title height for child element to make offsetTop accurate.
 					if (element.options.repeatorId)
 						sectionHeight -= 20
 
