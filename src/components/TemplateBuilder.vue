@@ -1084,6 +1084,7 @@
 				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
 				var keys = Object.keys(this.settings.dataSets)
+				var clonedDataset = JSON.parse(JSON.stringify(this.settings.dataSets))
 				let tmp
 
 				var defaultElementObject: IElement = {
@@ -1106,7 +1107,7 @@
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
-									dataSets: this.settings.dataSets,
+									dataSets: clonedDataset,
 									appendedElements: {},
 									variables: this.locals.variables,
 								},
@@ -1126,7 +1127,7 @@
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
-									dataSets: this.settings.dataSets,
+									dataSets: clonedDataset,
 									stylesTarget: 'all',
 									defaultRow: this.locals.dataSetDefaultRow
 								},
