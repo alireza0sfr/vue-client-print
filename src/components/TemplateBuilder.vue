@@ -1173,8 +1173,6 @@
 							options: {
 								configs: { imageSrc: DefaultLogo },
 								styles: {
-									top: 0,
-									left: 0,
 									width: "100px",
 									height: "100px",
 								},
