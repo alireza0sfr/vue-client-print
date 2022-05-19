@@ -2,8 +2,8 @@
 	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
 
 		<!-- If its the template builder mode -->
-		<div v-if="settings.grandParent === 'TemplateBuilder'">
-			<span class="content">
+		<div class="content" v-if="settings.grandParent === 'TemplateBuilder'">
+			<span>
 				{{ settings.configs.field === "" ? locals.text1 : locals.text + ' ' + settings.configs.field }}
 			</span>
 			<Resizers :query="`bindingobject-${settings.id}`" />
