@@ -475,12 +475,12 @@ textarea:focus {
     word-break: break-word;
 }
 
-.dataset .name {
+.dataset-name {
     text-align: right;
     background-color: #ffdc79;
 }
 
-.repeator .name {
+.repeator-name {
     text-align: right;
     background-color: #a7b1f9;
     height: 24px;

@@ -3,11 +3,11 @@
 
 		<!-- Template Builder -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'">
-			<div class="name">
+			<div class="repeator-name">
 				<span>{{displaySet.options.configs.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex; position: absolute;">
-				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
+				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @clickedOnElement="(child) => $emit(child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 			</div>
 			<Resizers :query="`repeator-${settings.id}`" />
 		</div>
@@ -16,7 +16,7 @@
 		<div v-else>
 			<div v-for="(row, index) in displaySet.options.configs.rows" :key="row" :style="computedStyles">
 				<div style="display: flex; position: absolute;">
-					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index, bindingObjectCallback)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
+					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index, bindingObjectCallback)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 				</div>
 				<Resizers :query="`repeator-${settings.id}`" />
 			</div>

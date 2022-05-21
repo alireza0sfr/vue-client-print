@@ -1,6 +1,6 @@
 <template>
 	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + settings.class + ' element'" :style="settings.styles">
-		<div v-if="settings.grandParent === 'TemplateBuilder'" class="name">
+		<div v-if="settings.grandParent === 'TemplateBuilder'" class="dataset-name">
 			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
