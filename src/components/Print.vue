@@ -117,10 +117,15 @@
 					bindingObject: {},
 					pageBorder: '0px',
 				},
-				configs: this.getDefaultConfigs()
+				configs: {
+					maximumFileSize: 1000, // Maximum file size in KB
+					language: 'en'
+				}
 			}
 		},
 		mounted() {
+			this.syncConfigs()
+			this.syncLanguage()
 			this.modalManager('printModal', 'printModalCloseBtn')
 		},
 		methods: {
@@ -162,14 +167,16 @@
 
 			/**
 			 * sync the given configs with the defaults.
-			 * @return {Object} - returns configs objects
 			 */
-			getDefaultConfigs(): IConfigs {
-				return Object.assign(
-					{
-						maximumFileSize: 1000 // Maximum file size in KB
-					}
-					, this.configurations)
+			syncConfigs(): void {
+				this.merge(this.configs, this.configurations)
+			},
+
+			/**
+			 * sync system language with given configs.
+			 */
+			syncLanguage(): void {
+				this.$i18n.locale = this.configs.language
 			},
 
 			/**

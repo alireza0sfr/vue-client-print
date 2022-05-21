@@ -112,6 +112,18 @@
 									</div>
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
+											<span>{{$t('template-builder.language')}}</span>
+										</div>
+										<div class="toolbar-content-field">
+											<select class="input-form-control" v-model="$i18n.locale">
+												<option v-for="(lang, i) in locals.langs" :key="`Lang${i}`" :value="lang">
+													{{ lang }}
+												</option>
+											</select>
+										</div>
+									</div>
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
 											<label for="pageSizeControl">{{$t('template-builder.page-size')}}</label>
 										</div>
 										<div class="toolbar-content-field">
@@ -611,6 +623,8 @@
 	import { IElement, IVariable } from '~/interfaces/elements.ts'
 	// @ts-ignore
 	import { ISettings } from '~/interfaces/general.ts'
+	// @ts-ignore
+	import { fetchLangList } from '~/assets/translations.ts'
 	import { saveAs } from 'file-saver'
 	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
@@ -622,6 +636,7 @@
 		data() {
 			return {
 				locals: {
+					langs: fetchLangList(),
 					dataSetDefaultRow: [
 						{
 							type: 'row',

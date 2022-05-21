@@ -17,6 +17,7 @@ const messages: object = {
         "text": "Text",
         "image": "Image"
       },
+      "language": "Language",
       "export": "Export",
       "page-counter": "page {currentPage} of {totalPages}",
       "print-settings": "Print Settings",
@@ -123,6 +124,7 @@ const messages: object = {
         "image": "تصویر",
         "type": "نوع"
       },
+      "language": "زبان",
       "print-settings": "تنظیمات چاپ",
       "page-counter": "صفحه {currentPage} از {totalPages}",
       "export": "Export",
@@ -210,5 +212,7 @@ const messages: object = {
     }
   }
 }
-
+export function fetchLangList() {
+  return Object.keys(messages)
+}
 export default messages

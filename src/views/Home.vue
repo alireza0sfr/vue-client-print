@@ -5,7 +5,7 @@
 		|
 		<a @click="templateBuilder()" href="#" :title="$t('template-builder.name')">{{ $t('template-builder.name') }}</a>
 
-		<Print ref="print" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configuration="configs">
+		<Print ref="print" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configurations="configs">
 			<template v-slot:printData>
 				<table>
 					<thead>
@@ -298,7 +298,9 @@
 					date: "2021/5/6",
 				},
 				variables: [],
-				configs: {}
+				configs: {
+					language: 'fa'
+				}
 			}
 		},
 		methods: {
