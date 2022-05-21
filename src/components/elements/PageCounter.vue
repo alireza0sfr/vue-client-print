@@ -1,11 +1,9 @@
 <template>
-	<div>
-		<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
-			<span class="content">
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+		<span class="content">
 			{{ computedCounter }}
-			</span>
-			<Resizers :query="`pagecounter-${settings.id}`"/>
-		</div>
+		</span>
+		<Resizers :query="`pagecounter-${settings.id}`" />
 	</div>
 </template>
 
