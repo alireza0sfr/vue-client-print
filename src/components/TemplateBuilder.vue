@@ -1415,7 +1415,7 @@
 				var parentId = parentElement ? parentElement.options.id : `${parent}Template`
 
 
-				if (parentElement) {// Element is dropped on another element.
+				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
 					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
@@ -1429,7 +1429,7 @@
 					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
 				}
 				else
-					this.settings[parent][`${parent}Elements`].push(elem)
+					this.settings[computedParent][`${computedParent}Elements`].push(elem)
 
 				elem = adjustElementToPage(elem, parentId)
 				this.locals.classType = ""
