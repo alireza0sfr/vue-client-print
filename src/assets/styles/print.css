@@ -41,6 +41,10 @@
     left: 10000px;
 }
 
+.body-render-section {
+    position: relative;
+}
+
 .converted canvas {
     width: 100%
 }

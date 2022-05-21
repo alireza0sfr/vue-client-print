@@ -1,14 +1,27 @@
 <template>
 	<div id="printPage">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
-		<!-- Data Slots -->
+		
+		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
 			<div :style="{width: settings.defaultWidthOfPaper + 'in',padding: '5px'}">
 				<div id="toBeConverted">
-					<div id="componentsParent" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length">
-						<component v-for="(element, index) in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+					<div id="componentsParent">
+
+						<div class="body-render-section" :style="{height: settings.beforeBody.height + 'in'}">
+							<component v-for="(element, index) in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						</div>
+
+						<div id="bodyComponents" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length" class="body-render-section" :style="{height: settings.body.height + 'in'}">
+							<component v-for="(element, index) in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						</div>
+
+						<slot v-else class="printData" name="printData"></slot>
+
+						<div class="body-render-section" :style="{height: settings.afterBody.height + 'in'}">
+							<component v-for="(element, index) in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						</div>
 					</div>
-					<slot v-else class="printData" name="printData"></slot>
 				</div>
 			</div>
 		</div>
@@ -102,6 +115,17 @@
 						height: 1,
 						headerElements: [],
 					},
+					beforeBody: {
+						height: 1,
+						beforeBodyElements: [],
+					},
+					body: {
+						bodyElements: []
+					},
+					afterBody: {
+						height: 1,
+						afterBodyElements: [],
+					},
 					footer: {
 						isFooterRepeatable: true,
 						height: 1,
@@ -135,16 +159,19 @@
 			 */
 			setTotalHieghtBasedOnElementsHeight(): void {
 				const parent = document.getElementById('componentsParent')
+				const body = document.getElementById('bodyComponents')
 				var maxBottom = 0
 				var elementWithMaxBottom
 				// @ts-ignore
-				for (let child of parent.children) {
+				for (let child of body.children) {
 					if (child.getBoundingClientRect().bottom > maxBottom) {
 						maxBottom = child.getBoundingClientRect().bottom
 						elementWithMaxBottom = child
 					}
 				}
-				parent.style.height = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height + 'px'
+				var bodyHeight = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height // body height in pixels
+				this.settings.body.height = this.convert2Inches(bodyHeight) // body height in inches
+				parent.style.height = this.settings.beforeBody.height + parseFloat(this.settings.body.height) + this.settings.afterBody.height + 'in'
 			},
 
 			/**

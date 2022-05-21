@@ -267,12 +267,28 @@ textarea:focus {
     bottom: 0;
 }
 
+.section.before-body .resizer {
+    bottom: 0;
+}
+
+.section.after-body .resizer {
+    top: 0;
+}
+
 .section.footer .resizer {
     top: 0;
 }
 
 .section.header {
     border-bottom: 1px #aaa solid;
+}
+
+.section.before-body {
+    border-bottom: 1px #aaa solid;
+}
+
+.section.after-body {
+    border-top: 1px #aaa solid;
 }
 
 .section.footer {
