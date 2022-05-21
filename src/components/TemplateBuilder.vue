@@ -1099,7 +1099,6 @@
 						}
 					}
 				}
-				console.log('1', e, defaultElementObject)
 
 				switch (classType) {
 					case 'repeator':
@@ -1329,7 +1328,6 @@
 			 * Method that triggers on element drop on header / footer.
 			 */
 			droppedElement(parent: string, parentElement: IElement, grandParent: string, e: any) {
-				console.log(e)
 
 				if (!this.locals.classType)
 					return
