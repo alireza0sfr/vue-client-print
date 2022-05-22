@@ -206,10 +206,14 @@ var mixins: object = {
           displaySet.options.configs.rows = rows
           break
         case 'dataset':
+          var stylesTarget = opt.configs.defaultRow[0].options.configs.stylesTarget
           var selectedDataSet = opt.configs.selectedDataSet
           var displaySet = opt.configs.dataSets[selectedDataSet]
           var columns = displaySet.options.configs.columns
           var rows
+
+          // settings dataset stylesTarget based on defualtRow's stylesTarget
+          opt.configs.stylesTarget = stylesTarget
 
           // if its called from repeator's methods therefore  dataset is in repeators options else get it's called from print's methods therefore dataset is in props
           var dataSets = opt.repeatorId ? this.settings.configs.dataSets : this.dataSets
