@@ -17,6 +17,13 @@ const messages: object = {
         "text": "Text",
         "image": "Image"
       },
+      "sections": {
+        "header": "Header",
+        "beforeBody": "Before Body",
+        "body": "Body",
+        "afterBody": "After Body",
+        "footer": "Footer"
+      },
       "language": "Language",
       "export": "Export",
       "page-counter": "page {currentPage} of {totalPages}",
@@ -123,6 +130,13 @@ const messages: object = {
         "text": "متن",
         "image": "تصویر",
         "type": "نوع"
+      },
+      "sections": {
+        "header": "Header",
+        "beforeBody": "Before Body",
+        "body": "Body",
+        "afterBody": "After Body",
+        "footer": "Footer"
       },
       "language": "زبان",
       "print-settings": "تنظیمات چاپ",

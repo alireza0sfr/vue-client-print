@@ -252,6 +252,27 @@ textarea:focus {
     direction: ltr;
 }
 
+.section-tag {
+    height: 13px;
+    padding: 0 5px;
+    font-size: 10px;
+    position: absolute;
+    left: 0;
+    border-bottom-right-radius: 5px;
+}
+
+.section-tag1 {
+    height: 13px;
+    padding: 0 5px;
+    font-size: 10px;
+    position: absolute;
+    left: 0;
+    background-color: #ffa3a3;
+    border: 1px dotted #000000;
+    border-left: none;
+    border-top: none;
+}
+
 .section .resizer {
     position: absolute;
     right: 0;
