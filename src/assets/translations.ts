@@ -143,7 +143,7 @@ const messages: object = {
       "repeat-header": "تکرار هدر",
       "repeat-footer": "تکرار فوتر",
       "elements": {
-        "settings": "تنظیمات المنت ها",
+        "settings": "تنظیمات المنت",
         "repeator": "تکرار شونده",
         "name": "المنت ها",
         "text-box": "متن",

@@ -442,7 +442,7 @@
 								<div style="margin-top: 15px" class="toolbar-header">
 									<span>{{$t('template-builder.elements.styles.name')}}</span>
 								</div>
-								<div class="toolbar-content-wrapper" id="elementStylesMenu">
+								<div class="toolbar-content-wrapper" v-if="locals.selectedElement.options.id" id="elementStylesMenu">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
 											<label for="elementTextAlignControl">{{$t('template-builder.elements.styles.text-align')}}</label>
