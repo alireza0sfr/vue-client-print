@@ -239,6 +239,7 @@ class Element {
    * @returns {boolean} true if valid
    */
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean {
+    return true
     var elementSettings = this.element
     var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
 
