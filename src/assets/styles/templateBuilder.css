@@ -252,8 +252,14 @@ textarea:focus {
     direction: ltr;
 }
 
+.section:hover .section-tag {
+    opacity: 1;
+}
+
 .section-tag {
     height: 13px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease-in-out;
     padding: 0 5px;
     font-size: 10px;
     position: absolute;
@@ -448,6 +454,7 @@ textarea:focus {
     overflow: hidden;
     min-height: 30px;
     min-width: 20px;
+    z-index: 999;
 }
 
 /* .element.selected,
