@@ -248,12 +248,22 @@ textarea:focus {
     touch-action: none;
     user-select: none;
     background-color: #f1f1f1;
-    box-sizing: border-box;
+    box-sizing: content-box;
     direction: ltr;
 }
 
 .section:hover .section-tag {
     opacity: 1;
+}
+
+.section::before {
+    content: " ";
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: #525252;
+    top: -1px;
+    left: 0;
 }
 
 .section-tag {
@@ -265,18 +275,7 @@ textarea:focus {
     position: absolute;
     left: 0;
     border-bottom-right-radius: 5px;
-}
-
-.section-tag1 {
-    height: 13px;
-    padding: 0 5px;
-    font-size: 10px;
-    position: absolute;
-    left: 0;
-    background-color: #ffa3a3;
-    border: 1px dotted #000000;
-    border-left: none;
-    border-top: none;
+    z-index: 999;
 }
 
 .section .resizer {
@@ -291,35 +290,35 @@ textarea:focus {
 }
 
 .section.header .resizer {
-    bottom: 0;
+    bottom: -10px;
 }
 
 .section.before-body .resizer {
-    bottom: 0;
+    bottom: -10px;
 }
 
 .section.after-body .resizer {
-    top: 0;
+    top: -10px;
 }
 
 .section.footer .resizer {
-    top: 0;
+    top: -10px;
 }
 
 .section.header {
-    border-bottom: 1px #aaa solid;
+    border-bottom: 10px #aaa solid;
 }
 
 .section.before-body {
-    border-bottom: 1px #aaa solid;
+    border-bottom: 10px #aaa solid;
 }
 
 .section.after-body {
-    border-top: 1px #aaa solid;
+    border-top: 10px #aaa solid;
 }
 
 .section.footer {
-    border-top: 1px #aaa solid;
+    border-top: 10px #aaa solid;
 }
 
 .template.dragged {

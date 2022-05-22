@@ -12,7 +12,7 @@
 			},
 			color: {
 				type: String,
-				default: '#98ceff'
+				default: '#9efffa'
 			},
 		},
 	}
