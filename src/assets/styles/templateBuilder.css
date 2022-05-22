@@ -250,6 +250,7 @@ textarea:focus {
     background-color: #f1f1f1;
     box-sizing: content-box;
     direction: ltr;
+    z-index: 3
 }
 
 .section:hover .section-tag {
@@ -275,7 +276,7 @@ textarea:focus {
     position: absolute;
     left: 0;
     border-bottom-right-radius: 5px;
-    z-index: 999;
+    z-index: 1;
 }
 
 .section .resizer {
@@ -453,7 +454,7 @@ textarea:focus {
     overflow: hidden;
     min-height: 30px;
     min-width: 20px;
-    z-index: 999;
+    z-index: 2;
 }
 
 /* .element.selected,
