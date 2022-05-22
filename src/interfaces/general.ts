@@ -31,7 +31,8 @@ interface ISettings {
 }
 
 interface IConfigs {
-  maximumFileSize: number
+  maximumFileSize: number,
+  language: string
 }
 
 export { ISettings, IConfigs }
