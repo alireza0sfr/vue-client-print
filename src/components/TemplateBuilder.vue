@@ -227,7 +227,7 @@
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
+									<div :class="{'element-disabled': Object.keys(settings.bindingObject).length == 0 && Object.keys(settings.dataSets).length == 0}" class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('bindingobject')" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/binding.png" :alt="$t('template-builder.elements.binding-objects')" />
@@ -235,7 +235,7 @@
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
+									<div :class="{'element-disabled': Object.keys(settings.bindingObject).length == 0 }" class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('textpattern')" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/textpattern.png" :alt="$t('template-builder.elements.text-pattern')" />
@@ -243,7 +243,7 @@
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
+									<div :class="{'element-disabled': Object.keys(settings.dataSets).length == 0 }" class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('dataset')" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/data-set.png" :alt="$t('template-builder.elements.dataset')" width="32" height="32" />
@@ -251,7 +251,7 @@
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
+									<div :class="{'element-disabled': Object.keys(settings.dataSets).length == 0 }" class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
 											<span draggable="true" @dragstart="startDraggingElement('repeator')" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="32" height="32" />
@@ -758,6 +758,7 @@
 			 * @return {Object} - Prepared dataset.
 			 */
 			prepareDataSets(sets: IRawDatasets = this.settings.dataSets): IDatasets {
+				console.log(Object.keys(sets).length > 0)
 				var tmp: object = {}
 				var keys: string[] = Object.keys(sets)
 

@@ -161,6 +161,10 @@ textarea:focus {
     margin-bottom: 5px;
 }
 
+.toolbar-content-row-element:hover {
+    cursor: pointer;
+}
+
 .toolbar-content-row-elements {
     width: 50%;
 }
@@ -239,6 +243,11 @@ textarea:focus {
     margin: auto;
     box-shadow: -1px 4px 10px 0px #818181;
     height: 100%;
+}
+
+.element-disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 /* Sections */
