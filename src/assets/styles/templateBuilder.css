@@ -245,11 +245,6 @@ textarea:focus {
     height: 100%;
 }
 
-.element-disabled {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
 /* Sections */
 
 .section {
