@@ -56,6 +56,7 @@ const messages: object = {
         "binding-object-text": "Please Choose Data Field",
         "text-pattern": "Text Pattern",
         "configs": {
+          "isActive": "Active",
           "datasets": "Data",
           "stylesTarget": "Row Styles Target",
           "even": 'Even',
@@ -169,6 +170,7 @@ const messages: object = {
         "binding-object-text": "لطفا نوع داده خود را اتنخاب کنید.",
         "text-pattern": "متن الکویی",
         "configs": {
+          "isActive": "فعال",
           "stylesTarget": "اعمال استایل روی",
           "even": 'زوج',
           "odd": "فرد",

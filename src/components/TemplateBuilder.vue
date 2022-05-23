@@ -379,6 +379,19 @@
 									</div>
 								</div>
 
+								<div v-if="locals.selectedElement.type === 'column'">
+									<div class="toolbar-content-row">
+										<div style="width: 100%;" class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.isActive')}} ({{locals.selectedElement.title}})</label>
+										</div>
+										<div class="toolbar-content-field">
+											<label style="margin-right: 10px; display:flex" for="colActive">
+												<input style="flex-grow: unset;" type="checkbox" class="input-form-control" v-model="locals.selectedElement.isActive" id="colActive" />
+											</label>
+										</div>
+									</div>
+								</div>
+
 								<div v-if="locals.selectedElement.type === 'row'">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
