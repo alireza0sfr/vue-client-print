@@ -161,7 +161,7 @@ textarea:focus {
     margin-bottom: 5px;
 }
 
-.toolbar-content-row-element:hover {
+.toolbar-content-row-element:hover > * {
     cursor: pointer;
 }
 
