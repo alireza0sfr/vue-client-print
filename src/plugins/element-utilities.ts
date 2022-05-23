@@ -126,7 +126,7 @@ class Element {
     function stopDrag(e: any): void {
       document.onmousemove = null
       document.onmouseup = null
-      element.dispatchEvent(new Event("finishededitingelement"))
+      element.dispatchEvent(new Event("finished-editing-element"))
       element.dispatchEvent(
         new CustomEvent('size-changed', {
           detail: {
@@ -217,7 +217,7 @@ class Element {
         // stop moving when mouse button is released:
         document.onmouseup = null
         document.onmousemove = null
-        element.dispatchEvent(new Event("finishededitingelement"))
+        element.dispatchEvent(new Event("finished-editing-element"))
         element.dispatchEvent(
           new CustomEvent('drag-end', {
             detail: {

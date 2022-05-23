@@ -1,5 +1,5 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishededitingelement')" :class="locals.classType + ' element'" :style="settings.styles">
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element'" :style="settings.styles">
 
 		<!-- Template Builder -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'">
@@ -7,7 +7,7 @@
 				<span>{{displaySet.options.configs.title}} <img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex; position: absolute;">
-				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finishededitingelement="$emit('finishededitingelement')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
+				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 			</div>
 			<Resizers :query="`repeator-${settings.id}`" />
 		</div>
