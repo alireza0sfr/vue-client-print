@@ -975,7 +975,7 @@
 				settings = this.encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
 				var currentdate = new Date()
-				var defaultDesignName = 'vue-print' + "_"
+				var defaultDesignName = 'vcp' + "_"
 					+ currentdate.getFullYear() + "_"
 					+ (currentdate.getMonth() + 1) + "_"
 					+ currentdate.getDate() + "_"
@@ -986,7 +986,7 @@
 
 				var blob = new Blob([settings],
 					{ type: "text/plain;charset=utf-8" })
-				saveAs(blob, `${fileName}.vp`)
+				saveAs(blob, `${fileName}.vcp`)
 			},
 
 			/**
