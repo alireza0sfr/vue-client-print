@@ -242,7 +242,6 @@ textarea:focus {
 .template-container {
     margin: auto;
     box-shadow: -1px 4px 10px 0px #818181;
-    height: 100%;
 }
 
 /* Sections */

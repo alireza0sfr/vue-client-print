@@ -610,7 +610,7 @@
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 						</div>
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
-							<div ref="template" :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
+							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div :style="{height: settings.header.height + 'in'}" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
 									<SectionTag tag="header" />
@@ -660,6 +660,7 @@
 		data() {
 			return {
 				locals: {
+					templateHeight: 11.7,
 					langs: fetchLangList(),
 					dataSetDefaultRow: [
 						{
@@ -1052,12 +1053,13 @@
 					section.appendChild(resizer)
 					resizer.addEventListener("mousedown", (e) => initDrag(e, section), false)
 
-					var startY, startHeight
+					var startY, startHeight, parentHeight
 
 					let that = this // Storing this value to that to be able to use it inside of the functions
 
 					function initDrag(e, section) {
 						startY = e.clientY
+						parentHeight = that.locals.templateHeight
 
 						startHeight = parseInt(document.defaultView.getComputedStyle(section).height, 10)
 
@@ -1068,10 +1070,17 @@
 					function doDrag(e) {
 						if (sectionName === 'header')
 							that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
-						else if (sectionName === 'before-body')
+						
+						else if (sectionName === 'before-body') {
 							that.settings.beforeBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
-						else if (sectionName === 'after-body')
-							that.settings.afterBody.height = that.convert2Inches(startHeight - e.clientY + startY) > 0 ? that.convert2Inches(startHeight - e.clientY + startY) : 0
+							that.locals.templateHeight = parentHeight + parseFloat(that.settings.beforeBody.height) - parseFloat(that.convert2Inches(startHeight))
+						}
+
+						else if (sectionName === 'after-body') {
+							that.settings.afterBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
+							that.locals.templateHeight = parentHeight + parseFloat(that.settings.afterBody.height) - parseFloat(that.convert2Inches(startHeight))
+						}
+
 						else // its footer
 							that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY) > 0 ? that.convert2Inches(startHeight - e.clientY + startY) : 0
 
