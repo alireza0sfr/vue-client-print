@@ -1,8 +1,29 @@
 {
-  "name": "vue-client-print",
+  "name": "vcp",
   "version": "0.9.91",
   "private": false,
   "license": "MIT",
+  "main": "./dist/Print.umd.ts",
+  "module": "./dist/Print.es.ts",
+  "description": "Vue Client Print with Template Builder",
+  "exports": {
+    ".": {
+      "import": "./dist/vcp.es.js",
+      "require": "./dist/vcp.umd.js"
+    },
+    "./dist/style.css" : "./dist/style.css"
+  },
+  "keywords": [
+    "vcp",
+    "vue print",
+    "vue client print",
+    "template builder",
+    "vue report",
+    "vue report generator"
+  ],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
