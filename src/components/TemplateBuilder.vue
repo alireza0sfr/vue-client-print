@@ -974,14 +974,15 @@
 				let settings: ISettings = this.export2Json()
 				settings = this.encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
-				let designName = this.settings.designName === '' ? 'vue-print' : this.settings.designName
 				var currentdate = new Date()
-				var fileName = designName + "_"
+				var defaultDesignName = 'vue-print' + "_"
 					+ currentdate.getFullYear() + "_"
 					+ (currentdate.getMonth() + 1) + "_"
 					+ currentdate.getDate() + "_"
 					+ currentdate.getHours() + "_"
 					+ currentdate.getMinutes()
+
+				let fileName = this.settings.designName === '' ? defaultDesignName : this.settings.designName
 
 				var blob = new Blob([settings],
 					{ type: "text/plain;charset=utf-8" })
@@ -1070,7 +1071,7 @@
 					function doDrag(e) {
 						if (sectionName === 'header')
 							that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
-						
+
 						else if (sectionName === 'before-body') {
 							that.settings.beforeBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
 							that.locals.templateHeight = parentHeight + parseFloat(that.settings.beforeBody.height) - parseFloat(that.convert2Inches(startHeight))
