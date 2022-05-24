@@ -1,10 +1,10 @@
 {
   "name": "vcp",
-  "version": "0.9.91",
+  "version": "0.9.912",
   "private": false,
   "license": "MIT",
-  "main": "./dist/Print.umd.ts",
-  "module": "./dist/Print.es.ts",
+  "main": "./dist/vcp.umd.ts",
+  "module": "./dist/vcp.es.ts",
   "description": "Vue Client Print with Template Builder",
   "exports": {
     ".": {
