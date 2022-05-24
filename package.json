@@ -8,8 +8,8 @@
   "description": "Vue Client Print with Template Builder",
   "exports": {
     ".": {
-      "import": "./dist/vcp.es.js",
-      "require": "./dist/vcp.umd.js"
+      "import": "./dist/vcp.es.ts",
+      "require": "./dist/vcp.umd.ts"
     },
     "./dist/style.css" : "./dist/style.css"
   },
@@ -22,7 +22,7 @@
     "vue report generator"
   ],
   "files": [
-    "dist"
+    "dist/*"
   ],
   "scripts": {
     "dev": "vite",
