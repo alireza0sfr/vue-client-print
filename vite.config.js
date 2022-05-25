@@ -24,6 +24,9 @@ export default defineConfig({
     port: 8080
   },
   resolve: {
+    dedupe: [
+      'vue'
+    ],
     alias: {
       "~": path.resolve(__dirname, "./src"),
       "@": path.resolve(__dirname, "./src"),
