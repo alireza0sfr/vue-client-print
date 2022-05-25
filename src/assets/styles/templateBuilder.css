@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+img:hover,
+input:hover {
+    cursor: pointer;
+}
+
 shadow {
     box-shadow: -3px 4px 9px 0px #ddd;
 }
@@ -161,7 +166,7 @@ textarea:focus {
     margin-bottom: 5px;
 }
 
-.toolbar-content-row-element:hover > * {
+.toolbar-content-row-element:hover>* {
     cursor: pointer;
 }
 
