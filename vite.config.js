@@ -9,7 +9,7 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',
       fileName: (format) => `vcp.${format}.ts`,
-      rollupInputOptions: {
+      rollupOptions: {
         external: ['vue'],
         output: {
           globals: {
@@ -24,6 +24,9 @@ export default defineConfig({
     port: 8080
   },
   resolve: {
+    dedupe: [
+      'vue'
+    ],
     alias: {
       "~": path.resolve(__dirname, "./src"),
       "@": path.resolve(__dirname, "./src"),
