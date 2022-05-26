@@ -13,13 +13,14 @@ export default defineConfig({
         external: ['vue'],
         output: {
           globals: {
-            vue: 'Vue'
+            vue: 'Vue',
+            vcp: 'Vcp'
           }
         }
       },
     }
   },
-  plugins: [vue()],
+  // plugins: [vue()],
   server: {
     port: 8080
   },
