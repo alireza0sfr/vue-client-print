@@ -8,19 +8,20 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',
-      fileName: (format) => `vcp.${format}.ts`,
-      rollupOptions: {
-        external: ['vue'],
-        output: {
-          globals: {
-            vue: 'Vue',
-            vcp: 'Vcp'
-          }
+      fileName: (format) => `vcp.${format}.ts`
+    },
+    rollupOptions: {
+      external: ['vue'],
+      output: {
+        exports: 'named',
+        globals: {
+          vue: 'Vue',
+          vcp: 'Vcp'
         }
-      },
-    }
+      }
+    },
   },
-  // plugins: [vue()],
+  plugins: [vue()],
   server: {
     port: 8080
   },
