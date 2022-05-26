@@ -1,6 +1,6 @@
 {
   "name": "vcp",
-  "version": "0.9.932",
+  "version": "0.9.933",
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
@@ -23,9 +23,12 @@
     "vue report generator"
   ],
   "files": [
-    "dist/*",
-    "src/**/*.vue"
+    "dist/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alireza0sfr/vue-client-print"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
