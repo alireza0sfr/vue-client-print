@@ -11,7 +11,8 @@ const i18n = createI18n({
   locale: 'fa',
   fallbackLocale: 'en',
   // @ts-ignore
-  messages: translations
+  messages: translations,
+  globalInjection: true,
 })
 
 const app = createApp(App)
