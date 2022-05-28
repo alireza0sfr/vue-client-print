@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 // import { createI18n } from 'vue-i18n'
-import { createI18n } from 'vue-i18n/index'
+import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import translations from './assets/translations'
 import mixins from './plugins/mixins'
