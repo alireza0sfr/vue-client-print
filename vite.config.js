@@ -12,11 +12,14 @@ export default defineConfig({
       fileName: (format) => `vcp.${format}.ts`
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'vueI18n'],
       output: {
         exports: 'named',
         globals: {
           vue: 'Vue',
+          // $t: '$t',
+          // $t: 'vueI18n',
+          $t: vueI18n,
           vcp: 'Vcp'
         }
       }
