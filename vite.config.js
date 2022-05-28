@@ -24,11 +24,15 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    vueI18n({
-      include: path.resolve(__dirname, 'src/assets/translations.json'),
-      globalSFCScope: true,
-      compositionOnly: false,
-    })
+    {
+      ...vueI18n({
+        include: path.resolve(__dirname, 'src/assets/translations.json'),
+        globalSFCScope: true,
+        compositionOnly: false,
+      }),
+      apply: 'build',
+      enforce: 'post'
+    }
   ],
   server: {
     port: 8080
