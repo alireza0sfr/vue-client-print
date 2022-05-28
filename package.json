@@ -1,6 +1,6 @@
 {
   "name": "vcp",
-  "version": "0.9.948",
+  "version": "0.9.949",
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
@@ -23,8 +23,7 @@
     "vue report generator"
   ],
   "files": [
-    "dist/*",
-    "src/*"
+    "dist/*"
   ],
   "repository": {
     "type": "git",

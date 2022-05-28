@@ -26,7 +26,7 @@ export default defineConfig({
     vue(),
     {
       ...vueI18n({
-        include: path.resolve(__dirname, 'src/assets/translations.json'),
+        // include: path.resolve(__dirname, 'src/assets/translations.json'),
         globalSFCScope: true,
         compositionOnly: false,
       }),
