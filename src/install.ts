@@ -1,7 +1,7 @@
 // Import vue component
 import Print from '~/components/Print.vue'
 import TemplateBuilder from '~/components/TemplateBuilder.vue'
-import { createI18n } from 'vue-i18n/index'
+import { createI18n } from 'vue-i18n'
 import translations from './assets/translations'
 
 const i18n = createI18n({
