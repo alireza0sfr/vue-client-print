@@ -4,6 +4,7 @@
 
 <script>
 	export default {
+		name: 'Resizer',
 		props: {
 			resizers: { type: Array, default: ['br', 'bottom', 'bl', 'left', 'right', 'tr', 'top', 'tl'] },
 			query: { type: String, required: true },

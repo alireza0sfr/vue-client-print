@@ -1,9 +1,9 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+	<div :id="settings.id" :data-testid="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
 		<div class="content">
 			{{settings.configs.text}}
 		</div>
-		<Resizers :query="`text-${settings.id}`" />
+		<Resizers :query="`${this.locals.classType}-${settings.id}`" />
 	</div>
 </template>
 
@@ -30,13 +30,10 @@
 		data() {
 			return {
 				locals: {
-					classType: "text",
+					classType: "textelement",
 				},
 				settings: {
-					id: 0,
-					configs: {
-						text: this.$t('template-builder.elements.configs.type-text'),
-					},
+					configs: {},
 					styles: {},
 				},
 			}
