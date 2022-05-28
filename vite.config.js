@@ -26,6 +26,7 @@ export default defineConfig({
     vue(),
     vueI18n({
       include: path.resolve(__dirname, 'src/assets/translations.ts'),
+      globalSFCScope: true,
       compositionOnly: false,
     })
   ],
