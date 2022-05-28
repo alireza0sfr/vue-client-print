@@ -17,9 +17,10 @@ export default defineConfig({
         exports: 'named',
         globals: {
           vue: 'Vue',
+          vueI18n: '$t',
           // $t: '$t',
           // $t: 'vueI18n',
-          $t: vueI18n,
+          // $t: vueI18n,
           vcp: 'Vcp'
         }
       }
