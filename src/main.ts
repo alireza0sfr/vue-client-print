@@ -10,6 +10,7 @@ import componentRegisterer from './plugins/components.ts'
 const i18n = createI18n({
   locale: 'fa',
   fallbackLocale: 'en',
+  globalInjection: true,
   // @ts-ignore
   messages: translations
 })
