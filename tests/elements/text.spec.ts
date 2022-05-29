@@ -46,7 +46,7 @@ describe('TextElement', () => {
     expect(element.get(`[query="textelement-${options.id}"]`)).exist
   })
 
-  it('Styles works', async () => {
+  it('Styles Works', async () => {
 
     await wrapper.setData({
       settings: {
@@ -66,7 +66,7 @@ describe('TextElement', () => {
     expect(element.attributes('style')).toBe('text-align: left; align-items: bottom; color: blue; background-color: red; font-size: 20px; font-weight: bold; border: 1px solid black; direction: ltr;')
   })
 
-  it('Settings works', async () => {
+  it('Settings Works', async () => {
 
     await wrapper.setData({
       settings: {
