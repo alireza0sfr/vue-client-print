@@ -36,9 +36,6 @@ describe('PageCounter Persian', () => {
     // checks element's id
     expect(element.attributes('id')).toBe(options.id)
 
-    // checks element's initial text
-    // expect(element.get('[class="content"]').text()).toBe(options.configs.text)
-
     // element has resizers
     expect(element.get(`[query="pagecounter-${options.id}"]`)).exist
   })
