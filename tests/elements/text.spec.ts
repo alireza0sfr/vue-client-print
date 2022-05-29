@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import TextElement from '~/components/elements/TextElement.vue'
-//@ts-ignore
-import mixins from '../../src/plugins/mixins.ts'
 
 describe('TextElement', () => {
 
@@ -14,9 +12,6 @@ describe('TextElement', () => {
   }
 
   const wrapper = mount(TextElement, {
-    global: {
-      mixins: [mixins]
-    },
     props: {
       options: options
     },
