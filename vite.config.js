@@ -1,9 +1,13 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 const path = require("path")
 export default defineConfig({
+  test: {
+    setupFiles: ['./tests/config.ts']
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),

@@ -29,9 +29,9 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test:ui": "vitest --environment jsdom --ui",
+    "test:raw": "vitest --environment jsdom",
     "test:run": "vitest --environment jsdom run",
-    "test": "vitest --environment jsdom",
+    "test": "vitest --environment jsdom --ui",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
