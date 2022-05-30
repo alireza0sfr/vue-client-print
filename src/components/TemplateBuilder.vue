@@ -997,7 +997,8 @@
 			importFromSrcFile(srcFile: File): void {
 				var callback = this.settings.callback || null
 				this.settings = this.getDefaultSettings() // Set the settings to default value
-				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+				this.settings = this.merge(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+
 
 				if (this.settings.variables)
 					this.setVariables(this.settings.variables)
@@ -1737,7 +1738,7 @@
 				}
 
 				let elem = array.find(x => x.options.id === element.options.id)
-				Object.assign(elem.options.styles, this.getCoordinates(element.options.id))
+				elem.options.styles = this.merge(elem.options.styles, this.getCoordinates(element.options.id))
 			},
 
 			/**
