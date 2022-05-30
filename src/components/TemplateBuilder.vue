@@ -779,7 +779,7 @@
 					return
 
 				for (let set of keys) {
-					var thisSet: IRawDataset = JSON.parse(JSON.stringify(sets[set])) // removing refrence to the original data.
+					var thisSet: IRawDataset = this.clone(sets[set]) // removing refrence to the original data.
 					tmp = {
 						options: {
 							id: this.idGenerator(5),
@@ -848,7 +848,7 @@
 			 */
 			copyCurrentElement(e: any): void {
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
-					this.locals.copiedElement = JSON.parse(JSON.stringify(this.locals.selectedElement))
+					this.locals.copiedElement = this.clone(this.locals.selectedElement)
 			},
 			/**
 			 * Paste copied element.
@@ -1145,7 +1145,7 @@
 				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
 				var keys = Object.keys(this.settings.dataSets)
-				var clonedDataset = JSON.parse(JSON.stringify(this.settings.dataSets))
+				var clonedDataset = this.clone(this.settings.dataSets)
 				let tmp
 
 				var defaultElementObject: IElement = {
