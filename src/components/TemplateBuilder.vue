@@ -608,6 +608,7 @@
 						<div style="margin:-5px 10px 10px">
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
+							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
 						</div>
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
@@ -767,6 +768,23 @@
 		},
 		methods: {
 			/**
+			 * delets given element
+			 * @param {Object} element - element to delete.
+			 */
+			deleteElement(element:IElement = this.locals.selectedElement) {
+				
+				if(element.options.id === -1 )
+					return
+				
+				var parent = this.locals.selectedElement.options.parent
+				var array = this.settings[parent][`${parent}Elements`]
+
+				var index = array.findIndex(x => x.options.id === element.options.id)
+
+				if(index > -1)
+					array.splice(index, 1)
+			},
+			/**
 			 * @param {Object} set - Raw dataset.
 			 * @param {String} key - dataset key.
 			 * @return {Object} - Prepared dataset.
@@ -874,11 +892,11 @@
 			 */
 			getDefaultSelectedElementObject(): IElement {
 				return {
-					id: -1,
 					type: '',
 					grandParent: 'TemplateBuilder',
 					parent: 'body',
 					options: {
+						id: -1,
 						configs: {},
 						styles: {},
 					},
