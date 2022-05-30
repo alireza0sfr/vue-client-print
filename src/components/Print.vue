@@ -380,7 +380,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				Object.assign(this.settings, json)
+				this.settings = this.merge(this.settings, json)
 				document.getElementById("printModal").style.display = "block"
 				document.getElementById('loadingModal').style.display = 'block'
 
@@ -399,7 +399,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal.style.display = "none"
 				this.templateBuilder(this.settings, (val) => {
-					Object.assign(this.settings, val)
+				this.settings = this.merge(this.settings, val)
 					this.printPreview()
 				})
 			},

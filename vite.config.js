@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
@@ -5,6 +6,9 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n'
 // https://vitejs.dev/config/
 const path = require("path")
 export default defineConfig({
+  test: {
+    setupFiles: ['./tests/config.ts']
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),
@@ -25,7 +29,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vueI18n({
-      include: path.resolve(__dirname, 'src/assets/translations.json'),
+      include: path.resolve(__dirname, 'src/assets/translations.ts'),
       globalSFCScope: true,
       compositionOnly: false,
     }),

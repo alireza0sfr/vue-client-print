@@ -39,7 +39,7 @@
 						stylesTarget === 'odd' && index % 2 === 1 || // index is odd
 						stylesTarget === 'all'
 					)
-						row.options.styles = Object.assign(row.options.styles, this.locals.defaultRow[0].options.styles)
+						row.options.styles = this.merge(row.options.styles, this.locals.defaultRow[0].options.styles)
 
 					index += 1
 				}
@@ -204,7 +204,7 @@
 					resize: 'none',
 					height: this.calculateColumnHeight()
 				}
-				var computedStyles = Object.assign(defaultColStyles, column.options.styles)
+				var computedStyles = this.merge(defaultColStyles, column.options.styles)
 				let tmp = {
 					grandParent: this.settings.grandParent,
 					hasResizer: column.hasResizer,
@@ -214,7 +214,7 @@
 					},
 					styles: computedStyles,
 				}
-				Object.assign(tmp.styles, column.options.styles)
+				this.merge(tmp.styles, column.options.styles)
 				return tmp
 			},
 			/**
@@ -229,7 +229,7 @@
 				let defaultColStyles = {
 					display: 'flex',
 				}
-				row.options.styles = Object.assign(row.options.styles, defaultColStyles)
+				row.options.styles = this.merge(row.options.styles, defaultColStyles)
 				return row.options
 			}
 		}

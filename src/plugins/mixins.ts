@@ -136,6 +136,15 @@ var mixins: object = {
     },
 
     /**
+     * Deep clone given object.
+     * @param {Object} target - Target object.
+     * @return {Object} - Cloned object.
+     */
+    clone(target: object): object {
+      return JSON.parse(JSON.stringify(target))
+    },
+
+    /**
      * Deep merge sources to target object recuresively.
      * @param {Object} target - Target object.
      * @param {Array} sources - Array of sources.
@@ -181,7 +190,7 @@ var mixins: object = {
       if (this.settings.grandParent === 'TemplateBuilder')
         return options
 
-      let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
+      let opt = this.clone(options) // Storing the options in opt
       opt.grandParent = 'Print'
       switch (type) {
 
@@ -202,7 +211,7 @@ var mixins: object = {
           opt.styles.height = 'auto'
           opt.styles.position = 'relative'
 
-          rows = JSON.parse(JSON.stringify(rows))
+          rows = this.clone(rows)
           displaySet.options.configs.rows = rows
           break
         case 'dataset':
@@ -235,7 +244,7 @@ var mixins: object = {
             rows = dataSets[selectedDataSet].rows
 
           // removing refrence to prevent recursion
-          rows = JSON.parse(JSON.stringify(rows))
+          rows = this.clone(rows)
           displaySet.options.configs.rows = this.prepareDataSetRows(rows)
 
           // storing dataset height in originalColumnHeight to use it for column height

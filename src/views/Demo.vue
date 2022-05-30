@@ -1,5 +1,5 @@
 <template>
-	<div class="home">
+	<div class="Demo">
 		<!-- Test Section -->
 		<a @click="printPreview()" id="printModalOpenBtn" href="#" :title="$t('print.print-preview')">{{$t('print.print-preview')}}</a>
 		|
@@ -40,7 +40,7 @@
 <script>
 	import Print from '~/components/Print.vue'
 	export default {
-		name: "Home",
+		name: "DemoHome",
 		components: {
 			Print,
 		},
@@ -306,7 +306,6 @@
 		methods: {
 			templateBuilder() {
 				this.$refs.print.templateBuilder(this.printOptions, (json) => {
-					console.log('json', json)
 					this.printOptions = json
 				})
 			},

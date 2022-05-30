@@ -24,6 +24,10 @@ const messages: object = {
         "afterBody": "After Body",
         "footer": "Footer"
       },
+      "alerts": {
+        "format-notsupported": "Format not supported",
+        "fileSize-exceeded": "File size exceeded, max file size is {size} KB",
+      },
       "language": "Language",
       "export": "Export",
       "page-counter": "page {currentPage} of {totalPages}",
@@ -131,6 +135,10 @@ const messages: object = {
         "text": "متن",
         "image": "تصویر",
         "type": "نوع"
+      },
+      "alerts": {
+        "format-notsupported": "فرمت فایل پشتیبانی نمیشود",
+        "fileSize-exceeded": "سایز فایل عکس مورد نظر بالای {size} کیلوبایت است",
       },
       "sections": {
         "header": "Header",
