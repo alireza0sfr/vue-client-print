@@ -1555,10 +1555,10 @@
 
 
 						if (image.type !== 'image/jpeg' && image.type !== 'image/png')
-							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 
 						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 
 						this.toBase64(image).then((res) => {
 							this.locals.selectedElement.options.configs.imageSrc = res
@@ -1578,10 +1578,10 @@
 
 						// @ts-ignore
 						if (image.type !== "image/jpeg" || image.type !== "image/png")
-							return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 
 						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 
 						this.toBase64(image).then((res) => {
 							variable.context = res
@@ -1589,15 +1589,14 @@
 						break
 
 					default: // if its a source file
-
 						let fileSrc = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
 						if (!fileSrc.name.includes('.vp')) { // Checking the file type
-							return alert('فرمت فایل پشتیبانی نمیشود فرمت فایل های قابل قبول: vp.*')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 						}
 
 						if (fileSrc.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 						}
 						var fr = new FileReader()
 						fr.readAsText(fileSrc)
