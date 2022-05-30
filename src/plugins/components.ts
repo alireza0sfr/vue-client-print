@@ -14,7 +14,7 @@ import Row from '~/components/elements/DataSet/Row.vue'
 // general
 import TemplateBuilder from '~/components/TemplateBuilder.vue'
 import Resizers from '~/components/elements/Resizers.vue'
-import SectionTag from '~/components/SectionTag.vue'
+import SectionTag from '../components/SectionTag.vue'
 
 export default function componentRegisterer(App: any): void {
 
