@@ -1,15 +1,13 @@
 {
   "name": "vcp",
-  "version": "0.9.931",
+  "version": "0.9.7",
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
   "main": "./dist/vcp.umd.ts",
-  "module": "./dist/vcp.es.ts",
   "description": "Vue Client Print with Template Builder",
   "exports": {
     ".": {
-      "import": "./dist/vcp.es.ts",
       "require": "./dist/vcp.umd.ts"
     },
     "./dist/style.css": "./dist/style.css"
@@ -25,13 +23,18 @@
   "files": [
     "dist/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alireza0sfr/vue-client-print"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "test": "vitest run --environment jsdom",
     "test:ui:": "vitest --environment jsdom --ui",
     "test:coverage": "vitest run --coverage --environment jsdom",
-    "test": "vitest --environment jsdom"
+    "test:watch": "vitest --environment jsdom"
   },
   "dependencies": {
     "dom-to-image": "^2.6.0",
@@ -45,6 +48,7 @@
     "vue-i18n": "^9.1.10"
   },
   "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^3.4.0",
     "@vitejs/plugin-vue": "^2.3.3",
     "@vitest/ui": "^0.12.9",
     "@vue/compiler-sfc": "^3.2.36",
