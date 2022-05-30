@@ -1130,7 +1130,6 @@
 			 * @return {void} - void
 			 */
 			clickedOnElement(element: IElement): void {
-				console.log(element)
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
 				this.locals.isClicked = true
