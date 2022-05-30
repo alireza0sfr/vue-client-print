@@ -1,15 +1,13 @@
 {
   "name": "vcp",
-  "version": "0.9.969",
+  "version": "0.9.7",
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
   "main": "./dist/vcp.umd.ts",
-  "module": "./dist/vcp.es.ts",
   "description": "Vue Client Print with Template Builder",
   "exports": {
     ".": {
-      "import": "./dist/vcp.es.ts",
       "require": "./dist/vcp.umd.ts"
     },
     "./dist/style.css": "./dist/style.css"
