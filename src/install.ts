@@ -4,14 +4,14 @@ import TemplateBuilder from '~/components/TemplateBuilder.vue'
 // @ts-ignore
 import mixins from './plugins/mixins.ts'
 // @ts-ignore
-import i18n from './plugins/i18n.ts'
+// import i18n from './plugins/i18n.ts'
 
 export default {
   install: (app: any, options: any): void => {
     app.component('Print', Print)
     app.component('TemplateBuilder', TemplateBuilder)
     app.mixin(mixins)
-    app.use(i18n)
+    // app.use(i18n)
   }
 }
 
