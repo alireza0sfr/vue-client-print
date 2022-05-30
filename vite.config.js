@@ -25,10 +25,9 @@ export default defineConfig({
   plugins: [
     vue(),
     vueI18n({
-      include: path.resolve(__dirname, 'src/assets/translations.json'),
+      include: path.resolve(__dirname, 'src/assets/translations.ts'),
       globalSFCScope: true,
       compositionOnly: false,
-      runtimeOnly: false,
     }),
   ],
   server: {
