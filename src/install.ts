@@ -2,9 +2,9 @@
 import Print from '~/components/Print.vue'
 import TemplateBuilder from '~/components/TemplateBuilder.vue'
 // @ts-ignore
-import mixins from '../src/plugins/mixins.ts'
+import mixins from './plugins/mixins.ts'
 // @ts-ignore
-import i18n from '../src/plugins/i18n.ts'
+import i18n from './plugins/i18n.ts'
 
 export default {
   install: (app: any, options: any): void => {

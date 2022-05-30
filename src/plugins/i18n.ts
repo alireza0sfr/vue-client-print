@@ -1,4 +1,4 @@
-import { createI18n } from 'vue-i18n/index'
+import { createI18n } from 'vue-i18n'
 import translations from '../assets/translations'
 const i18n = createI18n({
   locale: 'fa',
