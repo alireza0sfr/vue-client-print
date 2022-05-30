@@ -12,5 +12,3 @@ export default {
     // app.use(i18n)
   }
 }
-
-export { Print, TemplateBuilder }
