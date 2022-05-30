@@ -45,7 +45,7 @@ describe('DateTime Gregorian', () => {
     // element existsance
     expect(element.exists())
 
-    // checks element;s classes
+    // checks element's classes
     expect(element.classes()).toContain('datetime')
     expect(element.classes()).toContain('content-wrapper')
     expect(element.classes()).toContain('element')
