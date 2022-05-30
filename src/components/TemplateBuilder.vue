@@ -2,7 +2,7 @@
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
 		<div id="templateBuilderModal" class="print-modal">
-			<div class="print-modal-content">
+			<div id="fullscreenControl" class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
 						<a @click="save()" :title="$t('template-builder.save')" class="modal-icon" href="#">
@@ -609,6 +609,7 @@
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
+							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
@@ -661,6 +662,7 @@
 		data() {
 			return {
 				locals: {
+					fullScreen: false,
 					templateHeight: 11.7,
 					langs: fetchLangList(),
 					dataSetDefaultRow: [
@@ -767,6 +769,22 @@
 			this.keyboardHandler()
 		},
 		methods: {
+			/**
+			 * Fullscreen TB view
+			 */
+			fullScreen() {
+				var TBContainer = document.getElementById('fullscreenControl')
+				if(this.locals.fullScreen) {
+					this.locals.fullScreen = false
+					TBContainer.style.margin = '2% auto'
+					TBContainer.style.width = '1090px'
+				}
+				else {
+					this.locals.fullScreen = true
+					TBContainer.style.margin = '2%'
+					TBContainer.style.width = 'unset'
+				}
+			},
 			/**
 			 * delets given element
 			 * @param {Object} element - element to delete.
