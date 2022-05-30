@@ -6,7 +6,6 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   // @ts-ignore
   messages: translations,
-  globalInjection: true
 })
 
 export default i18n
