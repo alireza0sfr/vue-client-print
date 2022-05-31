@@ -5,7 +5,7 @@
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
   "main": "./dist/vcp.umd.ts",
-  "description": "Vue Client Print with Template Builder",
+  "description": "Frontend printing dynamic data made easy!",
   "exports": {
     ".": {
       "require": "./dist/vcp.umd.ts"
