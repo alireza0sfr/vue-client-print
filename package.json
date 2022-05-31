@@ -29,9 +29,10 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "test:ui:": "vitest --environment jsdom --ui",
-    "test:coverage": "vitest run --coverage --environment jsdom",
-    "test": "vitest --environment jsdom"
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "dom-to-image": "^2.6.0",

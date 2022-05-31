@@ -6,19 +6,23 @@ import vue from '@vitejs/plugin-vue'
 const path = require("path")
 export default defineConfig({
   test: {
-    setupFiles: ['./tests/config.ts']
+    setupFiles: ['./tests/config.ts'],
+    environment: 'jsdom'
   },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',
-      fileName: (format) => `vcp.${format}.ts`,
-      rollupOptions: {
-        external: ['vue'],
-        output: {
-          globals: {
-            vue: 'Vue'
-          }
+      formats: ['umd'],
+      fileName: (format) => `vcp.${format}.ts`
+    },
+    rollupOptions: {
+      external: ['vue', 'vueI18n', 'vue-demi',],
+      output: {
+        exports: 'named',
+        globals: {
+          'vue-demi': 'VueDemi',
+          'vue': 'Vue',
         }
       },
     }
