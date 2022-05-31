@@ -1,6 +1,6 @@
 {
   "name": "vcp",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
@@ -44,8 +44,17 @@
     "register-service-worker": "^1.7.2",
     "typescript": "^4.7.2",
     "vitest": "^0.12.9",
-    "vue": "^3.2.36",
+    "vue-demi": "^0.12.5",
     "vue-i18n": "^9.1.10"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.0.0-rc.1",
+    "vue": "^2.0.0 || >=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.4.0",
@@ -55,6 +64,7 @@
     "@vue/test-utils": "^2.0.0-rc.18",
     "c8": "^7.11.3",
     "cz-conventional-changelog": "^3.0.1",
-    "vite": "^2.9.9"
+    "vite": "^2.9.9",
+    "vue": "^3.0.0"
   }
 }

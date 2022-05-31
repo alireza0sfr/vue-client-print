@@ -9,6 +9,9 @@ export default defineConfig({
   test: {
     setupFiles: ['./tests/config.ts']
   },
+  optimizeDeps: {
+    exclude: ['vue-demi']
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),

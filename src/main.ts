@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp } from 'vue-demi'
 import App from './App.vue'
 // @ts-ignore
 import i18n from './plugins/i18n.ts'
