@@ -27,7 +27,10 @@ export default defineConfig({
     },
   },
   plugins: [
-    vue(),
+    vue({
+      style: true,
+      css: true
+    }),
     vueI18n({
       include: path.resolve(__dirname, 'src/assets/translations.ts'),
       globalSFCScope: true,

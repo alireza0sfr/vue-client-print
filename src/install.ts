@@ -1,4 +1,3 @@
-// Import vue component
 // @ts-ignore
 import componentRegisterer from './plugins/components.ts'
 // @ts-ignore

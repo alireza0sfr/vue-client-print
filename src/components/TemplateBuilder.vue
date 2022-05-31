@@ -2,7 +2,7 @@
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
 		<div id="templateBuilderModal" class="print-modal">
-			<div class="print-modal-content">
+			<div id="fullscreenControl" class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
 						<a @click="save()" :title="$t('template-builder.save')" class="modal-icon" href="#">
@@ -608,6 +608,8 @@
 						<div style="margin:-5px 10px 10px">
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
+							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
+							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
@@ -660,6 +662,7 @@
 		data() {
 			return {
 				locals: {
+					fullScreen: false,
 					templateHeight: 11.7,
 					langs: fetchLangList(),
 					dataSetDefaultRow: [
@@ -767,6 +770,39 @@
 		},
 		methods: {
 			/**
+			 * Fullscreen TB view
+			 */
+			fullScreen() {
+				var TBContainer = document.getElementById('fullscreenControl')
+				if(this.locals.fullScreen) {
+					this.locals.fullScreen = false
+					TBContainer.style.margin = '2% auto'
+					TBContainer.style.width = '1090px'
+				}
+				else {
+					this.locals.fullScreen = true
+					TBContainer.style.margin = '2%'
+					TBContainer.style.width = 'unset'
+				}
+			},
+			/**
+			 * delets given element
+			 * @param {Object} element - element to delete.
+			 */
+			deleteElement(element:IElement = this.locals.selectedElement) {
+				
+				if(element.options.id === -1 )
+					return
+				
+				var parent = this.locals.selectedElement.options.parent
+				var array = this.settings[parent][`${parent}Elements`]
+
+				var index = array.findIndex(x => x.options.id === element.options.id)
+
+				if(index > -1)
+					array.splice(index, 1)
+			},
+			/**
 			 * @param {Object} set - Raw dataset.
 			 * @param {String} key - dataset key.
 			 * @return {Object} - Prepared dataset.
@@ -779,7 +815,7 @@
 					return
 
 				for (let set of keys) {
-					var thisSet: IRawDataset = JSON.parse(JSON.stringify(sets[set])) // removing refrence to the original data.
+					var thisSet: IRawDataset = this.clone(sets[set]) // removing refrence to the original data.
 					tmp = {
 						options: {
 							id: this.idGenerator(5),
@@ -848,7 +884,7 @@
 			 */
 			copyCurrentElement(e: any): void {
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
-					this.locals.copiedElement = JSON.parse(JSON.stringify(this.locals.selectedElement))
+					this.locals.copiedElement = this.clone(this.locals.selectedElement)
 			},
 			/**
 			 * Paste copied element.
@@ -874,11 +910,11 @@
 			 */
 			getDefaultSelectedElementObject(): IElement {
 				return {
-					id: -1,
 					type: '',
 					grandParent: 'TemplateBuilder',
 					parent: 'body',
 					options: {
+						id: -1,
 						configs: {},
 						styles: {},
 					},
@@ -997,7 +1033,8 @@
 			importFromSrcFile(srcFile: File): void {
 				var callback = this.settings.callback || null
 				this.settings = this.getDefaultSettings() // Set the settings to default value
-				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+				this.settings = this.merge(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+
 
 				if (this.settings.variables)
 					this.setVariables(this.settings.variables)
@@ -1130,7 +1167,6 @@
 			 * @return {void} - void
 			 */
 			clickedOnElement(element: IElement): void {
-				console.log(element)
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
 				this.locals.isClicked = true
@@ -1145,7 +1181,7 @@
 				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
 				var keys = Object.keys(this.settings.dataSets)
-				var clonedDataset = JSON.parse(JSON.stringify(this.settings.dataSets))
+				var clonedDataset = this.clone(this.settings.dataSets)
 				let tmp
 
 				var defaultElementObject: IElement = {
@@ -1519,10 +1555,10 @@
 
 
 						if (image.type !== 'image/jpeg' && image.type !== 'image/png')
-							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 
 						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 
 						this.toBase64(image).then((res) => {
 							this.locals.selectedElement.options.configs.imageSrc = res
@@ -1542,10 +1578,10 @@
 
 						// @ts-ignore
 						if (image.type !== "image/jpeg" || image.type !== "image/png")
-							return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 
 						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 
 						this.toBase64(image).then((res) => {
 							variable.context = res
@@ -1553,15 +1589,14 @@
 						break
 
 					default: // if its a source file
-
 						let fileSrc = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
 						if (!fileSrc.name.includes('.vp')) { // Checking the file type
-							return alert('فرمت فایل پشتیبانی نمیشود فرمت فایل های قابل قبول: vp.*')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 						}
 
 						if (fileSrc.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 						}
 						var fr = new FileReader()
 						fr.readAsText(fileSrc)
@@ -1738,7 +1773,7 @@
 				}
 
 				let elem = array.find(x => x.options.id === element.options.id)
-				Object.assign(elem.options.styles, this.getCoordinates(element.options.id))
+				elem.options.styles = this.merge(elem.options.styles, this.getCoordinates(element.options.id))
 			},
 
 			/**
