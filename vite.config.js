@@ -16,15 +16,17 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',
+      formats: ['umd'],
       fileName: (format) => `vcp.${format}.ts`
     },
     rollupOptions: {
-      external: ['vue', 'vueI18n'],
+      external: ['vue', 'vueI18n', 'vue-demi',],
       output: {
         exports: 'named',
         globals: {
-          vue: 'Vue',
-          vcp: 'Vcp'
+          'vue-demi': 'VueDemi',
+          'vue': 'Vue',
+          'vcp': 'Vcp'
         }
       }
     },
