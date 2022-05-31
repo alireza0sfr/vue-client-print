@@ -7,7 +7,8 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n'
 const path = require("path")
 export default defineConfig({
   test: {
-    setupFiles: ['./tests/config.ts']
+    setupFiles: ['./tests/config.ts'],
+    environment: 'jsdom'
   },
   optimizeDeps: {
     exclude: ['vue-demi']
@@ -26,7 +27,6 @@ export default defineConfig({
         globals: {
           'vue-demi': 'VueDemi',
           'vue': 'Vue',
-          'vcp': 'Vcp'
         }
       }
     },
