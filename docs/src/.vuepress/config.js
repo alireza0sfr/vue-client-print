@@ -42,8 +42,8 @@ module.exports = {
         link: '/config/'
       },
       {
-        text: 'Exmaples',
-        link: '/examples/'
+        text: 'Playground',
+        link: '/playground/'
       },
       {
         text: 'GitHub',
@@ -53,14 +53,40 @@ module.exports = {
     sidebar: {
       '/guide/': [
         {
-          title: 'Guide',
+          title: 'Getting Started',
+          collapsable: false,
+          children: [
+            './getting-started/introduction',
+            './getting-started/installation',
+            './getting-started/usage'
+          ]
+        },
+        {
+          title: 'APIs',
+          collapsable: false,
+          children: [
+            './apis/templatebuilder',
+            './apis/printpreview',
+          ]
+        },
+        {
+          title: 'Elements',
           collapsable: false,
           children: [
             '',
             'installation',
-            'using-vue',
+            'usage'
           ]
-        }
+        },
+        {
+          title: 'Slot & Events',
+          collapsable: false,
+          children: [
+            '',
+            'installation',
+            'usage'
+          ]
+        },
       ],
     }
   },
