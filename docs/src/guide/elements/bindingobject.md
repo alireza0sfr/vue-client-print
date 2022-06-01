@@ -14,7 +14,7 @@ Can attach to given object or any field of given dataset object and display the 
 ```
 
 ::: tip BindingObject 
-  For further details check [Binding Object Prop](/props/bindingobject).
+  For further details check [Binding Object Prop](/props/#bindingobject).
 :::
 
 ## Settings

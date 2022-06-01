@@ -19,7 +19,7 @@ Can attach to dataset object and repeats based on dataset row count.
 - Can work as an element host elemnts can be added to repeator by dropping on repeator
 
 ::: tip DataSet 
-  For further details check [DataSet Prop](/props/dataset).
+  For further details check [DataSet Prop](/props/#dataset).
 :::
 
 ## Settings
