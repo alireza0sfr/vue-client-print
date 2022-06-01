@@ -56,7 +56,7 @@ module.exports = {
           title: 'Getting Started',
           collapsable: false,
           children: [
-            './getting-started/introduction',
+            '',
             './getting-started/installation',
             './getting-started/usage'
           ]
@@ -65,12 +65,22 @@ module.exports = {
           title: 'APIs',
           collapsable: false,
           children: [
+            'apis/introduction',
             './apis/templatebuilder',
             './apis/printpreview',
           ]
         },
         {
           title: 'Elements',
+          collapsable: false,
+          children: [
+            '',
+            'installation',
+            'usage'
+          ]
+        },
+        {
+          title: 'Tabs & Sections',
           collapsable: false,
           children: [
             '',
