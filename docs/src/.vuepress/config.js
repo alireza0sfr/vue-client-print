@@ -38,8 +38,8 @@ module.exports = {
         link: '/guide/',
       },
       {
-        text: 'Config',
-        link: '/config/'
+        text: 'Props',
+        link: '/props/'
       },
       {
         text: 'Playground',
@@ -72,6 +72,21 @@ module.exports = {
         },
         {
           title: 'Elements',
+          collapsable: true,
+          children: [
+            'elements/introduction',
+            'elements/text',
+            'elements/datetime',
+            'elements/pagecounter',
+            'elements/image',
+            'elements/bindingobject',
+            'elements/textpattern',
+            'elements/dataset',
+            'elements/repeator',
+          ]
+        },
+        {
+          title: 'Variables',
           collapsable: false,
           children: [
             '',

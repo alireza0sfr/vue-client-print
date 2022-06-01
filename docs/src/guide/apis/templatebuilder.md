@@ -11,7 +11,7 @@ function templateBuilder(printOptions: object, callback: function);
 ```ts
 printOptions: object = {
   header: {
-    isHeaderRepeatable: boolean, // detemines weather header repeats on every print page | defualt: true
+    isHeaderRepeatable: boolean, // detemines whether header repeats on every print page | defualt: true
     height: number, // header height in inches | defualt: 1
     headerElements: object[], // array of header elements | defualt: []
   },
@@ -27,7 +27,7 @@ printOptions: object = {
     afterBodyElements: object[], // array of after body elements | defualt: []
   },
   footer: {
-    isFooterRepeatable: boolean, // detemines weather footer repeats on every print page | defualt: true
+    isFooterRepeatable: boolean, // detemines whether footer repeats on every print page | defualt: true
     height: number, // footer height in inches | defualt: 1
     footerElements: object[] // array of footer elements | defualt: [],
   },

@@ -127,7 +127,7 @@ var mixins: object = {
     },
 
     /**
-     * Check weather given item is object.
+     * Check whether given item is object.
      * @param {any} item - given item to check.
      * @return {Boolean} - true if item is object.
      */
