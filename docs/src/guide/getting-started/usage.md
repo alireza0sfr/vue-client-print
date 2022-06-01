@@ -1,7 +1,7 @@
 # Basic Usage
 
 ::: warning API & Props    
-This assumes you have already read [API](/guide/apis/templatebuilder/) and [Props](/config/) section.
+This assumes you have already read [APIs](/guide/apis/templatebuilder/) and [Props](/config/) section.
 :::
 
 ```html
@@ -43,3 +43,10 @@ This assumes you have already read [API](/guide/apis/templatebuilder/) and [Prop
   };
 </script>
 ```
+
+## Print Body
+
+Print Body renders by:
+
+- [Gievn slot with name of 'printData'](/guide/slots/slots)
+- [By passing dataset and building template](/guide/elements/dataset)

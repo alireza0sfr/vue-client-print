@@ -104,9 +104,8 @@ module.exports = {
           title: 'Slot & Events',
           collapsable: false,
           children: [
-            '',
-            'installation',
-            'usage'
+            'slots/slots',
+            'slots/events'
           ]
         },
       ],
