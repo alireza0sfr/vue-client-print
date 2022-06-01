@@ -41,10 +41,10 @@ module.exports = {
         text: 'Props',
         link: '/props/'
       },
-      {
-        text: 'Playground',
-        link: '/playground/'
-      },
+      // {
+      //   text: 'Playground',
+      //   link: '/playground/'
+      // },
       {
         text: 'GitHub',
         link: 'https://github.com/alireza0sfr/vue-client-print'
