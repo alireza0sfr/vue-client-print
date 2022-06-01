@@ -18,7 +18,7 @@ Can attach to dataset object and display tables.
 - each section dataset/ row / column has it's own unique styles
 
 ::: tip DataSet 
-  for further detials check [DataSet Prop](/props/dataset)
+  For further details check [DataSet Prop](/props/dataset).
 :::
 
 ## DataSet Settings
