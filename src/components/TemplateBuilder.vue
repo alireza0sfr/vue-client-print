@@ -652,7 +652,6 @@
 	// @ts-ignore
 	import { fetchLangList } from '~/assets/translations.ts'
 	import { saveAs } from 'file-saver'
-	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -1288,7 +1287,7 @@
 					case 'imageelement':
 						tmp = {
 							options: {
-								configs: { imageSrc: DefaultLogo },
+								configs: { imageSrc: this.configurations.imageSrc },
 								styles: {
 									width: "100px",
 									height: "100px",

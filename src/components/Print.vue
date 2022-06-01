@@ -91,6 +91,7 @@
 	import { ISettings, IConfigs } from '~/interfaces/general.ts'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
+	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "Print",
 		props: {
@@ -143,7 +144,8 @@
 				},
 				configs: {
 					maximumFileSize: 1000, // Maximum file size in KB
-					language: 'en'
+					language: 'en',
+					imageSrc: DefaultLogo
 				}
 			}
 		},
