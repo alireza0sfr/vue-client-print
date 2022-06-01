@@ -1270,7 +1270,7 @@
 					case 'datetime':
 						tmp = {
 							options: {
-								configs: { hasDate: true, hasTime: true, persianDate: true },
+								configs: { hasDate: true, hasTime: true, persianDate: false },
 								styles: { width: "150px" },
 							},
 						}
