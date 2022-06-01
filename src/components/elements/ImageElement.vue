@@ -6,7 +6,6 @@
 </template>
 
 <script>
-	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "ImageElement",
 		props: {
@@ -35,7 +34,7 @@
 					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
-						imageSrc: DefaultLogo,
+						imageSrc: '',
 					},
 					styles: {},
 				},

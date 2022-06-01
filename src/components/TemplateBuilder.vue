@@ -652,7 +652,6 @@
 	// @ts-ignore
 	import { fetchLangList } from '~/assets/translations.ts'
 	import { saveAs } from 'file-saver'
-	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -1270,7 +1269,7 @@
 					case 'datetime':
 						tmp = {
 							options: {
-								configs: { hasDate: true, hasTime: true, persianDate: true },
+								configs: { hasDate: true, hasTime: true, persianDate: false },
 								styles: { width: "150px" },
 							},
 						}
@@ -1279,7 +1278,7 @@
 					case 'pagecounter':
 						tmp = {
 							options: {
-								configs: { counter: '1', persianNumbers: true, completeForm: true },
+								configs: { counter: '1', persianNumbers: false, completeForm: true },
 								styles: {},
 							},
 						}
@@ -1288,7 +1287,7 @@
 					case 'imageelement':
 						tmp = {
 							options: {
-								configs: { imageSrc: DefaultLogo },
+								configs: { imageSrc: this.configurations.imageSrc },
 								styles: {
 									width: "100px",
 									height: "100px",
