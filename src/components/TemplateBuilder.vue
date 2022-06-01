@@ -1279,7 +1279,7 @@
 					case 'pagecounter':
 						tmp = {
 							options: {
-								configs: { counter: '1', persianNumbers: true, completeForm: true },
+								configs: { counter: '1', persianNumbers: false, completeForm: true },
 								styles: {},
 							},
 						}
