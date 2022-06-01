@@ -6,7 +6,7 @@ Template Builder method will trigger Template Builder modal to popup
 function templateBuilder(printOptions: object, callback: function);
 ```
 
-## printOptions
+## Print Options
 
 ```ts
 printOptions: object = {

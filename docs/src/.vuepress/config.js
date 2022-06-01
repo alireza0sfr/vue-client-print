@@ -57,8 +57,8 @@ module.exports = {
           collapsable: false,
           children: [
             '',
-            './getting-started/installation',
-            './getting-started/usage'
+            'getting-started/installation',
+            'getting-started/usage'
           ]
         },
         {
@@ -66,8 +66,8 @@ module.exports = {
           collapsable: false,
           children: [
             'apis/introduction',
-            './apis/templatebuilder',
-            './apis/printpreview',
+            'apis/templatebuilder',
+            'apis/printpreview',
           ]
         },
         {
@@ -96,9 +96,8 @@ module.exports = {
           title: 'Tabs & Sections',
           collapsable: false,
           children: [
-            '',
-            'installation',
-            'usage'
+            'tabs/tabs',
+            'tabs/sections',
           ]
         },
         {
