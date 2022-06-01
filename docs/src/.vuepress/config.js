@@ -89,9 +89,7 @@ module.exports = {
           title: 'Variables',
           collapsable: false,
           children: [
-            '',
-            'installation',
-            'usage'
+            'variables/introduction',
           ]
         },
         {
