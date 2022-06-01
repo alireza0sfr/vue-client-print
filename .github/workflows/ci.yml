@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   unit-test:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,11 +19,23 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test
+  
+  vuepress-deploy:
+
+    needs: unit-test
+
+    uses: jenkey2011/vuepress-deploy@master
+    env:
+      ACCESS_TOKEN: ${{ secrets.REPO_TOKEN }}
+      TARGET_REPO: alireza0sfr/vue-client-print
+      TARGET_BRANCH: main
+      BUILD_SCRIPT: npm && npm build
+      BUILD_DIR: docs/.vuepress/dist
