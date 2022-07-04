@@ -14,6 +14,7 @@ export default defineConfig({
     exclude: ['vue-demi']
   },
   build: {
+    cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',

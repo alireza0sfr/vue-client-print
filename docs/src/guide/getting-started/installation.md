@@ -10,7 +10,6 @@ npm install vcp --save
 // main.js
 import Vue from 'vue';
 import Print from 'vcp';
-import 'vcp/dist/style.css';
 
 Vue.use(Print);
 ```
@@ -21,7 +20,6 @@ Vue.use(Print);
 import { createApp } from 'vue';
 import App from './App.vue'; // e.g: main app file
 import Print from 'vcp';
-import 'vcp/dist/style.css';
 
 const app = createApp(App);
 app.use(Print);
