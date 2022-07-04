@@ -30,6 +30,19 @@ sidebar: auto
 ```
 
 imageSrc: Given image for imageElement and variable with image type.
+usage:
+```ts
+// it can be either imported image file or base64 encoded image
+import Logo from './assetsDir/Logo
+{
+  imageSrc: Logo
+}
+// or add base64 image you can use VCP's encodebase64 API
+{
+  imageSrc: base64Image
+}
+```
+[VCP's encodebase64 API](/apis/#encode2base64)
 
 maximumFileSize: Maximum file size in KB.
 
