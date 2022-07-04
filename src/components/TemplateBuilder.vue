@@ -1783,33 +1783,6 @@
 			clickedOnInput(id: string): void {
 				document.getElementById(id).click()
 			},
-
-			/**
-			 * encode given string to base64.
-			 * @param {String} str - given string
-			 * @return {*} - base64
-			 */
-			encode2Base64(str: string): string {
-				{
-					return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-						function toSolidBytes(match, p1) {
-
-							// @ts-ignore
-							return String.fromCharCode('0x' + p1)
-						}))
-				}
-			},
-
-			/**
-			 * decode given string to base64.
-			 * @param {String} str - given string
-			 * @return {*} - base64
-			 */
-			decodeFromBase64(str: string): string {
-				return decodeURIComponent(atob(str).split('').map(function (c) {
-					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-				}).join(''))
-			}
 		},
 	};
 </script>
