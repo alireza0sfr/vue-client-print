@@ -3,9 +3,9 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import libCss from 'vite-plugin-libcss';
+import path from 'path'
 
 // https://vitejs.dev/config/
-const path = require("path")
 export default defineConfig({
   test: {
     setupFiles: ['./tests/config.ts'],
@@ -19,10 +19,10 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',
       formats: ['es'],
-      fileName: (format) => `vcp.${format}.ts`
+      fileName: (format) => `vcp.${format}.js`
     },
     rollupOptions: {
-      external: ['vue', 'vueI18n', 'vue-demi',],
+      external: ['vue', 'vue-demi',],
       output: {
         exports: 'named',
         globals: {
@@ -39,7 +39,7 @@ export default defineConfig({
       css: true
     }),
     vueI18n({
-      include: path.resolve(__dirname, 'src/assets/translations.ts'),
+      include: path.resolve(__dirname, './src/locales/**.json'),
       globalSFCScope: true,
       compositionOnly: false,
     }),
