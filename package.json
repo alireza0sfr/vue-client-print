@@ -4,11 +4,11 @@
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
-  "module": "./dist/vcp.es.ts",
+  "module": "./dist/vcp.es.js",
   "description": "Frontend printing dynamic data made easy!",
   "exports": {
     ".": {
-      "import": "./dist/vcp.es.ts"
+      "import": "./dist/vcp.es.js"
     },
     "./dist/style.css": "./dist/style.css"
   },

@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": false,
+    "resolveJsonModule": true,
     "noEmit": true
   }
 }

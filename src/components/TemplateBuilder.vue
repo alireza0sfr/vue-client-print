@@ -650,7 +650,7 @@
 	// @ts-ignore
 	import { ISettings } from '~/interfaces/general.ts'
 	// @ts-ignore
-	import { fetchLangList } from '~/assets/translations.ts'
+	import { fetchLangList } from '~/translations.ts'
 	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",
