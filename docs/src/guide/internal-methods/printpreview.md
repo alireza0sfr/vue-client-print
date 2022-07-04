@@ -7,4 +7,4 @@ function printPreview(printOptions);
 
 ## printOptions
 
-print Options as shown in [TemplateBuilder API](/guide/apis/templatebuilder)
+print Options as shown in [TemplateBuilder InternalMethod](/guide/internal-methods/templatebuilder)

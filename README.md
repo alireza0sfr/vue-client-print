@@ -21,7 +21,7 @@ npm run build
 ```
 cd docs
 npm install
-npm run serve
+npm run dev
 ```
 ### Contributing
 1. fork and clone the repo

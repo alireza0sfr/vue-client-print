@@ -1,7 +1,7 @@
 # Basic Usage
 
 ::: warning API & Props    
-This assumes you have already read [APIs](/guide/apis/templatebuilder/) and [Props](/config/) section.
+This assumes you have already read [Internal Methods](/guide/internal-methods/templatebuilder/) and [Props](/props/) section.
 :::
 
 ```html

@@ -41,6 +41,10 @@ module.exports = {
         text: 'Props',
         link: '/props/'
       },
+      {
+        text: 'API',
+        link: '/apis/'
+      },
       // {
       //   text: 'Playground',
       //   link: '/playground/'
@@ -62,12 +66,12 @@ module.exports = {
           ]
         },
         {
-          title: 'APIs',
+          title: 'Internal Methods',
           collapsable: false,
           children: [
-            'apis/introduction',
-            'apis/templatebuilder',
-            'apis/printpreview',
+            'internal-methods/introduction',
+            'internal-methods/templatebuilder',
+            'internal-methods/printpreview',
           ]
         },
         {
