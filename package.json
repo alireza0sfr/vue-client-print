@@ -1,14 +1,14 @@
 {
   "name": "vcp",
-  "version": "0.9.15",
+  "version": "0.9.16",
   "private": false,
   "author": "Alireza Safari <alireza.safaree@gmail.com> (http://alireza-safari.ir)",
   "license": "MIT",
-  "main": "./dist/vcp.umd.ts",
+  "module": "./dist/vcp.es.ts",
   "description": "Frontend printing dynamic data made easy!",
   "exports": {
     ".": {
-      "require": "./dist/vcp.umd.ts"
+      "import": "./dist/vcp.es.ts"
     },
     "./dist/style.css": "./dist/style.css"
   },
@@ -60,6 +60,7 @@
     "c8": "^7.11.3",
     "cz-conventional-changelog": "^3.0.1",
     "vite": "^2.9.9",
+    "vite-plugin-libcss": "^1.0.5",
     "vue": "^3.2.36"
   }
 }

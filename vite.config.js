@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
+import libCss from 'vite-plugin-libcss';
 
 // https://vitejs.dev/config/
 const path = require("path")
@@ -14,11 +15,10 @@ export default defineConfig({
     exclude: ['vue-demi']
   },
   build: {
-    cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, 'src/install.ts'),
       name: 'vcp',
-      formats: ['umd'],
+      formats: ['es'],
       fileName: (format) => `vcp.${format}.ts`
     },
     rollupOptions: {
@@ -33,6 +33,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    libCss(),
     vue({
       style: true,
       css: true
