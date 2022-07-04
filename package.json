@@ -34,7 +34,8 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "deploy:gh-pages": "chmod +x ./deploy-gh-pages.sh && ./deploy-gh-pages.sh"
   },
   "dependencies": {
     "dom-to-image": "^2.6.0",
