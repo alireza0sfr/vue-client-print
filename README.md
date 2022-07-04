@@ -24,13 +24,13 @@ npm install
 npm run serve
 ```
 ### Contributing
-1- fork and clone the repo
-2- create a seprate branch
-3- npm install
-4- make your changes
-5- commit using commitizen (either use commitizen extension or check [this](http://commitizen.github.io/cz-cli/))
-7- you can run tests with: npm run test
-7- git push
+1. fork and clone the repo
+2. create a seprate branch
+3. npm install
+4. make your changes
+5. commit using commitizen (either use commitizen extension or check [this](http://commitizen.github.io/cz-cli/))
+6. you can run tests with: npm run test
+7. git push
 
 ### Complete docs
 for more info check [this](https://alireza0sfr.github.io/vue-client-print/)
