@@ -409,7 +409,7 @@
 	};
 </script>
 
-<style>
-	@import "~/assets/styles/print.css";
-	@import "~/assets/styles/modal.css";
+<style lang="less">
+	@import "~/assets/styles/print";
+	@import "~/assets/styles/modal";
 </style>

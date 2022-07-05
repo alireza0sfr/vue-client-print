@@ -90,10 +90,10 @@ textarea:focus {
     flex-direction: row;
     justify-content: flex-start;
     border-bottom: 1px solid #78bfff;
-}
 
-.tabs a {
-    padding: 5px;
+    a {
+        padding: 5px;
+    }
 }
 
 .tab {
@@ -102,19 +102,20 @@ textarea:focus {
     border: 1px solid #d4d4d4;
     cursor: pointer;
     flex-grow: 1;
+
+    &:last-child {
+        border-left: 0 !important;
+    }
+
+    &.selected {
+        background-color: rgb(232, 235, 240);
+        color: #484848;
+        border: 1px solid #81c3ff;
+        border-bottom: 0;
+        margin-bottom: -1px;
+    }
 }
 
-.tab:last-child {
-    border-left: 0 !important;
-}
-
-.tab.selected {
-    background-color: rgb(232, 235, 240);
-    color: #484848;
-    border: 1px solid #81c3ff;
-    border-bottom: 0;
-    margin-bottom: -1px;
-}
 
 /* Toolbar */
 
@@ -182,7 +183,9 @@ textarea:focus {
     line-height: 1.5;
     color: #212529;
     background-color: #fff;
+    -webkit-background-clip: padding-box;
     background-clip: padding-box;
+
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -191,89 +194,129 @@ textarea:focus {
 .toolbar-content-label {
     width: 50%;
     padding: 5px;
+
+    &.span {
+        margin-right: 20px;
+    }
+
+    p {
+        font-size: 13px;
+        width: 140px;
+    }
 }
 
-.toolbar-content-label.span {
-    margin-right: 20px;
-}
 
 .toolbar-content-field {
-    width: 50%
-}
+    width: 50%;
 
-.toolbar-content-field select {
-    height: 30px;
-    width: 105px;
-    flex-grow: 2;
-    text-align: center;
-    text-align-last: center;
-}
+    select {
+        height: 30px;
+        width: 105px;
+        flex-grow: 2;
+        text-align: center;
+    }
 
-.toolbar-content-field input {
-    height: 28px;
-    width: 105px;
-    flex-grow: 2;
-    text-align: center;
-    text-align-last: center;
-}
+    input {
+        height: 28px;
+        width: 105px;
+        flex-grow: 2;
+        text-align: center;
+    }
 
-.toolbar-content-field input[type='checkbox'],
-.toolbar-content-field input[type='radio'] {
-    width: 15px;
-    height: 15px;
-    border-radius: .25em;
-}
+    input[type='checkbox'],
+    input[type='radio'] {
+        width: 15px;
+        height: 15px;
+        border-radius: .25em;
+    }
 
-.toolbar-content-field input[type='color'] {
-    padding: 0;
+    input[type='color'] {
+        padding: 0;
 
-    width: 107px;
-    height: 28px;
-}
+        width: 107px;
+        height: 28px;
+    }
 
-.toolbar-content-field textarea {
-    width: 200px;
-    height: 50px;
-    margin-right: 8px;
-    resize: none;
-    font-family: tahoma;
-}
-
-.toolbar-content-label p {
-    font-size: 13px;
-    width: 140px;
+    textarea {
+        width: 200px;
+        height: 50px;
+        margin-right: 8px;
+        resize: none;
+        font-family: tahoma;
+    }
 }
 
 .template-container {
     margin: auto;
     box-shadow: -1px 4px 10px 0px #818181;
+
+    .element {
+        background-color: #ffffff;
+    }
 }
 
 /* Sections */
 
 .section {
     position: relative;
-    touch-action: none;
+    -webkit-user-select: none;
     user-select: none;
     background-color: #f1f1f1;
     box-sizing: content-box;
     direction: ltr;
-    z-index: 3
+    z-index: 3;
+
+    &::before {
+        content: " ";
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background: #525252;
+        top: -1px;
+        left: 0;
+    }
+
+    .resizer {
+        position: absolute;
+        right: 0;
+        left: 0;
+
+        &:hover,
+        &:active {
+            cursor: n-resize;
+        }
+
+    }
+
+    &.header,
+    &.before-body {
+        .resizer {
+            bottom: -10px;
+        }
+    }
+
+    &.footer,
+    &.after-body {
+        .resize {
+            top: -10px;
+        }
+    }
+
+    &.header,
+    &.before-body {
+        border-bottom: 10px #aaa solid;
+    }
+
+    &.after-body,
+    &.footer {
+        border-top: 10px #aaa solid;
+    }
 }
 
 .section:hover .section-tag {
     opacity: 1;
 }
 
-.section::before {
-    content: " ";
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background: #525252;
-    top: -1px;
-    left: 0;
-}
 
 .section-tag {
     height: 13px;
@@ -287,49 +330,6 @@ textarea:focus {
     z-index: 1;
 }
 
-.section .resizer {
-    position: absolute;
-    right: 0;
-    left: 0;
-}
-
-.section .resizer:hover,
-.section .resizer:active {
-    cursor: n-resize;
-}
-
-.section.header .resizer {
-    bottom: -10px;
-}
-
-.section.before-body .resizer {
-    bottom: -10px;
-}
-
-.section.after-body .resizer {
-    top: -10px;
-}
-
-.section.footer .resizer {
-    top: -10px;
-}
-
-.section.header {
-    border-bottom: 10px #aaa solid;
-}
-
-.section.before-body {
-    border-bottom: 10px #aaa solid;
-}
-
-.section.after-body {
-    border-top: 10px #aaa solid;
-}
-
-.section.footer {
-    border-top: 10px #aaa solid;
-}
-
 .template.dragged {
     border: 3px #aaa dashed;
     box-shadow: inset 0 0 20px 16px rgb(235 233 233 / 88%);
@@ -337,105 +337,124 @@ textarea:focus {
 
 /* Elements  */
 
-.element.selected .elem-resizer {
+.element {
+    text-align: center;
     position: absolute;
-    height: 6px;
-    width: 6px;
-    background-image: url('~/assets/images/resizer.svg');
-}
+    width: 100px;
+    overflow: hidden;
+    min-height: 30px;
+    min-width: 20px;
+    z-index: 2;
 
-.element.selected .elem-resizer.tl {
-    left: 0;
-    top: 0;
-}
+    &:active {
+        cursor: grabbing;
+    }
 
-.element.selected .elem-resizer.tl:hover {
-    cursor: nwse-resize;
-}
+    &.selected {
+        .elem-resizer {
+            position: absolute;
+            height: 6px;
+            width: 6px;
+            background-image: url('~/assets/images/resizer.svg');
 
-.element.selected .elem-resizer.top {
-    left: 50%;
-    top: 0px;
-}
+            &.tl {
+                left: 0;
+                top: 0;
 
-.element.selected .elem-resizer.top:hover {
-    cursor: ns-resize;
-}
+                &:hover {
+                    cursor: nwse-resize;
 
-.element.selected .elem-resizer.tr {
-    right: 0;
-    top: 0;
-}
+                }
+            }
 
-.element.selected .elem-resizer.tr:hover {
-    cursor: nesw-resize;
-}
+            &.top {
+                left: 50%;
+                top: 0px;
 
-.element.selected .elem-resizer.left {
-    left: 0;
-    top: 50%;
-    transform: translate(0px, -4px);
-}
+                &:hover {
+                    cursor: ns-resize;
+                }
+            }
 
-.element.selected .elem-resizer.left:hover {
-    cursor: ew-resize;
-}
+            &.tr {
+                right: 0;
+                top: 0;
 
-.element.selected .elem-resizer.right {
-    right: 0;
-    top: 50%;
-    transform: translate(0px, -4px);
-}
+                &:hover {
+                    cursor: nesw-resize;
+                }
+            }
 
-.element.selected .elem-resizer.right:hover {
-    cursor: ew-resize;
-}
+            &.left {
+                left: 0;
+                top: 50%;
+                transform: translate(0px, -4px);
 
-.element.selected .elem-resizer.bl {
-    left: 0;
-    bottom: 0;
-}
+                &:hover {
+                    cursor: ew-resize;
+                }
+            }
 
-.element.selected .elem-resizer.bl:hover {
-    cursor: nesw-resize;
-}
+            &.right {
+                right: 0;
+                top: 50%;
+                transform: translate(0px, -4px);
 
-.element.selected .elem-resizer.bottom {
-    left: 50%;
-    bottom: 0;
-}
+                &:hover {
+                    cursor: ew-resize;
+                }
+            }
 
-.elem-resizer.right.resizer-large,
-.elem-resizer.left.resizer-large {
-    height: 100% !important
-}
+            &.bl {
+                left: 0;
+                bottom: 0;
 
-.elem-resizer.right.resizer-small,
-.elem-resizer.left.resizer-small {
-    height: 5% !important
-}
+                &:hover {
+                    cursor: nesw-resize;
+                }
+            }
 
-.elem-resizer.top.resizer-large,
-.elem-resizer.bottom.resizer-large {
-    width: 100% !important
-}
+            &.bottom {
+                left: 50%;
+                bottom: 0;
 
-.elem-resizer.top.resizer-small,
-.elem-resizer.bottom.resizer-small {
-    width: 5% !important
-}
+                &:hover {
+                    cursor: ns-resize;
+                }
+            }
 
-.element.selected .elem-resizer.bottom:hover {
-    cursor: ns-resize;
-}
+            &.br {
+                right: 0;
+                bottom: 0;
 
-.element.selected .elem-resizer.br {
-    right: 0;
-    bottom: 0;
-}
+                &:hover {
+                    cursor: nwse-resize;
+                }
+            }
 
-.element.selected .elem-resizer.br:hover {
-    cursor: nwse-resize;
+            &.right,
+            &.left {
+                &.resizer-large {
+                    height: 100% !important;
+                }
+
+                &.resizer-small {
+                    height: 5% !important;
+                }
+            }
+
+            &.top,
+            &.bottom {
+                .resizer-large {
+                    width: 100% !important;
+                }
+
+                .resizer-small {
+                    width: 5% !important;
+                }
+            }
+        }
+    }
 }
 
 .fas:hover {
@@ -451,20 +470,6 @@ textarea:focus {
     flex-grow: 1;
 }
 
-.template-container .element {
-    background-color: #ffffff;
-}
-
-.element {
-    text-align: center;
-    position: absolute;
-    width: 100px;
-    overflow: hidden;
-    min-height: 30px;
-    min-width: 20px;
-    z-index: 2;
-}
-
 /* .element.selected,
 .row.selected { */
 /* box-shadow: inset 0px 0px 4px 2px #c3c3c3; */
@@ -478,10 +483,6 @@ textarea:focus {
     border: 1px #aaa dashed;
     border-radius: 4px;
     cursor: move;
-}
-
-.element:active {
-    cursor: grabbing;
 }
 
 .icon {
@@ -546,10 +547,6 @@ textarea:focus {
     justify-content: center;
 }
 
-.variables-header {
-    text-align: center;
-}
-
 .add-section {
     margin-top: 10px;
     border: 1px solid black;
@@ -557,14 +554,14 @@ textarea:focus {
     text-align: center;
     display: inline-block;
     position: relative;
-}
 
-.add-section :hover {
-    cursor: pointer;
-}
+    &:hover {
+        cursor: pointer;
+    }
 
-.add-section span {
-    margin-right: 5px;
+    span {
+        margin-right: 5px;
+    }
 }
 
 .variables-row {
@@ -581,24 +578,34 @@ textarea:focus {
     width: 20% !important;
 }
 
-.variables-content-field input {
-    border: 1px solid rgb(207, 195, 195);
-    height: 100%;
-    width: 100%;
-    flex-grow: 2;
-    text-align: center;
-    text-align-last: center;
-    background-color: transparent;
-}
+.variables-content-field {
 
-.variables-content-field select {
-    border: 1px solid rgb(207, 195, 195);
-    height: 100%;
-    width: 100%;
-    flex-grow: 2;
-    text-align: center;
-    text-align-last: center;
-    background-color: transparent;
+    input {
+        border: 1px solid rgb(207, 195, 195);
+        height: 100%;
+        width: 100%;
+        flex-grow: 2;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    select {
+        border: 1px solid rgb(207, 195, 195);
+        height: 100%;
+        width: 100%;
+        flex-grow: 2;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    input[type='file'] {
+        margin-top: 3px;
+        border: 0;
+    }
+
+    img {
+        margin-top: 10px;
+    }
 }
 
 .variables-content-wrapper {
@@ -608,29 +615,25 @@ textarea:focus {
     flex-direction: column;
 }
 
-.variables-content-field input[type='file'] {
-    margin-top: 3px;
-    border: 0;
-}
+.variables {
 
-.variables .variable {
-    margin-top: 10px;
-    background-color: #faecff;
-    padding: 5px;
-}
+    .variable {
+        margin-top: 10px;
+        background-color: #faecff;
+        padding: 5px;
 
-.variables-content-field img {
-    margin-top: 10px;
+        &.element {
+            background-color: #faecff;
+        }
+
+        &.selected {
+            background-color: #f1caff;
+
+        }
+    }
+
 }
 
 .small img {
     cursor: pointer;
-}
-
-.variable.element {
-    background-color: #faecff;
-}
-
-.variables .variable.selected {
-    background-color: #f1caff;
 }

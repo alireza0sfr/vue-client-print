@@ -49,12 +49,12 @@
     position: relative;
 }
 
-.converted canvas {
-    width: 100%
-}
-
 .converted {
     margin-left: 10px;
+
+    canvas {
+        width: 100%
+    }
 }
 
 .mainFooter {
@@ -71,14 +71,15 @@
     background-color: #d6dee1;
     border-radius: 20px;
     border: 6px solid transparent;
+    -webkit-background-clip: content-box;
     background-clip: content-box;
-}
-
-table td,
-table th {
-    border: 1px solid black;
 }
 
 table {
     width: 100%;
+
+    td,
+    th{
+        border: 1px solid black;
+    }
 }

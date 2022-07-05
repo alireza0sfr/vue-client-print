@@ -1787,7 +1787,7 @@
 	};
 </script>
 
-<style>
-	@import "~/assets/styles/templateBuilder.css";
-	@import "~/assets/styles/modal.css";
+<style lang="less">
+	@import "~/assets/styles/templateBuilder";
+	@import "~/assets/styles/modal";
 </style>

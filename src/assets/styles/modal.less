@@ -5,10 +5,10 @@
     border-bottom: 1px solid rgb(129 195 255);
     display: flex;
     justify-content: space-between;
-}
 
-.print-modal-header .title {
-    margin: 5px 0 0 0;
+    .title {
+        margin: 5px 0 0 0;
+    }
 }
 
 .modal-icon {
@@ -23,11 +23,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    img {
+        width: 17px;
+    }
 }
 
-.modal-icon img {
-    width: 17px;
-}
 
 /* The Modal (background) */
 .print-modal {
@@ -52,7 +53,7 @@
 
 /* Modal Content/Box */
 .print-modal-content {
-    background-color: #fefefe;
+    background-color: rgb(254, 254, 254);
     margin: 2% auto;
     width: 1090px;
     border-radius: 7px;
@@ -71,13 +72,13 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
 
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    &:hover,
+    &:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 }
 
 /* Proccessing modal */
