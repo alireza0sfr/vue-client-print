@@ -89,7 +89,7 @@ textarea:focus {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    border-bottom: 1px solid #78bfff;
+    border-bottom: 1px solid @primary-dark;
 
     a {
         padding: 5px;
@@ -97,7 +97,7 @@ textarea:focus {
 }
 
 .tab {
-    background-color: white;
+    background-color: @bg-color;
     color: #aaa;
     border: 1px solid #d4d4d4;
     cursor: pointer;
@@ -108,9 +108,9 @@ textarea:focus {
     }
 
     &.selected {
-        background-color: rgb(232, 235, 240);
+        background-color: @toolbar-header;
         color: #484848;
-        border: 1px solid #81c3ff;
+        border: 1px solid @primary-dark;
         border-bottom: 0;
         margin-bottom: -1px;
     }
@@ -129,9 +129,9 @@ textarea:focus {
 }
 
 .toolbar-header {
-    background-color: rgb(232, 235, 240);
-    color: #484848;
-    border-bottom: 1px solid #81c3ff;
+    background-color: @toolbar-header;
+    color: @toolbar-color;
+    border-bottom: 1px solid @primary-dark;
     padding: 10px;
     font-weight: bold;
 }
@@ -304,12 +304,12 @@ textarea:focus {
 
     &.header,
     &.before-body {
-        border-bottom: 10px #aaa solid;
+        border-bottom: 10px @section-bd-color solid;
     }
 
     &.after-body,
     &.footer {
-        border-top: 10px #aaa solid;
+        border-top: 10px @section-bd-color solid;
     }
 }
 
@@ -328,6 +328,7 @@ textarea:focus {
     left: 0;
     border-bottom-right-radius: 5px;
     z-index: 1;
+    background-color: @section-tag-bg;
 }
 
 .template.dragged {
@@ -530,12 +531,12 @@ textarea:focus {
 
 .dataset-name {
     text-align: right;
-    background-color: #ffdc79;
+    background-color: @dataset-bg;
 }
 
 .repeator-name {
     text-align: right;
-    background-color: #a7b1f9;
+    background-color: @repeator-bg;
     height: 24px;
 }
 
@@ -581,7 +582,7 @@ textarea:focus {
 .variables-content-field {
 
     input {
-        border: 1px solid rgb(207, 195, 195);
+        border: 1px solid @variable-field-bd;
         height: 100%;
         width: 100%;
         flex-grow: 2;
@@ -590,7 +591,7 @@ textarea:focus {
     }
 
     select {
-        border: 1px solid rgb(207, 195, 195);
+        border: 1px solid @variable-field-bd;
         height: 100%;
         width: 100%;
         flex-grow: 2;
@@ -619,21 +620,22 @@ textarea:focus {
 
     .variable {
         margin-top: 10px;
-        background-color: #faecff;
+        background-color: @variable-bg;
         padding: 5px;
 
-        &.element {
-            background-color: #faecff;
-        }
-
         &.selected {
-            background-color: #f1caff;
+            background-color: @variable-bg-selected;
 
         }
     }
 
 }
 
+.variable {
+    &.element {
+        background-color: @variable-bg;
+    }
+}
 .small img {
     cursor: pointer;
 }

@@ -1,8 +1,10 @@
+@import './_variables.less';
+
 .print-modal-header {
     padding: 0.5rem 1rem;
     margin-bottom: 0;
-    background-color: rgb(215 236 255);
-    border-bottom: 1px solid rgb(129 195 255);
+    background-color: @primary-color;
+    border-bottom: 1px solid @primary-dark;
     display: flex;
     justify-content: space-between;
 
@@ -14,7 +16,7 @@
 .modal-icon {
     padding: 0;
     border-radius: 50px;
-    background-color: rgb(255 255 255);
+    background-color: @bg-color;
     width: 30px;
     height: 30px;
     display: flex;
@@ -53,7 +55,7 @@
 
 /* Modal Content/Box */
 .print-modal-content {
-    background-color: rgb(254, 254, 254);
+    background-color: @bg-color;
     margin: 2% auto;
     width: 1090px;
     border-radius: 7px;
@@ -178,7 +180,7 @@
     display: block;
     width: 20%;
     height: 20%;
-    background-color: #4ca6f8;
+    background-color: @primary-dark;
     border-radius: 100%;
     animation: sk-chase-dot-before 2.0s infinite ease-in-out both;
 }
