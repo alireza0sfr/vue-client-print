@@ -97,7 +97,7 @@
 		props: {
 			options: { type: Object },
 			bindingObject: { type: Object },
-			dataSets: { type: Object },
+			dataSets: { type: Object, default: () => ({}) },
 			variables: { type: Array },
 			configurations: { type: Object },
 		},
