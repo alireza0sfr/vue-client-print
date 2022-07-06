@@ -12,6 +12,7 @@
 		props: {
 			options: Object,
 		},
+		emits:['width-changed'],
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
 				this.Initialize()

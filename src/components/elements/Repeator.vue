@@ -31,6 +31,7 @@
 		props: {
 			options: Object,
 		},
+		emits:['clickedOnElement', 'finished-editing-element'],
 		computed: {
 			computedStyles() {
 				return { height: this.settings.configs.originalHeight }

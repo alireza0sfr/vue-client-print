@@ -15,6 +15,7 @@
 				type: Object,
 			},
 		},
+		emits:['clickedOnElement', 'finished-editing-element'],
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") // Initialize on moutned if its the template builder mode
 				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)

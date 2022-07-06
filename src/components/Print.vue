@@ -101,6 +101,7 @@
 			variables: { type: Array },
 			configurations: { type: Object },
 		},
+		emits:['print-success', 'print-error', 'preview-success', 'preview-failed'],
 		data() {
 			return {
 				locals: {
