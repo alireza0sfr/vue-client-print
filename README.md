@@ -1,4 +1,6 @@
-# print-component
+# Frontend printing dynamic data made easy!
+
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 ## Project setup
 ```
@@ -15,5 +17,20 @@ npm run dev
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Run documents
+```
+cd docs
+npm install
+npm run dev
+```
+### Contributing
+1. fork and clone the repo
+2. create a seprate branch
+3. npm install
+4. make your changes
+5. commit using commitizen (either use commitizen extension or check [this](http://commitizen.github.io/cz-cli/))
+6. you can run tests with: npm run test
+7. git push
+
+### Complete docs
+for more info check [this](https://alireza0sfr.github.io/vue-client-print/)

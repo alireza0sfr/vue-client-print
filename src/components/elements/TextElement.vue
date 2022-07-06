@@ -1,24 +1,21 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
-		{{settings.configs.text}}
-		<Resizers :query="`text-${settings.id}`" />
+	<div :id="settings.id" :data-testid="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+		<div class="content">
+			{{settings.configs.text}}
+		</div>
+		<Resizers :query="`${this.locals.classType}-${settings.id}`" />
 	</div>
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.js'
-	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
-		components: {
-			Resizers,
-		},
 		name: "TextElement",
 		props: {
 			options: Object,
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize()
+			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		watch: {
@@ -26,37 +23,20 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					let tmp = this.options.styles
-					Object.assign(this.settings, val)
-					this.settings.styles = tmp
-					Object.assign(this.settings.styles, val.styles)
+					this.settings = this.merge(this.settings, val)
 				},
 			},
 		},
 		data() {
 			return {
 				locals: {
-					classType: "text",
+					classType: "textelement",
 				},
 				settings: {
-					id: 0,
-					configs: {
-						text: this.$t('template-builder.elements.configs.type-text'),
-					},
+					configs: {},
 					styles: {},
 				},
 			}
-		},
-		methods: {
-			/**
-			* Initializing the element utilities for the created element
-			*/
-			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `text-${this.settings.id}`)
-				elem.click()
-				elem.resizable()
-				elem.dragable()
-			},
 		},
 	};
 </script>

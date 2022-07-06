@@ -1,14 +1,16 @@
 <template>
-	<div>
+	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
 
 		<!-- If its the template builder mode -->
-		<div v-if="$parent.$options.name === 'TemplateBuilder'" :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finishededitingelement="$emit('finishedEditingElement')" :class="locals.classType + ' element'" :style="settings.styles">
-			{{ settings.configs.text }}
+		<div class="content" v-if="settings.grandParent === 'TemplateBuilder'">
+			<span>
+				{{ settings.configs.text }}
+			</span>
 			<Resizers :query="`textpattern-${settings.id}`" />
 		</div>
 
 		<!-- If its the print mode -->
-		<div v-else :id="settings.id" ref="element" @click="$emit('clickedOnElement')" :class="locals.classType + ' element'" :style="settings.styles">
+		<div v-else>
 			{{ computedValue }}
 			<Resizers :query="`textpattern-${settings.id}`" />
 		</div>
@@ -17,25 +19,20 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.js'
-	import Resizers from '~/components/elements/Resizers.vue'
 	export default {
-		components: {
-			Resizers,
-		},
 		name: "TextPattern",
 		props: {
 			options: Object,
 		},
 		mounted() {
-			if (this.$parent.$options.name === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize()
+			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
+				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		computed: {
 			computedValue() {
 				if (this.settings.configs.persianNumbers) {
-					return this.toPersianNumbers(this.settings.configs.value)
+					return this.toPersianDigits(this.settings.configs.value)
 				}
 				return this.settings.configs.value
 			}
@@ -45,10 +42,7 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					let tmp = this.options.styles
-					Object.assign(this.settings, val)
-					this.settings.styles = tmp
-					Object.assign(this.settings.styles, val.styles)
+					this.settings = this.merge(this.settings, val)
 				},
 			},
 		},
@@ -58,36 +52,17 @@
 					classType: "textpattern",
 				},
 				settings: {
+					grandParent: 'TemplateBuilder',
 					id: 0,
 					configs: {
 						persianNumbers: false,
 						text: this.$t('template-builder.elements.configs.pattern-input'),
 						value: null,
+						bindingObject: {},
 					},
 					styles: {},
 				},
 			}
-		},
-		methods: {
-
-			/**
-			 * Initializing the element utilities for the created element
-			 */
-			Initialize(element = this.$refs.element) {
-				let elem = new ElementClass(element, `textpattern-${this.settings.id}`)
-				elem.click()
-				elem.resizable()
-				elem.dragable()
-			},
-
-			/**
-			 *  Convertes the given number to persian format 
-			 */
-			toPersianNumbers(n) {
-				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-			},
 		},
 	};
 </script>

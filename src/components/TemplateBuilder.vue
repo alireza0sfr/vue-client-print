@@ -2,10 +2,10 @@
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
 		<div id="templateBuilderModal" class="print-modal">
-			<div class="print-modal-content">
+			<div id="fullscreenControl" class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
-						<a @click="export2Json()" :title="$t('template-builder.save')" class="modal-icon" href="#">
+						<a @click="save()" :title="$t('template-builder.save')" class="modal-icon" href="#">
 							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
@@ -20,7 +20,7 @@
 
 				<!-- Section 1 (Template Builder) -->
 				<div class="template-builder-container">
-					<div :style="{ height: settings.defaultHeightOfPaper + 'in' }" class="toolbar-container">
+					<div class="toolbar-container">
 						<div class="toolbar-content">
 							<!-- Tabs -->
 							<div class="tabs">
@@ -108,6 +108,18 @@
 										</div>
 										<div class="toolbar-content-field">
 											<input type="text" v-model="settings.designName" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										</div>
+									</div>
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<span>{{$t('template-builder.language')}}</span>
+										</div>
+										<div class="toolbar-content-field">
+											<select class="input-form-control" v-model="$i18n.locale">
+												<option v-for="(lang, i) in locals.langs" :key="`Lang${i}`" :value="lang">
+													{{ lang }}
+												</option>
+											</select>
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -217,7 +229,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('bindingObject')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement('bindingobject')" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/binding.png" :alt="$t('template-builder.elements.binding-objects')" />
 												<div class="element-title">{{$t('template-builder.elements.binding-objects')}}</div>
 											</span>
@@ -239,6 +251,14 @@
 											</span>
 										</div>
 									</div>
+									<div class="toolbar-content-row-elements">
+										<div class="toolbar-content-row-element">
+											<span draggable="true" @dragstart="startDraggingElement('repeator')" @dragend="finishedDraggingElement()">
+												<img src="@/assets/images/repeat.png" :alt="$t('template-builder.elements.repeator')" width="32" height="32" />
+												<div class="element-title">{{$t('template-builder.elements.repeator')}}</div>
+											</span>
+										</div>
+									</div>
 								</div>
 								<div class="toolbar-header">
 
@@ -253,7 +273,7 @@
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textelement'">
 										<div class="toolbar-content-field">
-											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+											<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
@@ -310,7 +330,7 @@
 									<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === 'imageelement'">
 										<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingObject'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
@@ -318,13 +338,13 @@
 											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingObject'">
+									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
 										<div class="toolbar-content-label">
 											<label for="bindingObjectControl">{{$t('template-builder.elements.configs.data-type')}}</label>
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
-												<option v-for="option in Object.keys(settings.bindingObject)" :key="option">{{ option }}</option>
+												<option v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObject)" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -336,7 +356,7 @@
 									</div>
 									<div v-if="locals.selectedElement.type === 'textpattern'">
 										<div class="toolbar-content-field">
-											<textarea v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+											<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 										</div>
 									</div>
 									<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textpattern'">
@@ -344,7 +364,7 @@
 											<label for="textPatternPersianNumbersControl">{{$t('template-builder.elements.configs.persian-digits')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="textPatternPersianNumbersControl" />
+											<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="textPatternPersianNumbersControl" />
 										</div>
 									</div>
 								</div>
@@ -354,8 +374,80 @@
 									</div>
 									<div class="toolbar-content-field">
 										<select class="input-form-control" id="textpatternControl">
-											<option v-for="option in Object.keys(settings.bindingObject)" :key="option">{{ option }}</option>
+											<option v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObject)" :key="option">{{ option }}</option>
 										</select>
+									</div>
+								</div>
+
+								<div v-if="locals.selectedElement.type === 'column'">
+									<div class="toolbar-content-row">
+										<div style="width: 100%;" class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.isActive')}} ({{locals.selectedElement.title}})</label>
+										</div>
+										<div class="toolbar-content-field">
+											<label style="margin-right: 10px; display:flex" for="colActive">
+												<input style="flex-grow: unset;" type="checkbox" class="input-form-control" v-model="locals.selectedElement.isActive" id="colActive" />
+											</label>
+										</div>
+									</div>
+								</div>
+
+								<div v-if="locals.selectedElement.type === 'row'">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.stylesTarget')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
+												<option v-for="option in locals.rowStylesTargets" :value="option.key" :key="option.id">{{ option.title }}</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.rowsHeight')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<input type="number" class="input-form-control" v-model="locals.selectedElement.options.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										</div>
+									</div>
+								</div>
+
+								<div v-if="locals.selectedElement.type === 'dataset'">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.datasets')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+												<option v-for="option in Object.keys(locals.selectedElement.options.configs.dataSets)" :value="option" :key="option">{{ option }}</option>
+											</select>
+										</div>
+									</div>
+
+									<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
+										<div :dir="settings.pageDirections" class="toolbar-content-label">
+											<label style="margin-right: 10px; display:flex" :for="`dataSetColumnsControl${index}`">
+												<input type="checkbox" class="input-form-control" v-model="col.isActive" :id="`dataSetColumnsControl${index}`" />
+												{{$t('template-builder.elements.configs.index-column', {index: index+1})}}
+											</label>
+										</div>
+										<div class="toolbar-content-field">
+											<input type="text" :disabled="!col.isActive" class="input-form-control" v-model="col.title" id="dataSetColumnsName" />
+										</div>
+									</div>
+								</div>
+								<div v-if="locals.selectedElement.type === 'repeator'">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="dataSetNameControl">{{$t('template-builder.elements.configs.datasets')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+												<option v-for="option in Object.keys(locals.selectedElement.options.configs.dataSets)" :value="option" :key="option">{{ option }}</option>
+											</select>
+										</div>
 									</div>
 								</div>
 
@@ -363,7 +455,7 @@
 								<div style="margin-top: 15px" class="toolbar-header">
 									<span>{{$t('template-builder.elements.styles.name')}}</span>
 								</div>
-								<div class="toolbar-content-wrapper" id="elementStylesMenu">
+								<div class="toolbar-content-wrapper" v-if="locals.selectedElement.options.id" id="elementStylesMenu">
 									<div class="toolbar-content-row">
 										<div class="toolbar-content-label">
 											<label for="elementTextAlignControl">{{$t('template-builder.elements.styles.text-align')}}</label>
@@ -373,6 +465,18 @@
 												<option value="right">{{$t('template-builder.elements.styles.right')}}</option>
 												<option value="center">{{$t('template-builder.elements.styles.center')}}</option>
 												<option value="left">{{$t('template-builder.elements.styles.left')}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-label">
+											<label for="elementTextAlignControl">{{$t('template-builder.elements.styles.align-items')}}</label>
+										</div>
+										<div class="toolbar-content-field">
+											<select v-model="locals.selectedElement.options.styles.alignItems" class="input-form-control" id="elementTextAlignControl">
+												<option value="flex-start">{{$t('template-builder.elements.styles.top')}}</option>
+												<option value="center">{{$t('template-builder.elements.styles.center')}}</option>
+												<option value="flex-end">{{$t('template-builder.elements.styles.bottom')}}</option>
 											</select>
 										</div>
 									</div>
@@ -504,18 +608,30 @@
 						<div style="margin:-5px 10px 10px">
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
+							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
+							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
-						<div class="template-container" :style="{height: settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
-							<div :style="{width: '100%', height: '100%', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<div :style="{height: settings.header.height + 'in', 'min-height': '0.15in'}" id="headerTemplate" class="section header" ref="headerTemplate" @drop="droppedElement('header')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
+						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
+							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
+								<div :style="{height: settings.header.height + 'in'}" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
+									<SectionTag tag="header" />
 								</div>
-								<div id="bodyTemplate">
-									<div class="watermark">{{$t('template-builder.body')}}</div>
-									<p>{{$t('template-builder.body-msg')}}</p>
+								<div :style="{height: settings.beforeBody.height + 'in'}" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
+									<SectionTag tag="beforeBody" />
 								</div>
-								<div :style="{height: settings.footer.height + 'in', 'min-height': '0.15in'}" id="footerTemplate" class="section footer" ref="footerTemplate" @drop="droppedElement('footer')" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="clickedOnElement(element)" @finishedEditingElement="finishedEditingElement(element)" />
+								<div id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
+									<SectionTag tag="body" />
+								</div>
+								<div :style="{height: settings.afterBody.height + 'in'}" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
+									<SectionTag tag="afterBody" />
+								</div>
+								<div :style="{height: settings.footer.height + 'in'}" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
+									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
+									<SectionTag tag="footer" />
 								</div>
 							</div>
 						</div>
@@ -526,36 +642,72 @@
 	</div>
 </template>
 
-<script>
-	import Variable from '~/components/elements/Variable.vue'
-	import TextElement from '~/components/elements/TextElement.vue'
-	import DateTime from '~/components/elements/DateTime.vue'
-	import BindingObject from '~/components/elements/BindingObject.vue'
-	import PageCounter from '~/components/elements/PageCounter.vue'
-	import ImageElement from '~/components/elements/ImageElement.vue'
-	import TextPattern from '~/components/elements/TextPattern.vue'
-	import DataSet from '~/components/elements/DataSet/DataSet.vue'
+<script lang="ts">
+	// @ts-ignore
+	import { IRawDataset, IRawColumn, IDataset, IDatasets, IRawDatasets, IRow, IColumn, classType } from '~/interfaces/datasets.ts'
+	// @ts-ignore
+	import { IElement, IVariable } from '~/interfaces/elements.ts'
+	// @ts-ignore
+	import { ISettings } from '~/interfaces/general.ts'
+	// @ts-ignore
+	import { fetchLangList } from '~/translations.ts'
 	import { saveAs } from 'file-saver'
-	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
 			configurations: Object,
 		},
-		components: {
-			textelement: TextElement,
-			datetime: DateTime,
-			pagecounter: PageCounter,
-			imageelement: ImageElement,
-			bindingObject: BindingObject,
-			textpattern: TextPattern,
-			variable: Variable,
-			dataset: DataSet
-		},
 		data() {
 			return {
 				locals: {
+					fullScreen: false,
+					templateHeight: 11.7,
+					langs: fetchLangList(),
+					dataSetDefaultRow: [
+						{
+							type: 'row',
+							options: {
+								id: this.idGenerator(5),
+								parent: this.options.parent,
+								styles: {},
+								configs: {
+									cells: {
+										center: {
+											type: 'cell',
+											isActive: true,
+											options: {
+												id: this.idGenerator(5),
+												styles: {},
+												parent: this.options.parent,
+												configs: {
+													value: ''
+												},
+											}
+										}
+									}
+								}
+							}
+						},
+					],
+					rowStylesTargets: [
+						{
+							key: 'all',
+							id: this.idGenerator(5),
+							title: this.$t('template-builder.elements.configs.all')
+						},
+						{
+							key: 'even',
+							id: this.idGenerator(5),
+							title: this.$t('template-builder.elements.configs.even')
+						},
+						{
+							key: 'odd',
+							id: this.idGenerator(5),
+							title: this.$t('template-builder.elements.configs.odd')
+						},
+					],
+					copiedElement: null,
 					scale: 1,
 					pageSizeDictionary: {
 						landscape: {
@@ -594,14 +746,7 @@
 					clickedElementId: 0,
 					classType: "",
 					uniqueId: 0,
-					selectedElement: {
-						type: '',
-						options: {
-							id: 0,
-							configs: {},
-							styles: {},
-						},
-					},
+					selectedElement: this.getDefaultSelectedElementObject(),
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
 				settings: this.getDefaultSettings(),
@@ -612,22 +757,173 @@
 				deep: true,
 				immediate: true,
 				handler(val) {
-					let rawSettings = this.getDefaultSettings()
-					Object.assign(rawSettings, val)
-					this.settings = rawSettings
+					this.settings = this.merge(this.getDefaultSettings(), val)
+					this.settings.dataSets = this.prepareDataSets()
 				},
 			}
 		},
 		mounted() {
+			this.initCopyPaste()
 			this.modalManager('templateBuilderModal', 'TemplateBuilderModalCloseBtn')
+			this.keyboardHandler()
 		},
 		methods: {
+			/**
+			 * Fullscreen TB view
+			 */
+			fullScreen() {
+				var TBContainer = document.getElementById('fullscreenControl')
+				if(this.locals.fullScreen) {
+					this.locals.fullScreen = false
+					TBContainer.style.margin = '2% auto'
+					TBContainer.style.width = '1090px'
+				}
+				else {
+					this.locals.fullScreen = true
+					TBContainer.style.margin = '2%'
+					TBContainer.style.width = 'unset'
+				}
+			},
+			/**
+			 * delets given element
+			 * @param {Object} element - element to delete.
+			 */
+			deleteElement(element:IElement = this.locals.selectedElement) {
+				
+				if(element.options.id === -1 )
+					return
+				
+				var parent = this.locals.selectedElement.options.parent
+				var array = this.settings[parent][`${parent}Elements`]
 
+				var index = array.findIndex(x => x.options.id === element.options.id)
+
+				if(index > -1)
+					array.splice(index, 1)
+			},
+			/**
+			 * @param {Object} set - Raw dataset.
+			 * @param {String} key - dataset key.
+			 * @return {Object} - Prepared dataset.
+			 */
+			prepareDataSets(sets: IRawDatasets = this.settings.dataSets): IDatasets {
+				var tmp: object = {}
+				var keys: string[] = Object.keys(sets)
+
+				if (sets[keys[0]] && sets[keys[0]].options && sets[keys[0]].options.id) // if dataset has id it means it's already prepared
+					return
+
+				for (let set of keys) {
+					var thisSet: IRawDataset = this.clone(sets[set]) // removing refrence to the original data.
+					tmp = {
+						options: {
+							id: this.idGenerator(5),
+							configs: {
+								columns: this.prepareDataSetColumns(thisSet.columns),
+								rows: this.prepareDataSetRows(thisSet.rows),
+								title: thisSet.title,
+								key: thisSet.key
+							},
+						}
+					}
+					sets[set] = tmp
+				}
+				return sets
+			},
+
+			/**
+			 * Preparing columns for dataset element.
+			 * @param {Object} columns - Raw columns.
+			 * @param {String} parent - Parent name.
+			 * @return {Object} - Prepared columns.
+			 */
+			prepareDataSetColumns(columns: IRawColumn[]): IColumn {
+				let tmp: object = {}
+
+				for (let index = 0; index < columns.length; index++) {
+					var col = columns[index]
+
+					tmp = {
+						title: col.title,
+						key: col.key,
+						isActive: true,
+						hasResizer: columns.indexOf(col) !== columns.length - 1,
+						type: 'column',
+						options: {
+							id: this.idGenerator(5),
+							styles: {
+								width: col.options.styles.width ? col.options.styles.width : '70px',
+							},
+						}
+					}
+					if (col.columns)
+						// @ts-ignore
+						tmp.columns = col.columns
+
+					columns[index] = tmp
+				}
+				return columns
+			},
+			/**
+			 * Init copy paste listenners.
+			 */
+			initCopyPaste(): void {
+				document.addEventListener("keydown", this.copyCurrentElement, false)
+				document.addEventListener("keyup", this.pasteCopiedElement, false)
+			},
+			/**
+			 * Terminate copy paste listenners.
+			 */
+			terminateCopyPaste(): void {
+				document.removeEventListener("keydown", this.copyCurrentElement, false)
+				document.removeEventListener("keyup", this.pasteCopiedElement, false)
+			},
+			/**
+			 * Copy selected element.
+			 */
+			copyCurrentElement(e: any): void {
+				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
+					this.locals.copiedElement = this.clone(this.locals.selectedElement)
+			},
+			/**
+			 * Paste copied element.
+			 */
+			pasteCopiedElement(e: any): void {
+				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
+					var parent = this.locals.selectedElement.options.parent
+					var array = this.settings[parent][`${parent}Elements`]
+					this.locals.copiedElement.options.id = this.idGenerator(5)
+					this.locals.copiedElement.options.styles.top = '0px'
+
+					if (this.locals.copiedElement.options.repeatorId) {
+						var repeator = array.find(x => x.options.id === this.locals.copiedElement.options.repeatorId)
+						repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet].push(this.locals.copiedElement)
+					}
+					else
+						array.push(this.locals.copiedElement)
+				}
+			},
+			/**
+			 * Creates default element object.
+			 * @param {Object} - returns default selected element object
+			 */
+			getDefaultSelectedElementObject(): IElement {
+				return {
+					type: '',
+					grandParent: 'TemplateBuilder',
+					parent: 'body',
+					options: {
+						id: -1,
+						configs: {},
+						styles: {},
+					},
+				}
+			},
 			/**
 			 * set variable list.
 			 * @param {Array} list - variable list
 			 */
-			setVariables(list) {
+			setVariables(list: IVariable[]): void {
 				this.locals.variables = list
 			},
 
@@ -635,16 +931,27 @@
 			 * sync the given settings with the defaults.
 			 * @return {Object} - returns settings objects
 			 */
-			getDefaultSettings() {
+			getDefaultSettings(): ISettings {
 				return {
 					header: {
 						isHeaderRepeatable: true,
-						height: 0.5,
+						height: 1,
 						headerElements: [],
+					},
+					beforeBody: {
+						height: 1,
+						beforeBodyElements: [],
+					},
+					body: {
+						bodyElements: []
+					},
+					afterBody: {
+						height: 1,
+						afterBodyElements: [],
 					},
 					footer: {
 						isFooterRepeatable: true,
-						height: 0.5,
+						height: 1,
 						footerElements: [],
 					},
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
@@ -655,64 +962,39 @@
 					pageSize: 'a4',
 					pageDirections: 'rtl',
 					bindingObject: {},
+					dataSets: {},
 					pageBorder: '',
 					maximumFileSize: 1000 // Maximum file size in KB
 				}
 			},
 
 			/**
+			 * Save Changes on TB close.
+			 * @return {Object} - json file
+			 */
+			save(): void {
+				// Closing the template builder modal after save
+				let settings: ISettings = this.export2Json()
+				document.getElementById("templateBuilderModal").style.display = "none"
+
+				// this.terminateCopyPaste()
+
+				if (this.settings.callback)
+					this.settings.callback(settings)
+			},
+			/**
 			 * Exports settings to json a file.
 			 * @return {Object} - json file
 			 */
-			export2Json() {
-				// Syncing headerElements with the user chagnes
-				let headerElements = this.settings.header.headerElements
-				let footerElements = this.settings.footer.footerElements
-
-				for (let index = 0; index < headerElements.length; index++) {
-					let computedStyles = this.getCoordinates(headerElements[index].options.id)
-					let elementStyles = headerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
-				for (let index = 0; index < footerElements.length; index++) {
-					let computedStyles = this.getCoordinates(footerElements[index].options.id)
-					let elementStyles = footerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
+			export2Json(): ISettings {
 				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
 				if (this.settings.totalHeightOfAPaper < 0)
 					this.settings.totalHeightOfAPaper = 1.77
 
-				let tmp = {
-					header: {
-						isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
-						height: this.settings.header.height,
-						headerElements: this.settings.header.headerElements,
-					},
-					footer: {
-						isFooterRepeatable: this.settings.footer.isFooterRepeatable,
-						height: this.settings.footer.height,
-						footerElements: this.settings.footer.footerElements,
-					},
-					variables: this.locals.variables,
-					orientation: this.settings.orientation,
-					pageSize: this.settings.pageSize,
-					pageDirections: this.settings.pageDirections,
-					totalHeightOfAPaper: this.settings.totalHeightOfAPaper,
-					defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
-					defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
-					pageBorder: this.settings.pageBorder,
-					designName: this.settings.designName,
-				}
-
-				// Closing the template builder modal after save
-				document.getElementById("templateBuilderModal").style.display = "none"
-
-				if (this.settings.callback)
-					this.settings.callback(tmp)
+				let tmp = this.settings
+				tmp.variables = this.locals.variables
+				return tmp
 			},
 
 			/**
@@ -723,64 +1005,23 @@
 			 * Exports settings to vcp file.
 			 * @return {File} - save settings file in browser
 			 */
-			export2SrcFile() {
-				// Syncing headerElements with the user chagnes
-				let headerElements = this.settings.header.headerElements
-				let footerElements = this.settings.footer.footerElements
+			export2SrcFile(): void {
+				let settings: ISettings = this.export2Json()
+				settings = this.encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
-				for (let index = 0; index < headerElements.length; index++) {
-					let computedStyles = this.getCoordinates(headerElements[index].options.id)
-					let elementStyles = headerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
-				for (let index = 0; index < footerElements.length; index++) {
-					let computedStyles = this.getCoordinates(footerElements[index].options.id)
-					let elementStyles = footerElements[index].options.styles
-					Object.assign(elementStyles, computedStyles)
-				}
-
-				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
-
-				if (this.settings.totalHeightOfAPaper < 0)
-					this.settings.totalHeightOfAPaper = 1.77
-
-				let tmp = {
-					header: {
-						isHeaderRepeatable: this.settings.header.isHeaderRepeatable,
-						height: this.settings.header.height,
-						headerElements: this.settings.header.headerElements,
-					},
-					footer: {
-						isFooterRepeatable: this.settings.footer.isFooterRepeatable,
-						height: this.settings.footer.height,
-						footerElements: this.settings.footer.footerElements,
-					},
-					variables: this.locals.variables,
-					orientation: this.settings.orientation,
-					pageSize: this.settings.pageSize,
-					pageDirections: this.settings.pageDirections,
-					totalHeightOfAPaper: this.settings.totalHeightOfAPaper,
-					defaultHeightOfPaper: this.settings.defaultHeightOfPaper,
-					defaultWidthOfPaper: this.settings.defaultWidthOfPaper,
-					pageBorder: this.settings.pageBorder,
-					designName: this.settings.designName,
-				}
-
-				tmp = this.encode2Base64(JSON.stringify(tmp)) // encoding the settings to export
-
-				let designName = this.settings.designName === '' ? 'vue-print' : this.settings.designName
 				var currentdate = new Date()
-				var fileName = designName + "_"
+				var defaultDesignName = 'vcp' + "_"
 					+ currentdate.getFullYear() + "_"
 					+ (currentdate.getMonth() + 1) + "_"
 					+ currentdate.getDate() + "_"
 					+ currentdate.getHours() + "_"
 					+ currentdate.getMinutes()
 
-				var blob = new Blob([tmp],
+				let fileName = this.settings.designName === '' ? defaultDesignName : this.settings.designName
+
+				var blob = new Blob([settings],
 					{ type: "text/plain;charset=utf-8" })
-				saveAs(blob, `${fileName}.vp`)
+				saveAs(blob, `${fileName}.vcp`)
 			},
 
 			/**
@@ -788,28 +1029,24 @@
 			 * @param {srcFile} srcFile - given srcFile
 			 * @return {void} - void
 			 */
-			importFromSrcFile(srcFile) {
+			importFromSrcFile(srcFile: File): void {
+				var callback = this.settings.callback || null
 				this.settings = this.getDefaultSettings() // Set the settings to default value
-				Object.assign(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+				this.settings = this.merge(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+
 
 				if (this.settings.variables)
 					this.setVariables(this.settings.variables)
-			},
 
-			/**
-			 * converts given inch to pixel.
-			 * @param {Number} inches - inches
-			 * @return {Number} - given inches to pixels
-			 */
-			convert2Pixels(inches) {
-				return (inches * 96).toFixed(2)
+				if (callback)
+					this.settings.callback = callback
 			},
 
 			/**
 			 * sync the sizes based upon the selected page orientation and format.
 			 * @return {void} - void
 			 */
-			syncSizes() {
+			syncSizes(): void {
 
 				const errorValue = 0.2 // Subtracting this value to make the pages more accurate
 
@@ -821,10 +1058,9 @@
 			/**
 			 * Initializing dragging settings
 			 */
-			settingsInitFunc() {
+			settingsInitFunc(): void {
 				setTimeout(() => {
-					this.headerDragManager()
-					this.footerDragManager()
+					this.dragManager(['header', 'before-body', 'after-body', 'footer'])
 					this.locals.scale = 1
 				}, 100)
 			},
@@ -832,78 +1068,65 @@
 			/**
 			 * converts given pixel to inch.
 			 * @param {Number} pixels - pixels
-			 * @return {Number} - given pixel to intches
+			 * @return {String} - given pixel to intches
 			 */
-			convert2Inches(pixels) {
+			convert2Inches(pixels: number): string {
 				return (pixels / 96).toFixed(2)
 			},
 
 
 			/**
-			 * Init drag functionality for header section.
+			 * Init drag functionality for sections.
 			 * @return {void} - void
 			 */
-			headerDragManager() {
-				var headerSection = document.getElementsByClassName("section header")[0] // element to make resizable
+			dragManager(sections: string[]): void {
 
-				var resizer = document.createElement("div")
-				resizer.className = "resizer"
-				resizer.style.height = "10px"
-				headerSection.appendChild(resizer)
-				resizer.addEventListener("mousedown", initDrag, false)
+				for (let sectionName of sections) {
+					let section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
 
-				var startY, startHeight
+					var resizer = document.createElement("div")
+					resizer.className = "resizer"
+					resizer.style.height = "10px"
+					section.appendChild(resizer)
+					resizer.addEventListener("mousedown", (e) => initDrag(e, section), false)
 
-				let that = this // Storing this value to that to be able to use it inside of the functions
+					var startY, startHeight, parentHeight
 
-				function initDrag(e) {
-					startY = e.clientY
-					startHeight = parseInt(document.defaultView.getComputedStyle(headerSection).height, 10)
-					document.documentElement.addEventListener("mousemove", doDrag, false)
-					document.documentElement.addEventListener("mouseup", stopDrag, false)
-				}
+					let that = this // Storing this value to that to be able to use it inside of the functions
 
-				function doDrag(e) {
-					that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY)
-				}
+					function initDrag(e, section) {
+						startY = e.clientY
+						parentHeight = that.locals.templateHeight
 
-				function stopDrag(e) {
-					document.documentElement.removeEventListener("mousemove", doDrag, false)
-					document.documentElement.removeEventListener("mouseup", stopDrag, false)
-				}
-			},
+						startHeight = parseInt(document.defaultView.getComputedStyle(section).height, 10)
 
-			/**
-			 * Init drag functionality for footer section.
-			 * @return {void} - void
-			 */
-			footerDragManager() {
-				var footerSection = document.getElementsByClassName("section footer")[0] // element to make resizable
+						document.documentElement.addEventListener("mousemove", doDrag, false)
+						document.documentElement.addEventListener("mouseup", stopDrag, false)
+					}
 
-				var resizer = document.createElement("div")
-				resizer.className = "resizer"
-				resizer.style.height = "10px"
-				footerSection.appendChild(resizer)
-				resizer.addEventListener("mousedown", initDrag, false)
+					function doDrag(e) {
+						if (sectionName === 'header')
+							that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
 
-				var startY, startHeight
+						else if (sectionName === 'before-body') {
+							that.settings.beforeBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
+							that.locals.templateHeight = parentHeight + parseFloat(that.settings.beforeBody.height) - parseFloat(that.convert2Inches(startHeight))
+						}
 
-				let that = this // Storing this value to that to be able to use it inside of the functions
+						else if (sectionName === 'after-body') {
+							that.settings.afterBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
+							that.locals.templateHeight = parentHeight + parseFloat(that.settings.afterBody.height) - parseFloat(that.convert2Inches(startHeight))
+						}
 
-				function initDrag(e) {
-					startY = e.clientY
-					startHeight = parseInt(document.defaultView.getComputedStyle(footerSection).height, 10)
-					document.documentElement.addEventListener("mousemove", doDrag, false)
-					document.documentElement.addEventListener("mouseup", stopDrag, false)
-				}
+						else // its footer
+							that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY) > 0 ? that.convert2Inches(startHeight - e.clientY + startY) : 0
 
-				function doDrag(e) {
-					that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY)
-				}
+					}
 
-				function stopDrag(e) {
-					document.documentElement.removeEventListener("mousemove", doDrag, false)
-					document.documentElement.removeEventListener("mouseup", stopDrag, false)
+					function stopDrag(e) {
+						document.documentElement.removeEventListener("mousemove", doDrag, false)
+						document.documentElement.removeEventListener("mouseup", stopDrag, false)
+					}
 				}
 			},
 
@@ -913,7 +1136,7 @@
 			 * @param {HTMLElement} tab - selected tab element
 			 * @return {void} - void
 			 */
-			switchTabs(tabName, tab) {
+			switchTabs(tabName: string, tab: HTMLElement): void {
 				let slecetdTab = document.getElementsByClassName('tab selected')[0]
 				slecetdTab.classList.remove('selected')
 				tab.classList.add('selected')
@@ -924,19 +1147,13 @@
 			 * Deselect all selected elements.
 			 * @return {void} - void
 			 */
-			deSelectAll() {
+			deSelectAll(): void {
 				if (this.locals.isClicked) {
 					this.locals.isClicked = false
 					return
 				}
 
-				this.locals.selectedElement = {
-					type: '',
-					options: {
-						configs: {},
-						styles: {},
-					},
-				}
+				this.locals.selectedElement = this.getDefaultSelectedElementObject()
 				let selectedElements = document.getElementsByClassName("element selected")
 				for (let index = 0; index < selectedElements.length; index++) {
 					selectedElements[index].classList.remove("selected")
@@ -945,49 +1162,104 @@
 
 			/**
 			 * Clicked on element.
-			 * @param {HTMLElement} element - element
+			 * @param {Object} element - element
 			 * @return {void} - void
 			 */
-			clickedOnElement(element) {
+			clickedOnElement(element: IElement): void {
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
-				this.deletingElementOnPressingDeleteKey()
 				this.locals.isClicked = true
 			},
 
 			/**
 			 * create element.
-			 * @param {HTMLElement} parent - parent
+			 * @param {String} parent - element parent
 			 * @return {void} - void
 			 */
-			createElement(parent) {
-				let classType = this.locals.classType
+			createElement(parent: string, e: any): IElement {
+				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
+				var keys = Object.keys(this.settings.dataSets)
+				var clonedDataset = this.clone(this.settings.dataSets)
 				let tmp
 
+				var defaultElementObject: IElement = {
+					type: classType,
+					options: {
+						id: this.idGenerator(5),
+						parent: parent,
+						grandParent: 'TemplateBuilder',
+						styles: {
+							top: e.offsetY ? e.offsetY + 'px' : 0,
+							left: e.offsetX ? e.offsetX + 'px' : 0
+						}
+					}
+				}
+
 				switch (classType) {
-					case 'dataset':
+					case 'repeator':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
+								configs: {
+									selectedDataSet: keys[0],
+									dataSets: clonedDataset,
+									appendedElements: {},
+									variables: this.locals.variables,
+								},
 								styles: {
-									height: "60px",
-									direction: "rtl",
+									width: '600px',
+									height: '60px'
+								}
+							}
+						}
+
+						for (let key of keys)
+							tmp.options.configs.appendedElements[key] = []
+
+						break
+					case 'dataset':
+
+						/**
+						 * calculate totalWidth based on columns width.
+						 */
+						let width = 0
+						for (let index = 0; index < clonedDataset[keys[0]].options.configs.columns.length; index++) {
+							var col = clonedDataset[keys[0]].options.configs.columns[index]
+
+							if (!col.options.styles.width)
+								col.options.styles.width = 70
+
+							if (typeof col.options.styles.width === 'string')
+								width += parseFloat(col.options.styles.width.split('p')[0])
+
+							else
+								width += col.options.styles.width
+
+						}
+
+						tmp = {
+							options: {
+								configs: {
+									selectedDataSet: keys[0],
+									dataSets: clonedDataset,
+									stylesTarget: 'all',
+									defaultRow: this.locals.dataSetDefaultRow
+								},
+								styles: {
+									height: "100px",
+									width: width + 'px'
 								},
 							},
 						}
 						break
 					case 'textelement':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
 								configs: { text: this.$t('template-builder.elements.configs.type-text') },
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 									fontWeight: "",
 								},
 							},
@@ -996,10 +1268,8 @@
 
 					case 'datetime':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
-								configs: { hasDate: true, hasTime: true, persianDate: true },
+								configs: { hasDate: true, hasTime: true, persianDate: false },
 								styles: { width: "150px" },
 							},
 						}
@@ -1007,10 +1277,8 @@
 
 					case 'pagecounter':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
-								configs: { counter: '1', persianNumbers: true, completeForm: true },
+								configs: { counter: '1', persianNumbers: false, completeForm: true },
 								styles: {},
 							},
 						}
@@ -1018,13 +1286,9 @@
 
 					case 'imageelement':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
-								configs: { imageSrc: DefaultLogo },
+								configs: { imageSrc: this.configurations.imageSrc },
 								styles: {
-									top: 0,
-									left: 0,
 									width: "100px",
 									height: "100px",
 								},
@@ -1032,20 +1296,18 @@
 						}
 						break
 
-					case 'bindingObject':
+					case 'bindingobject':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
 									field: "",
-									bindingObject: {},
+									bindingObject: this.settings.bindingObject,
 								},
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 								},
 							},
 						}
@@ -1053,18 +1315,17 @@
 
 					case 'textpattern':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
 								configs: {
 									persianNumbers: false,
 									text: this.$t('template-builder.elements.configs.pattern-input'),
 									value: null,
+									bindingObject: this.settings.bindingObject,
 								},
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 								},
 							},
 						}
@@ -1072,16 +1333,14 @@
 
 					case 'variable':
 						tmp = {
-							type: classType,
 							options: {
-								id: this.idGenerator(5),
 								configs: {
 									uniqueId: uniqueId,
 								},
 								styles: {
 									whiteSpace: "pre",
 									width: "150px",
-									direction: "rtl",
+									direction: this.settings.pageDirections,
 								},
 							},
 						}
@@ -1090,22 +1349,15 @@
 					default:
 						break
 				}
-				if (parent.includes("header")) {
-					this.settings.header.headerElements.push(tmp)
-				} else if (parent.includes("footer")) {
-					this.settings.footer.footerElements.push(tmp)
-				}
-				this.locals.classType = ""
-				this.locals.uniqueId = 0
-				return
+				return this.merge(defaultElementObject, tmp)
 			},
 
 			/**
 			 * Creates variable in variables tab list.
 			 * @return {void} - void
 			 */
-			createVariable() {
-				let tmp = {
+			createVariable(): void {
+				let tmp: IVariable = {
 					uniqueId: this.idGenerator(5),
 					name: '',
 					type: 'text',
@@ -1119,19 +1371,19 @@
 			 * @param {variable} variable - variable object
 			 * @return {void} - void
 			 */
-			onVariableTypeChange(variable) {
+			onVariableTypeChange(variable: IVariable): void {
 				variable.context = ''
 			},
 
 			/**
 			 * Deletes variable in variables tab list.
-			 * @param {uniqueId} uniqueId - variable unique id
+			 * @param {string} uniqueId - variable unique id
 			 * @return {void} - void
 			 */
-			deleteVariable(uniqueId) {
-				let variablesList = this.locals.variables
-				let footerElements = this.settings.footer.footerElements
-				let headerElements = this.settings.header.headerElements
+			deleteVariable(uniqueId: string): void {
+				let variablesList: IVariable[] = this.locals.variables
+				let footerElements: IElement[] = this.settings.footer.footerElements
+				let headerElements: IElement[] = this.settings.header.headerElements
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
@@ -1158,34 +1410,133 @@
 
 			/**
 			 * Method that triggers on element drag.
-			 * @param {classType} classType - element unique id
+			 * @param {classType} classType - element classType
 			 * @param {uniqueId} uniqueId - element unique id
 			 * @return {void} - void
 			 */
-			startDraggingElement(classType, uniqueId) {
+			startDraggingElement(classType: classType, uniqueId: string) {
 				this.locals.classType = classType
 				this.locals.uniqueId = uniqueId
-				let headerSection = this.$refs.headerTemplate
-				headerSection.className = headerSection.className + " dragged"
-				let footerSection = this.$refs.footerTemplate
-				footerSection.className = footerSection.className + " dragged"
+				this.$refs.template.className += " dragged"
 			},
 
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent) {
-				this.createElement(parent)
+			droppedElement(parent: string, parentElement: IElement, grandParent: string, e: any) {
+
+				if (!this.locals.classType)
+					return
+
+				/**
+				 * prepare bindingObjects data based on repeator's selected dataset
+				 * @param {Array} columns - element's raw columns
+				 * @param {String} title - selected dataset's name
+				 * @return {Object} - preapred bindingObject options
+				 */
+				const prepareBindingObjects = (columns: IRawColumn[], key: string): object => {
+					let tmp = {}
+					for (let col of columns) {
+
+						// if columns contains child columns it means row data will be array and cant be assigned to bindingobject
+						if (col.columns)
+							continue
+
+						var name = `${key}-${col.key}`
+						tmp[name] = []
+					}
+					return tmp
+				}
+
+
+				/**
+				 * prepare datasets data based on repeator's selected dataset
+				 * @param {Array} columns - element's raw columns
+				 * @param {String} title - selected dataset's name
+				 * @param {String} parent - selected dataset's parent
+				 * @return {Object} - preapred bindingObject options
+				 */
+				const prepareDataSets = (columns: IColumn[], key: string): IDatasets => {
+					var tmp = {}
+					for (let col of columns) {
+
+						if (col.columns) {
+							var name = `${key}-${col.key}`
+							tmp[name] = {
+								options: {
+									id: this.idGenerator(5),
+									configs: {
+										title: col.title,
+										key: col.key,
+										rows: [],
+										columns: this.prepareDataSetColumns(col.columns),
+									}
+								}
+							}
+						}
+					}
+					return tmp
+				}
+
+				/** Controls if added element is outside page borders and adjust if so.
+				 * @param {Object} element - element object
+				 * @param {String} sectionId - section id that element is dropped to (parent)
+				 * @return {Object} element - adjusted element
+				 */
+				const adjustElementToPage = (element: any, sectionId: string): object => {
+					let elementWidth = element.options.styles.width || '30px'
+					let elementHeight = element.options.styles.height || '30px'
+					let containerRec = document.getElementById(sectionId).getBoundingClientRect()
+					let sectionWidth = containerRec.width
+					let sectionHeight = containerRec.height
+
+					// subtracting repeator title height for child element to make offsetTop accurate.
+					if (element.options.repeatorId)
+						sectionHeight -= 20
+
+					elementWidth = this.toFloatVal(elementWidth)
+					elementHeight = this.toFloatVal(elementHeight)
+
+					if (elementWidth + this.toFloatVal(element.options.styles.left) > sectionWidth)
+						element.options.styles.left = sectionWidth - elementWidth + 'px'
+
+					if (elementHeight + this.toFloatVal(element.options.styles.top) > sectionHeight)
+						element.options.styles.top = sectionHeight - elementHeight + 'px'
+
+					return element
+				}
+
+				var computedParent = parentElement ? grandParent : parent
+				var elem: IElement = this.createElement(computedParent, e)
+				var parentId = parentElement ? parentElement.options.id : `${parent}Template`
+
+
+				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
+					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+
+					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
+						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.options.configs.columns, displaySet.options.configs.key))
+
+					if (elem.type === 'dataset')
+						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.options.configs.columns, displaySet.options.configs.key))
+
+					elem.options.isChild = true
+					elem.options.repeatorId = parentElement.options.id
+					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
+				}
+				else
+					this.settings[computedParent][`${computedParent}Elements`].push(elem)
+
+				elem = adjustElementToPage(elem, parentId)
+				this.locals.classType = ""
+				this.locals.uniqueId = 0
 			},
 
 			/**
 			 * Method that triggers when drag is finished
 			 */
-			finishedDraggingElement() {
-				let headerSection = this.$refs.headerTemplate
-				headerSection.classList.remove("dragged")
-				let footerSection = this.$refs.footerTemplate
-				footerSection.classList.remove("dragged")
+			finishedDraggingElement(): void {
+				this.$refs.template.classList.remove("dragged")
 			},
 
 			/**
@@ -1193,19 +1544,20 @@
 			 * @param {uniqueId} uniqueId - variable | element unique id
 			 * @return {void} - void
 			 */
-			onFileChange(uniqueId) {
+			onFileChange(uniqueId: string): void {
 				let maximumFileSize = this.configurations.maximumFileSize * 1000
 				let that = this // Storing this value to be able to use it inside a function
 
 				switch (this.locals.selectedElement.type) {
 					case 'imageelement':
-						let image = document.getElementById("elementImageFileControl").files[0]
+						let image = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
+
 
 						if (image.type !== 'image/jpeg' && image.type !== 'image/png')
-							return alert('فرمت فایل انتخاب شده مجاز نمی باشد.')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 
 						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس انتخاب شده باید کمتر از ۱ مگابایت باشد')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 
 						this.toBase64(image).then((res) => {
 							this.locals.selectedElement.options.configs.imageSrc = res
@@ -1213,7 +1565,7 @@
 						break
 
 					case 'variable':
-						let variables = this.locals.variables
+						let variables: IVariable[] = this.locals.variables
 						let variable
 
 						for (let index = 0; index < variables.length; index++) {
@@ -1221,13 +1573,14 @@
 								variable = variables[index]
 							}
 						}
-						image = document.getElementById("variableImageFileControl").files[0]
+						image = (<HTMLInputElement>document.getElementById('variableImageFileControl')).files[0]
 
+						// @ts-ignore
 						if (image.type !== "image/jpeg" || image.type !== "image/png")
-							return alert('فرمت فایل مورد نظر قابل قبول نمی باشد.')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 
 						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 
 						this.toBase64(image).then((res) => {
 							variable.context = res
@@ -1235,15 +1588,14 @@
 						break
 
 					default: // if its a source file
-
-						let fileSrc = document.getElementById("fileSrcControl").files[0]
+						let fileSrc = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
 						if (!fileSrc.name.includes('.vp')) { // Checking the file type
-							return alert('فرمت فایل پشتیبانی نمیشود فرمت فایل های قابل قبول: vp.*')
+							return alert(this.$t('template-builder.alerts.format-notsupported'))
 						}
 
 						if (fileSrc.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-							return alert('سایز فایل عکس مورد نظر بالای ۱ مگابایت است')
+							return alert(this.$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
 						}
 						var fr = new FileReader()
 						fr.readAsText(fileSrc)
@@ -1263,7 +1615,7 @@
 			 * @param {File} file - image
 			 * @return {*} - base64 of image
 			 */
-			toBase64(file) {
+			toBase64(file: File): Promise<string | ArrayBuffer> {
 				return new Promise((resolve, reject) => {
 					const reader = new FileReader()
 					reader.readAsDataURL(file)
@@ -1273,151 +1625,169 @@
 			},
 
 			/**
-			 * Converts given image to base64.
-			 * @param {Number} n - number of digits
-			 * @return {String} - id
-			 */
-			idGenerator(n) {
-				return Math.random().toString(36).substr(2, n)
-			},
-
-			/**
 			 * Adds an event listenner on delete button and then removes the element
 			 */
-			deletingElementOnPressingDeleteKey() {
-				let headerElements = this.settings.header.headerElements
-				let footerElements = this.settings.footer.footerElements
-				document.addEventListener("keydown", deleteElement, false)
-				document.removeEventListener("keyup", deleteElement, false)
+			keyboardHandler(): void {
+				const toFloatVal = (val: string, elementId: string, style: string): number => {
+					if (val)
+						return parseFloat(val.split('p')[0])
 
-				let that = this // Storing the value of this to be able to use it inside of the function
+					return this.getCoordinates(elementId)[style]
+				}
+				const elementStyleChanger = (style: string, operator: string, e: any): void => {
+					e.preventDefault()
+					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style], this.locals.selectedElement.options.id, style)
+					this.locals.selectedElement.options.styles[style] = eval(`${this.locals.selectedElement.options.styles[style]} ${operator} 1`)
+					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
+				}
+				const keyBinds = (e: any): void => {
 
-				function deleteElement(e) {
-					if (e.code === "Delete") {
-						let id = that.locals.clickedElementId
-						for (let index = 0; index < headerElements.length; index++) {
-							if (headerElements[index].options.id === id) {
-								headerElements.splice(index, 1)
-							}
+					if (!this.locals.selectedElement.type)
+						return
+
+					if (e.code === "Delete") { // element delete
+
+						if (this.locals.selectedElement.type === 'column') {  // it's a column.
+							this.locals.selectedElement.isActive = false
+							return
 						}
-						for (let index = 0; index < footerElements.length; index++) {
-							if (footerElements[index].options.id === id) {
-								footerElements.splice(index, 1)
+
+						if (this.locals.selectedElement.type === 'row')  // it's a row (row is not deletable).
+							return
+
+						var parent = this.locals.selectedElement.options.parent
+						var array = this.settings[parent][`${parent}Elements`]
+
+						if (!parent)
+							return
+
+						if (this.locals.selectedElement.options.isChild) { // it's a repeator.
+
+							let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId) // repeator index in elements array
+
+							if (index > -1) {
+								let repeator = array[index]
+								var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
+
+								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id) // child index in repeator children array
+
+								if (index > -1) {
+
+									if (children[index].type === 'dataset') { // It's a dataset..
+										let columnEl = document.getElementsByClassName('column element selected')[0]
+
+										if (columnEl) { //  Delete is triggered on a column.
+
+											let columns = children[index].options.configs.dataSets[children[index].options.configs.selectedDataSet].options.configs.columns
+											index = columns.findIndex(x => x.options.id === columnEl.id) // column index in dataset columns array
+
+											if (index > -1)
+												columns[index].isActive = false
+
+											return
+										} // Else normal splice will delete dataset.
+									}
+
+									children.splice(index, 1)
+								}
 							}
+							return
 						}
-						that.locals.selectedElement = {
-							type: {},
-							options: {
-								configs: {},
-								styles: {},
-							},
+
+						// it's a normal element.
+						let id = this.locals.clickedElementId
+
+						let index = array.findIndex(x => x.options.id === id)
+
+						if (index > -1) {
+							array.splice(index, 1)
+							this.locals.selectedElement = this.getDefaultSelectedElementObject()
 						}
 					}
+					else if (e.ctrlKey) { // element resize
+						if (e.code === 'ArrowRight')
+							elementStyleChanger('width', '+', e)
+						else if (e.code === 'ArrowLeft')
+							elementStyleChanger('width', '-', e)
+						else if (e.code === 'ArrowUp')
+							elementStyleChanger('height', '-', e)
+						else if (e.code === 'ArrowDown')
+							elementStyleChanger('height', '+', e)
+					}
+					else if (e.code === 'ArrowRight') { // element drag
+						elementStyleChanger('left', '+', e)
+					}
+					else if (e.code === 'ArrowLeft')
+						elementStyleChanger('left', '-', e)
+					else if (e.code === 'ArrowUp')
+						elementStyleChanger('top', '-', e)
+					else if (e.code === 'ArrowDown')
+						elementStyleChanger('top', '+', e)
 				}
+				document.removeEventListener('keyup', keyBinds, false)
+				document.addEventListener('keydown', keyBinds, false)
 			},
 
 			/**
 			 * Gets coordinates of the given element.
-			 * @param {Number} id - element id
+			 * @param {String} id - element id
 			 * @return {Object} - return Coordination
 			 */
-			getCoordinates(id) {
+			getCoordinates(id: string): object {
 				let tmp = document.getElementById(id)
 				let compStyle = getComputedStyle(tmp)
-				let top = compStyle.getPropertyValue("top")
-				let left = compStyle.getPropertyValue("left")
-				let height = compStyle.getPropertyValue("height")
-				let width = compStyle.getPropertyValue("width")
 				return {
-					top: top,
-					left: left,
-					height: height,
-					width: width,
-				}
-			},
-
-			/**
-			 * Converts the given html to Image and append it to the body tag.
-			 * @param {Number} modalId - modal element id
-			 * @param {Number} closeBtnId - close button element id
-			 * @return {void} - void
-			 */
-			modalManager(modalId, closeBtnId) {
-				var modal = document.getElementById(modalId)
-
-				// Get the <span> element that closes the modal
-				var span = document.getElementById(closeBtnId)
-
-				// When the user clicks on <span> (x), close the modal
-				span.onclick = function () {
-					modal.style.display = "none"
+					top: compStyle.getPropertyValue("top"),
+					left: compStyle.getPropertyValue("left"),
+					height: compStyle.getPropertyValue("height"),
+					width: compStyle.getPropertyValue("width"),
 				}
 			},
 
 			/**
 			 * function to display modal
 			 */
-			showModal() {
+			showModal(): void {
 				document.getElementById("templateBuilderModal").style.display = "block"
 			},
 
 			/**
 			 * function that triggers while editing is finished.
-			 * @param {HTMLElment} element - element
+			 * @param {Object} element - element
 			 * @return {void} - void
 			 */
-			finishedEditingElement(element) {
-				let tmp = this.settings.header.headerElements.find(x => x.options.id === element.options.id)
+			finishedEditingElement(element: IElement, elementLocation: string): void {
 
-				if (tmp) { // its header element
-					Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
-					return
+				var array = this.settings[elementLocation][`${elementLocation}Elements`]
+
+				if (this.locals.selectedElement.options.isChild) { // it's a repeator.
+					let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId)
+					if (index > -1) {
+						let repeator = array[index]
+						var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
+						index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
+						if (index > -1)
+							children[index].options.styles = this.merge(children[index].options.styles, this.getCoordinates(children[index].options.id))
+					}
 				}
 
-				tmp = this.settings.footer.footerElements.find(x => x.options.id === element.options.id)
-
-				Object.assign(tmp.options.styles, this.getCoordinates(element.options.id))
-				return
+				let elem = array.find(x => x.options.id === element.options.id)
+				elem.options.styles = this.merge(elem.options.styles, this.getCoordinates(element.options.id))
 			},
 
 			/**
 			 * function that triggers when clicked on input.
-			 * @param {Number} id - element id
+			 * @param {string} id - element id
 			 * @return {void} - void
 			 */
-			clickedOnInput(id) {
+			clickedOnInput(id: string): void {
 				document.getElementById(id).click()
 			},
-
-			/**
-			 * encode given string to base64.
-			 * @param {String} str - string
-			 * @return {*} - base64
-			 */
-			encode2Base64(str) {
-				{
-					return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-						function toSolidBytes(match, p1) {
-							return String.fromCharCode('0x' + p1)
-						}))
-				}
-			},
-
-			/**
-			 * decode given string to base64.
-			 * @param {String} str - string
-			 * @return {*} - base64
-			 */
-			decodeFromBase64(str) {
-				return decodeURIComponent(atob(str).split('').map(function (c) {
-					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-				}).join(''))
-			}
 		},
 	};
 </script>
 
-<style>
-	@import "~/assets/styles/templateBuilder.css";
-	@import "~/assets/styles/modal.css";
+<style lang="less">
+	@import "~/assets/styles/templateBuilder";
+	@import "~/assets/styles/modal";
 </style>

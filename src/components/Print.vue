@@ -1,12 +1,27 @@
 <template>
 	<div id="printPage">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
-
-		<!-- Data Slots -->
+		
+		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
 			<div :style="{width: settings.defaultWidthOfPaper + 'in',padding: '5px'}">
 				<div id="toBeConverted">
-					<slot class="printData" name="printData"></slot>
+					<div id="componentsParent">
+
+						<div class="body-render-section" :style="{height: settings.beforeBody.height + 'in'}">
+							<component v-for="(element, index) in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						</div>
+
+						<div id="bodyComponents" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length" class="body-render-section" :style="{height: settings.body.height + 'in'}">
+							<component v-for="(element, index) in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						</div>
+
+						<slot v-else class="printData" name="printData"></slot>
+
+						<div class="body-render-section" :style="{height: settings.afterBody.height + 'in'}">
+							<component v-for="(element, index) in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -14,13 +29,7 @@
 		<!-- Print Preview Modal-->
 		<div id="printModal" class="print-modal">
 			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
-				<div class="print-modal-header">
-					<div>
-						<span id="printModalCloseBtn" class="close-btn">&times;</span>
-					</div>
-					<div>
-						<h3 class="title">{{$t('print.print-preview')}}</h3>
-					</div>
+				<div :dir="settings.pageDirections" class=" print-modal-header">
 					<div style="display: flex">
 						<a @click="editWhileInPreview()" :title="$t('print.edit')" class="modal-icon" href="#">
 							<img src="@/assets/images/edit.png" />
@@ -28,6 +37,12 @@
 						<a href="#" @click="printForm()" :title="$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
+					</div>
+					<div>
+						<h3 class="title">{{$t('print.print-preview')}}</h3>
+					</div>
+					<div>
+						<span id="printModalCloseBtn" class="close-btn">&times;</span>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
@@ -51,8 +66,8 @@
 						</div>
 					</div>
 					<div id="printForm">
-						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultheightofpaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
-							<div :style="{width: 'auto',border: settings.pageBorder,margin: '5px'}" class="pages">
+						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
+							<div :style="{width: 'auto', border: settings.pageBorder, margin: '5px'}">
 								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="{height: locals.pageHeadersSizes[index - 1] + 'in'}" class="mainHeader">
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 								</div>
@@ -69,34 +84,22 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+	// @ts-ignore
+	import { IVariable } from '~/interfaces/elements.ts'
+	// @ts-ignore
+	import { ISettings, IConfigs } from '~/interfaces/general.ts'
 	import printJS from "print-js"
-	import TemplateBuilder from '~/components/TemplateBuilder.vue'
-	import TextPattern from '~/components/elements/TextPattern.vue'
-	import TextElement from '~/components/elements/TextElement.vue'
-	import DateTime from '~/components/elements/DateTime.vue'
-	import BindingObject from '~/components/elements/BindingObject.vue'
-	import PageCounter from '~/components/elements/PageCounter.vue'
-	import ImageElement from '~/components/elements/ImageElement.vue'
-	import Variable from '~/components/elements/Variable.vue'
 	import domtoimage from 'dom-to-image'
+	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "Print",
 		props: {
 			options: { type: Object },
 			bindingObject: { type: Object },
+			dataSets: { type: Object },
 			variables: { type: Array },
 			configurations: { type: Object },
-		},
-		components: {
-			variable: Variable,
-			textelement: TextElement,
-			datetime: DateTime,
-			pagecounter: PageCounter,
-			imageelement: ImageElement,
-			bindingObject: BindingObject,
-			textpattern: TextPattern,
-			TemplateBuilder,
 		},
 		data() {
 			return {
@@ -110,12 +113,23 @@
 				settings: {
 					header: {
 						isHeaderRepeatable: true,
-						height: 0.5,
+						height: 1,
 						headerElements: [],
+					},
+					beforeBody: {
+						height: 1,
+						beforeBodyElements: [],
+					},
+					body: {
+						bodyElements: []
+					},
+					afterBody: {
+						height: 1,
+						afterBodyElements: [],
 					},
 					footer: {
 						isFooterRepeatable: true,
-						height: 0.5,
+						height: 1,
 						footerElements: [],
 					},
 					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
@@ -124,17 +138,50 @@
 					orientation: 'portrait',
 					pageSize: 'a4',
 					pageDirections: 'rtl',
+					dataSets: {},
 					bindingObject: {},
 					pageBorder: '0px',
 				},
-				configs: this.getDefaultConfigs()
+				configs: {
+					maximumFileSize: 1000, // Maximum file size in KB
+					language: 'en',
+					imageSrc: DefaultLogo
+				}
 			}
 		},
 		mounted() {
+			this.syncConfigs()
+			this.syncLanguage()
 			this.modalManager('printModal', 'printModalCloseBtn')
 		},
 		methods: {
-			printForm() {
+			/**
+			 * set body elements parent components height.
+			 * @return {void} - void
+			 */
+			setTotalHieghtBasedOnElementsHeight(): void {
+				const parent = document.getElementById('componentsParent')
+				const body = document.getElementById('bodyComponents')
+				var maxBottom = 0
+				var elementWithMaxBottom
+				// @ts-ignore
+				for (let child of body.children) {
+					if (child.getBoundingClientRect().bottom > maxBottom) {
+						maxBottom = child.getBoundingClientRect().bottom
+						elementWithMaxBottom = child
+					}
+				}
+				var bodyHeight = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height // body height in pixels
+				this.settings.body.height = this.convert2Inches(bodyHeight) // body height in inches
+				parent.style.height = this.settings.beforeBody.height + parseFloat(this.settings.body.height) + this.settings.afterBody.height + 'in'
+			},
+
+			/**
+			 * print calculated output to pdf
+			 * @return {void} - void
+			 */
+			printForm(): void {
+				// @ts-ignore
 				printJS({
 					printable: 'printForm',
 					type: 'html',
@@ -149,14 +196,16 @@
 
 			/**
 			 * sync the given configs with the defaults.
-			 * @return {Object} - returns configs objects
 			 */
-			getDefaultConfigs() {
-				return Object.assign(
-					{
-						maximumFileSize: 1000 // Maximum file size in KB
-					}
-					, this.configurations)
+			syncConfigs(): void {
+				this.merge(this.configs, this.configurations)
+			},
+
+			/**
+			 * sync system language with given configs.
+			 */
+			syncLanguage(): void {
+				this.$i18n.locale = this.configs.language
 			},
 
 			/**
@@ -164,28 +213,10 @@
 			 * @param {HTMLElement} parent - parent
 			 * @return {void} - void
 			 */
-			removeAllChildNodes(parent) {
+			removeAllChildNodes(parent: HTMLElement): void {
 				while (parent.firstChild) {
 					parent.removeChild(parent.firstChild)
 				}
-			},
-
-			/**
-			 * converts given pixel to inch.
-			 * @param {Number} pixels - pixels
-			 * @return {Number} - given pixel to intches
-			 */
-			convert2Inches(pixels) {
-				return (pixels / 96).toFixed(2)
-			},
-
-			/**
-			 * converts given inch to pixel.
-			 * @param {Number} inches - inches
-			 * @return {Number} - given inches to pixels
-			 */
-			convert2Pixels(inches) {
-				return (inches * 96).toFixed(2)
 			},
 
 			/**
@@ -193,7 +224,7 @@
 			 * @param {Number} totalPagesHeight - totalPagesHeight in inches
 			 * @return {void} - void
 			 */
-			calculateSizes(totalPagesHeight) {
+			calculateSizes(totalPagesHeight: number): void {
 
 				const errorValue = 0.01 // Subtractable value to make the pages height more accurate
 
@@ -250,7 +281,7 @@
 			 * @param {Number} totalPagesHeight - totalPagesHeight in inches
 			 * @return {HTMLElement} - canvas
 			 */
-			canvasMaker(imgBase64, sy, index) {
+			canvasMaker(imgBase64: string, sy: number, index: number): CanvasImageSource {
 				let scale = 2
 				let img = new Image()
 				let canvas = document.createElement("canvas")
@@ -278,11 +309,15 @@
 			 * Converts the given html to Image and append it to the body tag.
 			 * @return {Promise} - Promise void
 			 */
-			convert2Image() {
+			convert2Image(): Promise<ImageData> {
 				return new Promise((resolve, reject) => {
-					let transformOrigin = this.settings.pageDirections === 'rtl' ? 'top right' : 'top left'
+					let transformOrigin = 'top left'
 					var scale = 2
 					let domNode = document.getElementById("toBeConverted")
+
+					if (this.settings.body && this.settings.body.bodyElements && this.settings.body.bodyElements.length)
+						this.setTotalHieghtBasedOnElementsHeight()
+
 					domtoimage
 						.toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality
 							width: domNode.clientWidth * scale,
@@ -322,47 +357,19 @@
 			},
 
 			/**
-			 * Converts the given html to Image and append it to the body tag.
-			 * @param {Number} modalId - modal element id
-			 * @param {Number} closeBtnId - close button element id
-			 * @return {void} - void
-			 */
-			modalManager(modalId, closeBtnId) {
-				var modal = document.getElementById(modalId)
-
-				// Get the <span> element that closes the modal
-				var span = document.getElementById(closeBtnId)
-
-				// When the user clicks on <span> (x), close the modal
-				span.onclick = function () {
-					modal.style.display = "none"
-				}
-
-				// When the user clicks anywhere outside of the modal, close it
-				window.onclick = function (event) {
-					if (event.target === modal) {
-						modal.style.display = "none"
-					}
-				}
-			},
-
-			/**
 			 * By Triggering this func template builder modal will be displayed.
 			 * @param {object} json - settings json
 			 * @param {Function} callback - callback function
 			 * @return {void} - void
 			 */
-			templateBuilder(json, callback) {
+			templateBuilder(json: ISettings, callback: Function): void {
 				json.callback = callback
 				this.locals.templateBuilderData = json
-				let tmp = JSON.parse(JSON.stringify(this.bindingObject))
-				for (let key in tmp) {
-					tmp[key] = null
-				}
-				this.locals.templateBuilderData.bindingObject = tmp
+				this.locals.templateBuilderData.dataSets = this.dataSets
+				this.locals.templateBuilderData.bindingObject = this.bindingObject
 				this.$refs.TemplateBuilder.settingsInitFunc()
 
-				let variables = this.variables && this.variables.length ? this.variables : json.variables
+				let variables: IVariable[] = this.variables && this.variables.length ? this.variables : json.variables
 				if (variables)
 					this.$refs.TemplateBuilder.setVariables([...variables])
 
@@ -374,8 +381,8 @@
 			 * @param {object} json - settings json
 			 * @return {void} - void
 			 */
-			printPreview(json) {
-				Object.assign(this.settings, json)
+			printPreview(json: ISettings): void {
+				this.settings = this.merge(this.settings, json)
 				document.getElementById("printModal").style.display = "block"
 				document.getElementById('loadingModal').style.display = 'block'
 
@@ -390,100 +397,19 @@
 			 * Shows template builder in print preview.
 			 * @return {void} - void
 			 */
-			editWhileInPreview() {
+			editWhileInPreview(): void {
 				let printModal = document.getElementById("printModal")
 				printModal.style.display = "none"
 				this.templateBuilder(this.settings, (val) => {
-					Object.assign(this.settings, val)
+				this.settings = this.merge(this.settings, val)
 					this.printPreview()
 				})
-			},
-
-			/**
-			 * Covertes the given number to persian fotmat.
-			 * @param {Number} n - given number
-			 * @return {Number} - converted number
-			 */
-			toPersianNumbers(n) {
-				const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
-
-				return n.toString().replace(/\d/g, (x) => farsiDigits[x])
-			},
-
-			/**
-			 * Prepare elements options before previewing in print preview.
-			 * @param {Object} options - preview settings
-			 * @param {String} type - element type
-			 * @param {Number} index - loop index
-			 * @return {Number} - converted number
-			 */
-			prepareComponentsOptions(options, type, index) {
-
-				let opt = JSON.parse(JSON.stringify(options)) // Storing the options in opt
-
-				switch (type) {
-
-					case 'pagecounter':
-						if (opt.configs.completeForm) {
-							if (opt.configs.persianNumbers) {
-								index = this.toPersianNumbers(index)
-								let totalPages = this.toPersianNumbers(this.locals.totalPages)
-								opt.configs.counter = opt.configs.counter.replace('1', this.$t('template-builder.page-counter', { index, totalPages }))
-							} else {
-								opt.configs.counter = opt.configs.counter.replace('1', `page ${index} / ${this.locals.totalPages}`)
-							}
-						} else {
-							opt.configs.counter = index
-						}
-						break
-
-					case 'bindingObject':
-						let key = opt.configs.field
-
-						if (this.bindingObject[key])
-							opt.configs.value = this.bindingObject[key]
-						else
-							opt.configs.value = ''
-
-						break
-
-					case 'textpattern':
-						let matches = [], // an array to collect the strings that are matches
-							types = [],
-							regex = /{([^{]*?\w)(?=\})}/gim,
-							text = opt.configs.text,
-							curMatch
-
-						while ((curMatch = regex.exec(text))) {
-							types.push(curMatch[1])
-							matches.push(curMatch[0])
-						}
-
-						for (let index = 0; index < types.length; index++) {
-							text = text.replace(
-								"{" + types[index] + "}",
-								this.bindingObject[types[index]]
-							)
-						}
-						opt.configs.value = text
-
-						break
-
-					case 'variable':
-
-						opt.styles.backgroundColor = 'white'
-
-					default:
-						break
-				}
-
-				return opt
 			},
 		},
 	};
 </script>
 
-<style>
-	@import "~/assets/styles/print.css";
-	@import "~/assets/styles/modal.css";
+<style lang="less">
+	@import "~/assets/styles/print";
+	@import "~/assets/styles/modal";
 </style>
