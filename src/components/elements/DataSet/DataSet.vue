@@ -19,6 +19,7 @@
 		props: {
 			options: Object,
 		},
+		emits:['clickedOnElement', 'finished-editing-element'],
 		computed: {
 			displaySet() {
 				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]

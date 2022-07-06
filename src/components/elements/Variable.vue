@@ -25,6 +25,7 @@
 			options: Object,
 			variable: Object,
 		},
+		emits:['clickedOnElement', 'finished-editing-element'],
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
 				this.Initialize(this.$refs.imageVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)

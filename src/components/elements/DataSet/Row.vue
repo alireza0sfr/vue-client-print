@@ -11,6 +11,7 @@
 		props: {
 			options: Object,
 		},
+		emits:['styles-target-changed'],
 		computed: {
 			filteredCells() {
 				var filtered = []
