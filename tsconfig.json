@@ -6,6 +6,7 @@
     "importHelpers": true,
     "isolatedModules": false,
     "resolveJsonModule": true,
-    "noEmit": true
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
   }
 }
