@@ -631,7 +631,7 @@
 								</div>
 								<div :style="{height: settings.footer.height + 'in'}" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
-									<SectionTag tag="footer" color="#9efffa" />
+									<SectionTag tag="footer" />
 								</div>
 							</div>
 						</div>

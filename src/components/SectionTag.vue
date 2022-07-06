@@ -1,5 +1,5 @@
 <template>
-	<span class="section-tag" :style="{backgroundColor: color}">{{$t(`template-builder.sections.${tag}`)}}</span>
+	<span class="section-tag">{{$t(`template-builder.sections.${tag}`)}}</span>
 </template>
 
 <script>
@@ -9,10 +9,6 @@
 			tag: {
 				type: String,
 				required: true
-			},
-			color: {
-				type: String,
-				default: '#9efffa'
 			},
 		},
 	}
