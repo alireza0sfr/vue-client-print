@@ -1,87 +1,90 @@
 @import './_variables.less';
 
-* {
-    font-size: 14px;
-}
+.__VCP__ {
 
-.mainLoop {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.converted {
-    text-align: center;
-    flex-grow: 2;
-    overflow: hidden;
-}
-
-#printForm {
-    padding: 20px;
-    overflow-y: scroll;
-    height: 100%;
-}
-
-.fa-print {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#page {
-    width: max-content;
-}
-
-.mainHeader {
-    position: relative;
-    overflow: hidden;
-}
-
-.mainLoop {
-    box-shadow: -1px 4px 10px 0px #818181;
-    margin-bottom: 25px;
-}
-
-.slotWrapper {
-    position: fixed;
-    left: 10000px;
-}
-
-.body-render-section {
-    position: relative;
-}
-
-.converted {
-    margin-left: 10px;
-
-    canvas {
-        width: 100%
+    * {
+        font-size: 14px;
     }
-}
 
-.mainFooter {
-    position: relative;
-    overflow: hidden;
-}
+    .mainLoop {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-::-webkit-scrollbar {
-    width: 17px;
-    background-color: transparent;
-}
+    .converted {
+        text-align: center;
+        flex-grow: 2;
+        overflow: hidden;
+    }
 
-::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    -webkit-background-clip: content-box;
-    background-clip: content-box;
-}
+    #printForm {
+        padding: 20px;
+        overflow-y: scroll;
+        height: 100%;
+    }
 
-table {
-    width: 100%;
+    .fa-print {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-    td,
-    th{
-        border: 1px solid black;
+    #page {
+        width: max-content;
+    }
+
+    .mainHeader {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mainLoop {
+        box-shadow: -1px 4px 10px 0px #818181;
+        margin-bottom: 25px;
+    }
+
+    .slotWrapper {
+        position: fixed;
+        left: 10000px;
+    }
+
+    .body-render-section {
+        position: relative;
+    }
+
+    .converted {
+        margin-left: 10px;
+
+        canvas {
+            width: 100%
+        }
+    }
+
+    .mainFooter {
+        position: relative;
+        overflow: hidden;
+    }
+
+    ::-webkit-scrollbar {
+        width: 17px;
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #d6dee1;
+        border-radius: 20px;
+        border: 6px solid transparent;
+        -webkit-background-clip: content-box;
+        background-clip: content-box;
+    }
+
+    table {
+        width: 100%;
+
+        td,
+        th {
+            border: 1px solid black;
+        }
     }
 }

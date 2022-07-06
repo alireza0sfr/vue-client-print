@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="__VCP__" id="app">
       <Demo />
   </div>
 </template>
