@@ -1,5 +1,5 @@
 <template>
-	<div id="printPage">
+	<div class="__VCP__" id="printPage">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
 		
 		<!-- Preparing body to create canvas -->
@@ -412,5 +412,4 @@
 
 <style lang="less">
 	@import "~/assets/styles/print";
-	@import "~/assets/styles/modal";
 </style>

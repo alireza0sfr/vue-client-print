@@ -1785,9 +1785,4 @@
 			},
 		},
 	};
-</script>
-
-<style lang="less">
-	@import "~/assets/styles/templateBuilder";
-	@import "~/assets/styles/modal";
-</style>
+</script>	
