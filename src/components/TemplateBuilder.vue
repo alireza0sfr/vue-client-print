@@ -605,7 +605,7 @@
 
 					<!-- Section 2 (Template)-->
 					<div style="overflow: auto; width: 100%; padding: 20px">
-						<div style="margin:-5px 10px 10px">
+						<div class="toolbar">
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
