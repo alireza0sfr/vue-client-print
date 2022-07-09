@@ -3,7 +3,7 @@ import componentRegisterer from './plugins/components.ts'
 // @ts-ignore
 import mixins from './plugins/mixins.ts'
 // @ts-ignore
-import i18n from './plugins/i18n.ts'
+import { createLocalI18n } from './plugins/i18n.ts'
 
 const _encode2Base64 = mixins.methods.encode2Base64
 const _decodeFromBase64 = mixins.methods.decodeFromBase64
@@ -17,6 +17,8 @@ export default {
   install: (app: any, options: any): void => {
     app.mixin(mixins)
     componentRegisterer(app)
-    app.use(i18n)
+    
+    // creating a local $t instance so that this instance wouldn't conflict with the global $t instance
+    createLocalI18n(app)
   }
 }

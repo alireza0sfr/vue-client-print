@@ -54,8 +54,8 @@
 			return {
 				locals: {
 					classType: "bindingobject",
-					text: this.$t('template-builder.elements.binding-objects'),
-					text1: this.$t('template-builder.elements.binding-object-text')
+					text: this._$t('template-builder.elements.binding-objects'),
+					text1: this._$t('template-builder.elements.binding-object-text')
 				},
 				settings: {
 					id: 0,

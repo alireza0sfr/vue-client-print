@@ -1,5 +1,5 @@
 <template>
-	<span class="section-tag">{{$t(`template-builder.sections.${tag}`)}}</span>
+	<span class="section-tag">{{_$t(`template-builder.sections.${tag}`)}}</span>
 </template>
 
 <script>

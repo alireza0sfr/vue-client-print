@@ -1,9 +1,9 @@
 <template>
 	<div class="Demo">
 		<!-- Test Section -->
-		<a @click="printPreview()" id="printModalOpenBtn" href="#" :title="$t('print.print-preview')">{{$t('print.print-preview')}}</a>
+		<a @click="printPreview()" id="printModalOpenBtn" href="#" :title="_$t('print.print-preview')">{{_$t('print.print-preview')}}</a>
 		|
-		<a @click="templateBuilder()" href="#" :title="$t('template-builder.name')">{{ $t('template-builder.name') }}</a>
+		<a @click="templateBuilder()" href="#" :title="_$t('template-builder.name')">{{ _$t('template-builder.name') }}</a>
 
 		<Print ref="print" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configurations="configs">
 			<template v-slot:printData>

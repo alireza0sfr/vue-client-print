@@ -57,7 +57,7 @@
 					id: 0,
 					configs: {
 						persianNumbers: false,
-						text: this.$t('template-builder.elements.configs.pattern-input'),
+						text: this._$t('template-builder.elements.configs.pattern-input'),
 						value: null,
 						bindingObject: {},
 					},

@@ -31,22 +31,22 @@
 			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
 				<div :dir="settings.pageDirections" class=" print-modal-header">
 					<div style="display: flex">
-						<a @click="editWhileInPreview()" :title="$t('print.edit')" class="modal-icon" href="#">
+						<a @click="editWhileInPreview()" :title="_$t('print.edit')" class="modal-icon" href="#">
 							<img src="@/assets/images/edit.png" />
 						</a>
-						<a href="#" @click="printForm()" :title="$t('print.name')" class="modal-icon">
+						<a href="#" @click="printForm()" :title="_$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
 					</div>
 					<div>
-						<h3 class="title">{{$t('print.print-preview')}}</h3>
+						<h3 class="title">{{_$t('print.print-preview')}}</h3>
 					</div>
 					<div>
 						<span id="printModalCloseBtn" class="close-btn">&times;</span>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
-					<div style="padding-top: 10px; text-align: center">{{ $t('template-builder.page-count') }}: {{ locals.totalPages }}</div>
+					<div style="padding-top: 10px; text-align: center">{{ _$t('template-builder.page-count') }}: {{ locals.totalPages }}</div>
 
 					<!-- Loading popup modal -->
 
@@ -61,7 +61,7 @@
 									<div class="sk-chase-dot"></div>
 									<div class="sk-chase-dot"></div>
 								</div>
-								<p style="margin-top: 20px">{{ $t('print.proccessing') }}</p>
+								<p style="margin-top: 20px">{{ _$t('print.proccessing') }}</p>
 							</div>
 						</div>
 					</div>
@@ -206,7 +206,7 @@
 			 * sync system language with given configs.
 			 */
 			syncLanguage(): void {
-				this.$i18n.locale = this.configs.language
+				this._$i18n.locale = this.configs.language
 			},
 
 			/**
