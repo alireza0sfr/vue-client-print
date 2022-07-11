@@ -362,32 +362,44 @@ var mixins: object = {
       return opt
     },
 
-    			/**
-			 * encode given string to base64.
-			 * @param {String} str - given string
-			 * @return {*} - base64
-			 */
-			encode2Base64(str: string): string {
-				{
-					return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-						function toSolidBytes(match, p1) {
+    /**
+ * encode given string to base64.
+ * @param {String} str - given string
+ * @return {*} - base64
+ */
+    encode2Base64(str: string): string {
+      {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+          function toSolidBytes(match, p1) {
 
-							// @ts-ignore
-							return String.fromCharCode('0x' + p1)
-						}))
-				}
-			},
+            // @ts-ignore
+            return String.fromCharCode('0x' + p1)
+          }))
+      }
+    },
 
-			/**
-			 * decode given string to base64.
-			 * @param {String} str - given string
-			 * @return {*} - base64
-			 */
-			decodeFromBase64(str: string): string {
-				return decodeURIComponent(atob(str).split('').map(function (c) {
-					return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-				}).join(''))
-			}
+    /**
+     * decode given string to base64.
+     * @param {String} str - given string
+     * @return {*} - base64
+     */
+    decodeFromBase64(str: string): string {
+      return decodeURIComponent(atob(str).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      }).join(''))
+    },
+
+    /**
+     * set !important to all styles.
+     * @param {Object} obj - raw styles
+     * @return {Object} - styles with !important
+     */
+    initStyles(obj: object): object {
+      for (let key in obj) {
+        obj[key] += ' !important'
+      }
+      return obj
+    }
   }
 }
 

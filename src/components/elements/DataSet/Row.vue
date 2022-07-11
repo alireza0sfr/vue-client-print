@@ -36,6 +36,7 @@
 					this.$emit('styles-target-changed', val.configs.stylesTarget)
 
 					this.settings = this.merge(this.settings, val)
+					this.settings.styles = this.initStyles(this.settings.styles)
 				},
 			},
 		},
