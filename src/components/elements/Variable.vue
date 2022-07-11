@@ -11,7 +11,7 @@
 
 		<!-- If the variable is image -->
 		<div v-show="variable.type === 'image' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element'" :style="settings.styles" ref="imageVariable">
-			<img class="image" draggable="false" :src="variable.context" alt="Image" />
+			<img class="image" :src="variable.context" alt="Image" />
 			<Resizers :query="`variable-${this.settings.id}`" />
 		</div>
 

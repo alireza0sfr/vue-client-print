@@ -14,7 +14,7 @@ const i18n = createI18n({
   },
 })
 
-export function createLocalI18n(app: any) :void {
+export function createLocalI18n(app: any): void {
   app.config.globalProperties._$t = i18n.global.t
   app.config.globalProperties._$i18n = i18n.global
 }
