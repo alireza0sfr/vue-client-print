@@ -411,5 +411,5 @@
 </script>
 
 <style lang="less">
-	@import "~/assets/styles/print";
+	@import "~/styles/print";
 </style>
