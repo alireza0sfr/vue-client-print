@@ -1198,6 +1198,12 @@
 
 				switch (classType) {
 					case 'repeator':
+
+						if(this.isEmpty(this.settings.dataSets)) {
+							alert('[VCP] DataSet is empty')
+							throw Error('[VCP] DataSet is empty')
+						}
+							
 						tmp = {
 							options: {
 								configs: {
@@ -1218,6 +1224,11 @@
 
 						break
 					case 'dataset':
+
+						if(this.isEmpty(this.settings.dataSets)) {
+							alert('[VCP] DataSet is empty')
+							throw Error('[VCP] DataSet is empty')
+						}
 
 						/**
 						 * calculate totalWidth based on columns width.

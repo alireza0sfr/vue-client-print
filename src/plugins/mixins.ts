@@ -399,6 +399,28 @@ var mixins: object = {
         obj[key] += ' !important'
       }
       return obj
+    },
+
+    /**
+     * check if given arg is empty.
+     * @param {Any} arg - raw styles
+     * @return {Boolean}
+     */
+    isEmpty(arg: object[] | object | string | undefined | null): boolean {
+
+      if (!arg) // null or undefined
+        return true
+
+      if (typeof arg === 'string')
+        return arg.trim().length === 0
+
+      if (Array.isArray(arg))
+        arg.length === 0
+
+      if (this.isObject(arg))
+        return Object.keys(arg).length === 0
+
+      return false
     }
   }
 }
