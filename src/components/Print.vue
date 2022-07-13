@@ -1,24 +1,24 @@
 <template>
 	<div class="__VCP__" id="printPage">
 		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
-		
+
 		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
-			<div :style="{width: settings.defaultWidthOfPaper + 'in',padding: '5px'}">
+			<div :style="{width: settings.defaultWidthOfPaper + 'in'}">
 				<div id="toBeConverted">
 					<div id="componentsParent">
 
-						<div class="body-render-section" :style="{height: settings.beforeBody.height + 'in'}">
+						<div class="body-render-section" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]">
 							<component v-for="(element, index) in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 						</div>
 
-						<div id="bodyComponents" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length" class="body-render-section" :style="{height: settings.body.height + 'in'}">
+						<div id="bodyComponents" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length" class="body-render-section" :style="[{height: settings.body.height + 'in'}, settings.body.styles]">
 							<component v-for="(element, index) in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 						</div>
 
 						<slot v-else class="printData" name="printData"></slot>
 
-						<div class="body-render-section" :style="{height: settings.afterBody.height + 'in'}">
+						<div class="body-render-section" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]">
 							<component v-for="(element, index) in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 						</div>
 					</div>
@@ -67,13 +67,13 @@
 					</div>
 					<div id="printForm">
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
-							<div :style="{width: 'auto', border: settings.pageBorder, margin: '5px'}">
-								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="{height: locals.pageHeadersSizes[index - 1] + 'in'}" class="mainHeader">
+							<div :style="{width: 'auto', border: settings.pageBorder}">
+								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
-							<div v-if="settings.footer.isFooterRepeatable ||index === locals.totalPages" :style="{height: locals.pageFootersSizes[index - 1] + 'in'}" class="mainFooter">
+							<div v-if="settings.footer.isFooterRepeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
 								<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 							</div>
 						</div>
@@ -111,38 +111,7 @@
 					pageFootersSizes: [],
 					pageHeadersSizes: [],
 				},
-				settings: {
-					header: {
-						isHeaderRepeatable: true,
-						height: 1,
-						headerElements: [],
-					},
-					beforeBody: {
-						height: 1,
-						beforeBodyElements: [],
-					},
-					body: {
-						bodyElements: []
-					},
-					afterBody: {
-						height: 1,
-						afterBodyElements: [],
-					},
-					footer: {
-						isFooterRepeatable: true,
-						height: 1,
-						footerElements: [],
-					},
-					defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
-					defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
-					designName: '',
-					orientation: 'portrait',
-					pageSize: 'a4',
-					pageDirections: 'rtl',
-					dataSets: {},
-					bindingObject: {},
-					pageBorder: '0px',
-				},
+				settings: this.getDefaultSettings(),
 				configs: {
 					maximumFileSize: 1000, // Maximum file size in KB
 					language: 'en',

@@ -14,22 +14,27 @@ printOptions: object = {
     isHeaderRepeatable: boolean, // detemines whether header repeats on every print page | defualt: true
     height: number, // header height in inches | defualt: 1
     headerElements: object[], // array of header elements | defualt: []
+    styles: {}, // header styles | defualt: {}
   },
   beforeBody: {
     height: number, // before body height in inches | defualt: 1
     beforeBodyElements: object[], // array of before body elements | defualt: []
+    styles: {}, // beforeBody styles | defualt: {}
   },
   body: {
     bodyElements: object[], // array of body elements | defualt: []
+    styles: {}, // body styles | defualt: {}
   },
   afterBody: {
     height: number, // after body height in inches | defualt: 1
     afterBodyElements: object[], // array of after body elements | defualt: []
+    styles: {}, // afterBody styles | defualt: {}
   },
   footer: {
     isFooterRepeatable: boolean, // detemines whether footer repeats on every print page | defualt: true
     height: number, // footer height in inches | defualt: 1
     footerElements: object[] // array of footer elements | defualt: [],
+    styles: {}, // footer styles | defualt: {}
   },
   defaultHeightOfPaper: number, // Height of the defualt paper in inches
   defaultWidthOfPaper: number, // Height of the defualt paper in inches
