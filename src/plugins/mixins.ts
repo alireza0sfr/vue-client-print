@@ -1,6 +1,8 @@
 // @ts-ignore
 import ElementClass from '~/plugins/element-utilities.ts'
 // @ts-ignore
+import { ISettings } from '~/interfaces/general.ts'
+// @ts-ignore
 import { IElement } from '~/interfaces/elements.ts'
 // @ts-ignore
 import { IRow } from '~/interfaces/datasets.ts'
@@ -421,7 +423,52 @@ var mixins: object = {
         return Object.keys(arg).length === 0
 
       return false
-    }
+    },
+
+    /**
+ * sync the given settings with the defaults.
+ * @return {Object} - returns settings objects
+ */
+    getDefaultSettings(): ISettings {
+      return {
+        header: {
+          isHeaderRepeatable: true,
+          height: 1,
+          headerElements: [],
+          styles: {},
+        },
+        beforeBody: {
+          height: 1,
+          beforeBodyElements: [],
+          styles: {},
+        },
+        body: {
+          bodyElements: [],
+          styles: {},
+        },
+        afterBody: {
+          height: 1,
+          afterBodyElements: [],
+          styles: {},
+        },
+        footer: {
+          isFooterRepeatable: true,
+          height: 1,
+          footerElements: [],
+          styles: {},
+        },
+        defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
+        defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
+        totalHeightOfAPaper: 10.4, // Useable height for body tag
+        designName: '',
+        orientation: 'portrait',
+        pageSize: 'a4',
+        pageDirections: 'rtl',
+        bindingObject: {},
+        dataSets: {},
+        pageBorder: '',
+      }
+    },
   }
 }
 
