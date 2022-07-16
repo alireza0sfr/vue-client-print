@@ -900,6 +900,10 @@
 			 * @return {Object} - Prepared dataset.
 			 */
 			prepareDataSets(sets: IRawDatasets = this.settings.dataSets): IDatasets {
+
+				if(this.isEmpty(sets))
+					return
+
 				var tmp: object = {}
 				var keys: string[] = Object.keys(sets)
 
