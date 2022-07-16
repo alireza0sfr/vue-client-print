@@ -1240,7 +1240,6 @@
 			createElement(parent: string, e: any): IElement {
 				let classType: classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
-				var keys = Object.keys(this.settings.dataSets)
 				var clonedDataset = this.clone(this.settings.dataSets)
 				let tmp
 
@@ -1264,6 +1263,7 @@
 							alert('[VCP] DataSet is empty')
 							throw Error('[VCP] DataSet is empty')
 						}
+						var keys = Object.keys(this.settings.dataSets)
 							
 						tmp = {
 							options: {
@@ -1290,6 +1290,7 @@
 							alert('[VCP] DataSet is empty')
 							throw Error('[VCP] DataSet is empty')
 						}
+						var keys = Object.keys(this.settings.dataSets)
 
 						/**
 						 * calculate totalWidth based on columns width.
