@@ -831,7 +831,7 @@
 				deep: true,
 				immediate: true,
 				handler(val) {
-					this.settings = this.merge(this.getDefaultSettings(), val)
+					this.settings = this.merge(this.settings, val)
 					this.settings.dataSets = this.prepareDataSets()
 				},
 			}
