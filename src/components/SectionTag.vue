@@ -1,5 +1,5 @@
 <template>
-	<span class="section-tag">{{_$t(`template-builder.sections.${tag}`)}}</span>
+	<span :class="['section-tag', {'active': current === tag}]">{{_$t(`template-builder.sections.${tag}`)}}</span>
 </template>
 
 <script>
@@ -10,6 +10,10 @@
 				type: String,
 				required: true
 			},
+			current: {
+				type: [String, null],
+				required: true
+			}
 		},
 	}
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
-		<div id="templateBuilderModal" class="print-modal">
+		<div @click="deselectSection" id="templateBuilderModal" class="print-modal">
 			<div id="fullscreenControl" class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
@@ -686,25 +686,25 @@
 						</div>
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<div @click="clickedOnSection('header')" :style="[{height: settings.header.height + 'in' }, settings.header.styles]" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
+								<div @click="(e) => clickedOnSection(e, 'header')" :style="[{height: settings.header.height + 'in' }, settings.header.styles]" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
-									<SectionTag tag="header" />
+									<SectionTag :current="locals.selectedSection" tag="header" />
 								</div>
-								<div @click="clickedOnSection('beforeBody')" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
+								<div @click="(e) => clickedOnSection(e, 'beforeBody')" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
-									<SectionTag tag="beforeBody" />
+									<SectionTag :current="locals.selectedSection" tag="beforeBody" />
 								</div>
-								<div @click="clickedOnSection('body')" :style="settings.body.styles" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
+								<div @click="(e) => clickedOnSection(e, 'body')" :style="settings.body.styles" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
-									<SectionTag tag="body" />
+									<SectionTag :current="locals.selectedSection" tag="body" />
 								</div>
-								<div @click="clickedOnSection('afterBody')" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
+								<div @click="(e) => clickedOnSection(e, 'afterBody')" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
-									<SectionTag tag="afterBody" />
+									<SectionTag :current="locals.selectedSection" tag="afterBody" />
 								</div>
-								<div @click="clickedOnSection('footer')" :style="[{height: settings.footer.height + 'in'}, settings.footer.styles]" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
+								<div @click="(e) => clickedOnSection(e, 'footer')" :style="[{height: settings.footer.height + 'in'}, settings.footer.styles]" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
 									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
-									<SectionTag tag="footer" />
+									<SectionTag :current="locals.selectedSection" tag="footer" />
 								</div>
 							</div>
 						</div>
@@ -844,11 +844,22 @@
 		methods: {
 
 			/**
+			 * Deselect Section.
+			 * @param {Event} e - event.
+			 */
+			deselectSection(e: any): void {
+				if(e.target.id === 'templateBuilderModal')
+					this.locals.selectedSection = null
+			},
+
+			/**
 			 * Sets selected section.
 			 * @param {String} sectionName - clicked SectionName.
 			 */
-			clickedOnSection(sectionName: string): void {
-				this.locals.selectedSection = sectionName
+			clickedOnSection(e: any, sectionName: string): void {
+				
+				if(e.target.id && e.target.id.includes('Template'))
+					this.locals.selectedSection = sectionName
 			},
 			/**
 			 * Fullscreen TB view
@@ -1218,6 +1229,7 @@
 				this.locals.selectedElement = element
 				this.locals.clickedElementId = element.options.id
 				this.locals.isClicked = true
+				this.locals.selectedSection = null
 			},
 
 			/**
@@ -1702,8 +1714,20 @@
 				}
 				const keyBinds = (e: any): void => {
 
-					if (!this.locals.selectedElement.type)
-						return
+					if(this.locals.selectedSection) {
+
+						if(e.code === 'ArrowUp') {
+							e.preventDefault()
+							this.settings[this.locals.selectedSection].height -= 0.01
+						}
+						
+						if(e.code === 'ArrowDown') {
+							e.preventDefault()
+							this.settings[this.locals.selectedSection].height += 0.01
+						}
+					}
+
+					else if(this.locals.selectedElement.type) {
 
 					if (e.code === "Delete") { // element delete
 
@@ -1784,6 +1808,7 @@
 					else if (e.code === 'ArrowDown')
 						elementStyleChanger('top', '+', e)
 				}
+			}
 				document.removeEventListener('keyup', keyBinds, false)
 				document.addEventListener('keydown', keyBinds, false)
 			},
