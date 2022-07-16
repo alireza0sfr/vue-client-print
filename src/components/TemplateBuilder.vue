@@ -1650,7 +1650,7 @@
 					default: // if its a source file
 						let fileSrc = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
-						if (!fileSrc.name.includes('.vp')) { // Checking the file type
+						if (!fileSrc.name.includes('.vcp')) { // Checking the file type
 							return alert(this._$t('template-builder.alerts.format-notsupported'))
 						}
 
