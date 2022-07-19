@@ -29,6 +29,10 @@ interface IRawColumn {
   readonly key: string
   title: string
   columns?: IRawColumn[]
+  options: {
+    styles: any,
+    readonly id: string
+  } 
 }
 
 interface IColumn extends IRawColumn {

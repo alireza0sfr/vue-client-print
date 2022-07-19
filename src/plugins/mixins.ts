@@ -5,47 +5,13 @@ import { ISettings } from '~/interfaces/general.ts'
 // @ts-ignore
 import { IElement } from '~/interfaces/elements.ts'
 // @ts-ignore
-import { IRow } from '~/interfaces/datasets.ts'
+import { IMixins } from '~/interfaces/general.ts'
+// @ts-ignore
+import { prepareDataSetRows, prepareDataSetColumns } from './dataset-utils.ts'
+import { IRawColumn, IDatasets, IColumn } from '../interfaces/datasets'
 
-var mixins: object = {
+var mixins: IMixins = {
   methods: {
-
-    /** converting normal row object to dataset row objects
-     * @param {Object} rows - Raw rows.
-     * @param {String} parent - Parent name.
-     * @return {Object} - Prepared rows.
-     */
-    prepareDataSetRows(rows: object[]): IRow[] {
-      for (let index = 0; index < rows.length; index++) {
-        var objectKeys = Object.keys(rows[index])
-        var tempRow: IRow = {
-          type: 'row',
-          options: {
-            id: this.idGenerator(5),
-            styles: {},
-            configs: {
-              cells: {}
-            }
-          },
-        }
-
-        for (let key of objectKeys) {
-          tempRow.options.configs.cells[key] = {
-            type: 'cell',
-            isActive: true,
-            options: {
-              id: this.idGenerator(5),
-              styles: {},
-              configs: {
-                value: rows[index][key]
-              },
-            }
-          }
-        }
-        rows[index] = tempRow
-      }
-      return rows
-    },
 
     /**
      * Initializing the element utilities for the created element
@@ -246,8 +212,8 @@ var mixins: object = {
             rows = dataSets[selectedDataSet].rows
 
           // removing refrence to prevent recursion
-          rows = this.clone(rows)
-          displaySet.options.configs.rows = this.prepareDataSetRows(rows)
+          rows = prepareDataSetRows(this.clone(rows))
+          displaySet.options.configs.rows = rows
 
           // storing dataset height in originalColumnHeight to use it for column height
           opt.configs.originalColumnHeight = opt.styles.height
@@ -469,6 +435,58 @@ var mixins: object = {
         pageBorder: '',
       }
     },
+
+    /**
+     * prepare bindingObjects data based on repeator's selected dataset
+     * @param {Array} columns - element's raw columns
+     * @param {String} key - columns key
+     * @return {Object} - preapred bindingObject options
+     */
+    computeBindingObjects(columns: IRawColumn[], key: string): object {
+      if (this.locals.selectedElement.repeatorId && this.locals.selectedElement.isChild) {
+        let tmp = {}
+        for (let col of columns) {
+
+          // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
+          if (col.columns && col.columns.length)
+            continue
+
+          var name = `${key}-${col.key}`
+          tmp[name] = []
+        }
+        return tmp
+      }
+    },
+
+    /**
+     * prepare datasets data based on repeator's selected dataset
+     * @param {Array} columns - element's raw columns
+     * @param {String} key - columns key
+     * @return {Object} - preapred bindingObject options
+     */
+    computeDatasets(columns: IColumn[], key: string): IDatasets {
+      if (this.locals.selectedElement.repeatorId && this.locals.selectedElement.isChild) {
+        var tmp = {}
+        for (let col of columns) {
+
+          if (col.columns && col.columns.length) {
+            var name = `${key}-${col.key}`
+            tmp[name] = {
+              options: {
+                id: this.idGenerator(5),
+                configs: {
+                  title: col.title,
+                  key: col.key,
+                  rows: [],
+                  columns: prepareDataSetColumns(col.columns),
+                }
+              }
+            }
+          }
+        }
+        return tmp
+      }
+    }
   }
 }
 

@@ -717,13 +717,13 @@
 
 <script lang="ts">
 	// @ts-ignore
-	import { IRawDataset, IRawColumn, IDataset, IDatasets, IRawDatasets, IRow, IColumn, classType } from '~/interfaces/datasets.ts'
-	// @ts-ignore
 	import { IElement, IVariable } from '~/interfaces/elements.ts'
 	// @ts-ignore
 	import { ISettings } from '~/interfaces/general.ts'
 	// @ts-ignore
 	import { fetchLangList } from '~/translations.ts'
+	// @ts-ignore
+	import { prepareDataSets } from '~/plugins/dataset-utils.ts'
 	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",
@@ -832,7 +832,7 @@
 				immediate: true,
 				handler(val) {
 					this.settings = this.merge(this.settings, val)
-					this.settings.dataSets = this.prepareDataSets()
+					this.settings.dataSets = prepareDataSets(this.settings.dataSets)
 				},
 			}
 		},
@@ -894,73 +894,7 @@
 				if(index > -1)
 					array.splice(index, 1)
 			},
-			/**
-			 * @param {Object} set - Raw dataset.
-			 * @param {String} key - dataset key.
-			 * @return {Object} - Prepared dataset.
-			 */
-			prepareDataSets(sets: IRawDatasets = this.settings.dataSets): IDatasets {
 
-				if(this.isEmpty(sets))
-					return
-
-				var tmp: object = {}
-				var keys: string[] = Object.keys(sets)
-
-				if (sets[keys[0]] && sets[keys[0]].options && sets[keys[0]].options.id) // if dataset has id it means it's already prepared
-					return
-
-				for (let set of keys) {
-					var thisSet: IRawDataset = this.clone(sets[set]) // removing refrence to the original data.
-					tmp = {
-						options: {
-							id: this.idGenerator(5),
-							configs: {
-								columns: this.prepareDataSetColumns(thisSet.columns),
-								rows: this.prepareDataSetRows(thisSet.rows),
-								title: thisSet.title,
-								key: thisSet.key
-							},
-						}
-					}
-					sets[set] = tmp
-				}
-				return sets
-			},
-
-			/**
-			 * Preparing columns for dataset element.
-			 * @param {Object} columns - Raw columns.
-			 * @param {String} parent - Parent name.
-			 * @return {Object} - Prepared columns.
-			 */
-			prepareDataSetColumns(columns: IRawColumn[]): IColumn {
-				let tmp: object = {}
-
-				for (let index = 0; index < columns.length; index++) {
-					var col = columns[index]
-
-					tmp = {
-						title: col.title,
-						key: col.key,
-						isActive: true,
-						hasResizer: columns.indexOf(col) !== columns.length - 1,
-						type: 'column',
-						options: {
-							id: this.idGenerator(5),
-							styles: {
-								width: col.options.styles.width ? col.options.styles.width : '70px',
-							},
-						}
-					}
-					if (col.columns)
-						// @ts-ignore
-						tmp.columns = col.columns
-
-					columns[index] = tmp
-				}
-				return columns
-			},
 			/**
 			 * Init copy paste listenners.
 			 */
@@ -1060,10 +994,6 @@
 				tmp.variables = this.locals.variables
 				return tmp
 			},
-
-			/**
-			 * Exports Data from given src file
-			 */
 
 			/**
 			 * Exports settings to vcp file.
@@ -1242,7 +1172,7 @@
 			 * @return {void} - void
 			 */
 			createElement(parent: string, e: any): IElement {
-				let classType: classType = this.locals.classType
+				let classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
 				var clonedDataset = this.clone(this.settings.dataSets)
 				let tmp
@@ -1491,7 +1421,7 @@
 			 * @param {uniqueId} uniqueId - element unique id
 			 * @return {void} - void
 			 */
-			startDraggingElement(classType: classType, uniqueId: string) {
+			startDraggingElement(classType: string, uniqueId: string): void {
 				this.locals.classType = classType
 				this.locals.uniqueId = uniqueId
 				this.$refs.template.className += " dragged"
@@ -1504,56 +1434,6 @@
 
 				if (!this.locals.classType)
 					return
-
-				/**
-				 * prepare bindingObjects data based on repeator's selected dataset
-				 * @param {Array} columns - element's raw columns
-				 * @param {String} title - selected dataset's name
-				 * @return {Object} - preapred bindingObject options
-				 */
-				const prepareBindingObjects = (columns: IRawColumn[], key: string): object => {
-					let tmp = {}
-					for (let col of columns) {
-
-						// if columns contains child columns it means row data will be array and cant be assigned to bindingobject
-						if (col.columns)
-							continue
-
-						var name = `${key}-${col.key}`
-						tmp[name] = []
-					}
-					return tmp
-				}
-
-
-				/**
-				 * prepare datasets data based on repeator's selected dataset
-				 * @param {Array} columns - element's raw columns
-				 * @param {String} title - selected dataset's name
-				 * @param {String} parent - selected dataset's parent
-				 * @return {Object} - preapred bindingObject options
-				 */
-				const prepareDataSets = (columns: IColumn[], key: string): IDatasets => {
-					var tmp = {}
-					for (let col of columns) {
-
-						if (col.columns) {
-							var name = `${key}-${col.key}`
-							tmp[name] = {
-								options: {
-									id: this.idGenerator(5),
-									configs: {
-										title: col.title,
-										key: col.key,
-										rows: [],
-										columns: this.prepareDataSetColumns(col.columns),
-									}
-								}
-							}
-						}
-					}
-					return tmp
-				}
 
 				/** Controls if added element is outside page borders and adjust if so.
 				 * @param {Object} element - element object
@@ -1589,13 +1469,13 @@
 
 
 				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
-					var displaySet: IDataset = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
-						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, prepareBindingObjects(displaySet.options.configs.columns, displaySet.options.configs.key))
+						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, this.computeBindingObjectOptions(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, prepareDataSets(displaySet.options.configs.columns, displaySet.options.configs.key))
+						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, this.computeDatasetOptions(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id

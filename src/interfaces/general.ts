@@ -35,4 +35,9 @@ interface IConfigs {
   language: string
 }
 
-export { ISettings, IConfigs }
+interface IMixins {
+  methods: object
+  data: () => object;
+}
+
+export { ISettings, IConfigs, IMixins }
