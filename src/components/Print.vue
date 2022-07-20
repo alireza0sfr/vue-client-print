@@ -1,6 +1,6 @@
 <template>
 	<div class="__VCP__" id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" :configurations="configs" />
+		<TemplateBuilder ref="TemplateBuilder" :bindingObject="bindingObject" :options="locals.templateBuilderData" :configurations="configs" />
 
 		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
@@ -336,7 +336,6 @@
 				json.callback = callback
 				this.locals.templateBuilderData = json
 				this.locals.templateBuilderData.dataSets = this.dataSets
-				this.locals.templateBuilderData.bindingObject = this.bindingObject
 				this.$refs.TemplateBuilder.settingsInitFunc()
 
 				let variables: IVariable[] = this.variables && this.variables.length ? this.variables : json.variables
@@ -352,7 +351,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				this.settings = this.merge(this.settings, json)
+				this.prepareSettings(json)
 				document.getElementById("printModal").style.display = "block"
 				document.getElementById('loadingModal').style.display = 'block'
 
@@ -371,7 +370,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal.style.display = "none"
 				this.templateBuilder(this.settings, (val) => {
-				this.settings = this.merge(this.settings, val)
+					this.prepareSettings(val)
 					this.printPreview()
 				})
 			},

@@ -65,7 +65,6 @@
 						persianNumbers: false,
 						field: "",
 						value: null,
-						bindingObject: {},
 					},
 					styles: {},
 				},

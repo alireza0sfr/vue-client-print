@@ -9,7 +9,6 @@ Can attach to given object or any field of given dataset object and display the 
     persianNumbers: boolean, // whether to use persian digits for value | default: false
     field: "", // Selected field in binding object prop | default: ""
     value: null, // Selected value in binding object prop | default: null
-    bindingObject: {}, // Binding object prop | default: {}
   }
 ```
 

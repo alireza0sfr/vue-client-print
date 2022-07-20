@@ -346,7 +346,7 @@
 											</div>
 											<div class="toolbar-content-field">
 												<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
-													<option v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObject)" :key="option">{{ option }}</option>
+													<option v-for="option in Object.keys(computeBindingObject())" :key="option">{{ option }}</option>
 												</select>
 											</div>
 										</div>
@@ -376,7 +376,7 @@
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" id="textpatternControl">
-												<option v-for="option in Object.keys(locals.selectedElement.options.configs.bindingObject)" :key="option">{{ option }}</option>
+												<option v-for="option in Object.keys(computeBindingObject())" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -730,6 +730,7 @@
 		props: {
 			options: Object,
 			configurations: Object,
+			bindingObject: Object
 		},
 		data() {
 			return {
@@ -831,7 +832,7 @@
 				deep: true,
 				immediate: true,
 				handler(val) {
-					this.settings = this.merge(this.settings, val)
+					this.prepareSettings(val)
 					this.settings.dataSets = prepareDataSets(this.settings.dataSets)
 				},
 			}
@@ -1309,7 +1310,6 @@
 								configs: {
 									persianNumbers: false,
 									field: "",
-									bindingObject: this.settings.bindingObject,
 								},
 								styles: {
 									whiteSpace: "pre",
@@ -1327,7 +1327,6 @@
 									persianNumbers: false,
 									text: this._$t('template-builder.elements.configs.pattern-input'),
 									value: null,
-									bindingObject: this.settings.bindingObject,
 								},
 								styles: {
 									whiteSpace: "pre",
@@ -1470,9 +1469,6 @@
 
 				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
 					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
-
-					if (elem.type === 'bindingobject' || elem.type === 'textpattern')
-						elem.options.configs.bindingObject = this.merge(elem.options.configs.bindingObject, this.computeBindingObjectOptions(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					if (elem.type === 'dataset')
 						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, this.computeDatasetOptions(displaySet.options.configs.columns, displaySet.options.configs.key))

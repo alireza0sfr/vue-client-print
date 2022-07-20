@@ -7,7 +7,7 @@ interface State {
 export const useBindingObjectStore = defineStore('bindingObject', {
   
   state: (): State => ({
-    bindingObject: {test: 'hello'},
+    bindingObject: null,
   }),
 
   actions: {

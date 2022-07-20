@@ -1,5 +1,6 @@
 // @ts-ignore
 import ElementClass from '~/plugins/element-utilities.ts'
+
 // @ts-ignore
 import { ISettings } from '~/interfaces/general.ts'
 // @ts-ignore
@@ -8,7 +9,15 @@ import { IElement } from '~/interfaces/elements.ts'
 import { IMixins } from '~/interfaces/general.ts'
 // @ts-ignore
 import { prepareDataSetRows, prepareDataSetColumns } from './dataset-utils.ts'
-import { IRawColumn, IDatasets, IColumn } from '../interfaces/datasets'
+// @ts-ignore
+import { IRawColumn, IDatasets, IColumn } from '~/interfaces/datasets.ts'
+
+// @ts-ignore
+import { useBindingObjectStore } from '~/stores/binding-object.ts'
+// @ts-ignore
+import piniaInstance from '~/plugins/pinia-instance.ts'
+
+const bindingObjectStore = useBindingObjectStore(piniaInstance)
 
 var mixins: IMixins = {
   methods: {
@@ -267,7 +276,7 @@ var mixins: IMixins = {
 
         case 'bindingobject':
           let field = opt.configs.field
-          var bindingObject = opt.configs.bindingObject
+          var bindingObject: object = this.computeBindingObject(opt)
 
           // if it's repeator's bindingObject
           if (opt.repeatorId) {
@@ -297,7 +306,7 @@ var mixins: IMixins = {
           break
 
         case 'textpattern':
-          var bindingObject = opt.configs.bindingObject
+          var bindingObject: object = this.computeBindingObject(opt)
           let matches = [], // an array to collect the strings that are matches
             types = [],
             regex = /{([^{]*?\w)(?=\})}/gim,
@@ -430,7 +439,6 @@ var mixins: IMixins = {
         orientation: 'portrait',
         pageSize: 'a4',
         pageDirections: 'rtl',
-        bindingObject: {},
         dataSets: {},
         pageBorder: '',
       }
@@ -438,13 +446,33 @@ var mixins: IMixins = {
 
     /**
      * prepare bindingObjects data based on repeator's selected dataset
-     * @param {Array} columns - element's raw columns
-     * @param {String} key - columns key
+     * this method can be called for element or elements of repeator
+     * if repeator calls this method 'this.settings' points to Repeator.vue's settings and 'opt' points to repeator's child's options.
+     * else if element(TB/PP) calls this method 'this.settings' points to either TB settings or Print settings and 'opt' points to element's options.
+     * @param {String} opt - element's options
      * @return {Object} - preapred bindingObject options
      */
-    computeBindingObjects(columns: IRawColumn[], key: string): object {
-      if (this.locals.selectedElement.repeatorId && this.locals.selectedElement.isChild) {
+    computeBindingObject(opt: IElement = this.locals.selectedElement.options): object {
+
+      if (opt.repeatorId && opt.isChild) {
+        // it's repeator's child
+        var parentElement: IElement = {}
+
+        if (opt.grandParent === 'TemplateBuilder') {
+          var parent = this.locals.selectedElement.options.parent
+          var index = this.settings[parent][`${parent}Elements`].findIndex(x => x.options.id === opt.repeatorId)
+          parentElement = this.settings[parent][`${parent}Elements`][index]
+        }
+
+        else if (this.locals && this.locals.classType === 'repeator') {
+          parentElement.options = this.settings
+        }
+
+        var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+        var columns: IRawColumn[] = displaySet.options.configs.columns
+        var key: string = displaySet.options.configs.key
         let tmp = {}
+
         for (let col of columns) {
 
           // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
@@ -454,8 +482,9 @@ var mixins: IMixins = {
           var name = `${key}-${col.key}`
           tmp[name] = []
         }
-        return tmp
+        return this.merge({}, bindingObjectStore.bindingObject, tmp)
       }
+      return bindingObjectStore.bindingObject
     },
 
     /**
@@ -486,7 +515,17 @@ var mixins: IMixins = {
         }
         return tmp
       }
-    }
+    },
+
+    /**
+     * Prepare settings on init
+     * @param {Object} val - new Settings
+     * @return {Object} - merged new settings and old/default settings
+     */
+    prepareSettings(val: ISettings): void {
+      this.settings = this.merge(this.settings, val)
+      bindingObjectStore.updateBindingObject(this.bindingObject)
+    },
   }
 }
 

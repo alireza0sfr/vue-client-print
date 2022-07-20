@@ -24,7 +24,6 @@ interface ISettings {
   orientation: string,
   pageSize: string,
   pageDirections: string,
-  bindingObject: object,
   dataSets: IRawDataset,
   pageBorder: string,
   maximumFileSize: string

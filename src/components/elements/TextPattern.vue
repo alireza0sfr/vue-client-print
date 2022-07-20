@@ -60,7 +60,6 @@
 						persianNumbers: false,
 						text: this._$t('template-builder.elements.configs.pattern-input'),
 						value: null,
-						bindingObject: {},
 					},
 					styles: {},
 				},

@@ -23,3 +23,5 @@ pnpm-debug.log*
 .vs
 .temp
 .cache
+
+bookmarks.json
