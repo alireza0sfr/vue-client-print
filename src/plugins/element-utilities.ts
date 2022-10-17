@@ -1,11 +1,20 @@
 import { IElement } from '~/interfaces/elements'
+import { IRawDataset, IRawColumn, IDatasets, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
+import mixins from './mixins'
+
+const DEFAULTCOLUMNWIDTH = '70px'
+var $methods: any
+
+setTimeout(() => {
+  $methods = mixins.methods
+}, 100)
+
 
 class Element {
 
   element: IElement
   resizerQuery: string
   $el: HTMLElement
-  pageCoordinates: object
 
   constructor($el: HTMLElement, resizerQuery: string, element: IElement) {
     this.$el = $el
@@ -36,14 +45,13 @@ class Element {
         originalTop = element.offsetTop
         startX = e.clientX
         startY = e.clientY
-        startWidth = parseInt(document.defaultView.getComputedStyle(element).width, 10)
-        startHeight = parseInt(document.defaultView.getComputedStyle(element).height, 10)
+        startWidth = parseInt(document.defaultView!.getComputedStyle(element).width, 10)
+        startHeight = parseInt(document.defaultView!.getComputedStyle(element).height, 10)
         document.onmousemove = (e) => doDrag(e, resizer)
         document.onmouseup = stopDrag
       }
     }
     function doDrag(e: any, resizer: HTMLElement): void {
-      var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
 
       if (resizer.className.includes('right')) {
 
@@ -239,54 +247,54 @@ class Element {
    */
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean {
     return true
-    var elementSettings = this.element
-    var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
+    // var elementSettings = this.element
+    // var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
 
-    if (pos === 'top') {
-      // if element doesn't go out of page from top
-      if (element.offsetTop - newVal > 0)
-        // if element doesn't go out of page from bottom
-        if (element.offsetTop + element.offsetHeight - newVal < pageCoordinates.height) {
-          // if element is on top of element or containg section
-          var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-          if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-            return true
-        }
-    }
+    // if (pos === 'top') {
+    //   // if element doesn't go out of page from top
+    //   if (element.offsetTop - newVal > 0)
+    //     // if element doesn't go out of page from bottom
+    //     if (element.offsetTop + element.offsetHeight - newVal < pageCoordinates.height) {
+    //       // if element is on top of element or containg section
+    //       var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
+    //       if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
+    //         return true
+    //     }
+    // }
 
-    else if (pos === 'left') {
-      // if element doesn't go out of page from left
-      if (element.offsetLeft - newVal > 0)
-        // if element doesn't go out of page from right
-        if (element.offsetLeft + element.offsetWidth - newVal < pageCoordinates.width) {
-          // if element is on top of element or containg section
-          var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-          if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-            return true
-        }
-    }
+    // else if (pos === 'left') {
+    //   // if element doesn't go out of page from left
+    //   if (element.offsetLeft - newVal > 0)
+    //     // if element doesn't go out of page from right
+    //     if (element.offsetLeft + element.offsetWidth - newVal < pageCoordinates.width) {
+    //       // if element is on top of element or containg section
+    //       var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
+    //       if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
+    //         return true
+    //     }
+    // }
 
-    else if (pos === 'width') {
-      // if element doesn't go out of page from right
-      if (element.offsetLeft + element.offsetWidth - newVal < pageCoordinates.width) {
-        // if element is on top of element or containg section
-        var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-        if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-          return true
+    // else if (pos === 'width') {
+    //   // if element doesn't go out of page from right
+    //   if (element.offsetLeft + element.offsetWidth - newVal < pageCoordinates.width) {
+    //     // if element is on top of element or containg section
+    //     var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
+    //     if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
+    //       return true
 
-      }
-    }
+    //   }
+    // }
 
-    if (pos === 'height') {
-      // if element doesn't go out of page from bottom
-      if (element.offsetTop + element.offsetHeight - newVal < pageCoordinates.height) {
-        // if element is on top of element or containg section
-        var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-        if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-          return true
-      }
-    }
-    return false
+    // if (pos === 'height') {
+    //   // if element doesn't go out of page from bottom
+    //   if (element.offsetTop + element.offsetHeight - newVal < pageCoordinates.height) {
+    //     // if element is on top of element or containg section
+    //     var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
+    //     if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
+    //       return true
+    //   }
+    // }
+    // return false
   }
 
   cleanedCoordinates(): object {
@@ -303,4 +311,108 @@ class Element {
   }
 
 }
+
+/**
+ * @param {Object} sets - Raw dataset.
+ * @return {Object} - Prepared dataset.
+ */
+function prepareDataSets(sets: IRawDatasets): IDatasets {
+
+  var tmp: object = {}
+  var keys: string[] = Object.keys(sets)
+  var preparedSets: any = {}
+
+  for (let set of keys) {
+    var thisSet: IRawDataset = $methods.clone(sets[set]) // removing refrence to the original data.
+    tmp = {
+      options: {
+        id: $methods.idGenerator(5),
+        configs: {
+          columns: prepareDataSetColumns(thisSet.columns),
+          rows: prepareDataSetRows(thisSet.rows || []),
+          title: thisSet.title,
+          key: thisSet.key
+        },
+      }
+    }
+    preparedSets[set] = tmp
+  }
+  return preparedSets
+}
+
+/**
+ * Preparing columns for dataset element.
+ * @param {Object} columns - Raw columns.
+ * @return {Object} - Prepared columns.
+ */
+function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
+
+  let tmp = {}
+  var preparedColumns = []
+
+  for (let index = 0; index < columns.length; index++) {
+    var col = columns[index]
+
+    tmp = {
+      columns: col.columns || [], // if child has column
+      title: col.title,
+      key: col.key,
+      isActive: true,
+      hasResizer: columns.indexOf(col) !== columns.length - 1,
+      type: 'column',
+      options: {
+        id: $methods.idGenerator(5),
+        styles: {
+          width: col.options.styles.width ? col.options.styles.width : DEFAULTCOLUMNWIDTH,
+        },
+      }
+    }
+
+    preparedColumns[index] = tmp
+  }
+
+  return preparedColumns as IColumn[]
+}
+
+/** converting normal row object to dataset row objects
+ * @param {Object} rows - Raw rows.
+ * @return {Object} - Prepared rows.
+ */
+function prepareDataSetRows(rows: any): IRow[] {
+
+  var preparedRows = []
+
+  for (let index = 0; index < rows.length; index++) {
+    var objectKeys = Object.keys(rows[index])
+    var tempRow: IRow = {
+      type: 'row',
+      options: {
+        id: $methods.idGenerator(5),
+        styles: {},
+        configs: {
+          cells: {}
+        }
+      },
+    }
+
+    for (let key of objectKeys) {
+      tempRow.options.configs.cells[key] = {
+        type: 'cell',
+        isActive: true,
+        options: {
+          id: $methods.idGenerator(5),
+          styles: {},
+          configs: {
+            value: rows[index][key]
+          },
+        }
+      }
+    }
+    preparedRows[index] = tempRow
+  }
+
+  return preparedRows
+}
+
 export default Element
+export { prepareDataSets, prepareDataSetColumns, prepareDataSetRows }

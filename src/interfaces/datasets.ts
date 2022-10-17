@@ -30,9 +30,8 @@ interface IRawColumn {
   title: string
   columns?: IRawColumn[]
   options: {
-    styles: any,
-    readonly id: string
-  } 
+    styles?: any
+  }
 }
 
 interface IColumn extends IRawColumn {
@@ -41,7 +40,7 @@ interface IColumn extends IRawColumn {
   isActive: boolean
   options: {
     readonly id: string
-    styles: object
+    styles?: any
   }
 }
 interface ICellValue {

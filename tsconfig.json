@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "resolveJsonModule": true,
+    "downlevelIteration": true,
     "paths": {
       "@/*": ["src/*"],
       "~/*": ["src/*"],
