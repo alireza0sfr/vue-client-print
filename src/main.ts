@@ -1,13 +1,9 @@
 import { createApp } from 'vue-demi'
 import App from './App.vue'
-// @ts-ignore
-import { createLocalI18n } from './plugins/i18n.ts'
-// @ts-ignore
-import mixins from './plugins/mixins.ts'
-// @ts-ignore
-import componentRegisterer from './plugins/components.ts'
-// @ts-ignore
-import piniaInstance from '~/plugins/pinia-instance.ts'
+import { createLocalI18n } from './plugins/i18n'
+import mixins from './plugins/mixins'
+import componentRegisterer from './plugins/components'
+import piniaInstance from '~/plugins/pinia-instance'
 
 const app = createApp(App)
 

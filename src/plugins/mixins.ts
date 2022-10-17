@@ -1,21 +1,11 @@
-// @ts-ignore
-import ElementClass from '~/plugins/element-utilities.ts'
-
-// @ts-ignore
-import { ISettings } from '~/interfaces/general.ts'
-// @ts-ignore
-import { IElement } from '~/interfaces/elements.ts'
-// @ts-ignore
-import { IMixins } from '~/interfaces/general.ts'
-// @ts-ignore
-import { prepareDataSetRows, prepareDataSetColumns } from './dataset-utils.ts'
-// @ts-ignore
-import { IRawColumn, IDatasets, IColumn } from '~/interfaces/datasets.ts'
-
-// @ts-ignore
-import { useBindingObjectStore } from '~/stores/binding-object.ts'
-// @ts-ignore
-import piniaInstance from '~/plugins/pinia-instance.ts'
+import ElementClass from '~/plugins/element-utilities'
+import { ISettings } from '~/interfaces/general'
+import { IElement } from '~/interfaces/elements'
+import { IMixins } from '~/interfaces/general'
+import { prepareDataSetRows, prepareDataSetColumns } from './dataset-utils'
+import { IRawColumn, IDatasets, IColumn } from '~/interfaces/datasets'
+import { useBindingObjectStore } from '~/stores/binding-object'
+import piniaInstance from '~/plugins/pinia-instance'
 
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
 

@@ -1,7 +1,5 @@
-// @ts-ignore
-import { IRawDataset } from './datasets.ts'
-// @ts-ignore
-import { IElement } from './elements.ts'
+import { IRawDataset } from './datasets'
+import { IElement } from './elements'
 
 interface ISettings {
   header: {

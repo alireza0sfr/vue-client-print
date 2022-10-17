@@ -1,5 +1,4 @@
-// @ts-ignore
-import { IElement } from '~/interfaces/elements.ts'
+import { IElement } from '~/interfaces/elements'
 
 class Element {
 

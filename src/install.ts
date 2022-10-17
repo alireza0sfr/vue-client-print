@@ -1,9 +1,6 @@
-// @ts-ignore
-import componentRegisterer from './plugins/components.ts'
-// @ts-ignore
-import mixins from './plugins/mixins.ts'
-// @ts-ignore
-import { createLocalI18n } from './plugins/i18n.ts'
+import componentRegisterer from './plugins/components'
+import mixins from './plugins/mixins'
+import { createLocalI18n } from './plugins/i18n'
 
 const _encode2Base64 = mixins.methods.encode2Base64
 const _decodeFromBase64 = mixins.methods.decodeFromBase64

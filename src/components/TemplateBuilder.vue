@@ -716,14 +716,10 @@
 </template>
 
 <script lang="ts">
-	// @ts-ignore
-	import { IElement, IVariable } from '~/interfaces/elements.ts'
-	// @ts-ignore
-	import { ISettings } from '~/interfaces/general.ts'
-	// @ts-ignore
-	import { fetchLangList } from '~/translations.ts'
-	// @ts-ignore
-	import { prepareDataSets } from '~/plugins/dataset-utils.ts'
+	import { IElement, IVariable } from '~/interfaces/elements'
+	import { ISettings } from '~/interfaces/general'
+	import { fetchLangList } from '~/translations'
+	import { prepareDataSets } from '~/plugins/dataset-utils'
 	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",

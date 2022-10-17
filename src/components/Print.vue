@@ -85,10 +85,8 @@
 </template>
 
 <script lang="ts">
-	// @ts-ignore
-	import { IVariable } from '~/interfaces/elements.ts'
-	// @ts-ignore
-	import { ISettings, IConfigs } from '~/interfaces/general.ts'
+	import { IVariable } from '~/interfaces/elements'
+	import { ISettings, IConfigs } from '~/interfaces/general'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
 	import DefaultLogo from '@/assets/images/logo.png'
