@@ -45,6 +45,10 @@ module.exports = {
         text: 'API',
         link: '/apis/'
       },
+      {
+        text: 'Interfaces',
+        link: '/interfaces/'
+      },
       // {
       //   text: 'Playground',
       //   link: '/playground/'
