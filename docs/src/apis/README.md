@@ -4,9 +4,10 @@ sidebar: auto
 
 # API
 
-## clone
+## Clone
 
 Make a copy of nested objects like [lodash cloneDeep](https://lodash.com/docs/4.17.15#cloneDeep).
+
 - Type: `function`
 - Params: `object`
 - Return: `object`
@@ -17,7 +18,7 @@ import { clone } from 'vcp'
 clone(object: object): object
 ```
 
-## merge
+## Merge
 
 Merge array of objects like [lodash merge](https://lodash.com/docs/4.17.15#merge).
 
@@ -31,7 +32,7 @@ import { merge } from 'vcp'
 merge(...objects): object
 ```
 
-## idGenerator
+## IdGenerator
 
 Generate unique id.
 
@@ -45,7 +46,7 @@ import { idGenerator } from 'vcp'
 idGenerator(n: integer): string
 ```
 
-## encode2Base64
+## Encode2Base64
 
 Encode given string to base64.
 
@@ -59,7 +60,7 @@ import { encode2Base64 } from 'vcp'
 encode2Base64(string: string): string
 ```
 
-## decodeFromBase64
+## DecodeFromBase64
 
 Decode given string from base64.
 
@@ -71,4 +72,69 @@ Decode given string from base64.
 ```ts
 import { decodeFromBase64 } from 'vcp'
 decodeFromBase64(string: string): string
+```
+
+## BindingObjectGenerator
+
+Generate nested object to key value pairs understandable for [bindingObject](/guide/elements/bindingobject)
+
+- Type: `function`
+- Params:
+
+  - source: `given object with nested key value pairs`
+  - display: `display object to customize which properties to be used as value`
+
+- Return: `string`
+- Sample:
+
+```ts
+import { bindingObjectGenerator } from 'vcp'
+
+    var nestedObj = {
+      a: {
+        b: {
+          c: 'found'
+          }
+        }
+      }
+
+    var nestedObjWithArray = {
+      a: {
+        b: [
+          {
+            c: 'found'
+          },
+          {
+            d: 'not found'
+          }
+        ]
+      }
+    }
+
+    var obj = {
+      string: 'found',
+      withoutDisplay: 'found',
+      function: 'f',
+      nestedObj,
+      nestedObjWithArray,
+      nullValue: null
+    }
+
+    var displays = {
+      string: '',
+      function: (property: string): string => property += 'ound',
+      nestedObj: 'a.b.c',
+      nestedObjWithArray: 'a.b[0].c',
+    }
+
+    var result = {
+      string: 'found',
+      withoutDisplay: 'found',
+      function: 'found',
+      nestedObj: 'found',
+      nestedObjWithArray: 'found',
+      nullValue: null
+    }
+
+bindingObjectGenerator(source: object[], displays: object[]): object[]
 ```

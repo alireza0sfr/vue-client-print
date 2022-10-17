@@ -23,4 +23,8 @@ type classType =
   'textpattern' | 'variable' |
   'dataset' | 'row' | 'column'
 
-export { IElement, IVariable, classType }
+interface IBindingObject {
+  [key: string]: string
+}
+
+export { IElement, IVariable, IBindingObject, classType }
