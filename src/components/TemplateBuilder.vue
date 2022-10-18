@@ -62,7 +62,7 @@
 													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 												<div class="variables-content-field large" v-if="variable.type === 'image'">
-													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
+													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId, locals.fileEntryTypes.imageVariable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
 													<img @click="deleteVariable(variable.uniqueId)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
@@ -90,7 +90,7 @@
 								</div>
 								<div style="display:none" class="toolbar-content-row">
 									<div class="variables-content-field">
-										<input type="file" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
+										<input type="file" @change="onFileChange(null, locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
 									</div>
 								</div>
 							</div>
@@ -330,7 +330,7 @@
 											</div>
 										</div>
 										<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === 'imageelement'">
-											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
+											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(null, locals.fileEntryTypes.imageElement)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
 											<div class="toolbar-content-label">
@@ -717,6 +717,7 @@
 
 <script lang="ts">
 	import { IElement, IVariable } from '~/interfaces/elements'
+	import { fileEntryTypes } from '~/enums/general'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { prepareDataSets } from '~/plugins/element-utilities'
@@ -731,6 +732,7 @@
 		data() {
 			return {
 				locals: {
+					fileEntryTypes: fileEntryTypes,
 					selectedSection: null,
 					fullScreen: false,
 					templateHeight: 11.7,
@@ -1493,66 +1495,58 @@
 			 * @param {uniqueId} uniqueId - variable | element unique id
 			 * @return {void} - void
 			 */
-			onFileChange(uniqueId: string): void {
+			onFileChange(uniqueId: string, type: fileEntryTypes): void {
 				let maximumFileSize = this.configurations.maximumFileSize * 1000
-				let that = this // Storing this value to be able to use it inside a function
+				var file
 
-				switch (this.locals.selectedElement.type) {
-					case 'imageelement':
-						let image = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
+				const fileValidator = (file: any, maximumFileSize: number, validTypes: string[]) => {
 
+					if (validTypes.length && !validTypes.includes(file.type))
+						return alert(this._$t('template-builder.alerts.format-notsupported'))
 
-						if (image.type !== 'image/jpeg' && image.type !== 'image/png')
-							return alert(this._$t('template-builder.alerts.format-notsupported'))
+					if (file.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
+						return alert(this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize } ))
+					
+					return true
+				}
 
-						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert(this._$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
+				const getFile = (id: string) => (<HTMLInputElement>document.getElementById(id)).files[0]
 
-						this.toBase64(image).then((res) => {
-							this.locals.selectedElement.options.configs.imageSrc = res
-						})
+				switch (type) {
+					case fileEntryTypes.imageElement:
+
+						file = getFile('elementImageFileControl')
+
+						if(fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
+							this.toBase64(file).then(res => this.locals.selectedElement.options.configs.imageSrc = res )
+						
 						break
 
-					case 'variable':
-						let variables: IVariable[] = this.locals.variables
-						let variable
+					case fileEntryTypes.imageVariable:
+						let variable = this.locals.variables.find(x => x['uniqueId'] === uniqueId)
 
-						for (let index = 0; index < variables.length; index++) {
-							if (variables[index].uniqueId === uniqueId) {
-								variable = variables[index]
-							}
-						}
-						image = (<HTMLInputElement>document.getElementById('variableImageFileControl')).files[0]
+						file = getFile('variableImageFileControl')
 
-						// @ts-ignore
-						if (image.type !== "image/jpeg" || image.type !== "image/png")
-							return alert(this._$t('template-builder.alerts.format-notsupported'))
-
-						if (image.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-							return alert(this._$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
-
-						this.toBase64(image).then((res) => {
-							variable.context = res
-						})
+						if(fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
+							this.toBase64(file).then(res => variable.context = res)
+						
 						break
+					
+					case fileEntryTypes.VCPSrcFile:
+					default:
 
-					default: // if its a source file
-						let fileSrc = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
+						file = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
-						if (!fileSrc.name.includes('.vcp')) { // Checking the file type
+						if (!file.name.includes('.vcp'))
 							return alert(this._$t('template-builder.alerts.format-notsupported'))
-						}
 
-						if (fileSrc.size >= maximumFileSize) { // Check if the file size is under 1MB the image size value is in bytes
-							return alert(this._$t('template-builder.alerts.fileSize-exceeded', {size: this.configurations.maximumFileSize}))
-						}
-						var fr = new FileReader()
-						fr.readAsText(fileSrc)
-						fr.onload = function () {
-							that.importFromSrcFile(fr.result)
-						}
-						fr.onerror = function (err) {
-							alert(err)
+						if(fileValidator(file, maximumFileSize, [])) {
+
+							var fr = new FileReader()
+							fr.readAsText(file)
+							fr.onload = () => this.importFromSrcFile(fr.result)
+							fr.onerror = (err) => alert(err)
+					
 						}
 						break
 				}
