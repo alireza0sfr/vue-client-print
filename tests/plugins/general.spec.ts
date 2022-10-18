@@ -43,7 +43,9 @@ describe('BindingObjectGenerator', () => {
       function: 'f',
       nestedObj,
       nestedObjWithArray,
-      nullValue: null
+      nullValue: null,
+      integer: 12,
+      float: 12.5
     }
 
     var displays = {
@@ -59,7 +61,9 @@ describe('BindingObjectGenerator', () => {
       function: 'found',
       nestedObj: 'found',
       nestedObjWithArray: 'found',
-      nullValue: null
+      nullValue: null,
+      integer: 12,
+      float: 12.5,
     }
 
     expect(BindingObjectGenerator(obj, displays)).toEqual(result)

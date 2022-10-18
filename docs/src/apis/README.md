@@ -83,7 +83,6 @@ Generate nested object to key value pairs understandable for [bindingObject](/gu
 
   - source: `given object with nested key value pairs`
   - display: `display object to customize which properties to be used as value`
-
 - Return: `string`
 - Sample:
 
@@ -117,7 +116,9 @@ import { bindingObjectGenerator } from 'vcp'
       function: 'f',
       nestedObj,
       nestedObjWithArray,
-      nullValue: null
+      nullValue: null,
+      integer: 12,
+      float: 12.5
     }
 
     var displays = {
@@ -133,7 +134,9 @@ import { bindingObjectGenerator } from 'vcp'
       function: 'found',
       nestedObj: 'found',
       nestedObjWithArray: 'found',
-      nullValue: null
+      nullValue: null,
+      integer: 12,
+      float: 12.5
     }
 
 bindingObjectGenerator(source: object[], displays: object[]): object[]

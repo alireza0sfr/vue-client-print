@@ -12,8 +12,8 @@ function BindingObjectGenerator(source: any, displays: any): IBindingObject {
     if (!source[key])
       newObj[key] = null
 
-    // if property is string or without display
-    else if (typeof source[key] === 'string' && !currentDisplay)
+    // if property is (string or number) and without display
+    else if ((typeof source[key] === 'string' || typeof source[key] === 'number') && !currentDisplay)
       newObj[key] = source[key]
 
     // if propperty has function as display
