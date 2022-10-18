@@ -7,6 +7,10 @@
     },
     "template-builder": {
       "name": "Template Builder",
+      "alerts": {
+        "format-notsupported": "File format is not supported!",
+        "fileSize-exceeded": "File size is too large!"
+      },
       "variables": {
         "type": "Type",
         "variables": "Variables",

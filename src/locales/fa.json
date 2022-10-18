@@ -3,11 +3,15 @@
       "name": "چاپ",
       "print-preview": "پیش نمایش پرینت",
       "edit": "ویرایش",
-      "proccessing": "در حال ویرایش"
+      "proccessing": "در حال آماده سازی"
     },
     "template-builder": {
       "name": "طراح چاپ",
       "settings": "تنظیمات",
+      "alerts": {
+        "format-notsupported": "فرمت فایل پشتیبانی نمی شود",
+        "fileSize-exceeded": "حجم فایل انتخابی از حجم مجاز بیشتر است."
+      },
       "variables": {
         "variables": "متغیرها",
         "name": "نام",
