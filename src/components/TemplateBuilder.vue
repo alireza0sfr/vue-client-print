@@ -827,7 +827,7 @@
 		},
 		watch: {
 			options: {
-				deep: true,
+				// deep: true,
 				immediate: true,
 				handler(val) {
 					this.prepareSettings(val)
