@@ -416,19 +416,19 @@
 										</div>
 									</div>
 
-									<div v-if="locals.selectedElement.type === 'dataset'">
+									<div :set="dataSets = locals.selectedElement.options.configs.dataSets" v-if="locals.selectedElement.type === 'dataset'">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="option in Object.keys(locals.selectedElement.options.configs.dataSets)" :value="option" :key="option">{{ option }}</option>
+													<option v-for="dataset in Object.keys(dataSets)" :value="dataset" :key="dataset">{{ dataSets[dataset].options.configs.title }}</option>
 												</select>
 											</div>
 										</div>
 
-										<div v-for="(col, index) in locals.selectedElement.options.configs.dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
+										<div v-for="(col, index) in dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
 											<div :dir="settings.pageDirections" class="toolbar-content-label">
 												<label style="margin-right: 10px; display:flex" :for="`dataSetColumnsControl${index}`">
 													<input type="checkbox" class="input-form-control" v-model="col.isActive" :id="`dataSetColumnsControl${index}`" />
@@ -440,14 +440,14 @@
 											</div>
 										</div>
 									</div>
-									<div v-if="locals.selectedElement.type === 'repeator'">
+									<div :set="dataSets = locals.selectedElement.options.configs.dataSets" v-if="locals.selectedElement.type === 'repeator'">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="option in Object.keys(locals.selectedElement.options.configs.dataSets)" :value="option" :key="option">{{ option }}</option>
+													<option v-for="dataset in Object.keys(dataSets)" :value="dataset" :key="dataset">{{ dataSets[dataset].options.configs.title }}</option>
 												</select>
 											</div>
 										</div>
