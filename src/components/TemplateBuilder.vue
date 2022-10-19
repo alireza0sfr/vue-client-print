@@ -972,7 +972,6 @@
 			save(): void {
 				// Closing the template builder modal after save
 				let settings: ISettings = this.export2Json()
-				document.getElementById("templateBuilderModal").style.display = "none"
 
 				// this.terminateCopyPaste()
 
