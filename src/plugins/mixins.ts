@@ -37,19 +37,31 @@ var mixins: IMixins = {
     /**
      * converts given pixel to inch.
      * @param {Number} pixels - pixels
-     * @return {String} - given pixel to intches
+     * @return {String} - given pixel to intches returns 0 if number is NaN
      */
-    convert2Inches(pixels: number): string {
-      return (pixels / 96).toFixed(2)
+    convert2Inches(pixels: number): number {
+
+      var number = parseFloat((pixels / 96).toFixed(2))
+
+      if (Number.isNaN(number))
+        return 0
+
+      return number
     },
 
     /**
      * converts given inch to pixel.
      * @param {Number} inches - inches
-     * @return {String} - given inches to pixels
+     * @return {Number} - given inches to pixels returns 0 if number is NaN
      */
-    convert2Pixels(inches: number): string {
-      return (inches * 96).toFixed(2)
+    convert2Pixels(inches: number): number {
+
+      var number = parseFloat((inches * 96).toFixed(2))
+
+      if (Number.isNaN(number))
+        return 0
+
+      return number
     },
 
     /**

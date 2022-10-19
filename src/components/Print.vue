@@ -141,7 +141,7 @@
 				}
 				var bodyHeight = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height // body height in pixels
 				this.settings.body.height = this.convert2Inches(bodyHeight) // body height in inches
-				parent.style.height = this.settings.beforeBody.height + parseFloat(this.settings.body.height) + this.settings.afterBody.height + 'in'
+				parent.style.height = this.settings.beforeBody.height + this.settings.body.height + this.settings.afterBody.height + 'in'
 			},
 
 			/**

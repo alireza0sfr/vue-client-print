@@ -1053,26 +1053,16 @@
 			 */
 			settingsInitFunc(): void {
 				setTimeout(() => {
-					this.dragManager(['header', 'before-body', 'after-body', 'footer'])
+					this.sectionResizeHandler(['header', 'before-body', 'after-body', 'footer'])
 					this.locals.scale = 1
 				}, 100)
 			},
 
 			/**
-			 * converts given pixel to inch.
-			 * @param {Number} pixels - pixels
-			 * @return {String} - given pixel to intches
-			 */
-			convert2Inches(pixels: number): string {
-				return (pixels / 96).toFixed(2)
-			},
-
-
-			/**
-			 * Init drag functionality for sections.
+			 * Init resize functionality for sections.
 			 * @return {void} - void
 			 */
-			dragManager(sections: string[]): void {
+			sectionResizeHandler(sections: string[]): void {
 
 				for (let sectionName of sections) {
 					let section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
@@ -1085,11 +1075,9 @@
 
 					var startY, startHeight, parentHeight
 
-					let that = this // Storing this value to that to be able to use it inside of the functions
-
-					function initDrag(e, section) {
+					const initDrag = (e, section) => {
 						startY = e.clientY
-						parentHeight = that.locals.templateHeight
+						parentHeight = this.locals.templateHeight
 
 						startHeight = parseInt(document.defaultView.getComputedStyle(section).height, 10)
 
@@ -1097,26 +1085,26 @@
 						document.documentElement.addEventListener("mouseup", stopDrag, false)
 					}
 
-					function doDrag(e) {
+					const doDrag = (e) => {
 						if (sectionName === 'header')
-							that.settings.header.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
+							this.settings.header.height = this.convert2Inches(startHeight + e.clientY - startY)
 
 						else if (sectionName === 'before-body') {
-							that.settings.beforeBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
-							that.locals.templateHeight = parentHeight + parseFloat(that.settings.beforeBody.height) - parseFloat(that.convert2Inches(startHeight))
+							this.settings.beforeBody.height = this.convert2Inches(startHeight + e.clientY - startY)
+							this.locals.templateHeight = parentHeight + this.settings.beforeBody.height - this.convert2Inches(startHeight)
 						}
 
 						else if (sectionName === 'after-body') {
-							that.settings.afterBody.height = that.convert2Inches(startHeight + e.clientY - startY) > 0 ? that.convert2Inches(startHeight + e.clientY - startY) : 0
-							that.locals.templateHeight = parentHeight + parseFloat(that.settings.afterBody.height) - parseFloat(that.convert2Inches(startHeight))
+							this.settings.afterBody.height = this.convert2Inches(startHeight + e.clientY - startY)
+							this.locals.templateHeight = parentHeight + this.settings.afterBody.height - this.convert2Inches(startHeight)
 						}
 
 						else // its footer
-							that.settings.footer.height = that.convert2Inches(startHeight - e.clientY + startY) > 0 ? that.convert2Inches(startHeight - e.clientY + startY) : 0
+							this.settings.footer.height = this.convert2Inches(startHeight - e.clientY + startY)
 
 					}
 
-					function stopDrag(e) {
+					const stopDrag = (e) => {
 						document.documentElement.removeEventListener("mousemove", doDrag, false)
 						document.documentElement.removeEventListener("mouseup", stopDrag, false)
 					}

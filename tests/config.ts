@@ -1,4 +1,8 @@
 import { config } from '@vue/test-utils'
-//@ts-ignore
-import mixins from '../src/plugins/mixins.ts'
+import mixins from '../src/plugins/mixins'
+
 config.global.mixins = [mixins]
+config.global.mocks = {
+  _$t: (text: string): string => text,
+  _$i18n: { locale: ['en', 'fa'] }
+}
