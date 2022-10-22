@@ -14,7 +14,7 @@
 					</div>
 
 					<div>
-						<span id="TemplateBuilderModalCloseBtn" class="close-btn">&times;</span>
+						<span id="TemplateBuilderModalCloseBtn" @click="closeModal('templateBuilderModal')" class="close-btn">&times;</span>
 					</div>
 				</div>
 
@@ -721,6 +721,7 @@
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { prepareDataSets } from '~/plugins/element-utilities'
+	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	export default {
 		name: "TemplateBuilder",
@@ -741,7 +742,7 @@
 						{
 							type: 'row',
 							options: {
-								id: this.idGenerator(5),
+								id: idGenerator(5),
 								parent: this.options.parent,
 								styles: {},
 								configs: {
@@ -750,7 +751,7 @@
 											type: 'cell',
 											isActive: true,
 											options: {
-												id: this.idGenerator(5),
+												id: idGenerator(5),
 												styles: {},
 												parent: this.options.parent,
 												configs: {
@@ -766,17 +767,17 @@
 					rowStylesTargets: [
 						{
 							key: 'all',
-							id: this.idGenerator(5),
+							id: idGenerator(5),
 							title: this._$t('template-builder.elements.configs.all')
 						},
 						{
 							key: 'even',
-							id: this.idGenerator(5),
+							id: idGenerator(5),
 							title: this._$t('template-builder.elements.configs.even')
 						},
 						{
 							key: 'odd',
-							id: this.idGenerator(5),
+							id: idGenerator(5),
 							title: this._$t('template-builder.elements.configs.odd')
 						},
 					],
@@ -822,7 +823,7 @@
 					selectedElement: this.getDefaultSelectedElementObject(),
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
-				settings: this.getDefaultSettings(),
+				settings: getDefaultSettings(),
 			}
 		},
 		watch: {
@@ -830,17 +831,23 @@
 				// deep: true,
 				immediate: true,
 				handler(val) {
-					this.prepareSettings(val)
+					prepareSettings(val, this.settings, this.bindingObject)
 					this.settings.dataSets = prepareDataSets(this.settings.dataSets)
 				},
 			}
 		},
 		mounted() {
 			this.initCopyPaste()
-			this.modalManager('templateBuilderModal', 'TemplateBuilderModalCloseBtn')
 			this.keyboardHandler()
 		},
 		methods: {
+
+			/**
+			 * Temp method to close modal before refactoring modal
+			 */
+			closeModal(id: string): void {
+      	document.getElementById(id)!.style.display = 'none'
+			},
 
 			/**
 			 * Deselect Section.
@@ -917,7 +924,7 @@
 					return
 
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
-					this.locals.copiedElement = this.clone(this.locals.selectedElement)
+					this.locals.copiedElement = clone(this.locals.selectedElement)
 			},
 			/**
 			 * Paste copied element.
@@ -930,7 +937,7 @@
 				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
 					var parent = this.locals.selectedElement.options.parent
 					var array = this.settings[parent][`${parent}Elements`]
-					this.locals.copiedElement.options.id = this.idGenerator(5)
+					this.locals.copiedElement.options.id = idGenerator(5)
 					this.locals.copiedElement.options.styles.top = '0px'
 
 					if (this.locals.copiedElement.options.repeatorId) {
@@ -999,7 +1006,7 @@
 			 */
 			export2SrcFile(): void {
 				let settings: ISettings = this.export2Json()
-				settings = this.encode2Base64(JSON.stringify(settings)) // encoding the settings to export
+				settings = encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
 				var currentdate = new Date()
 				var defaultDesignName = 'vcp' + "_"
@@ -1023,8 +1030,8 @@
 			 */
 			importFromSrcFile(srcFile: File): void {
 				var callback = this.settings.callback || null
-				this.settings = this.getDefaultSettings() // Set the settings to default value
-				this.settings = this.merge(this.settings, JSON.parse(this.decodeFromBase64(srcFile))) // assign the changes
+				this.settings = getDefaultSettings() // Set the settings to default value
+				this.settings = merge(this.settings, JSON.parse(decodeFromBase64(srcFile))) // assign the changes
 
 
 				if (this.settings.variables)
@@ -1086,20 +1093,20 @@
 
 					const doDrag = (e) => {
 						if (sectionName === 'header')
-							this.settings.header.height = this.convert2Inches(startHeight + e.clientY - startY)
+							this.settings.header.height = convert2Inches(startHeight + e.clientY - startY)
 
 						else if (sectionName === 'before-body') {
-							this.settings.beforeBody.height = this.convert2Inches(startHeight + e.clientY - startY)
-							this.locals.templateHeight = parentHeight + this.settings.beforeBody.height - this.convert2Inches(startHeight)
+							this.settings.beforeBody.height = convert2Inches(startHeight + e.clientY - startY)
+							this.locals.templateHeight = parentHeight + this.settings.beforeBody.height - convert2Inches(startHeight)
 						}
 
 						else if (sectionName === 'after-body') {
-							this.settings.afterBody.height = this.convert2Inches(startHeight + e.clientY - startY)
-							this.locals.templateHeight = parentHeight + this.settings.afterBody.height - this.convert2Inches(startHeight)
+							this.settings.afterBody.height = convert2Inches(startHeight + e.clientY - startY)
+							this.locals.templateHeight = parentHeight + this.settings.afterBody.height - convert2Inches(startHeight)
 						}
 
 						else // its footer
-							this.settings.footer.height = this.convert2Inches(startHeight - e.clientY + startY)
+							this.settings.footer.height = convert2Inches(startHeight - e.clientY + startY)
 
 					}
 
@@ -1160,13 +1167,13 @@
 			createElement(parent: string, e: any): IElement {
 				let classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
-				var clonedDataset = this.clone(this.settings.dataSets)
+				var clonedDataset = clone(this.settings.dataSets)
 				let tmp
 
 				var defaultElementObject: IElement = {
 					type: classType,
 					options: {
-						id: this.idGenerator(5),
+						id: idGenerator(5),
 						parent: parent,
 						grandParent: 'TemplateBuilder',
 						styles: {
@@ -1179,7 +1186,7 @@
 				switch (classType) {
 					case 'repeator':
 
-						if(this.isEmpty(this.settings.dataSets)) {
+						if(isEmpty(this.settings.dataSets)) {
 							alert('[VCP] DataSet is empty')
 							throw Error('[VCP] DataSet is empty')
 						}
@@ -1206,7 +1213,7 @@
 						break
 					case 'dataset':
 
-						if(this.isEmpty(this.settings.dataSets)) {
+						if(isEmpty(this.settings.dataSets)) {
 							alert('[VCP] DataSet is empty')
 							throw Error('[VCP] DataSet is empty')
 						}
@@ -1340,7 +1347,7 @@
 					default:
 						break
 				}
-				return this.merge(defaultElementObject, tmp)
+				return merge(defaultElementObject, tmp)
 			},
 
 			/**
@@ -1349,7 +1356,7 @@
 			 */
 			createVariable(): void {
 				let tmp: IVariable = {
-					uniqueId: this.idGenerator(5),
+					uniqueId: idGenerator(5),
 					name: '',
 					type: 'text',
 					context: '',
@@ -1435,13 +1442,13 @@
 					if (element.options.repeatorId)
 						sectionHeight -= 20
 
-					elementWidth = this.toFloatVal(elementWidth)
-					elementHeight = this.toFloatVal(elementHeight)
+					elementWidth = toFloatVal(elementWidth)
+					elementHeight = toFloatVal(elementHeight)
 
-					if (elementWidth + this.toFloatVal(element.options.styles.left) > sectionWidth)
+					if (elementWidth + toFloatVal(element.options.styles.left) > sectionWidth)
 						element.options.styles.left = sectionWidth - elementWidth + 'px'
 
-					if (elementHeight + this.toFloatVal(element.options.styles.top) > sectionHeight)
+					if (elementHeight + toFloatVal(element.options.styles.top) > sectionHeight)
 						element.options.styles.top = sectionHeight - elementHeight + 'px'
 
 					return element
@@ -1456,7 +1463,7 @@
 					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = this.merge(elem.options.configs.dataSets, this.computeDatasetOptions(displaySet.options.configs.columns, displaySet.options.configs.key))
+						elem.options.configs.dataSets = merge(elem.options.configs.dataSets, this.computeDatasetOptions(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
@@ -1710,12 +1717,12 @@
 						var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
 						index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
 						if (index > -1)
-							children[index].options.styles = this.merge(children[index].options.styles, this.getCoordinates(children[index].options.id))
+							children[index].options.styles = merge(children[index].options.styles, this.getCoordinates(children[index].options.id))
 					}
 				}
 
 				let elem = array.find(x => x.options.id === element.options.id)
-				elem.options.styles = this.merge(elem.options.styles, this.getCoordinates(element.options.id))
+				elem.options.styles = merge(elem.options.styles, this.getCoordinates(element.options.id))
 			},
 
 			/**

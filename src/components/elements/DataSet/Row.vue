@@ -5,7 +5,8 @@
 </template>
 
 <script>
-	import ElementClass from '~/plugins/element-utilities.ts'
+	import { merge } from '~/plugins/general-utilities'
+	import ElementClass, {initElementStyles} from '~/plugins/element-utilities.ts'
 	export default {
 		name: "Row",
 		props: {
@@ -35,21 +36,21 @@
 
 					this.$emit('styles-target-changed', val.configs.stylesTarget)
 
-					this.settings = this.merge(this.settings, val)
-					this.settings.styles = this.initStyles(this.settings.styles)
+					this.settings = merge(this.settings, val)
+					this.settings.styles = initElementStyles(this.settings.styles)
 				},
 			},
 		},
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				this.Initialize()
+				this.initialize()
 			}
 		},
 		methods: {
 			/**
 			 * Initializing the element utilities for the created element
 			 */
-			Initialize() {
+			initialize() {
 				let elem = new ElementClass(this.$refs.element, `column-${this.settings.id}`, this.settings)
 				elem.clickable()
 			},

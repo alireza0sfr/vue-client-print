@@ -6,14 +6,27 @@ interface ISettings {
     isHeaderRepeatable: boolean,
     height: number,
     headerElements: IElement[],
+    styles: {},
+  },
+  beforeBody: {
+    height: number,
+    beforeBodyElements: IElement[],
+    styles: {},
   },
   body: {
-    bodyElements: IElement[]
+    bodyElements: IElement[],
+    styles: {},
+  },
+  afterBody: {
+    height: number,
+    afterBodyElements: IElement[],
+    styles: {},
   },
   footer: {
     isFooterRepeatable: boolean,
     height: number,
     footerElements: IElement[],
+    styles: {},
   },
   defaultHeightOfPaper: number,
   defaultWidthOfPaper: number
@@ -22,9 +35,8 @@ interface ISettings {
   orientation: string,
   pageSize: string,
   pageDirections: string,
-  dataSets: IRawDataset,
+  dataSets: IRawDataset | object,
   pageBorder: string,
-  maximumFileSize: string
 }
 
 interface IConfigs {
@@ -32,9 +44,4 @@ interface IConfigs {
   language: string
 }
 
-interface IMixins {
-  methods: object
-  data: () => object;
-}
-
-export { ISettings, IConfigs, IMixins }
+export { ISettings, IConfigs }

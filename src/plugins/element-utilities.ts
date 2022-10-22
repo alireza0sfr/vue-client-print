@@ -1,14 +1,8 @@
 import { IElement } from '~/interfaces/elements'
 import { IRawDataset, IRawColumn, IDatasets, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
-import mixins from './mixins'
+import { idGenerator, toFloatVal, clone } from './general-utilities'
 
 const DEFAULTCOLUMNWIDTH = '70px'
-var $methods: any
-
-setTimeout(() => {
-  $methods = mixins.methods
-}, 100)
-
 
 class Element {
 
@@ -299,15 +293,11 @@ class Element {
 
   cleanedCoordinates(): object {
     return {
-      height: this.toFloatValue(this.$el.style.height),
-      width: this.toFloatValue(this.$el.style.width),
-      left: this.toFloatValue(this.$el.style.left),
-      top: this.toFloatValue(this.$el.style.top),
+      height: toFloatVal(this.$el.style.height),
+      width: toFloatVal(this.$el.style.width),
+      left: toFloatVal(this.$el.style.left),
+      top: toFloatVal(this.$el.style.top),
     }
-  }
-
-  toFloatValue(value: string): number {
-    return parseFloat(value.split('p')[0])
   }
 
 }
@@ -316,17 +306,17 @@ class Element {
  * @param {Object} sets - Raw dataset.
  * @return {Object} - Prepared dataset.
  */
-function prepareDataSets(sets: IRawDatasets): IDatasets {
+export function prepareDataSets(sets: IRawDatasets): IDatasets {
 
   var tmp: object = {}
   var keys: string[] = Object.keys(sets)
   var preparedSets: any = {}
 
   for (let set of keys) {
-    var thisSet: IRawDataset = $methods.clone(sets[set]) // removing refrence to the original data.
+    var thisSet: IRawDataset = clone(sets[set]) // removing refrence to the original data.
     tmp = {
       options: {
-        id: $methods.idGenerator(5),
+        id: idGenerator(5),
         configs: {
           columns: prepareDataSetColumns(thisSet.columns),
           rows: prepareDataSetRows(thisSet.rows || []),
@@ -345,7 +335,7 @@ function prepareDataSets(sets: IRawDatasets): IDatasets {
  * @param {Object} columns - Raw columns.
  * @return {Object} - Prepared columns.
  */
-function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
+export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
 
   let tmp = {}
   var preparedColumns = []
@@ -361,7 +351,7 @@ function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
       hasResizer: columns.indexOf(col) !== columns.length - 1,
       type: 'column',
       options: {
-        id: $methods.idGenerator(5),
+        id: idGenerator(5),
         styles: {
           width: col.options.styles.width ? col.options.styles.width : DEFAULTCOLUMNWIDTH,
         },
@@ -378,7 +368,7 @@ function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
  * @param {Object} rows - Raw rows.
  * @return {Object} - Prepared rows.
  */
-function prepareDataSetRows(rows: any): IRow[] {
+export function prepareDataSetRows(rows: any): IRow[] {
 
   var preparedRows = []
 
@@ -387,7 +377,7 @@ function prepareDataSetRows(rows: any): IRow[] {
     var tempRow: IRow = {
       type: 'row',
       options: {
-        id: $methods.idGenerator(5),
+        id: idGenerator(5),
         styles: {},
         configs: {
           cells: {}
@@ -400,7 +390,7 @@ function prepareDataSetRows(rows: any): IRow[] {
         type: 'cell',
         isActive: true,
         options: {
-          id: $methods.idGenerator(5),
+          id: idGenerator(5),
           styles: {},
           configs: {
             value: rows[index][key]
@@ -414,5 +404,32 @@ function prepareDataSetRows(rows: any): IRow[] {
   return preparedRows
 }
 
+/**
+ * set !important to all styles.
+ * @param {Object} obj - raw styles
+ * @return {Object} - styles with !important
+ */
+export function initElementStyles(obj: any): object {
+
+  for (let key in obj)
+    if (obj[key].indexOf('!important') === -1)
+      obj[key] += ' !important'
+
+  return obj
+}
+
+/**
+ * Initializing the element utilities for the created element
+ * @param {HTMLElement} $el - element's html
+ * @param {String} resizerQuery - resizers query
+ * @param {Object} element - element's settings
+ * @return {Void} - void
+ */
+export function initializeGeneralElement($el: HTMLElement, resizerQuery: string, element: IElement): void {
+  let elem = new Element($el, resizerQuery, element)
+  elem.clickable()
+  elem.resizable()
+  elem.dragable()
+}
+
 export default Element
-export { prepareDataSets, prepareDataSetColumns, prepareDataSetRows }

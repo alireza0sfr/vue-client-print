@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+	import { merge } from '~/plugins/general-utilities'
 	export default {
 		name: "Variable",
 		props: {
@@ -28,8 +30,8 @@
 		emits:['clickedOnElement', 'finished-editing-element'],
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
-				this.Initialize(this.$refs.imageVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
-				this.Initialize(this.$refs.textVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
+				initializeGeneralElement(this.$refs.imageVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
+				initializeGeneralElement(this.$refs.textVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		watch: {
@@ -37,8 +39,8 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					this.settings = this.merge(this.settings, val)
-					this.settings.styles = this.initStyles(this.settings.styles)
+					this.settings = merge(this.settings, val)
+					this.settings.styles = initElementStyles(this.settings.styles)
 				},
 			},
 		},

@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+import { toPersianDigits, merge } from '~/plugins/general-utilities'
 	export default {
 		name: "DateTime",
 		props: {
@@ -18,7 +20,7 @@
 		emits:['clickedOnElement', 'finished-editing-element'],
 		mounted() {
 			if (this.settings.grandParent === "TemplateBuilder") // Initialize on moutned if its the template builder mode
-				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
+				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 		},
 		computed: {
 			computedValue() {
@@ -41,8 +43,8 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					this.settings = this.merge(this.settings, val)
-					this.settings.styles = this.initStyles(this.settings.styles)
+					this.settings = merge(this.settings, val)
+					this.settings.styles = initElementStyles(this.settings.styles)
 
 					if (this.settings.configs.persianDate)
 						this.persianDate()
@@ -78,7 +80,7 @@
 			persianDate() {
 				let today = new Date().toLocaleDateString("fa-IR")
 				this.dateToday = today
-				this.timeToday = this.toPersianDigits(this.timeNow())
+				this.timeToday = toPersianDigits(this.timeNow())
 			},
 
 			/**

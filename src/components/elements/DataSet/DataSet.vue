@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+import { toFloatVal, merge } from '~/plugins/general-utilities'
 	export default {
 		name: "DataSet",
 		props: {
@@ -40,7 +42,7 @@
 						stylesTarget === 'odd' && index % 2 === 1 || // index is odd
 						stylesTarget === 'all'
 					)
-						row.options.styles = this.merge(row.options.styles, this.locals.defaultRow[0].options.styles)
+						row.options.styles = merge(row.options.styles, this.locals.defaultRow[0].options.styles)
 
 					index += 1
 				}
@@ -49,7 +51,7 @@
 		},
 		mounted() {
 			if (this.settings.grandParent === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
-				this.Initialize(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
+				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
 			}
 		},
 		watch: {
@@ -57,8 +59,8 @@
 				immediate: true,
 				deep: true,
 				handler(val) {
-					this.settings = this.merge(this.settings, val)
-					this.settings.styles = this.initStyles(this.settings.styles)
+					this.settings = merge(this.settings, val)
+					this.settings.styles = initElementStyles(this.settings.styles)
 				},
 			},
 		},
@@ -105,7 +107,7 @@
 					height = this.settings.styles.height
 
 				if (this.settings.grandParent === 'TemplateBuilder')
-					return this.toFloatVal(height) - 45 + 'px'
+					return toFloatVal(height) - 45 + 'px'
 
 				return height
 			},
@@ -119,7 +121,7 @@
 				const ratio = diffrence / e.detail.oldValue.width
 
 				for (let col of this.displaySet.options.configs.columns) {
-					col.options.styles.width = this.toFloatVal(col.options.styles.width)
+					col.options.styles.width = toFloatVal(col.options.styles.width)
 					col.options.styles.width += ratio * col.options.styles.width
 					col.options.styles.width = col.options.styles.width + 'px'
 				}
@@ -166,32 +168,32 @@
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
 				var seconColumn = columns[secondIndex]
-				const startWidth = this.toFloatVal(thisColumn.options.styles.width) || 0
+				const startWidth = toFloatVal(thisColumn.options.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
-				const maxWidth = this.toFloatVal(this.settings.styles.width) - (columns.length * minWidth)
+				const maxWidth = toFloatVal(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (this.toFloatVal(thisColumn.options.styles.width) < minWidth)
+					if (toFloatVal(thisColumn.options.styles.width) < minWidth)
 						return
 
-					if (maxWidth < this.toFloatVal(seconColumn.options.styles.width))
+					if (maxWidth < toFloatVal(seconColumn.options.styles.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < this.toFloatVal(thisColumn.options.styles.width))
+					if (maxWidth < toFloatVal(thisColumn.options.styles.width))
 						return
 
-					if (this.toFloatVal(seconColumn.options.styles.width) < minWidth)
+					if (toFloatVal(seconColumn.options.styles.width) < minWidth)
 						return
 
 				}
 
 				thisColumn.options.styles.width = newWidth + 'px'
-				seconColumn.options.styles.width = this.toFloatVal(seconColumn.options.styles.width) - diffrence
+				seconColumn.options.styles.width = toFloatVal(seconColumn.options.styles.width) - diffrence
 				seconColumn.options.styles.width = seconColumn.options.styles.width + 'px'
 			},
 
@@ -206,7 +208,7 @@
 					resize: 'none',
 					height: this.calculateColumnHeight()
 				}
-				var computedStyles = this.merge(defaultColStyles, column.options.styles)
+				var computedStyles = merge(defaultColStyles, column.options.styles)
 				let tmp = {
 					grandParent: this.settings.grandParent,
 					hasResizer: column.hasResizer,
@@ -216,7 +218,7 @@
 					},
 					styles: computedStyles,
 				}
-				this.merge(tmp.styles, column.options.styles)
+				merge(tmp.styles, column.options.styles)
 				return tmp
 			},
 			/**
@@ -231,7 +233,7 @@
 				let defaultColStyles = {
 					display: 'flex',
 				}
-				row.options.styles = this.merge(row.options.styles, defaultColStyles)
+				row.options.styles = merge(row.options.styles, defaultColStyles)
 				return row.options
 			}
 		}

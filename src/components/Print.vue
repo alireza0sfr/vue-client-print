@@ -42,7 +42,7 @@
 						<h3 class="title">{{_$t('print.print-preview')}}</h3>
 					</div>
 					<div>
-						<span id="printModalCloseBtn" class="close-btn">&times;</span>
+						<span id="printModalCloseBtn" @click="closeModal('printModal')" class="close-btn">&times;</span>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
@@ -89,6 +89,7 @@
 	import { ISettings, IConfigs } from '~/interfaces/general'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
+	import { convert2Pixels, convert2Inches, merge, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
 	import DefaultLogo from '@/assets/images/logo.png'
 	export default {
 		name: "Print",
@@ -109,7 +110,7 @@
 					pageFootersSizes: [],
 					pageHeadersSizes: [],
 				},
-				settings: this.getDefaultSettings(),
+				settings: getDefaultSettings(),
 				configs: {
 					maximumFileSize: 1000, // Maximum file size in KB
 					language: 'en',
@@ -120,9 +121,15 @@
 		mounted() {
 			this.syncConfigs()
 			this.syncLanguage()
-			this.modalManager('printModal', 'printModalCloseBtn')
 		},
 		methods: {
+			/**
+			 * Temp method to close modal before refactoring modal
+			 */
+			closeModal(id: string): void {
+      	document.getElementById(id)!.style.display = 'none'
+			},
+			
 			/**
 			 * set body elements parent components height.
 			 * @return {void} - void
@@ -140,7 +147,7 @@
 					}
 				}
 				var bodyHeight = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height // body height in pixels
-				this.settings.body.height = this.convert2Inches(bodyHeight) // body height in inches
+				this.settings.body.height = convert2Inches(bodyHeight) // body height in inches
 				parent.style.height = this.settings.beforeBody.height + this.settings.body.height + this.settings.afterBody.height + 'in'
 			},
 
@@ -166,7 +173,7 @@
 			 * sync the given configs with the defaults.
 			 */
 			syncConfigs(): void {
-				this.merge(this.configs, this.configurations)
+				merge(this.configs, this.configurations)
 			},
 
 			/**
@@ -253,8 +260,8 @@
 				let scale = 2
 				let img = new Image()
 				let canvas = document.createElement("canvas")
-				canvas.height = this.convert2Pixels(this.locals.pageBodiesSizes[index]) * scale
-				canvas.width = this.convert2Pixels(this.settings.defaultWidthOfPaper) * scale
+				canvas.height = convert2Pixels(this.locals.pageBodiesSizes[index]) * scale
+				canvas.width = convert2Pixels(this.settings.defaultWidthOfPaper) * scale
 				let context = canvas.getContext("2d")
 				img.src = imgBase64
 				img.onload = () => {
@@ -262,12 +269,12 @@
 						img, // img
 						0, // sx
 						sy * scale, // sy
-						this.convert2Pixels(this.settings.defaultWidthOfPaper) * scale, // sWidth
-						this.convert2Pixels(this.locals.pageBodiesSizes[index]) * scale, // sHeight
+						convert2Pixels(this.settings.defaultWidthOfPaper) * scale, // sWidth
+						convert2Pixels(this.locals.pageBodiesSizes[index]) * scale, // sHeight
 						0, // dx
 						0, // dy
-						this.convert2Pixels(this.settings.defaultWidthOfPaper) * scale, // dWidth
-						this.convert2Pixels(this.locals.pageBodiesSizes[index] * scale) // dHeight
+						convert2Pixels(this.settings.defaultWidthOfPaper) * scale, // dWidth
+						convert2Pixels(this.locals.pageBodiesSizes[index] * scale) // dHeight
 					)
 				}
 				return canvas
@@ -299,7 +306,7 @@
 								var result = reader.result
 								let compStyles = window.getComputedStyle(document.getElementById("toBeConverted"))
 								let imgHeight = compStyles.getPropertyValue("height")
-								let totalPagesHeight = this.convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
+								let totalPagesHeight = convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
 
 								this.calculateSizes(totalPagesHeight) // Calculating sizes in inches
 
@@ -311,7 +318,7 @@
 
 										this.removeAllChildNodes(convertedElement[index])
 
-										let computedSy = index * this.convert2Pixels(this.locals.pageBodiesSizes[index])
+										let computedSy = index * convert2Pixels(this.locals.pageBodiesSizes[index])
 										let finalResult = this.canvasMaker(result, computedSy, index)
 										convertedElement[index].appendChild(finalResult)
 									}
@@ -349,7 +356,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				this.prepareSettings(json)
+				prepareSettings(json, this.settings, this.bindingObject)
 				document.getElementById("printModal").style.display = "block"
 				document.getElementById('loadingModal').style.display = 'block'
 
@@ -368,7 +375,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal.style.display = "none"
 				this.templateBuilder(this.settings, (val) => {
-					this.prepareSettings(val)
+					prepareSettings(val, this.settings, this.bindingObject)
 					this.printPreview()
 				})
 			},
