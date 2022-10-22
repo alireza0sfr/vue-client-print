@@ -3,30 +3,30 @@ import { IElement } from './elements'
 
 interface ISettings {
   header: {
-    isHeaderRepeatable: boolean,
-    height: number,
-    headerElements: IElement[],
+    elements: IElement[],
     styles: {},
+    height: number,
+    isHeaderRepeatable: boolean,
   },
   beforeBody: {
-    height: number,
-    beforeBodyElements: IElement[],
+    elements: IElement[],
     styles: {},
+    height: number,
   },
   body: {
-    bodyElements: IElement[],
+    elements: IElement[],
     styles: {},
   },
   afterBody: {
-    height: number,
-    afterBodyElements: IElement[],
+    elements: IElement[],
     styles: {},
+    height: number,
   },
   footer: {
-    isFooterRepeatable: boolean,
-    height: number,
-    footerElements: IElement[],
+    elements: IElement[],
     styles: {},
+    height: number,
+    isFooterRepeatable: boolean,
   },
   defaultHeightOfPaper: number,
   defaultWidthOfPaper: number

@@ -687,23 +687,24 @@
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div @click="(e) => clickedOnSection(e, 'header')" :style="[{height: settings.header.height + 'in' }, settings.header.styles]" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
+
+									<component v-for="element in settings.header.elements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
 									<SectionTag :current="locals.selectedSection" tag="header" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'beforeBody')" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
+									<component v-for="element in settings.beforeBody.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
 									<SectionTag :current="locals.selectedSection" tag="beforeBody" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'body')" :style="settings.body.styles" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
+									<component v-for="element in settings.body.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
 									<SectionTag :current="locals.selectedSection" tag="body" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'afterBody')" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
+									<component v-for="element in settings.afterBody.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
 									<SectionTag :current="locals.selectedSection" tag="afterBody" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'footer')" :style="[{height: settings.footer.height + 'in'}, settings.footer.styles]" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
+									<component v-for="element in settings.footer.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
 									<SectionTag :current="locals.selectedSection" tag="footer" />
 								</div>
 							</div>
@@ -893,7 +894,7 @@
 					return
 				
 				var parent = this.locals.selectedElement.options.parent
-				var array = this.settings[parent][`${parent}Elements`]
+				var array = this.settings[parent].elements
 
 				var index = array.findIndex(x => x.options.id === element.options.id)
 
@@ -936,7 +937,7 @@
 				
 				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
 					var parent = this.locals.selectedElement.options.parent
-					var array = this.settings[parent][`${parent}Elements`]
+					var array = this.settings[parent].elements
 					this.locals.copiedElement.options.id = idGenerator(5)
 					this.locals.copiedElement.options.styles.top = '0px'
 
@@ -977,7 +978,6 @@
 			 * @return {Object} - json file
 			 */
 			save(): void {
-				// Closing the template builder modal after save
 				let settings: ISettings = this.export2Json()
 
 				// this.terminateCopyPaste()
@@ -1380,13 +1380,13 @@
 			 */
 			deleteVariable(uniqueId: string): void {
 				let variablesList: IVariable[] = this.locals.variables
-				let footerElements: IElement[] = this.settings.footer.footerElements
-				let headerElements: IElement[] = this.settings.header.headerElements
+				let footerElements: IElement[] = this.settings.footer.elements
+				let headerElements: IElement[] = this.settings.header.elements
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
-						if (headerElements[index].options.configs.uniqueId === uniqueId)
-							headerElements.splice(index, 1)
+						if (elements[index].options.configs.uniqueId === uniqueId)
+							elements.splice(index, 1)
 					}
 				}
 
@@ -1463,14 +1463,14 @@
 					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
 					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = merge(elem.options.configs.dataSets, this.computeDatasetOptions(displaySet.options.configs.columns, displaySet.options.configs.key))
+						elem.options.configs.dataSets = merge(elem.options.configs.dataSets, this.computeDataset(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id
 					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
 				}
 				else
-					this.settings[computedParent][`${computedParent}Elements`].push(elem)
+					this.settings[computedParent].elements.push(elem)
 
 				elem = adjustElementToPage(elem, parentId)
 				this.locals.classType = ""
@@ -1605,7 +1605,7 @@
 							return
 
 						var parent = this.locals.selectedElement.options.parent
-						var array = this.settings[parent][`${parent}Elements`]
+						var array = this.settings[parent].elements
 
 						if (!parent)
 							return
@@ -1708,7 +1708,7 @@
 			 */
 			finishedEditingElement(element: IElement, elementLocation: string): void {
 
-				var array = this.settings[elementLocation][`${elementLocation}Elements`]
+				var array = this.settings[elementLocation].elements
 
 				if (this.locals.selectedElement.options.isChild) { // it's a repeator.
 					let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId)

@@ -9,17 +9,17 @@
 					<div id="componentsParent">
 
 						<div class="body-render-section" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]">
-							<component v-for="(element, index) in settings.beforeBody.beforeBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+							<component v-for="(element, index) in settings.beforeBody.elements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 						</div>
 
-						<div id="bodyComponents" v-if="settings.body && settings.body.bodyElements && settings.body.bodyElements.length" class="body-render-section" :style="[{height: settings.body.height + 'in'}, settings.body.styles]">
-							<component v-for="(element, index) in settings.body.bodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+						<div id="bodyComponents" v-if="settings.body && settings.body.elements && settings.body.elements.length" class="body-render-section" :style="[{height: settings.body.height + 'in'}, settings.body.styles]">
+							<component v-for="(element, index) in settings.body.elements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 						</div>
 
 						<slot v-else class="printData" name="printData"></slot>
 
 						<div class="body-render-section" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]">
-							<component v-for="(element, index) in settings.afterBody.afterBodyElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+							<component v-for="(element, index) in settings.afterBody.elements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 						</div>
 					</div>
 				</div>
@@ -69,12 +69,12 @@
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
 								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
-									<component v-for="element in settings.header.headerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
+									<component v-for="element in settings.header.elements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
 							<div v-if="settings.footer.isFooterRepeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
-								<component v-for="element in settings.footer.footerElements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
+								<component v-for="element in settings.footer.elements" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.options.configs.uniqueId): {}" />
 							</div>
 						</div>
 					</div>
@@ -290,7 +290,7 @@
 					var scale = 2
 					let domNode = document.getElementById("toBeConverted")
 
-					if (this.settings.body && this.settings.body.bodyElements && this.settings.body.bodyElements.length)
+					if (this.settings.body && this.settings.body.elements && this.settings.body.elements.length)
 						this.setTotalHieghtBasedOnElementsHeight()
 
 					domtoimage

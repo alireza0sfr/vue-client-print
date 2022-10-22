@@ -240,27 +240,27 @@ export function getDefaultSettings(): ISettings {
     header: {
       isHeaderRepeatable: true,
       height: 1,
-      headerElements: [],
+      elements: [],
       styles: {},
     },
     beforeBody: {
       height: 1,
-      beforeBodyElements: [],
+      elements: [],
       styles: {},
     },
     body: {
-      bodyElements: [],
+      elements: [],
       styles: {},
     },
     afterBody: {
       height: 1,
-      afterBodyElements: [],
+      elements: [],
       styles: {},
     },
     footer: {
       isFooterRepeatable: true,
       height: 1,
-      footerElements: [],
+      elements: [],
       styles: {},
     },
     defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch

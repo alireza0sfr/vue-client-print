@@ -209,14 +209,15 @@ var mixins = {
      */
     computeBindingObject(opt: IElement = this.locals.selectedElement.options): object {
 
+      let tmp = {}
       if (opt.repeatorId && opt.isChild) {
         // it's repeator's child
         var parentElement: IElement = {}
 
         if (opt.grandParent === 'TemplateBuilder') {
           var parent = this.locals.selectedElement.options.parent
-          var index = this.settings[parent][`${parent}Elements`].findIndex(x => x.options.id === opt.repeatorId)
-          parentElement = this.settings[parent][`${parent}Elements`][index]
+          var index = this.settings[parent].elements.findIndex(x => x.options.id === opt.repeatorId)
+          parentElement = this.settings[parent].elements[index]
         }
 
         else if (this.locals && this.locals.classType === 'repeator') {
@@ -226,7 +227,6 @@ var mixins = {
         var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
         var columns: IRawColumn[] = displaySet.options.configs.columns
         var key: string = displaySet.options.configs.key
-        let tmp = {}
 
         for (let col of columns) {
 
@@ -237,9 +237,8 @@ var mixins = {
           var name = `${key}-${col.key}`
           tmp[name] = []
         }
-        return this.merge({}, bindingObjectStore.bindingObject, tmp)
       }
-      return bindingObjectStore.bindingObject
+      return merge(bindingObjectStore.bindingObject, tmp)
     },
 
     /**
