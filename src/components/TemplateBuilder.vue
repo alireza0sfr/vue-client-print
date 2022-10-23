@@ -346,7 +346,7 @@
 											</div>
 											<div class="toolbar-content-field">
 												<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
-													<option v-for="option in Object.keys(computeBindingObject())" :key="option">{{ option }}</option>
+													<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
 												</select>
 											</div>
 										</div>
@@ -376,7 +376,7 @@
 										</div>
 										<div class="toolbar-content-field">
 											<select class="input-form-control" id="textpatternControl">
-												<option v-for="option in Object.keys(computeBindingObject())" :key="option">{{ option }}</option>
+												<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -721,7 +721,7 @@
 	import { fileEntryTypes } from '~/enums/general'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { prepareDataSets } from '~/plugins/element-utilities'
+	import { prepareDataSets, computeBindingObject } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	export default {
@@ -730,6 +730,11 @@
 			options: Object,
 			configurations: Object,
 			bindingObject: Object
+		},
+		computed: {
+			bindingObjectComputed() {
+				return computeBindingObject(this.locals.selectedElement, this.settings)
+			}
 		},
 		data() {
 			return {

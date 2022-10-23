@@ -1,11 +1,8 @@
 import ElementClass, { prepareDataSetRows, prepareDataSetColumns } from '~/plugins/element-utilities'
-import { IElement } from '~/interfaces/elements'
+import { IBindingObject, IElement } from '~/interfaces/elements'
+import { ISettings } from '~/interfaces/general'
 import { IRawColumn, IDatasets, IColumn } from '~/interfaces/datasets'
-import { useBindingObjectStore } from '~/stores/binding-object'
-import piniaInstance from '~/plugins/pinia-instance'
 import { idGenerator } from './general-utilities'
-
-const bindingObjectStore = useBindingObjectStore(piniaInstance)
 
 var mixins = {
   methods: {
@@ -136,7 +133,7 @@ var mixins = {
 
     //     case 'bindingobject':
     //       let field = opt.configs.field
-    //       var bindingObject: object = this.computeBindingObject(opt)
+    //       var bindingObject: object = computeBindingObject(opt)
 
     //       // if it's repeator's bindingObject
     //       if (opt.repeatorId) {
@@ -166,7 +163,7 @@ var mixins = {
     //       break
 
     //     case 'textpattern':
-    //       var bindingObject: object = this.computeBindingObject(opt)
+    //       var bindingObject: object = computeBindingObject(opt)
     //       let matches = [], // an array to collect the strings that are matches
     //         types = [],
     //         regex = /{([^{]*?\w)(?=\})}/gim,
@@ -198,48 +195,6 @@ var mixins = {
 
     //   return opt
     // },
-
-    /**
-     * prepare bindingObjects data based on repeator's selected dataset
-     * this method can be called for element or elements of repeator
-     * if repeator calls this method 'this.settings' points to Repeator.vue's settings and 'opt' points to repeator's child's options.
-     * else if element(TB/PP) calls this method 'this.settings' points to either TB settings or Print settings and 'opt' points to element's options.
-     * @param {String} opt - element's options
-     * @return {Object} - preapred bindingObject options
-     */
-    computeBindingObject(opt: IElement = this.locals.selectedElement.options): object {
-
-      let tmp = {}
-      if (opt.repeatorId && opt.isChild) {
-        // it's repeator's child
-        var parentElement: IElement = {}
-
-        if (opt.grandParent === 'TemplateBuilder') {
-          var parent = this.locals.selectedElement.options.parent
-          var index = this.settings[parent].elements.findIndex(x => x.options.id === opt.repeatorId)
-          parentElement = this.settings[parent].elements[index]
-        }
-
-        else if (this.locals && this.locals.classType === 'repeator') {
-          parentElement.options = this.settings
-        }
-
-        var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
-        var columns: IRawColumn[] = displaySet.options.configs.columns
-        var key: string = displaySet.options.configs.key
-
-        for (let col of columns) {
-
-          // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
-          if (col.columns && col.columns.length)
-            continue
-
-          var name = `${key}-${col.key}`
-          tmp[name] = []
-        }
-      }
-      return merge(bindingObjectStore.bindingObject, tmp)
-    },
 
     /**
      * prepare datasets data based on repeator's selected dataset

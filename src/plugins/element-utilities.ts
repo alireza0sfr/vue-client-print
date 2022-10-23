@@ -1,10 +1,13 @@
-import { IElement } from '~/interfaces/elements'
+import { IElement, IBindingObject } from '~/interfaces/elements'
+import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
-import { idGenerator, toFloatVal, clone } from './general-utilities'
 
-const DEFAULTCOLUMNWIDTH = '70px'
+import { idGenerator, toFloatVal, clone, merge } from './general-utilities'
 
-class Element {
+import { useBindingObjectStore } from '~/stores/binding-object'
+const bindingObjectStore = useBindingObjectStore()
+
+export default class Element {
 
   element: IElement
   resizerQuery: string
@@ -337,6 +340,8 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
  */
 export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
 
+  const DEFAULTCOLUMNWIDTH = '70px'
+
   let tmp = {}
   var preparedColumns = []
 
@@ -432,4 +437,38 @@ export function initializeGeneralElement($el: HTMLElement, resizerQuery: string,
   elem.dragable()
 }
 
-export default Element
+/**
+ * prepare bindingObject
+ * if its a not child element it will display the bindingObject given by the user
+ * if its appended to a reapeator it will display bindingObject prop and dataset bound data
+ * @param {IElement} selectedElement - selected Element
+ * @param {ISettings} settings - app settings
+ * @return {IBindingObject} - preapred bindingObject options
+ */
+export function computeBindingObject(selectedElement: IElement, settings?: ISettings | any): IBindingObject {
+
+  let additional: any = {}
+  var options = selectedElement.options
+
+  // it's repeator's child
+  if (options.repeatorId && options.isChild) {
+
+    var parentSection = selectedElement.options.parent
+    var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === options.repeatorId)
+    var parentElement = settings[parentSection].elements[repeatorIndex]
+    var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+    var columns: IRawColumn[] = displaySet.options.configs.columns
+    var key: string = displaySet.options.configs.key
+
+    for (let col of columns) {
+
+      // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
+      if (col.columns && col.columns.length)
+        continue
+
+      var name = `${key}-${col.key}`
+      additional[name] = []
+    }
+  }
+  return merge(bindingObjectStore.bindingObject, additional)
+}
