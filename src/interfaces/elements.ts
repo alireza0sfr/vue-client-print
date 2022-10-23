@@ -1,11 +1,13 @@
 interface IElement {
-  readonly id: string
   readonly type: string
-  readonly parent: string
-  readonly grandParent: string
   options: {
+    readonly parent: string
+    readonly grandParent: string
+    readonly id: string
     configs: object,
     styles: object
+    isChild: boolean
+    repeatorId?: string
   }
 }
 
