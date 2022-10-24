@@ -54,6 +54,8 @@
         "textelement": "Text Box",
         "datetime": "Date & Time",
         "pagecounter": "Page Counter",
+        "row": "Row",
+        "column": "Column",
         "dataset": "Grid",
         "imageelement": "Image",
         "bindingobject": "Binding Objects",

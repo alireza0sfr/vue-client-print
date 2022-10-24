@@ -54,6 +54,8 @@
         "textelement": "متن",
         "datetime": "تاریخ و ساعت",
         "dataset": "جدول",
+        "row": "ردیف",
+        "column": "ستون",
         "pagecounter": "شماره صفحه",
         "imageelement": "تصویر",
         "bindingobject": "اتصال داده",
