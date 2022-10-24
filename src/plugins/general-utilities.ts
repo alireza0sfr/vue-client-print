@@ -144,33 +144,29 @@ export function toFloatVal(val: string): number {
 
 /**
  * Deep merge sources to target object recuresively.
- * @param {Object} target - Target object.
- * @param {Array} sources - Array of sources.
+ * @param {Array} objects - Array of sources.
  * @return {Object} - Merged object.
  */
-export function merge<T>(target: any, ...sources: T[]): T {
+ export function merge<T>(...objects: any[]): T {
 
-  if (!sources.length)
-    return target
-
-  const source: T | undefined = sources.shift()
-
-  if (isObject(target) && isObject(source)) {
-    for (const key in source) {
-      if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, {
-          [key]: {}
-        })
-        merge(target[key], source[key])
-      } else {
-        Object.assign(target, {
-          [key]: source[key]
-        })
+  return objects.reduce((prev, obj) => {
+    Object.keys(obj).forEach(key => {
+      const pVal = prev[key];
+      const oVal = obj[key];
+      
+      if (Array.isArray(pVal) && Array.isArray(oVal)) {
+        prev[key] = pVal.concat(...oVal);
       }
-    }
-  }
-
-  return merge(target, ...sources)
+      else if (isObject(pVal) && isObject(oVal)) {
+        prev[key] = merge(pVal, oVal);
+      }
+      else {
+        prev[key] = oVal;
+      }
+    });
+    
+    return prev;
+  }, {});
 }
 
 /**

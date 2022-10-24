@@ -24,50 +24,50 @@ var nestedObjWithArray = {
 
 describe('findPropertyBasedOnPath', () => {
 
-  it('Nested Ojbect', () => {
+  it('Nested Object', () => {
     expect(methods.findPropertyBasedOnPath(nestedObj, 'a.b.c')).toBe('found')
   })
 
-  it('Nested Ojbect With Array', () => {
+  it('Nested Object With Array', () => {
     expect(methods.findPropertyBasedOnPath(nestedObjWithArray, 'a.b[0].c')).toBe('found')
   })
 })
 
 describe('BindingObjectGenerator', () => {
 
-  it('All Modes', () => {
+  var obj: any = {
+    string: 'found',
+    withoutDisplay: 'found',
+    function: 'f',
+    nestedObj,
+    nestedObjWithArray,
+    nullValue: null,
+    integer: 12,
+    float: 12.5,
+  }
 
-    var obj = {
-      string: 'found',
-      withoutDisplay: 'found',
-      function: 'f',
-      nestedObj,
-      nestedObjWithArray,
-      nullValue: null,
-      integer: 12,
-      float: 12.5
-    }
+  var displays: any = {
+    string: '',
+    function: (property: string): string => property += 'ound',
+    nestedObj: 'a.b.c',
+    nestedObjWithArray: 'a.b[0].c',
+  }
 
-    var displays = {
-      string: '',
-      function: (property: string): string => property += 'ound',
-      nestedObj: 'a.b.c',
-      nestedObjWithArray: 'a.b[0].c',
-    }
+  var result: any = {
+    string: 'found',
+    withoutDisplay: 'found',
+    function: 'found',
+    nestedObj: 'found',
+    nestedObjWithArray: 'found',
+    nullValue: null,
+    integer: 12,
+    float: 12.5,
+  }
 
-    var result = {
-      string: 'found',
-      withoutDisplay: 'found',
-      function: 'found',
-      nestedObj: 'found',
-      nestedObjWithArray: 'found',
-      nullValue: null,
-      integer: 12,
-      float: 12.5,
-    }
+  for (var key in obj) {
+    it(`${key}`, () => expect(methods.BindingObjectGenerator({ test: obj[key] }, { test: displays[key] })).toEqual({ test: result[key] }))
+  }
 
-    expect(methods.BindingObjectGenerator(obj, displays)).toEqual(result)
-  })
 })
 
 describe('Other Methods', () => {
@@ -124,15 +124,21 @@ describe('Other Methods', () => {
 
   it('merge', () => {
 
-    var result = { a: 1, b: 2 }
-
     var first = { a: 1 }
     var second = { b: 2 }
+    var result = { a: 1, b: 2 }
 
     var overlap = { b: 3 }
+    var resultOverlap = { a: 1, b: 3 }
 
-    expect(methods.merge(first, second)).toEqual(result)
-    expect(methods.merge(first, second, overlap)).not.to.equal(result)
+    var deep1 = { a: { b: 1 } }
+    var deep2 = { a: { b: 2 } }
+    var resultDeep = { a: { b: 2 } }
+
+    expect(methods.merge(first, second)).toStrictEqual(result)
+    expect(first).not.to.toStrictEqual(result) // immutation
+    expect(methods.merge(first, second, overlap)).toStrictEqual(resultOverlap) // overlaps
+    expect(methods.merge(deep1, deep2)).toStrictEqual(resultDeep) // deep
 
   })
 
