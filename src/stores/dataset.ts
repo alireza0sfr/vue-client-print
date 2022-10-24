@@ -1,20 +1,21 @@
+import { IDatasets } from '~/interfaces/datasets'
 import { defineStore } from 'pinia'
 
 interface State {
-  dataSet: object
+  dataSets: IDatasets | null
 }
 
-export const useDataSetStore = defineStore('dataSet', {
+export const useDataSetStore = defineStore('dataSets', {
   
   state: (): State => ({
-    dataSet: null,
+    dataSets: null,
   }),
 
   actions: {
-    updateDataSet (payload: object) {
-      this.dataSet = payload
+    updateDataSets (payload: IDatasets) {
+      this.dataSets = payload
     },
-    clearDataSet () {
+    clearDataSets () {
       this.$reset()
     }
   }

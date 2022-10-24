@@ -1,7 +1,8 @@
+import { IBindingObject } from '~/interfaces/elements'
 import { defineStore } from 'pinia'
 
 interface State {
-  bindingObject: object
+  bindingObject: IBindingObject | null
 }
 
 export const useBindingObjectStore = defineStore('bindingObject', {
@@ -11,7 +12,7 @@ export const useBindingObjectStore = defineStore('bindingObject', {
   }),
 
   actions: {
-    updateBindingObject (payload: object) {
+    updateBindingObject (payload: IBindingObject) {
       this.bindingObject = payload
     },
     clearBindingObject () {
