@@ -147,26 +147,28 @@ export function toFloatVal(val: string): number {
  * @param {Array} objects - Array of sources.
  * @return {Object} - Merged object.
  */
- export function merge<T>(...objects: any[]): T {
+ export function merge<T>(target: any, ...sources: any[]): T {
 
-  return objects.reduce((prev, obj) => {
-    Object.keys(obj).forEach(key => {
-      const pVal = prev[key];
-      const oVal = obj[key];
-      
-      if (Array.isArray(pVal) && Array.isArray(oVal)) {
-        prev[key] = pVal.concat(...oVal);
+  if (!sources.length)
+    return target
+
+  const source = sources.shift()
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, {
+          [key]: {}
+        })
+        merge(target[key], source[key])
+      } else {
+        Object.assign(target, {
+          [key]: source[key]
+        })
       }
-      else if (isObject(pVal) && isObject(oVal)) {
-        prev[key] = merge(pVal, oVal);
-      }
-      else {
-        prev[key] = oVal;
-      }
-    });
-    
-    return prev;
-  }, {});
+    }
+  }
+  return merge(target, ...sources)
 }
 
 /**

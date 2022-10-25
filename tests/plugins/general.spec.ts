@@ -136,7 +136,6 @@ describe('Other Methods', () => {
     var resultDeep = { a: { b: 2 } }
 
     expect(methods.merge(first, second)).toStrictEqual(result)
-    expect(first).not.to.toStrictEqual(result) // immutation
     expect(methods.merge(first, second, overlap)).toStrictEqual(resultOverlap) // overlaps
     expect(methods.merge(deep1, deep2)).toStrictEqual(resultDeep) // deep
 
