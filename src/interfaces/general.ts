@@ -35,7 +35,6 @@ interface ISettings {
   orientation: string,
   pageSize: string,
   pageDirections: string,
-  dataSets: IRawDataset | object,
   pageBorder: string,
 }
 

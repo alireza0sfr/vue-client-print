@@ -1,9 +1,13 @@
+import { IDatasets } from '@/interfaces/datasets'
 import { IBindingObject } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
+
 import piniaInstance from '~/plugins/pinia-instance'
 import { useBindingObjectStore } from '~/stores/binding-object'
+import { useDataSetStore } from '~/stores/dataset'
 
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
+const dataSetStore = useDataSetStore(piniaInstance)
 
 /**
  * Converts nested object to key value pair to be used in bindingObject.
@@ -268,7 +272,6 @@ export function getDefaultSettings(): ISettings {
     orientation: 'portrait',
     pageSize: 'a4',
     pageDirections: 'rtl',
-    dataSets: {},
     pageBorder: '',
   }
 }
@@ -278,7 +281,8 @@ export function getDefaultSettings(): ISettings {
  * @param {Object} val - new Settings
  * @return {Object} - merged new settings and old/default settings
  */
-export function prepareSettings(val: ISettings, settings: ISettings, bindingObject: IBindingObject = {}): ISettings {
+export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets): ISettings {
   bindingObjectStore.updateBindingObject(bindingObject)
-  return merge<ISettings>(settings, val)
+  dataSetStore.updateDataSets(dataSets)
+  return merge<ISettings>(settings, updatedSettings)
 }

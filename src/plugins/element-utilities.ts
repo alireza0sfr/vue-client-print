@@ -5,7 +5,11 @@ import { IRawDataset, IRawColumn, IDatasets, IRawDatasets, IRow, IColumn } from 
 import { idGenerator, toFloatVal, clone, merge } from './general-utilities'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
-const bindingObjectStore = useBindingObjectStore()
+import { useDataSetStore } from '~/stores/dataset'
+import piniaInstance from './pinia-instance'
+
+const bindingObjectStore = useBindingObjectStore(piniaInstance)
+const dataSetStore = useDataSetStore(piniaInstance)
 
 export default class Element {
 
@@ -470,5 +474,48 @@ export function computeBindingObject(selectedElement: IElement, settings?: ISett
       additional[name] = []
     }
   }
-  return merge(bindingObjectStore.bindingObject, additional)
+  return merge({}, bindingObjectStore.bindingObject, additional)
+}
+
+/**
+ * prepare datasets data based on repeator's selected dataset
+ * @param {Array} columns - element's raw columns
+ * @param {String} key - columns key
+ * @return {Object} - preapred bindingObject options
+ */
+export function computeDatasets(selectedElement: IElement, settings?: ISettings | any): IDatasets | null {
+  
+  debugger
+  let additional: any = {}
+  var options = selectedElement.options
+
+  if (options.repeatorId && options.isChild) {
+
+    var parentSection = selectedElement.options.parent
+    var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === options.repeatorId)
+    var parentElement = settings[parentSection].elements[repeatorIndex]
+    var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
+    var columns: IRawColumn[] = displaySet.options.configs.columns
+    var key: string = displaySet.options.configs.key
+
+    for (let col of columns) {
+
+      // columns should contains child columns to be used inside repeator
+      if (col.columns && col.columns.length) {
+        var name = `${key}-${col.key}`
+        additional[name] = {
+          options: {
+            id: idGenerator(5),
+            configs: {
+              title: name,
+              key: col.key,
+              rows: [],
+              columns: prepareDataSetColumns(col.columns),
+            }
+          }
+        }
+      }
+    }
+  }
+  return merge({}, dataSetStore.dataSets, additional)
 }

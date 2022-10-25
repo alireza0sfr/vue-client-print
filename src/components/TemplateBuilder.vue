@@ -416,19 +416,19 @@
 										</div>
 									</div>
 
-									<div :set="dataSets = locals.selectedElement.options.configs.dataSets" v-if="locals.selectedElement.type === 'dataset'">
+									<div v-if="locals.selectedElement.type === 'dataset'">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="dataset in Object.keys(dataSets)" :value="dataset" :key="dataset">{{ dataSets[dataset].options.configs.title }}</option>
+													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].options.configs.title }}</option>
 												</select>
 											</div>
 										</div>
 
-										<div v-for="(col, index) in dataSets[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
+										<div v-for="(col, index) in dataSetComputed[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
 											<div :dir="settings.pageDirections" class="toolbar-content-label">
 												<label style="margin-right: 10px; display:flex" :for="`dataSetColumnsControl${index}`">
 													<input type="checkbox" class="input-form-control" v-model="col.isActive" :id="`dataSetColumnsControl${index}`" />
@@ -440,14 +440,14 @@
 											</div>
 										</div>
 									</div>
-									<div :set="dataSets = locals.selectedElement.options.configs.dataSets" v-if="locals.selectedElement.type === 'repeator'">
+									<div v-if="locals.selectedElement.type === 'repeator'">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="dataset in Object.keys(dataSets)" :value="dataset" :key="dataset">{{ dataSets[dataset].options.configs.title }}</option>
+													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].options.configs.title }}</option>
 												</select>
 											</div>
 										</div>
@@ -721,7 +721,7 @@
 	import { fileEntryTypes } from '~/enums/general'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { prepareDataSets, computeBindingObject } from '~/plugins/element-utilities'
+	import { computeBindingObject, computeDatasets } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	export default {
@@ -729,11 +729,15 @@
 		props: {
 			options: Object,
 			configurations: Object,
-			bindingObject: Object
+			bindingObject: Object,
+			dataSets: { type: Object, default: () => ({}) },
 		},
 		computed: {
 			bindingObjectComputed() {
 				return computeBindingObject(this.locals.selectedElement, this.settings)
+			},
+			dataSetComputed() {
+				return computeDatasets(this.locals.selectedElement, this.settings)
 			}
 		},
 		data() {
@@ -837,8 +841,7 @@
 				// deep: true,
 				immediate: true,
 				handler(val) {
-					prepareSettings(val, this.settings, this.bindingObject)
-					this.settings.dataSets = prepareDataSets(this.settings.dataSets)
+					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.dataSets)
 				},
 			}
 		},
@@ -1172,7 +1175,7 @@
 			createElement(parent: string, e: any): IElement {
 				let classType = this.locals.classType
 				let uniqueId = this.locals.uniqueId
-				var clonedDataset = clone(this.settings.dataSets)
+				var datasets = this.dataSetComputed
 				let tmp
 
 				var defaultElementObject: IElement = {
@@ -1181,6 +1184,8 @@
 						id: idGenerator(5),
 						parent: parent,
 						grandParent: 'TemplateBuilder',
+						isChild: false,
+						configs: {},
 						styles: {
 							top: e.offsetY ? e.offsetY + 'px' : 0,
 							left: e.offsetX ? e.offsetX + 'px' : 0
@@ -1191,17 +1196,17 @@
 				switch (classType) {
 					case 'repeator':
 
-						if(isEmpty(this.settings.dataSets)) {
+						if(isEmpty(datasets)) {
 							alert('[VCP] DataSet is empty')
 							throw Error('[VCP] DataSet is empty')
 						}
-						var keys = Object.keys(this.settings.dataSets)
+						var keys = Object.keys(datasets)
 							
 						tmp = {
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
-									dataSets: clonedDataset,
+									dataSets: datasets,
 									appendedElements: {},
 									variables: this.locals.variables,
 								},
@@ -1218,24 +1223,21 @@
 						break
 					case 'dataset':
 
-						if(isEmpty(this.settings.dataSets)) {
+						if(isEmpty(datasets)) {
 							alert('[VCP] DataSet is empty')
 							throw Error('[VCP] DataSet is empty')
 						}
-						var keys = Object.keys(this.settings.dataSets)
+						var keys = Object.keys(datasets)
 
 						/**
 						 * calculate totalWidth based on columns width.
 						 */
 						let width = 0
-						for (let index = 0; index < clonedDataset[keys[0]].options.configs.columns.length; index++) {
-							var col = clonedDataset[keys[0]].options.configs.columns[index]
-
-							if (!col.options.styles.width)
-								col.options.styles.width = 70
+						for (let index = 0; index < datasets[keys[0]].options.configs.columns.length; index++) {
+							var col = datasets[keys[0]].options.configs.columns[index]
 
 							if (typeof col.options.styles.width === 'string')
-								width += parseFloat(col.options.styles.width.split('p')[0])
+								width += toFloatVal(col.options.styles.width)
 
 							else
 								width += col.options.styles.width
@@ -1246,7 +1248,7 @@
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
-									dataSets: clonedDataset,
+									dataSets: datasets,
 									stylesTarget: 'all',
 									defaultRow: this.locals.dataSetDefaultRow
 								},
@@ -1466,9 +1468,6 @@
 
 				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
 					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
-
-					if (elem.type === 'dataset')
-						elem.options.configs.dataSets = merge(elem.options.configs.dataSets, this.computeDataset(displaySet.options.configs.columns, displaySet.options.configs.key))
 
 					elem.options.isChild = true
 					elem.options.repeatorId = parentElement.options.id

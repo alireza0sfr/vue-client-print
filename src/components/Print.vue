@@ -1,6 +1,6 @@
 <template>
 	<div class="__VCP__" id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :bindingObject="bindingObject" :options="locals.templateBuilderData" :configurations="configs" />
+		<TemplateBuilder ref="TemplateBuilder" :bindingObject="bindingObject" :dataSets="locals.preparedDataSets" :options="locals.templateBuilderData" :configurations="configs" />
 
 		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
@@ -86,7 +86,9 @@
 
 <script lang="ts">
 	import { IVariable } from '~/interfaces/elements'
+	import { IDatasets } from '~/interfaces/datasets'
 	import { ISettings, IConfigs } from '~/interfaces/general'
+	import { prepareDataSets } from '~/plugins/element-utilities'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
 	import { convert2Pixels, convert2Inches, merge, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
@@ -109,6 +111,7 @@
 					pageBodiesSizes: [],
 					pageFootersSizes: [],
 					pageHeadersSizes: [],
+					preparedDataSets: null as IDatasets | null
 				},
 				settings: getDefaultSettings(),
 				configs: {
@@ -116,6 +119,14 @@
 					language: 'en',
 					imageSrc: DefaultLogo
 				}
+			}
+		},
+		watch: {
+			dataSets: {
+				immediate: true,
+				handler(val) {
+					this.locals.preparedDataSets = prepareDataSets(val)
+				},
 			}
 		},
 		mounted() {
@@ -340,7 +351,6 @@
 			templateBuilder(json: ISettings, callback: Function): void {
 				json.callback = callback
 				this.locals.templateBuilderData = json
-				this.locals.templateBuilderData.dataSets = this.dataSets
 				this.$refs.TemplateBuilder.settingsInitFunc()
 
 				let variables: IVariable[] = this.variables && this.variables.length ? this.variables : json.variables
@@ -356,7 +366,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				prepareSettings(json, this.settings, this.bindingObject)
+				this.settings = prepareSettings(this.settings, json, this.bindingObject, this.locals.preparedDataSets)
 				document.getElementById("printModal").style.display = "block"
 				document.getElementById('loadingModal').style.display = 'block'
 
@@ -375,7 +385,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal.style.display = "none"
 				this.templateBuilder(this.settings, (val) => {
-					prepareSettings(val, this.settings, this.bindingObject)
+					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.locals.preparedDataSets)
 					this.printPreview()
 				})
 			},
