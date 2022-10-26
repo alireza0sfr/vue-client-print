@@ -1,36 +1,57 @@
 import { expect, it, describe } from 'vitest'
 import * as methods from '~/plugins/element-utilities'
-
-import { defaultSettings, datasets, bindingObject } from '../utils'
+import { defaultSettings, datasets, bindingObject, REPEATORID } from '../utils'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
 
+import { getDisplaySetModes } from '~/enums/general'
+
 import { IElement } from '@/interfaces/elements'
 
-describe('computeBindingObject', () => {
-
-  var bindingObjectElement: IElement = {
-    type: "bindingobject",
-    options: {
-      id: "06bg1",
-      parent: "body",
-      grandParent: "TemplateBuilder",
-      styles: {
-        top: "84px",
-        left: "454px",
-        whiteSpace: "pre",
-        width: "150px",
-        direction: "rtl",
-        height: "30px"
-      },
-      configs: {
-        persianNumbers: false,
-        field: ""
-      },
-      isChild: false
-    }
+var bindingObjectElement: IElement = {
+  type: "bindingobject",
+  options: {
+    id: "06bg1",
+    parent: "body",
+    grandParent: "TemplateBuilder",
+    styles: {
+      top: "84px",
+      left: "454px",
+      whiteSpace: "pre",
+      width: "150px",
+      direction: "rtl",
+      height: "30px"
+    },
+    configs: {
+      persianNumbers: false,
+      field: ""
+    },
+    isChild: false
   }
+}
+
+var dataSetElement: IElement = {
+  type: 'dataset',
+  options: {
+    grandParent: "TemplateBuilder",
+    id: "80zo4",
+    isChild: false,
+    configs: {
+      dataSets: datasets,
+      selectedDataSet: "testDataset"
+    },
+    styles: {
+      height: "100px !important",
+      top: "42px !important",
+      left: "17px !important",
+      width: "740px !important"
+    },
+    parent: "body"
+  }
+}
+
+describe('computeBindingObject', () => {
 
   // settings initial value for store
   const store = useBindingObjectStore()
@@ -46,7 +67,7 @@ describe('computeBindingObject', () => {
 
     var childElement = { ...bindingObjectElement }
     childElement.options.isChild = true
-    childElement.options.repeatorId = 'ymrl7'
+    childElement.options.repeatorId = REPEATORID
 
     var result = {
       ...bindingObject,
@@ -58,27 +79,6 @@ describe('computeBindingObject', () => {
 })
 
 describe('computeDataSets', () => {
-
-  var dataSetElement: IElement = {
-    type: 'dataset',
-    options: {
-      grandParent: "TemplateBuilder",
-      id: "80zo4",
-      isChild: false,
-      configs: {
-        dataSets: datasets,
-        selectedDataSet: "testDataset"
-      },
-      styles: {
-        height: "100px !important",
-        top: "42px !important",
-        left: "17px !important",
-        width: "740px !important"
-      },
-      parent: "body"
-    }
-  }
-
 
   // settings initial value for store
   const store = useDataSetStore()
@@ -94,7 +94,7 @@ describe('computeDataSets', () => {
 
     var childElement = { ...dataSetElement }
     childElement.options.isChild = true
-    childElement.options.repeatorId = 'ymrl7'
+    childElement.options.repeatorId = REPEATORID
 
     var result = {
       ...datasets,
@@ -128,13 +128,24 @@ describe('computeDataSets', () => {
 
     var methodResult: any = methods.computeDatasets(childElement, defaultSettings)
 
-    
     // syncing generated id's with each other to ignore id's in test
     methodResult['test_dataset-column'].options.id = result['test_dataset-column'].options.id
     methodResult['test_dataset-column'].options.configs.columns[0].options.id = result['test_dataset-column'].options.configs.columns[0].options.id
-    
+
     expect(methodResult).toStrictEqual(result)
   })
+})
+
+describe('Get Display Set', () => {
+
+  var selectedElement = { ...dataSetElement }
+  selectedElement.options.repeatorId = REPEATORID
+
+
+  it('Template Builder Mode', () => expect(methods.getDisplaySet(selectedElement, getDisplaySetModes.TEMPLATEBUILDER, defaultSettings)).toStrictEqual(datasets['testDataset']))
+
+  it('Repeator Mode', () => expect(methods.getDisplaySet(selectedElement, getDisplaySetModes.REPEATOR, defaultSettings)).toStrictEqual(datasets['testDataset']))
+
 })
 
 describe('Other Methods', () => {

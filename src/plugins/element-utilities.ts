@@ -2,6 +2,8 @@ import { IElement, IBindingObject } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
 
+import { getDisplaySetModes } from '~/enums/general'
+
 import { idGenerator, toFloatVal, clone, merge } from './general-utilities'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
@@ -517,4 +519,32 @@ export function computeDatasets(selectedElement: IElement, settings?: ISettings 
     }
   }
   return merge({}, dataSetStore.dataSets, additional)
+}
+
+/**
+ * find and returns current displaySet
+ * @param {IElement} selectedElement - selected element
+ * @param {ISettings} settings - settings
+ * @return {IDatasets} - display set
+ */
+export function getDisplaySet(selectedElement: IElement, mode = getDisplaySetModes.TEMPLATEBUILDER, settings?: ISettings | any): IDatasets {
+
+  var displaySet
+
+  switch (mode) {
+
+    case getDisplaySetModes.REPEATOR:
+      displaySet = selectedElement.options.configs.dataSets[selectedElement.options.configs.selectedDataSet]
+
+    case getDisplaySetModes.TEMPLATEBUILDER:
+    default:
+      var parentSection = selectedElement.options.parent
+      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === selectedElement.options.repeatorId)
+      var repeatorElement = settings[parentSection].elements[repeatorIndex]
+      displaySet = repeatorElement.options.configs.dataSets[repeatorElement.options.configs.selectedDataSet]
+      break
+  }
+
+  return displaySet
+
 }

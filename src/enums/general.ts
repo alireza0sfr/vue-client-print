@@ -1,7 +1,10 @@
-enum fileEntryTypes {
+export enum fileEntryTypes {
   imageElement = 1,
   imageVariable,
   VCPSrcFile
 }
 
-export { fileEntryTypes }
+export enum getDisplaySetModes {
+  TEMPLATEBUILDER = 1,
+  REPEATOR
+}

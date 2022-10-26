@@ -1,6 +1,7 @@
 // import { classType } from '@/interfaces/elements'
 
 export const DEFAULTID = 'test1'
+export const REPEATORID = 'ymrl7'
 
 // export const seprateElementGenerator = (type: classType, parent: string = 'body') => {
 //   return {
@@ -90,7 +91,7 @@ export var defaultSettings = {
       {
         type: "repeator",
         options: {
-          id: "ymrl7",
+          id: REPEATORID,
           parent: "body",
           grandParent: "TemplateBuilder",
           styles: {

@@ -4,7 +4,7 @@ interface IElement {
     readonly parent: string
     readonly grandParent: string
     readonly id: string
-    configs: object,
+    configs: any,
     styles: object
     isChild: boolean
     repeatorId?: string
