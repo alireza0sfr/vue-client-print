@@ -85,52 +85,54 @@ export const datasets = {
   }
 }
 
+export var repeatorElement = {
+  type: "repeator",
+  options: {
+    id: REPEATORID,
+    parent: "body",
+    grandParent: "TemplateBuilder",
+    styles: {
+      top: "289px",
+      left: "135px",
+      width: "600px",
+      height: "139px"
+    },
+    configs: {
+      selectedDataSet: "testDataset",
+      dataSets: datasets,
+      appendedElements: {
+        testDataset: [
+          {
+            type: "bindingobject",
+            options: {
+              id: "xdfg3",
+              parent: "body",
+              grandParent: "TemplateBuilder",
+              styles: {
+                top: "54px",
+                left: "328px",
+                whiteSpace: "pre",
+                width: "150px",
+                direction: "rtl"
+              },
+              configs: {
+                persianNumbers: false,
+                field: ""
+              },
+              isChild: true,
+              repeatorId: "ymrl7"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
 export var defaultSettings = {
   body: {
     elements: [
-      {
-        type: "repeator",
-        options: {
-          id: REPEATORID,
-          parent: "body",
-          grandParent: "TemplateBuilder",
-          styles: {
-            top: "289px",
-            left: "135px",
-            width: "600px",
-            height: "139px"
-          },
-          configs: {
-            selectedDataSet: "testDataset",
-            dataSets: datasets,
-            appendedElements: {
-              testDataset: [
-                {
-                  type: "bindingobject",
-                  options: {
-                    id: "xdfg3",
-                    parent: "body",
-                    grandParent: "TemplateBuilder",
-                    styles: {
-                      top: "54px",
-                      left: "328px",
-                      whiteSpace: "pre",
-                      width: "150px",
-                      direction: "rtl"
-                    },
-                    configs: {
-                      persianNumbers: false,
-                      field: ""
-                    },
-                    isChild: true,
-                    repeatorId: "ymrl7"
-                  }
-                }
-              ]
-            }
-          }
-        }
-      }
+      repeatorElement
     ]
   }
 }

@@ -1,6 +1,6 @@
 import { expect, it, describe } from 'vitest'
 import * as methods from '~/plugins/element-utilities'
-import { defaultSettings, datasets, bindingObject, REPEATORID } from '../utils'
+import { defaultSettings, datasets, bindingObject, repeatorElement, REPEATORID } from '../utils'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
@@ -142,9 +142,9 @@ describe('Get Display Set', () => {
   selectedElement.options.repeatorId = REPEATORID
 
 
-  it('Template Builder Mode', () => expect(methods.getDisplaySet(selectedElement, getDisplaySetModes.TEMPLATEBUILDER, defaultSettings)).toStrictEqual(datasets['testDataset']))
+  it('Template Builder Mode', () => expect(methods.getDisplaySet(selectedElement, defaultSettings, getDisplaySetModes.TEMPLATEBUILDER)).toStrictEqual(datasets['testDataset']))
 
-  it('Repeator Mode', () => expect(methods.getDisplaySet(selectedElement, getDisplaySetModes.REPEATOR, defaultSettings)).toStrictEqual(datasets['testDataset']))
+  it('Repeator Mode', () => expect(methods.getDisplaySet(selectedElement, repeatorElement.options, getDisplaySetModes.REPEATOR)).toStrictEqual(datasets['testDataset']))
 
 })
 

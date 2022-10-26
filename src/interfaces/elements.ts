@@ -1,6 +1,9 @@
 interface IElement {
   readonly type: string
-  options: {
+  options: IElementOptions
+}
+
+interface IElementOptions {
     readonly parent: string
     readonly grandParent: string
     readonly id: string
@@ -8,7 +11,6 @@ interface IElement {
     styles: object
     isChild: boolean
     repeatorId?: string
-  }
 }
 
 interface IVariable {
@@ -29,4 +31,4 @@ interface IBindingObject {
   [key: string]: string
 }
 
-export { IElement, IVariable, IBindingObject, classType }
+export { IElement, IVariable, IBindingObject, IElementOptions, classType }

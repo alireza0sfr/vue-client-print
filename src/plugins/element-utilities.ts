@@ -1,6 +1,6 @@
-import { IElement, IBindingObject } from '~/interfaces/elements'
+import { IElement, IElementOptions, IBindingObject } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
-import { IRawDataset, IRawColumn, IDatasets, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
+import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
 
 import { getDisplaySetModes } from '~/enums/general'
 
@@ -527,14 +527,15 @@ export function computeDatasets(selectedElement: IElement, settings?: ISettings 
  * @param {ISettings} settings - settings
  * @return {IDatasets} - display set
  */
-export function getDisplaySet(selectedElement: IElement, mode = getDisplaySetModes.TEMPLATEBUILDER, settings?: ISettings | any): IDatasets {
+ export function getDisplaySet(selectedElement: IElement, settings: ISettings | IElementOptions | any, mode = getDisplaySetModes.TEMPLATEBUILDER): IDataset {
 
   var displaySet
 
   switch (mode) {
 
     case getDisplaySetModes.REPEATOR:
-      displaySet = selectedElement.options.configs.dataSets[selectedElement.options.configs.selectedDataSet]
+      displaySet = settings.configs.dataSets[settings.configs.selectedDataSet]
+      break
 
     case getDisplaySetModes.TEMPLATEBUILDER:
     default:
