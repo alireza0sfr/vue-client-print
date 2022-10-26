@@ -485,7 +485,6 @@ export function computeBindingObject(selectedElement: IElement, settings?: ISett
  */
 export function computeDatasets(selectedElement: IElement, settings?: ISettings | any): IDatasets | null {
   
-  debugger
   let additional: any = {}
   var options = selectedElement.options
 
