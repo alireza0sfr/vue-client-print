@@ -1,202 +1,84 @@
 import { expect, it, describe } from 'vitest'
 import * as methods from '~/plugins/element-utilities'
 
+import { defaultSettings, datasets, bindingObject } from '../utils'
+
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
 
+import { IElement } from '@/interfaces/elements'
+
 describe('computeBindingObject', () => {
+
+  var bindingObjectElement: IElement = {
+    type: "bindingobject",
+    options: {
+      id: "06bg1",
+      parent: "body",
+      grandParent: "TemplateBuilder",
+      styles: {
+        top: "84px",
+        left: "454px",
+        whiteSpace: "pre",
+        width: "150px",
+        direction: "rtl",
+        height: "30px"
+      },
+      configs: {
+        persianNumbers: false,
+        field: ""
+      },
+      isChild: false
+    }
+  }
 
   // settings initial value for store
   const store = useBindingObjectStore()
-  store.updateBindingObject({
-    name: 'test'
-  })
+  store.updateBindingObject(bindingObject)
 
   it('Seprate Element', () => {
 
-    var seprateElement = {
-      type: "bindingobject",
-      options: {
-        id: "06bg1",
-        parent: "body",
-        grandParent: "TemplateBuilder",
-        styles: {
-          top: "84px",
-          left: "454px",
-          whiteSpace: "pre",
-          width: "150px",
-          direction: "rtl",
-          height: "30px"
-        },
-        configs: {
-          persianNumbers: false,
-          field: ""
-        },
-        isChild: false
-      }
-    }
-
-    var result = {
-      name: 'test'
-    }
-
-    expect(methods.computeBindingObject(seprateElement)).toStrictEqual(result)
+    expect(methods.computeBindingObject(bindingObjectElement)).toStrictEqual(bindingObject)
 
   })
 
   it('Child Element', () => {
 
-    var settings = {
-      body: {
-        elements: [
-          {
-            type: "repeator",
-            options: {
-              id: "ymrl7",
-              parent: "body",
-              grandParent: "TemplateBuilder",
-              styles: {
-                top: "289px",
-                left: "135px",
-                width: "600px",
-                height: "139px"
-              },
-              configs: {
-                selectedDataSet: "document",
-                dataSets: {
-                  document: {
-                    options: {
-                      id: "lo1s1",
-                      configs: {
-                        title: "سند 134",
-                        key: "document_134",
-                        columns: [
-                          {
-                            columns: [],
-                            title: "کد حساب",
-                            key: "acocuntCode",
-                            isActive: true,
-                            hasResizer: true,
-                            type: "column",
-                            options: {
-                              id: "4zp1x",
-                              styles: {
-                                width: "70px"
-                              }
-                            }
-                          },
-                        ]
-                      }
-                    }
-                  }
-                },
-                appendedElements: {
-                  document: [
-                    {
-                      type: "bindingobject",
-                      options: {
-                        id: "xdfg3",
-                        parent: "body",
-                        grandParent: "TemplateBuilder",
-                        styles: {
-                          top: "54px",
-                          left: "328px",
-                          whiteSpace: "pre",
-                          width: "150px",
-                          direction: "rtl"
-                        },
-                        configs: {
-                          persianNumbers: false,
-                          field: ""
-                        },
-                        isChild: true,
-                        repeatorId: "ymrl7"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        ]
-      }
-    }
-    var childElement = {
-      type: "bindingobject",
-      options: {
-        id: "xdfg3",
-        parent: "body",
-        grandParent: "TemplateBuilder",
-        styles: {
-          top: "54px",
-          left: "328px",
-          whiteSpace: "pre",
-          width: "150px",
-          direction: "rtl"
-        },
-        configs: {
-          persianNumbers: false,
-          field: ""
-        },
-        isChild: true,
-        repeatorId: "ymrl7"
-      }
-    }
+    var childElement = { ...bindingObjectElement }
+    childElement.options.isChild = true
+    childElement.options.repeatorId = 'ymrl7'
 
     var result = {
-      name: 'test',
-      'document_134-acocuntCode': []
+      ...bindingObject,
+      'test_dataset-column_2': []
     }
 
-    expect(methods.computeBindingObject(childElement, settings)).toStrictEqual(result)
+    expect(methods.computeBindingObject(childElement, defaultSettings)).toStrictEqual(result)
   })
 })
 
 describe('computeDataSets', () => {
 
-  const datasets = {
-    document_rows: {
-      options: {
-        id: "xttnu",
-        configs: {
-          columns: [
-            {
-              columns: [
-                {
-                  columns: [],
-                  title: "کد شناور",
-                  key: "centerCode",
-                  isActive: true,
-                  hasResizer: true,
-                  type: "column",
-                  options: {
-                    id: "ktsc3",
-                    styles: {
-                      width: "70px"
-                    }
-                  }
-                }
-              ],
-              title: "کد حساب",
-              key: "acocuntCode",
-              isActive: true,
-              hasResizer: true,
-              type: "column",
-              options: {
-                id: "ktscd",
-                styles: {
-                  width: "70px"
-                }
-              }
-            }
-          ],
-          rows: [],
-          title: "ردیف های سند",
-          key: "document_137"
-        }
-      }
+  var dataSetElement: IElement = {
+    type: 'dataset',
+    options: {
+      grandParent: "TemplateBuilder",
+      id: "80zo4",
+      isChild: false,
+      configs: {
+        dataSets: datasets,
+        selectedDataSet: "testDataset"
+      },
+      styles: {
+        height: "100px !important",
+        top: "42px !important",
+        left: "17px !important",
+        width: "740px !important"
+      },
+      parent: "body"
     }
   }
+
 
   // settings initial value for store
   const store = useDataSetStore()
@@ -204,158 +86,30 @@ describe('computeDataSets', () => {
 
   it('Seprate Element', () => {
 
-    var seprateElement = {
-      type: 'dataset',
-      options: {
-        grandParent: "TemplateBuilder",
-        id: "80zo4",
-        isChild: false,
-        class: "",
-        configs: {
-          dataSets: datasets,
-          selectedDataSet: "document_rows"
-        },
-        styles: {
-          height: "100px !important",
-          top: "42px !important",
-          left: "17px !important",
-          width: "740px !important"
-        },
-        parent: "body"
-      }
-    }
-
-    expect(methods.computeDatasets(seprateElement)).toStrictEqual(datasets)
+    expect(methods.computeDatasets(dataSetElement)).toStrictEqual(datasets)
 
   })
 
   it('Child Element', () => {
 
-    var settings = {
-      body: {
-        elements: [
-          {
-            type: "repeator",
-            options: {
-              id: "ymrl7",
-              parent: "body",
-              grandParent: "TemplateBuilder",
-              styles: {
-                top: "289px",
-                left: "135px",
-                width: "600px",
-                height: "139px"
-              },
-              configs: {
-                selectedDataSet: "document_rows",
-                dataSets: datasets,
-                appendedElements: {
-                  document: [
-                    {
-                      type: "dataset",
-                      options: {
-                        id: "xdfg3",
-                        parent: "body",
-                        grandParent: "TemplateBuilder",
-                        styles: {
-                          top: "54px",
-                          left: "328px",
-                          whiteSpace: "pre",
-                          width: "150px",
-                          direction: "rtl"
-                        },
-                        configs: {
-                          persianNumbers: false,
-                          field: ""
-                        },
-                        isChild: true,
-                        repeatorId: "ymrl7"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        ]
-      }
-    }
-    var childElement = {
-      type: "dataset",
-      options: {
-        id: "xdfg3",
-        parent: "body",
-        grandParent: "TemplateBuilder",
-        styles: {
-          top: "54px",
-          left: "328px",
-          whiteSpace: "pre",
-          width: "150px",
-          direction: "rtl"
-        },
-        configs: {
-          persianNumbers: false,
-          field: ""
-        },
-        isChild: true,
-        repeatorId: "ymrl7"
-      }
-    }
+    var childElement = { ...dataSetElement }
+    childElement.options.isChild = true
+    childElement.options.repeatorId = 'ymrl7'
 
     var result = {
-      document_rows: {
-        options: {
-          id: 'xttnu',
-          configs: {
-            rows: [],
-            title: 'ردیف های سند',
-            key: 'document_137',
-            columns: [
-              {
-                title: "کد حساب",
-                key: "acocuntCode",
-                isActive: true,
-                hasResizer: true,
-                type: "column",
-                options: {
-                  id: "ktscd",
-                  styles: {
-                    width: "70px"
-                  }
-                },
-                columns: [
-                  {
-                    columns: [],
-                    title: "کد شناور",
-                    key: "centerCode",
-                    isActive: true,
-                    hasResizer: true,
-                    type: "column",
-                    options: {
-                      id: "ktsc3",
-                      styles: {
-                        width: "70px"
-                      }
-                    }
-                  }
-                ],
-              }
-            ],
-          }
-        }
-      },
-      'document_137-acocuntCode': {
+      ...datasets,
+      'test_dataset-column': {
         options: {
           id: 'i2y14',
           configs: {
-            title: 'document_137-acocuntCode',
-            key: 'acocuntCode',
+            title: 'test_dataset-column',
+            key: 'column',
             rows: [],
             columns: [
               {
                 columns: [],
-                title: 'کد شناور',
-                key: 'centerCode',
+                title: 'child column',
+                key: 'childColumn',
                 isActive: true,
                 hasResizer: false,
                 type: 'column',
@@ -372,11 +126,12 @@ describe('computeDataSets', () => {
       }
     }
 
-    var methodResult: any = methods.computeDatasets(childElement, settings)
+    var methodResult: any = methods.computeDatasets(childElement, defaultSettings)
+
     
     // syncing generated id's with each other to ignore id's in test
-    methodResult['document_137-acocuntCode'].options.id = result['document_137-acocuntCode'].options.id
-    methodResult['document_137-acocuntCode'].options.configs.columns[0].options.id = result['document_137-acocuntCode'].options.configs.columns[0].options.id
+    methodResult['test_dataset-column'].options.id = result['test_dataset-column'].options.id
+    methodResult['test_dataset-column'].options.configs.columns[0].options.id = result['test_dataset-column'].options.configs.columns[0].options.id
     
     expect(methodResult).toStrictEqual(result)
   })
