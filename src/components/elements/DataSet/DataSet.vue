@@ -80,7 +80,8 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 						dataSets: {},
 					},
 					styles: {
-						height: '80px',
+						height: "100px",
+						minWidth: '300px'
 					},
 				},
 			}

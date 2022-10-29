@@ -40,7 +40,10 @@ import { initElementStyles, initializeGeneralElement } from '~/plugins/element-u
 					configs: {
 						imageSrc: '',
 					},
-					styles: {},
+					styles: {
+						width: "100px",
+						height: "100px",
+					}
 				},
 			}
 		},

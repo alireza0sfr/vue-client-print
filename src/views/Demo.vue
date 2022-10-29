@@ -52,6 +52,15 @@
 						title: 'شناور',
 						columns: [
 							{
+								title: 'new column',
+								key: 'new',
+								options: {
+									styles: {
+										width: '70px',
+									},
+								},
+							},
+							{
 								title: 'column 1',
 								key: 'center',
 								options: {

@@ -63,7 +63,10 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 						text: this._$t('template-builder.elements.configs.pattern-input'),
 						value: null,
 					},
-					styles: {},
+					styles: {
+						whiteSpace: "pre",
+						width: "150px",
+					},
 				},
 			}
 		},

@@ -37,8 +37,12 @@ import { initElementStyles, initializeGeneralElement } from '~/plugins/element-u
 					classType: "textelement",
 				},
 				settings: {
-					configs: {},
-					styles: {},
+					configs: { text: this._$t('template-builder.elements.configs.type-text') },
+					styles: {
+						whiteSpace: "pre",
+						width: "150px",
+						fontWeight: "",
+					},
 				},
 			}
 		},

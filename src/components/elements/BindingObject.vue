@@ -68,7 +68,10 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 						field: "",
 						value: null,
 					},
-					styles: {},
+					styles: {
+						whiteSpace: "pre",
+						width: "150px",
+					},
 				},
 			}
 		},

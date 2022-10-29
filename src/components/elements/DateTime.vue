@@ -68,7 +68,9 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 						hasTime: true,
 						persianDate: true,
 					},
-					styles: {}
+					styles: {
+						width: '150px'
+					}
 				},
 			}
 		},

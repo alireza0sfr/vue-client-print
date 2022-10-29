@@ -72,7 +72,10 @@ import { initElementStyles, initializeGeneralElement } from '~/plugins/element-u
 						appendedElements: {},
 						originalHeight: '0'
 					},
-					styles: {},
+					styles: {
+						width: '600px',
+						height: '60px'
+					}
 				},
 			}
 		},

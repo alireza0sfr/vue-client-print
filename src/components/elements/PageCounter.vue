@@ -57,7 +57,7 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 					id: 0,
 					configs: {
 						counter: '1',
-						persianNumbers: true,
+						persianNumbers: false,
 						completeForm: true,
 					},
 					styles: {},

@@ -55,7 +55,10 @@ import { initElementStyles, initializeGeneralElement } from '~/plugins/element-u
 					configs: {
 						uniqueId: '',
 					},
-					styles: {},
+					styles: {
+						whiteSpace: "pre",
+						width: "150px",
+					},
 				},
 			}
 		},

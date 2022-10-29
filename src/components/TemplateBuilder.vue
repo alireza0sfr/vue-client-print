@@ -1170,6 +1170,11 @@
 				var datasets = this.dataSetComputed
 				let tmp
 
+				if((classType === 'dataset' || classType === 'repeator') && isEmpty(datasets)) {
+					alert('[VCP] DataSet is empty')
+					throw Error('[VCP] DataSet is empty')
+				}
+
 				var defaultElementObject: IElement = {
 					type: classType,
 					options: {
@@ -1188,10 +1193,6 @@
 				switch (classType) {
 					case 'repeator':
 
-						if(isEmpty(datasets)) {
-							alert('[VCP] DataSet is empty')
-							throw Error('[VCP] DataSet is empty')
-						}
 						var keys = Object.keys(datasets)
 							
 						tmp = {
@@ -1202,10 +1203,6 @@
 									appendedElements: {},
 									variables: this.locals.variables,
 								},
-								styles: {
-									width: '600px',
-									height: '60px'
-								}
 							}
 						}
 
@@ -1215,38 +1212,14 @@
 						break
 					case 'dataset':
 
-						if(isEmpty(datasets)) {
-							alert('[VCP] DataSet is empty')
-							throw Error('[VCP] DataSet is empty')
-						}
 						var keys = Object.keys(datasets)
-
-						/**
-						 * calculate totalWidth based on columns width.
-						 */
-						let width = 0
-						for (let index = 0; index < datasets[keys[0]].options.configs.columns.length; index++) {
-							var col = datasets[keys[0]].options.configs.columns[index]
-
-							if (typeof col.options.styles.width === 'string')
-								width += toFloatVal(col.options.styles.width)
-
-							else
-								width += col.options.styles.width
-
-						}
 
 						tmp = {
 							options: {
 								configs: {
 									selectedDataSet: keys[0],
 									dataSets: datasets,
-									stylesTarget: 'all',
 									defaultRow: this.locals.dataSetDefaultRow
-								},
-								styles: {
-									height: "100px",
-									width: width + 'px'
 								},
 							},
 						}
@@ -1254,31 +1227,9 @@
 					case 'textelement':
 						tmp = {
 							options: {
-								configs: { text: this._$t('template-builder.elements.configs.type-text') },
 								styles: {
-									whiteSpace: "pre",
-									width: "150px",
 									direction: this.settings.pageDirections,
-									fontWeight: "",
 								},
-							},
-						}
-						break
-
-					case 'datetime':
-						tmp = {
-							options: {
-								configs: { hasDate: true, hasTime: true, persianDate: false },
-								styles: { width: "150px" },
-							},
-						}
-						break
-
-					case 'pagecounter':
-						tmp = {
-							options: {
-								configs: { counter: '1', persianNumbers: false, completeForm: true },
-								styles: {},
 							},
 						}
 						break
@@ -1287,10 +1238,6 @@
 						tmp = {
 							options: {
 								configs: { imageSrc: this.configurations.imageSrc },
-								styles: {
-									width: "100px",
-									height: "100px",
-								},
 							},
 						}
 						break
@@ -1298,13 +1245,7 @@
 					case 'bindingobject':
 						tmp = {
 							options: {
-								configs: {
-									persianNumbers: false,
-									field: "",
-								},
 								styles: {
-									whiteSpace: "pre",
-									width: "150px",
 									direction: this.settings.pageDirections,
 								},
 							},
@@ -1314,14 +1255,7 @@
 					case 'textpattern':
 						tmp = {
 							options: {
-								configs: {
-									persianNumbers: false,
-									text: this._$t('template-builder.elements.configs.pattern-input'),
-									value: null,
-								},
 								styles: {
-									whiteSpace: "pre",
-									width: "150px",
 									direction: this.settings.pageDirections,
 								},
 							},
@@ -1335,8 +1269,6 @@
 									uniqueId: uniqueId,
 								},
 								styles: {
-									whiteSpace: "pre",
-									width: "150px",
 									direction: this.settings.pageDirections,
 								},
 							},
