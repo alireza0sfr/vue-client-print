@@ -358,7 +358,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
       columns: col.columns || [], // if child has column
       title: col.title,
       key: col.key,
-      isActive: true,
+      isActive: false,
       hasResizer: columns.indexOf(col) !== columns.length - 1,
       type: 'column',
       options: {
