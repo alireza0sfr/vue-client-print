@@ -81,7 +81,8 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 					},
 					styles: {
 						height: "100px",
-						minWidth: '300px'
+						width: '300px',
+						minWidth: '70px'
 					},
 				},
 			}
