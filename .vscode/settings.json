@@ -1,6 +1,7 @@
 {
   "vetur.format.enable": true,
-  "vetur.format.defaultFormatter.js": "prettier",
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "vetur.format.defaultFormatter.ts": "vscode-typescript",
   "vetur.format.defaultFormatter.css": "prettier",
   "vetur.format.defaultFormatter.html": "js-beautify-html",
   "vetur.completion.tagCasing": "initial",
@@ -8,21 +9,24 @@
   "vetur.format.scriptInitialIndent": true,
   "vetur.format.styleInitialIndent": true,
   "vetur.ignoreProjectWarning": true,
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.format.semicolons": "remove",
+  "javascript.format.semicolons": "remove",
+  "javascript.preferences.quoteStyle": "single",
   "vetur.grammar.customBlocks": {
-      "docs": "md",
-      "i18n": "json"
+    "docs": "md",
+    "i18n": "json"
   },
   "vetur.format.defaultFormatterOptions": {
-      "prettier": {
-          "semi": false,
-          "singleQuote": true,
-          "printWidth":"120"
-      },
-      "js-beautify-html": {
-          "end_with_newline": true,
-          "wrap-attributes": true 
-      }
+    "js-beautify-html": {
+      "end_with_newline": true,
+      "wrap-attributes": true
+    },
+    "vscode-typescript": {
+      "quote_type": "single"
+    }
   },
   "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
   "editor.tabSize": 2
 }
