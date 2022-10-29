@@ -428,16 +428,8 @@
 											</div>
 										</div>
 
-										<div v-for="(col, index) in dataSetComputed[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-row">
-											<div :dir="settings.pageDirections" class="toolbar-content-label">
-												<label style="margin-right: 10px; display:flex" :for="`dataSetColumnsControl${index}`">
-													<input type="checkbox" class="input-form-control" v-model="col.isActive" :id="`dataSetColumnsControl${index}`" />
-													{{_$t('template-builder.elements.configs.index-column', {index: index+1})}}
-												</label>
-											</div>
-											<div class="toolbar-content-field">
-												<input type="text" :disabled="!col.isActive" class="input-form-control" v-model="col.title" id="dataSetColumnsName" />
-											</div>
+										<div class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
+											<Toggler v-for="col in dataSetComputed[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-label column-toggler" :options="{ title: col.title }" v-model="col.isActive" />
 										</div>
 									</div>
 									<div v-if="locals.selectedElement.type === 'repeator'">

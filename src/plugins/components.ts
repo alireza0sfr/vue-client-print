@@ -16,6 +16,7 @@ import Print from '~/components/Print.vue'
 import TemplateBuilder from '~/components/TemplateBuilder.vue'
 import Resizers from '~/components/elements/Resizers.vue'
 import SectionTag from '~/components/SectionTag.vue'
+import Toggler from '~/components/Toggler.vue'
 
 export default function componentRegisterer(App: any): void {
 
@@ -37,4 +38,5 @@ export default function componentRegisterer(App: any): void {
   App.component('TemplateBuilder', TemplateBuilder)
   App.component('Resizers', Resizers)
   App.component('SectionTag', SectionTag)
+  App.component('Toggler', Toggler)
 }
