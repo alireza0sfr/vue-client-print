@@ -5,6 +5,7 @@ export enum fileEntryTypes {
 }
 
 export enum getDisplaySetModes {
-  TEMPLATEBUILDER = 'templatebuilder',
+  TEMPLATEBUILDERCHILD = 'templatebuilder_child', // child element of repeator
+  TEMPLATEBUILDERSEPRATE = 'templatebuilder_seprate',
   REPEATOR = 'repeator'
 }

@@ -486,7 +486,7 @@ export function computeBindingObject(selectedElement: IElement, settings?: ISett
  * @return {Object} - preapred bindingObject options
  */
 export function computeDatasets(selectedElement: IElement, settings?: ISettings | any): IDatasets | null {
-  
+
   let additional: any = {}
   var options = selectedElement.options
 
@@ -527,7 +527,7 @@ export function computeDatasets(selectedElement: IElement, settings?: ISettings 
  * @param {ISettings} settings - settings
  * @return {IDatasets} - display set
  */
- export function getDisplaySet(selectedElement: IElement, settings: ISettings | IElementOptions | any, mode = getDisplaySetModes.TEMPLATEBUILDER): IDataset {
+export function getDisplaySet(selectedElement: IElement, settings: ISettings | IElementOptions | any, mode = getDisplaySetModes.TEMPLATEBUILDERCHILD): IDataset {
 
   var displaySet
 
@@ -537,7 +537,11 @@ export function computeDatasets(selectedElement: IElement, settings?: ISettings 
       displaySet = settings.configs.dataSets[settings.configs.selectedDataSet]
       break
 
-    case getDisplaySetModes.TEMPLATEBUILDER:
+    case getDisplaySetModes.TEMPLATEBUILDERSEPRATE:
+      displaySet = selectedElement.options.configs.dataSets[selectedElement.options.configs.selectedDataSet]
+      break
+
+    case getDisplaySetModes.TEMPLATEBUILDERCHILD:
     default:
       var parentSection = selectedElement.options.parent
       var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === selectedElement.options.repeatorId)
