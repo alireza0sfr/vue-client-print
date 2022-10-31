@@ -1,4 +1,4 @@
-import { IElement, IElementOptions, IBindingObject, IElementCoordinates, IEmptyElement } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -583,7 +583,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
  * @param {ISettings} settings - settings
  * @return {IDatasets} - display set
  */
-export function getDisplaySet(selectedElement: IElement, settings: ISettings | IElementOptions | any, mode = getDisplaySetModes.TEMPLATEBUILDERCHILD): IDataset {
+export function getDisplaySet(selectedElement: IElement, settings: ISettings | IElement | any, mode = getDisplaySetModes.TEMPLATEBUILDERCHILD): IDataset {
 
   var displaySet
 
