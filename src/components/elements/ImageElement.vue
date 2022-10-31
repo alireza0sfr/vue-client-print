@@ -1,53 +1,44 @@
 <template>
-	<div :id="settings.id" :data-testid="settings.id" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element'" :style="settings.styles" ref="element">
-		<img class="image" :src="settings.configs.imageSrc" alt="Image" />
-		<Resizers :query="`imageelement-${settings.id}`" />
+	<div :id="element.id" :data-testid="element.id" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles" ref="element">
+		<img class="image" :src="element.configs.imageSrc" alt="Image" />
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { IElement } from '~/interfaces/elements'
+	import { defineComponent } from 'vue'
 	import { merge } from '~/plugins/general-utilities'
-	export default {
-		name: "ImageElement",
+	export default defineComponent({
+		name: ElementTypes.IMAGEELEMENT,
 		props: {
-			options: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
-				locals: {
-					classType: "imageelement",
-				},
-				settings: {
-					grandParent: 'TemplateBuilder',
-					id: 0,
-					configs: {
-						imageSrc: '',
-					},
+				element: {
 					styles: {
 						width: "100px",
 						height: "100px",
 					}
-				},
+				} as IElement,
 			}
 		},
-	};
+	})
 </script>
 
 <style>
