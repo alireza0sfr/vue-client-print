@@ -1,4 +1,4 @@
-import { IElement, IElementOptions, IBindingObject, IElementCoordinates } from '~/interfaces/elements'
+import { IElement, IElementOptions, IBindingObject, IElementCoordinates, IEmptyElement } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -378,7 +378,7 @@ export class Element implements IElement {
   }
 }
 
-export class DataSetLike extends Element {
+export class DataSetLikeElement extends Element {
 
   /** converting normal row object to dataset row objects
    * @param {Object} rows - Raw rows.
@@ -455,7 +455,7 @@ export class DataSetLike extends Element {
   }
 }
 
-export class BindingObjectLike extends Element {
+export class BindingObjectLikeElement extends Element {
 
   /**
    * prepare bindingObject data based on repeator's selected dataset
@@ -490,6 +490,18 @@ export class BindingObjectLike extends Element {
   }
 
 }
+
+export class EmptyElement implements IEmptyElement {
+  readonly type: ElementTypes = ElementTypes.EMPTY
+  readonly id: string = emptyId
+  parent: ElementParents = ElementParents.EMPTY
+  grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
+  styles: any = {}
+  configs: any = {}
+}
+
+export const emptyId: string = '00000'
+
 
 /**
  * @param {Object} sets - Raw dataset.

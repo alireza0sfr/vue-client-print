@@ -40,7 +40,7 @@
 										<a class="a-btn">{{ _$t('template-builder.variables.add') }}</a>
 									</div>
 									<div class="variables">
-										<div :class="['variable',{selected:locals.selectedElement.options.configs.uniqueId ===variable.uniqueId}]" v-for="variable in locals.variables" :key="variable.uniqueId">
+										<div :class="['variable',{selected:locals.selectedElement.configs.uniqueId ===variable.uniqueId}]" v-for="variable in locals.variables" :key="variable.uniqueId">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
@@ -53,7 +53,7 @@
 														</select>
 													</div>
 												</div>
-												<div draggable="true" class="variables-content-field small" @dragstart="startDraggingElement('variable', variable.uniqueId)" @dragend="finishedDraggingElement()">
+												<div draggable="true" class="variables-content-field small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable.uniqueId)" @dragend="finishedDraggingElement()">
 													<img style="height: 20px; width: 15px; cursor: move;" src="@/assets/images/drag.png" />
 												</div>
 											</div>
@@ -198,7 +198,7 @@
 								<div class="toolbar-content-wrapper" style="flex-direction: row" id="elementsMenu">
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('textelement')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.TEXTELEMENT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/text.png" :alt="_$t('template-builder.elements.textelement')" />
 												<div class="element-title">{{_$t('template-builder.elements.textelement')}}</div>
 											</span>
@@ -206,7 +206,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('datetime')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.DATETIME)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/timetable.png" :alt="_$t('template-builder.elements.datetime')" />
 												<div class="element-title">{{_$t('template-builder.elements.datetime')}}</div>
 											</span>
@@ -214,7 +214,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('pagecounter')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.PAGECOUNTER)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/pages.png" :alt="_$t('template-builder.elements.pagecounter')" />
 												<div class="element-title">{{_$t('template-builder.elements.pagecounter')}}</div>
 											</span>
@@ -222,7 +222,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('imageelement')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.IMAGEELEMENT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/image.png" alt="_$t('template-builder.elements.imageelement')" />
 												<div class="element-title">{{_$t('template-builder.elements.imageelement')}}</div>
 											</span>
@@ -230,7 +230,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('bindingobject')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.BINDINGOBJECT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/binding.png" :alt="_$t('template-builder.elements.bindingobject')" />
 												<div class="element-title">{{_$t('template-builder.elements.bindingobject')}}</div>
 											</span>
@@ -238,7 +238,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('textpattern')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.TEXTPATTERN)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/textpattern.png" :alt="_$t('template-builder.elements.textpattern')" />
 												<div class="element-title">{{_$t('template-builder.elements.textpattern')}}</div>
 											</span>
@@ -246,7 +246,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('dataset')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.DATASET)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="32" height="32" />
 												<div class="element-title">{{_$t('template-builder.elements.dataset')}}</div>
 											</span>
@@ -254,7 +254,7 @@
 									</div>
 									<div class="toolbar-content-row-elements">
 										<div class="toolbar-content-row-element">
-											<span draggable="true" @dragstart="startDraggingElement('repeator')" @dragend="finishedDraggingElement()">
+											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.REPEATOR)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="32" height="32" />
 												<div class="element-title">{{_$t('template-builder.elements.repeator')}}</div>
 											</span>
@@ -263,7 +263,7 @@
 								</div>
 
 								<!-- Element's Settings -->
-								<div v-if="locals.selectedElement.options.id != -1">
+								<div v-if="locals.selectedElement.type !== locals.ElementTypes.EMPTY">
 									<div class="toolbar-header">
 										<span>{{_$t('template-builder.elements.settings', {elementType: _$t(`template-builder.elements.${locals.selectedElement.type}`)})}}</span>
 									</div>
@@ -275,7 +275,7 @@
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textelement'">
 											<div class="toolbar-content-field">
-												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
@@ -283,7 +283,7 @@
 												<label for="hasDateControl">{{_$t('template-builder.elements.configs.date')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasDate" id="hasDateControl" />
+												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasDate" id="hasDateControl" />
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
@@ -291,7 +291,7 @@
 												<label for="hasTimeControl">{{_$t('template-builder.elements.configs.time')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.hasTime" id="hasTimeControl" />
+												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasTime" id="hasTimeControl" />
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'datetime'">
@@ -299,7 +299,7 @@
 												<label for="persiaDateControl">{{_$t('template-builder.elements.configs.solar-date')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.options.configs.persianDate" id="persiaDateControl" />
+												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.persianDate" id="persiaDateControl" />
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'pagecounter'">
@@ -307,7 +307,7 @@
 												<label for="persianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="persianNumbersControl" />
+												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="persianNumbersControl" />
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'pagecounter'">
@@ -315,7 +315,7 @@
 												<label for="completeFormControl">{{_$t('template-builder.elements.configs.use-complete-format')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.completeForm" id="completeFormControl" />
+												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.completeForm" id="completeFormControl" />
 											</div>
 										</div>
 										<div class="toolbar-content-row" style="flex-direction: column" v-if="locals.selectedElement.type === 'imageelement'">
@@ -337,7 +337,7 @@
 												<label for="bindingObjectPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
+												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
@@ -345,7 +345,7 @@
 												<label for="bindingObjectControl">{{_$t('template-builder.elements.configs.data-type')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select class="input-form-control" v-model="locals.selectedElement.options.configs.field" id="bindingObjectControl">
+												<select class="input-form-control" v-model="locals.selectedElement.configs.field" id="bindingObjectControl">
 													<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
 												</select>
 											</div>
@@ -358,7 +358,7 @@
 										</div>
 										<div v-if="locals.selectedElement.type === 'textpattern'">
 											<div class="toolbar-content-field">
-												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.options.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'textpattern'">
@@ -366,7 +366,7 @@
 												<label for="textPatternPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.options.configs.persianNumbers" id="textPatternPersianNumbersControl" />
+												<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="textPatternPersianNumbersControl" />
 											</div>
 										</div>
 									</div>
@@ -400,7 +400,7 @@
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.stylesTarget')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.options.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
+												<select v-model="locals.selectedElement.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
 													<option v-for="option in locals.rowStylesTargets" :value="option.key" :key="option.id">{{ option.title }}</option>
 												</select>
 											</div>
@@ -411,7 +411,7 @@
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.rowsHeight')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="number" class="input-form-control" v-model="locals.selectedElement.options.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="number" class="input-form-control" v-model="locals.selectedElement.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>
@@ -422,14 +422,14 @@
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].options.configs.title }}</option>
+												<select v-model="locals.selectedElement.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].configs.title }}</option>
 												</select>
 											</div>
 										</div>
 
 										<div class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
-											<Toggler v-for="col in dataSetComputed[locals.selectedElement.options.configs.selectedDataSet].options.configs.columns" :key="col.options.id" class="toolbar-content-label column-toggler" :options="{ title: col.title }" v-model="col.isActive" />
+											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler" :options="{ title: col.title }" v-model="col.isActive" />
 										</div>
 									</div>
 									<div v-if="locals.selectedElement.type === 'repeator'">
@@ -438,8 +438,8 @@
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.options.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].options.configs.title }}</option>
+												<select v-model="locals.selectedElement.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].configs.title }}</option>
 												</select>
 											</div>
 										</div>
@@ -447,7 +447,7 @@
 								</div>
 
 								<!-- Element's Styles -->
-								<div v-if="locals.selectedElement.options.id != -1">
+								<div v-if="locals.selectedElement.type !== locals.ElementTypes.EMPTY">
 									<div style="margin-top: 15px" class="toolbar-header">
 										<span>{{_$t('template-builder.elements.styles.name', {elementType: _$t(`template-builder.elements.${locals.selectedElement.type}`)})}}</span>
 									</div>
@@ -457,7 +457,7 @@
 												<label for="elementTextAlignControl">{{_$t('template-builder.elements.styles.text-align')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.options.styles.textAlign" class="input-form-control" id="elementTextAlignControl">
+												<select v-model="locals.selectedElement.styles.textAlign" class="input-form-control" id="elementTextAlignControl">
 													<option value="right">{{_$t('template-builder.elements.styles.right')}}</option>
 													<option value="center">{{_$t('template-builder.elements.styles.center')}}</option>
 													<option value="left">{{_$t('template-builder.elements.styles.left')}}</option>
@@ -469,7 +469,7 @@
 												<label for="elementTextAlignControl">{{_$t('template-builder.elements.styles.align-items')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.options.styles.alignItems" class="input-form-control" id="elementTextAlignControl">
+												<select v-model="locals.selectedElement.styles.alignItems" class="input-form-control" id="elementTextAlignControl">
 													<option value="flex-start">{{_$t('template-builder.elements.styles.top')}}</option>
 													<option value="center">{{_$t('template-builder.elements.styles.center')}}</option>
 													<option value="flex-end">{{_$t('template-builder.elements.styles.bottom')}}</option>
@@ -481,7 +481,7 @@
 												<span>{{_$t('template-builder.elements.styles.text-color')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="color" class="input-form-control" v-model="locals.selectedElement.options.styles.color" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="color" class="input-form-control" v-model="locals.selectedElement.styles.color" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -489,7 +489,7 @@
 												<span>{{_$t('template-builder.elements.styles.background-color')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="color" class="input-form-control" v-model="locals.selectedElement.options.styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="color" class="input-form-control" v-model="locals.selectedElement.styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -497,7 +497,7 @@
 												<span>{{_$t('template-builder.elements.styles.font-size')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<select class="input-form-control" v-model="locals.selectedElement.options.styles.fontSize" id="pageSizeControl">
+												<select class="input-form-control" v-model="locals.selectedElement.styles.fontSize" id="pageSizeControl">
 													<option v-for="option in locals.fontSizes" :key="option" :value="option + 'px'">{{ option }}</option>
 												</select>
 											</div>
@@ -507,7 +507,7 @@
 												<label for="fontWeightControl">{{_$t('template-builder.elements.styles.font-weight')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.options.styles.fontWeight" class="input-form-control" id="elementTextAlignControl">
+												<select v-model="locals.selectedElement.styles.fontWeight" class="input-form-control" id="elementTextAlignControl">
 													<option value="normal">{{_$t('template-builder.elements.styles.normal')}}</option>
 													<option value="bold">{{_$t('template-builder.elements.styles.bold')}}</option>
 												</select>
@@ -518,7 +518,7 @@
 												<span>{{_$t('template-builder.elements.styles.font-family')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.fontFamily" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.fontFamily" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div class="toolbar-content-row">
@@ -537,7 +537,7 @@
 												<span>{{_$t('template-builder.elements.styles.border-style')}}</span>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div v-if="locals.bordersAllDirections === false" style="width: 100%">
@@ -546,7 +546,7 @@
 													<span>{{_$t('template-builder.elements.styles.border-top')}}</span>
 												</div>
 												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
 											<div class="toolbar-content-row">
@@ -554,7 +554,7 @@
 													<span>{{_$t('template-builder.elements.styles.border-right')}}</span>
 												</div>
 												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
 											<div class="toolbar-content-row">
@@ -562,7 +562,7 @@
 													<span>{{_$t('template-builder.elements.styles.border-bottom')}}</span>
 												</div>
 												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
 											<div class="toolbar-content-row">
@@ -570,7 +570,7 @@
 													<span>{{_$t('template-builder.elements.styles.border-left')}}</span>
 												</div>
 												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.options.styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
 										</div>
@@ -581,13 +581,13 @@
 											<div class="toolbar-content-field" style="text-align: right">
 												<label for="elementDirections">
 													<div>
-														<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="locals.selectedElement.options.styles.direction" />
+														<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="locals.selectedElement.styles.direction" />
 														{{_$t('template-builder.elements.styles.right-to-left')}}
 													</div>
 												</label>
 												<label for="elementDirections2">
 													<div>
-														<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="locals.selectedElement.options.styles.direction" />
+														<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="locals.selectedElement.styles.direction" />
 														{{_$t('template-builder.elements.styles.left-to-right')}}
 													</div>
 												</label>
@@ -680,23 +680,23 @@
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div @click="(e) => clickedOnSection(e, 'header')" :style="[{height: settings.header.height + 'in' }, settings.header.styles]" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
 
-									<component v-for="element in settings.header.elements" :key="element.options.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :options="element.options" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
+									<component v-for="element in settings.header.elements" :key="element.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :instance="element" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
 									<SectionTag :current="locals.selectedSection" tag="header" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'beforeBody')" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.beforeBody.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
+									<component v-for="element in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
 									<SectionTag :current="locals.selectedSection" tag="beforeBody" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'body')" :style="settings.body.styles" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
+									<component v-for="element in settings.body.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
 									<SectionTag :current="locals.selectedSection" tag="body" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'afterBody')" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.afterBody.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
+									<component v-for="element in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
 									<SectionTag :current="locals.selectedSection" tag="afterBody" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'footer')" :style="[{height: settings.footer.height + 'in'}, settings.footer.styles]" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.elements" :key="element.options.id" :is="element.type" :options="element.options" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
+									<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
 									<SectionTag :current="locals.selectedSection" tag="footer" />
 								</div>
 							</div>
@@ -709,13 +709,15 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IVariable } from '~/interfaces/elements'
+	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
 	import { fileEntryTypes } from '~/enums/general'
+	import { ElementParents, ElementTypes } from '~/enums/element'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { computeBindingObject, computeDatasets } from '~/plugins/element-utilities'
+	import { Element, BindingObjectLikeElement, DataSetLikeElement, EmptyElement } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
+	import { ElementGrandParents } from '@/enums/element'
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -726,16 +728,20 @@
 		},
 		computed: {
 			bindingObjectComputed() {
-				return computeBindingObject(this.locals.selectedElement, this.settings)
+				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
+					return this.locals.selectedElement.computeBindingObject(this.settings)
 			},
 			dataSetComputed() {
-				return computeDatasets(this.locals.selectedElement, this.settings)
+				if (this.locals.selectedElement instanceof DataSetLikeElement)
+					return this.locals.selectedElement.computeDatasets(this.settings)
 			}
 		},
 		data() {
 			return {
 				locals: {
 					fileEntryTypes: fileEntryTypes,
+					ElementTypes: ElementTypes,
+					elementType: ElementTypes.EMPTY,
 					selectedSection: null,
 					fullScreen: false,
 					templateHeight: 11.7,
@@ -743,24 +749,20 @@
 					dataSetDefaultRow: [
 						{
 							type: 'row',
-							options: {
-								id: idGenerator(5),
-								parent: this.options.parent,
-								styles: {},
-								configs: {
-									cells: {
-										center: {
-											type: 'cell',
-											isActive: true,
-											options: {
-												id: idGenerator(5),
-												styles: {},
-												parent: this.options.parent,
-												configs: {
-													value: ''
-												},
-											}
-										}
+							id: idGenerator(5),
+							parent: this.options.parent,
+							styles: {},
+							configs: {
+								cells: {
+									center: {
+										type: 'cell',
+										isActive: true,
+										id: idGenerator(5),
+										styles: {},
+										parent: this.options.parent,
+										configs: {
+											value: ''
+										},
 									}
 								}
 							}
@@ -819,10 +821,9 @@
 					bordersAllDirections: true,
 					tabName: 'settings',
 					isClicked: false,
-					clickedElementId: 0,
-					classType: "",
+					clickedElementId: '',
 					uniqueId: 0,
-					selectedElement: this.getDefaultSelectedElementObject(),
+					selectedElement: new EmptyElement as IElement | IEmptyElement,
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
 				settings: getDefaultSettings(),
@@ -847,7 +848,7 @@
 			 * Temp method to close modal before refactoring modal
 			 */
 			closeModal(id: string): void {
-      	document.getElementById(id)!.style.display = 'none'
+				document.getElementById(id)!.style.display = 'none'
 			},
 
 			/**
@@ -855,7 +856,7 @@
 			 * @param {Event} e - event.
 			 */
 			deselectSection(e: any): void {
-				if(e.target.id === 'templateBuilderModal')
+				if (e.target.id === 'templateBuilderModal')
 					this.locals.selectedSection = null
 			},
 
@@ -864,8 +865,8 @@
 			 * @param {String} sectionName - clicked SectionName.
 			 */
 			clickedOnSection(e: any, sectionName: string): void {
-				
-				if(e.target.id && e.target.id.includes('Template'))
+
+				if (e.target.id && e.target.id.includes('Template'))
 					this.locals.selectedSection = sectionName
 			},
 			/**
@@ -873,7 +874,7 @@
 			 */
 			fullScreen() {
 				var TBContainer = document.getElementById('fullscreenControl')
-				if(this.locals.fullScreen) {
+				if (this.locals.fullScreen) {
 					this.locals.fullScreen = false
 					TBContainer.style.margin = '2% auto'
 					TBContainer.style.width = '1090px'
@@ -888,17 +889,17 @@
 			 * delets given element
 			 * @param {Object} element - element to delete.
 			 */
-			deleteElement(element:IElement = this.locals.selectedElement) {
-				
-				if(element.options.id === -1 )
+			deleteElement(element: IElement = this.locals.selectedElement) {
+
+				if (element instanceof EmptyElement)
 					return
-				
-				var parent = this.locals.selectedElement.options.parent
+
+				var parent = this.locals.selectedElement.parent
 				var array = this.settings[parent].elements
 
-				var index = array.findIndex(x => x.options.id === element.options.id)
+				var index = array.findIndex(x => x.id === element.id)
 
-				if(index > -1)
+				if (index > -1)
 					array.splice(index, 1)
 			},
 
@@ -920,8 +921,8 @@
 			 * Copy selected element.
 			 */
 			copyCurrentElement(e: any): void {
-				
-				if(!this.locals.selectedElement || this.locals.selectedElement.options.id === -1)
+
+				if (this.locals.selectedElement instanceof EmptyElement)
 					return
 
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
@@ -931,38 +932,22 @@
 			 * Paste copied element.
 			 */
 			pasteCopiedElement(e: any): void {
-				
-				if(!this.locals.selectedElement || this.locals.selectedElement.options.id === -1)
-					return
-				
-				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
-					var parent = this.locals.selectedElement.options.parent
-					var array = this.settings[parent].elements
-					this.locals.copiedElement.options.id = idGenerator(5)
-					this.locals.copiedElement.options.styles.top = '0px'
 
-					if (this.locals.copiedElement.options.repeatorId) {
-						var repeator = array.find(x => x.options.id === this.locals.copiedElement.options.repeatorId)
-						repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet].push(this.locals.copiedElement)
+				if (this.locals.selectedElement instanceof EmptyElement)
+					return
+
+				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
+					var parent = this.locals.selectedElement.parent
+					var array = this.settings[parent].elements
+					this.locals.copiedElement.id = idGenerator(5)
+					this.locals.copiedElement.styles.top = '0px'
+
+					if (this.locals.copiedElement.repeatorId) {
+						var repeator = array.find(x => x.id === this.locals.copiedElement.repeatorId)
+						repeator.configs.appendedElements[repeator.configs.selectedDataSet].push(this.locals.copiedElement)
 					}
 					else
 						array.push(this.locals.copiedElement)
-				}
-			},
-			/**
-			 * Creates default element object.
-			 * @param {Object} - returns default selected element object
-			 */
-			getDefaultSelectedElementObject(): IElement {
-				return {
-					type: '',
-					grandParent: 'TemplateBuilder',
-					parent: 'body',
-					options: {
-						id: -1,
-						configs: {},
-						styles: {},
-					},
 				}
 			},
 			/**
@@ -1140,7 +1125,7 @@
 					return
 				}
 
-				this.locals.selectedElement = this.getDefaultSelectedElementObject()
+				this.locals.selectedElement = new EmptyElement
 				let selectedElements = document.getElementsByClassName("element selected")
 				for (let index = 0; index < selectedElements.length; index++) {
 					selectedElements[index].classList.remove("selected")
@@ -1154,7 +1139,7 @@
 			 */
 			clickedOnElement(element: IElement): void {
 				this.locals.selectedElement = element
-				this.locals.clickedElementId = element.options.id
+				this.locals.clickedElementId = element.id
 				this.locals.isClicked = true
 				this.locals.selectedSection = null
 			},
@@ -1162,123 +1147,82 @@
 			/**
 			 * create element.
 			 * @param {String} parent - element parent
-			 * @return {void} - void
+			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(parent: string, e: any): IElement {
-				let classType = this.locals.classType
+			createElement(parent: ElementParents, e: any): IElement | IEmptyElement {
+				let elementType = this.locals.elementType
 				let uniqueId = this.locals.uniqueId
-				var datasets = this.dataSetComputed
-				let tmp
-
-				if((classType === 'dataset' || classType === 'repeator') && isEmpty(datasets)) {
-					alert('[VCP] DataSet is empty')
-					throw Error('[VCP] DataSet is empty')
+				var configs
+				var styles: any = {
+					top: e.offsetY ? e.offsetY + 'px' : 0,
+					left: e.offsetX ? e.offsetX + 'px' : 0,
+					direction: this.settings.pageDirections
 				}
 
-				var defaultElementObject: IElement = {
-					type: classType,
-					options: {
-						id: idGenerator(5),
-						parent: parent,
-						grandParent: 'TemplateBuilder',
-						isChild: false,
-						configs: {},
-						styles: {
-							top: e.offsetY ? e.offsetY + 'px' : 0,
-							left: e.offsetX ? e.offsetX + 'px' : 0
-						}
-					}
-				}
 
-				switch (classType) {
-					case 'repeator':
+				switch (elementType) {
+
+					case ElementTypes.EMPTY:
+						return new EmptyElement
+
+					case ElementTypes.REPEATOR:
+
+						var datasets = this.dataSetComputed
+
+						if (isEmpty(datasets)) {
+							alert('[VCP] DataSet is empty')
+							throw Error('[VCP] DataSet is empty')
+						} // move to dropped element and validator for it
 
 						var keys = Object.keys(datasets)
-							
-						tmp = {
-							options: {
-								configs: {
-									selectedDataSet: keys[0],
-									dataSets: datasets,
-									appendedElements: {},
-									variables: this.locals.variables,
-								},
-							}
+
+						configs = {
+							selectedDataSet: keys[0],
+							dataSets: datasets,
+							appendedElements: {},
+							variables: this.locals.variables,
 						}
 
 						for (let key of keys)
-							tmp.options.configs.appendedElements[key] = []
+							configs.appendedElements[key] = []
 
-						break
-					case 'dataset':
+						return new DataSetLikeElement(ElementTypes.REPEATOR, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+
+					case ElementTypes.DATASET:
+
+						var datasets = this.dataSetComputed
+
+						if (isEmpty(datasets)) {
+							alert('[VCP] DataSet is empty')
+							throw Error('[VCP] DataSet is empty')
+						} // move to dropped element and validator for it
 
 						var keys = Object.keys(datasets)
 
-						tmp = {
-							options: {
-								configs: {
-									selectedDataSet: keys[0],
-									dataSets: datasets,
-									defaultRow: this.locals.dataSetDefaultRow
-								},
-							},
+						configs = {
+							selectedDataSet: keys[0],
+							dataSets: datasets,
+							defaultRow: this.locals.dataSetDefaultRow
 						}
-						break
-					case 'textelement':
-						tmp = {
-							options: {
-								styles: {
-									direction: this.settings.pageDirections,
-								},
-							},
-						}
+
+						return new DataSetLikeElement(ElementTypes.DATASET, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+
+					case ElementTypes.BINDINGOBJECT:
+					case ElementTypes.TEXTPATTERN:
+						return new BindingObjectLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+
+					case ElementTypes.IMAGEELEMENT:
+						configs = { imageSrc: this.configurations.imageSrc }
 						break
 
-					case 'imageelement':
-						tmp = {
-							options: {
-								configs: { imageSrc: this.configurations.imageSrc },
-							},
-						}
-						break
-
-					case 'bindingobject':
-						tmp = {
-							options: {
-								styles: {
-									direction: this.settings.pageDirections,
-								},
-							},
-						}
-						break
-
-					case 'textpattern':
-						tmp = {
-							options: {
-								styles: {
-									direction: this.settings.pageDirections,
-								},
-							},
-						}
-						break
-
-					case 'variable':
-						tmp = {
-							options: {
-								configs: {
-									uniqueId: uniqueId,
-								},
-								styles: {
-									direction: this.settings.pageDirections,
-								},
-							},
-						}
+					case ElementTypes.VARIABLE:
+						configs = { uniqueId: uniqueId }
 						break
 
 					default:
 						break
 				}
-				return merge(defaultElementObject, tmp)
+				return new Element(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
 			},
 
 			/**
@@ -1316,14 +1260,14 @@
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
-						if (elements[index].options.configs.uniqueId === uniqueId)
+						if (elements[index].configs.uniqueId === uniqueId)
 							elements.splice(index, 1)
 					}
 				}
 
 				function deleteFromFooter() {
 					for (let index = 0; index < footerElements.length; index++) {
-						if (footerElements[index].options.configs.uniqueId === uniqueId)
+						if (footerElements[index].configs.uniqueId === uniqueId)
 							footerElements.splice(index, 1)
 					}
 				}
@@ -1339,12 +1283,12 @@
 
 			/**
 			 * Method that triggers on element drag.
-			 * @param {classType} classType - element classType
+			 * @param {ElementTypes} elementType - element type
 			 * @param {uniqueId} uniqueId - element unique id
 			 * @return {void} - void
 			 */
-			startDraggingElement(classType: string, uniqueId: string): void {
-				this.locals.classType = classType
+			startDraggingElement(elementType: ElementTypes, uniqueId: string): void {
+				this.locals.elementType = elementType
 				this.locals.uniqueId = uniqueId
 				this.$refs.template.className += " dragged"
 			},
@@ -1354,7 +1298,7 @@
 			 */
 			droppedElement(parent: string, parentElement: IElement, grandParent: string, e: any) {
 
-				if (!this.locals.classType)
+				if (this.locals.elementType === ElementTypes.EMPTY)
 					return
 
 				/** Controls if added element is outside page borders and adjust if so.
@@ -1363,45 +1307,44 @@
 				 * @return {Object} element - adjusted element
 				 */
 				const adjustElementToPage = (element: any, sectionId: string): object => {
-					let elementWidth = element.options.styles.width || '30px'
-					let elementHeight = element.options.styles.height || '30px'
+					let elementWidth = element.styles.width || '30px'
+					let elementHeight = element.styles.height || '30px'
 					let containerRec = document.getElementById(sectionId).getBoundingClientRect()
 					let sectionWidth = containerRec.width
 					let sectionHeight = containerRec.height
 
 					// subtracting repeator title height for child element to make offsetTop accurate.
-					if (element.options.repeatorId)
+					if (element.repeatorId)
 						sectionHeight -= 20
 
 					elementWidth = toFloatVal(elementWidth)
 					elementHeight = toFloatVal(elementHeight)
 
-					if (elementWidth + toFloatVal(element.options.styles.left) > sectionWidth)
-						element.options.styles.left = sectionWidth - elementWidth + 'px'
+					if (elementWidth + toFloatVal(element.styles.left) > sectionWidth)
+						element.styles.left = sectionWidth - elementWidth + 'px'
 
-					if (elementHeight + toFloatVal(element.options.styles.top) > sectionHeight)
-						element.options.styles.top = sectionHeight - elementHeight + 'px'
+					if (elementHeight + toFloatVal(element.styles.top) > sectionHeight)
+						element.styles.top = sectionHeight - elementHeight + 'px'
 
 					return element
 				}
 
 				var computedParent = parentElement ? grandParent : parent
 				var elem: IElement = this.createElement(computedParent, e)
-				var parentId = parentElement ? parentElement.options.id : `${parent}Template`
+				var parentId = parentElement ? parentElement.id : `${parent}Template`
 
 
 				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
-					var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
 
-					elem.options.isChild = true
-					elem.options.repeatorId = parentElement.options.id
-					parentElement.options.configs.appendedElements[parentElement.options.configs.selectedDataSet].push(elem)
+					elem.isChild = true
+					elem.repeatorId = parentElement.id
+					parentElement.configs.appendedElements[parentElement.configs.selectedDataSet].push(elem)
 				}
 				else
 					this.settings[computedParent].elements.push(elem)
 
 				elem = adjustElementToPage(elem, parentId)
-				this.locals.classType = ""
+				this.locals.elementType = ElementTypes.EMPTY
 				this.locals.uniqueId = 0
 			},
 
@@ -1427,8 +1370,8 @@
 						return alert(this._$t('template-builder.alerts.format-notsupported'))
 
 					if (file.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-						return alert(this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize } ))
-					
+						return alert(this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize }))
+
 					return true
 				}
 
@@ -1439,9 +1382,9 @@
 
 						file = getFile('elementImageFileControl')
 
-						if(fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
-							this.toBase64(file).then(res => this.locals.selectedElement.options.configs.imageSrc = res )
-						
+						if (fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
+							this.toBase64(file).then(res => this.locals.selectedElement.configs.imageSrc = res)
+
 						break
 
 					case fileEntryTypes.imageVariable:
@@ -1449,11 +1392,11 @@
 
 						file = getFile('variableImageFileControl')
 
-						if(fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
+						if (fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
 							this.toBase64(file).then(res => variable.context = res)
-						
+
 						break
-					
+
 					case fileEntryTypes.VCPSrcFile:
 					default:
 
@@ -1462,13 +1405,13 @@
 						if (!file.name.includes('.vcp'))
 							return alert(this._$t('template-builder.alerts.format-notsupported'))
 
-						if(fileValidator(file, maximumFileSize, [])) {
+						if (fileValidator(file, maximumFileSize, [])) {
 
 							var fr = new FileReader()
 							fr.readAsText(file)
 							fr.onload = () => this.importFromSrcFile(fr.result)
 							fr.onerror = (err) => alert(err)
-					
+
 						}
 						break
 				}
@@ -1501,107 +1444,107 @@
 				}
 				const elementStyleChanger = (style: string, operator: string, e: any): void => {
 					e.preventDefault()
-					this.locals.selectedElement.options.styles[style] = toFloatVal(this.locals.selectedElement.options.styles[style], this.locals.selectedElement.options.id, style)
-					this.locals.selectedElement.options.styles[style] = eval(`${this.locals.selectedElement.options.styles[style]} ${operator} 1`)
-					this.locals.selectedElement.options.styles[style] = this.locals.selectedElement.options.styles[style] + 'px'
+					this.locals.selectedElement.styles[style] = toFloatVal(this.locals.selectedElement.styles[style], this.locals.selectedElement.id, style)
+					this.locals.selectedElement.styles[style] = eval(`${this.locals.selectedElement.styles[style]} ${operator} 1`)
+					this.locals.selectedElement.styles[style] = this.locals.selectedElement.styles[style] + 'px'
 				}
 				const keyBinds = (e: any): void => {
 
-					if(this.locals.selectedSection) {
+					if (this.locals.selectedSection) {
 
-						if(e.code === 'ArrowUp') {
+						if (e.code === 'ArrowUp') {
 							e.preventDefault()
 							this.settings[this.locals.selectedSection].height -= 0.01
 						}
-						
-						if(e.code === 'ArrowDown') {
+
+						if (e.code === 'ArrowDown') {
 							e.preventDefault()
 							this.settings[this.locals.selectedSection].height += 0.01
 						}
 					}
 
-					else if(this.locals.selectedElement.type) {
+					else if (this.locals.selectedElement.type) {
 
-					if (e.code === "Delete") { // element delete
+						if (e.code === "Delete") { // element delete
 
-						if (this.locals.selectedElement.type === 'column') {  // it's a column.
-							this.locals.selectedElement.isActive = false
-							return
-						}
+							if (this.locals.selectedElement.type === 'column') {  // it's a column.
+								this.locals.selectedElement.isActive = false
+								return
+							}
 
-						if (this.locals.selectedElement.type === 'row')  // it's a row (row is not deletable).
-							return
+							if (this.locals.selectedElement.type === 'row')  // it's a row (row is not deletable).
+								return
 
-						var parent = this.locals.selectedElement.options.parent
-						var array = this.settings[parent].elements
+							var parent = this.locals.selectedElement.parent
+							var array = this.settings[parent].elements
 
-						if (!parent)
-							return
+							if (!parent)
+								return
 
-						if (this.locals.selectedElement.options.isChild) { // it's a repeator.
+							if (this.locals.selectedElement.isChild) { // it's a repeator.
 
-							let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId) // repeator index in elements array
-
-							if (index > -1) {
-								let repeator = array[index]
-								var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
-
-								index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id) // child index in repeator children array
+								let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId) // repeator index in elements array
 
 								if (index > -1) {
+									let repeator = array[index]
+									var children = repeator.configs.appendedElements[repeator.configs.selectedDataSet]
 
-									if (children[index].type === 'dataset') { // It's a dataset..
-										let columnEl = document.getElementsByClassName('column element selected')[0]
+									index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
 
-										if (columnEl) { //  Delete is triggered on a column.
+									if (index > -1) {
 
-											let columns = children[index].options.configs.dataSets[children[index].options.configs.selectedDataSet].options.configs.columns
-											index = columns.findIndex(x => x.options.id === columnEl.id) // column index in dataset columns array
+										if (children[index].type === 'dataset') { // It's a dataset..
+											let columnEl = document.getElementsByClassName('column element selected')[0]
 
-											if (index > -1)
-												columns[index].isActive = false
+											if (columnEl) { //  Delete is triggered on a column.
 
-											return
-										} // Else normal splice will delete dataset.
+												let columns = children[index].configs.dataSets[children[index].configs.selectedDataSet].configs.columns
+												index = columns.findIndex(x => x.id === columnEl.id) // column index in dataset columns array
+
+												if (index > -1)
+													columns[index].isActive = false
+
+												return
+											} // Else normal splice will delete dataset.
+										}
+
+										children.splice(index, 1)
 									}
-
-									children.splice(index, 1)
 								}
+								return
 							}
-							return
+
+							// it's a normal element.
+							let id = this.locals.clickedElementId
+
+							let index = array.findIndex(x => x.id === id)
+
+							if (index > -1) {
+								array.splice(index, 1)
+								this.locals.selectedElement = new EmptyElement
+							}
 						}
-
-						// it's a normal element.
-						let id = this.locals.clickedElementId
-
-						let index = array.findIndex(x => x.options.id === id)
-
-						if (index > -1) {
-							array.splice(index, 1)
-							this.locals.selectedElement = this.getDefaultSelectedElementObject()
+						else if (e.ctrlKey) { // element resize
+							if (e.code === 'ArrowRight')
+								elementStyleChanger('width', '+', e)
+							else if (e.code === 'ArrowLeft')
+								elementStyleChanger('width', '-', e)
+							else if (e.code === 'ArrowUp')
+								elementStyleChanger('height', '-', e)
+							else if (e.code === 'ArrowDown')
+								elementStyleChanger('height', '+', e)
 						}
-					}
-					else if (e.ctrlKey) { // element resize
-						if (e.code === 'ArrowRight')
-							elementStyleChanger('width', '+', e)
+						else if (e.code === 'ArrowRight') { // element drag
+							elementStyleChanger('left', '+', e)
+						}
 						else if (e.code === 'ArrowLeft')
-							elementStyleChanger('width', '-', e)
+							elementStyleChanger('left', '-', e)
 						else if (e.code === 'ArrowUp')
-							elementStyleChanger('height', '-', e)
+							elementStyleChanger('top', '-', e)
 						else if (e.code === 'ArrowDown')
-							elementStyleChanger('height', '+', e)
+							elementStyleChanger('top', '+', e)
 					}
-					else if (e.code === 'ArrowRight') { // element drag
-						elementStyleChanger('left', '+', e)
-					}
-					else if (e.code === 'ArrowLeft')
-						elementStyleChanger('left', '-', e)
-					else if (e.code === 'ArrowUp')
-						elementStyleChanger('top', '-', e)
-					else if (e.code === 'ArrowDown')
-						elementStyleChanger('top', '+', e)
 				}
-			}
 				document.removeEventListener('keyup', keyBinds, false)
 				document.addEventListener('keydown', keyBinds, false)
 			},
@@ -1638,19 +1581,19 @@
 
 				var array = this.settings[elementLocation].elements
 
-				if (this.locals.selectedElement.options.isChild) { // it's a repeator.
-					let index = array.findIndex(x => x.options.id === this.locals.selectedElement.options.repeatorId)
+				if (this.locals.selectedElement.isChild) { // it's a repeator.
+					let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId)
 					if (index > -1) {
 						let repeator = array[index]
-						var children = repeator.options.configs.appendedElements[repeator.options.configs.selectedDataSet]
-						index = children.findIndex(x => x.options.id === this.locals.selectedElement.options.id)
+						var children = repeator.configs.appendedElements[repeator.configs.selectedDataSet]
+						index = children.findIndex(x => x.id === this.locals.selectedElement.id)
 						if (index > -1)
-							children[index].options.styles = merge(children[index].options.styles, this.getCoordinates(children[index].options.id))
+							children[index].styles = merge(children[index].styles, this.getCoordinates(children[index].id))
 					}
 				}
 
-				let elem = array.find(x => x.options.id === element.options.id)
-				elem.options.styles = merge(elem.options.styles, this.getCoordinates(element.options.id))
+				let elem = array.find(x => x.id === element.id)
+				elem.styles = merge(elem.styles, this.getCoordinates(element.id))
 			},
 
 			/**

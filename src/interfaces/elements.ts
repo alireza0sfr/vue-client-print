@@ -1,4 +1,5 @@
 import { ElementGrandParents, ElementParents, ElementTypes } from '~/enums/element'
+import { emptyId } from '~/plugins/element-utilities'
 
 export interface IElementOptions {
   readonly parent: string
@@ -15,6 +16,15 @@ export interface IElementCoordinates {
   width: number
   top: number
   left: number
+}
+
+export interface IEmptyElement {
+  readonly type: ElementTypes
+  readonly id: typeof emptyId
+  parent: ElementParents
+  grandParent: ElementGrandParents
+  styles: any
+  configs: any
 }
 
 export interface IElement {
