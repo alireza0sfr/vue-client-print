@@ -1,8 +1,9 @@
-import { IElement, IElementOptions, IBindingObject } from '~/interfaces/elements'
+import { IElement, IElementOptions, IBindingObject, IElementCoordinates } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
-import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn } from '../interfaces/datasets'
+import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
 import { getDisplaySetModes } from '~/enums/general'
+import { ElementTypes, ElementGrandParents, ElementParents } from '~/enums/element'
 
 import { idGenerator, toFloatVal, clone, merge } from './general-utilities'
 
@@ -13,36 +14,94 @@ import piniaInstance from './pinia-instance'
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
 const dataSetStore = useDataSetStore(piniaInstance)
 
-export default class Element {
+export class Element implements IElement {
 
-  element: IElement
-  resizerQuery: string
-  $el: HTMLElement
+  readonly type: ElementTypes
+  readonly id: string
+  protected _parent: ElementParents
+  protected _grandParent: ElementGrandParents
+  protected $el!: HTMLElement
+  protected resizerQuery!: string
+  configs: any
+  styles: any
+  isChild: boolean
+  repeatorId?: string
 
-  constructor($el: HTMLElement, resizerQuery: string, element: IElement) {
-    this.$el = $el
+  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, styles: any = {}, configs: any = {}, repeatorId: string = '') {
+    this.type = type
+    this.id = idGenerator(5)
+    this._parent = parent
+    this._grandParent = grandParent
+    this.configs = configs
+    this.styles = styles
+    this.isChild = false
+    this.repeatorId = repeatorId
+  }
+
+  get parent(): ElementParents {
+    return this._parent
+  }
+  set parent(value: ElementParents) {
+    this._parent = value
+  }
+
+  get grandParent(): ElementGrandParents {
+    return this._grandParent
+  }
+  set grandParent(value: ElementGrandParents) {
+    this._grandParent = value
+  }
+
+  /**
+   * Initializing the element
+   * @param {Object} element - html element
+   * @param {String} resizerQuery - resizer query
+   **/
+  init(element: HTMLElement, resizerQuery: string) {
+
+    this.$el = element
     this.resizerQuery = resizerQuery
-    this.element = element
+
+    this.initStyles()
+    this.makeResizable()
+    this.makeResizable()
+    this.makeClickable()
+  }
+
+  /**
+   * set !important to all styles.
+   * @param {Object} styles - raw styles
+   * @return {Object} - styles with !important
+   */
+  initStyles(styles: any = this.styles): object {
+
+    for (let key in styles)
+      if (styles[key].indexOf('!important') === -1)
+        styles[key] += ' !important'
+
+    return styles
   }
 
   /**
    * make element resiable
-   * @emits {size-changed} call size-changed event and passes cleanedCoordinates, element, queryResizer.
+   * @param {Object} element - html element
+   * @param {String} resizerQuery - resizer query
+   * @return {Void}
+   * @emits {size-changed} call size-changed event and passes getCoordinates, element, queryResizer.
    */
-  resizable(): void {
-    var elementSettings = this.element
-    var element = this.$el
-    const resizers = document.querySelectorAll(`.elem-resizer.${this.resizerQuery}`)
+  makeResizable(element: HTMLElement = this.$el, resizerQuery: string = this.resizerQuery): void {
+
+    const resizers: any = document.querySelectorAll(`.elem-resizer.${resizerQuery}`)
 
     for (let resizer of resizers)
-      // @ts-ignore
       resizer.onmousedown = (e: any) => initDrag(e, resizer)
 
-    element.onmousedown = this.dragable
+    //@ts-ignore
+    element.onmousedown = this.makeDragable
 
-    var startX: number, startY: number, startWidth: number, startHeight: number, originalLeft: number, originalTop: number, that = this
+    var startX: number, startY: number, startWidth: number, startHeight: number, originalLeft: number, originalTop: number
 
-    function initDrag(e: any, resizer: HTMLElement): void {
+    const initDrag = (e: any, resizer: HTMLElement): void => {
       if (e.target.className.includes('elem-resizer')) { // If Clicking on the resizer
         originalLeft = element.offsetLeft
         originalTop = element.offsetTop
@@ -54,86 +113,86 @@ export default class Element {
         document.onmouseup = stopDrag
       }
     }
-    function doDrag(e: any, resizer: HTMLElement): void {
+    const doDrag = (e: any, resizer: HTMLElement): void => {
 
       if (resizer.className.includes('right')) {
 
-        if (that.validatePos(element, e.clientX - startX, 'width', e))
+        if (this.validatePos(element, e.clientX - startX, 'width', e))
           element.style.width = startWidth + e.clientX - startX + "px"
       }
 
       else if (resizer.className.includes('top')) {
 
-        if (that.validatePos(element, e.clientY - startHeight, 'height', e))
+        if (this.validatePos(element, e.clientY - startHeight, 'height', e))
           element.style.height = startY - (e.clientY - startHeight) + "px"
 
-        if (that.validatePos(element, e.clientY - startY, 'top', e))
+        if (this.validatePos(element, e.clientY - startY, 'top', e))
           element.style.top = originalTop + (e.clientY - startY) + 'px'
       }
 
       else if (resizer.className.includes('bottom')) {
-        if (that.validatePos(element, e.clientY - startY, 'height', e))
+        if (this.validatePos(element, e.clientY - startY, 'height', e))
           element.style.height = startHeight + e.clientY - startY + "px"
       }
 
       else if (resizer.className.includes('left')) {
-        if (that.validatePos(element, e.clientX + startX, 'width', e))
+        if (this.validatePos(element, e.clientX + startX, 'width', e))
           element.style.width = startWidth - e.clientX + startX + "px"
 
-        if (that.validatePos(element, e.clientX - startX, 'left', e))
+        if (this.validatePos(element, e.clientX - startX, 'left', e))
           element.style.left = originalLeft + (e.clientX - startX) + 'px'
       }
 
       else if (resizer.className.includes('br')) {
 
-        if (that.validatePos(element, e.clientX - startX, 'width', e))
+        if (this.validatePos(element, e.clientX - startX, 'width', e))
           element.style.width = startWidth + e.clientX - startX + "px"
 
-        if (that.validatePos(element, e.clientY - startY, 'height', e))
+        if (this.validatePos(element, e.clientY - startY, 'height', e))
           element.style.height = startHeight + e.clientY - startY + "px"
       }
 
       else if (resizer.className.includes('tr')) {
 
-        if (that.validatePos(element, e.clientX - startX, 'width', e))
+        if (this.validatePos(element, e.clientX - startX, 'width', e))
           element.style.width = startWidth + e.clientX - startX + "px"
 
-        if (that.validatePos(element, e.clientY - startHeight, 'height', e))
+        if (this.validatePos(element, e.clientY - startHeight, 'height', e))
           element.style.height = startY - (e.clientY - startHeight) + "px"
 
-        if (that.validatePos(element, e.clientY - startY, 'top', e))
+        if (this.validatePos(element, e.clientY - startY, 'top', e))
           element.style.top = originalTop + (e.clientY - startY) + 'px'
       }
 
       else if (resizer.className.includes('bl')) {
 
-        if (that.validatePos(element, e.clientX + startX, 'width', e))
+        if (this.validatePos(element, e.clientX + startX, 'width', e))
           element.style.width = startWidth - e.clientX + startX + "px"
 
-        if (that.validatePos(element, e.clientY - startY, 'height', e))
+        if (this.validatePos(element, e.clientY - startY, 'height', e))
           element.style.height = startHeight + e.clientY - startY + "px"
 
-        if (that.validatePos(element, e.clientX - startX, 'left', e))
+        if (this.validatePos(element, e.clientX - startX, 'left', e))
           element.style.left = originalLeft + (e.clientX - startX) + 'px'
       }
 
       else if (resizer.className.includes('tl')) {
 
-        if (that.validatePos(element, e.clientX + startX, 'width', e))
+        if (this.validatePos(element, e.clientX + startX, 'width', e))
           element.style.width = startWidth - e.clientX + startX + "px"
 
-        if (that.validatePos(element, e.clientY - startHeight, 'height', e))
+        if (this.validatePos(element, e.clientY - startHeight, 'height', e))
           element.style.height = startY - (e.clientY - startHeight) + "px"
 
-        if (that.validatePos(element, e.clientX - startX, 'left', e))
+        if (this.validatePos(element, e.clientX - startX, 'left', e))
           element.style.left = originalLeft + (e.clientX - startX) + 'px'
 
-        if (that.validatePos(element, e.clientY - startY, 'top', e))
+        if (this.validatePos(element, e.clientY - startY, 'top', e))
           element.style.top = originalTop + (e.clientY - startY) + 'px'
       }
     }
 
-    function stopDrag(e: any): void {
+    const stopDrag = (e: any): void => {
       document.onmousemove = null
       document.onmouseup = null
       element.dispatchEvent(new Event("finished-editing-element"))
@@ -146,52 +205,58 @@ export default class Element {
               left: originalLeft,
               top: originalTop,
             },
-            newValue: that.cleanedCoordinates(),
-            elementDetails: { $el: that.$el, resizerQuery: that.resizerQuery, element: that.element }
+            newValue: this.getCoordinates(),
+            elementDetails: { $el: element, resizerQuery: resizerQuery, element: this }
           }
         })
       )
     }
-  }
-
-  /**
-   * element click handler 
-   * @emits {click} call click event and passes element, queryResizer.
-   */
-  clickable(): void {
-    var element = this.$el
-    var that = this
-    element.addEventListener("mousedown", onClick, false)
-    function onClick(e: any) {
-      e.stopPropagation() // prevent event to call parent events aswell
-      let selectedElements = document.getElementsByClassName('element selected')
-      for (let index = 0; index < selectedElements.length; index++) {
-        selectedElements[index].classList.remove('selected')
-      }
-      element.classList.add('selected')
-      element.dispatchEvent(
-        new CustomEvent('click', {
-          detail: {
-            elementDetails: { $el: that.$el, resizerQuery: that.resizerQuery, element: that.element }
-          }
-        })
-      )
-    }
-
   }
 
   /**
    * make element dragable
-   * @emits {drag-end} call drag-end event and passes cleanedCoordinates, element, queryResizer.
+   * @param {Object} element - html element
+   * @return {Void}
+   * @emits {drag-end} call drag-end event and passes getCoordinates, element, queryResizer.
    */
-  dragable(): void {
-    let element = this.$el
-    var startX: number, startY: number, newLeft: number, newTop: number, that = this
+  makeDragable(element: HTMLElement = this.$el): void {
 
-    // move the DIV from anywhere inside the DIV:
-    element.onmousedown = dragMouseDown
+    var startX: number, startY: number, newLeft: number, newTop: number
 
-    function dragMouseDown(e: any): void {
+    const elementDrag = (e: any): void => {
+      e = e || window.event
+      e.preventDefault()
+      // calculate the new cursor position:
+      newLeft = startX - e.clientX
+      newTop = startY - e.clientY
+      startX = e.clientX
+      startY = e.clientY
+
+      if (this.validatePos(element, newLeft, 'left', e))
+        element.style.left = element.offsetLeft - newLeft + "px"
+
+      if (this.validatePos(element, newTop, 'top', e))
+        element.style.top = element.offsetTop - newTop + "px"
+
+    }
+
+    const closeDragElement = (): void => {
+      // stop moving when mouse button is released:
+      document.onmouseup = null
+      document.onmousemove = null
+      element.dispatchEvent(new Event("finished-editing-element"))
+      element.dispatchEvent(
+        new CustomEvent('drag-end', {
+          detail: {
+            newValue: this.getCoordinates(),
+            elementDetails: { $el: element, element: this }
+          }
+        })
+      )
+    }
+
+    const dragMouseDown = (e: any): void => {
+
       if (e.target.className.includes('resizer'))
         return
 
@@ -205,50 +270,62 @@ export default class Element {
         // call a function whenever the cursor moves:
         document.onmousemove = elementDrag
       }
+    }
 
-      function elementDrag(e: any): void {
-        e = e || window.event
-        e.preventDefault()
-        // calculate the new cursor position:
-        newLeft = startX - e.clientX
-        newTop = startY - e.clientY
-        startX = e.clientX
-        startY = e.clientY
+    // move the DIV from anywhere inside the DIV:
+    element.onmousedown = dragMouseDown
+  }
 
-        if (that.validatePos(element, newLeft, 'left', e))
-          element.style.left = element.offsetLeft - newLeft + "px"
+  /**
+   * element click handler 
+   * @param {Object} element - html element
+   * @return {Void}
+   * @emits {click} call click event and passes element, queryResizer.
+   */
+  makeClickable(element: HTMLElement = this.$el): void {
 
-        if (that.validatePos(element, newTop, 'top', e))
-          element.style.top = element.offsetTop - newTop + "px"
-
+    const onClick = (e: any) => {
+      e.stopPropagation() // prevent event to call parent events aswell
+      let selectedElements = document.getElementsByClassName('element selected')
+      for (let index = 0; index < selectedElements.length; index++) {
+        selectedElements[index].classList.remove('selected')
       }
+      element.classList.add('selected')
+      element.dispatchEvent(
+        new CustomEvent('click', {
+          detail: {
+            elementDetails: { $el: element, element: this }
+          }
+        })
+      )
+    }
 
-      function closeDragElement(): void {
-        // stop moving when mouse button is released:
-        document.onmouseup = null
-        document.onmousemove = null
-        element.dispatchEvent(new Event("finished-editing-element"))
-        element.dispatchEvent(
-          new CustomEvent('drag-end', {
-            detail: {
-              newValue: that.cleanedCoordinates(),
-              elementDetails: { $el: that.$el, resizerQuery: that.resizerQuery, element: that.element }
-            }
-          })
-        )
-      }
+    element.addEventListener("mousedown", onClick, false)
+
+  }
+
+  /**
+   * returns element coordinates
+   * @return {IElementCoordinates}
+   **/
+  getCoordinates(): IElementCoordinates {
+    return {
+      height: toFloatVal(this.$el.style.height),
+      width: toFloatVal(this.$el.style.width),
+      left: toFloatVal(this.$el.style.left),
+      top: toFloatVal(this.$el.style.top),
     }
   }
 
   /**
    * validates new position of element
-   * @params {element} element to validate
+   * @params {HTMLElement} element to validate
    * @params {newVal} new val position
    * @params {pos} position type
    * @params {e} js event
    * @returns {boolean} true if valid
    */
-  validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean {
+  validatePos(element: HTMLElement = this.$el, newVal: number, pos: string, e: any): boolean {
     return true
     // var elementSettings = this.element
     // var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
@@ -299,14 +376,117 @@ export default class Element {
     // }
     // return false
   }
+}
 
-  cleanedCoordinates(): object {
-    return {
-      height: toFloatVal(this.$el.style.height),
-      width: toFloatVal(this.$el.style.width),
-      left: toFloatVal(this.$el.style.left),
-      top: toFloatVal(this.$el.style.top),
+export class DataSetLike extends Element {
+
+  /** converting normal row object to dataset row objects
+   * @param {Object} rows - Raw rows.
+   * @return {Object} - Prepared rows.
+   */
+  prepareDataSetRows(rows: IRawRow[]): IRow[] {
+
+    var preparedRows = []
+
+    for (let index = 0; index < rows.length; index++) {
+      var objectKeys = Object.keys(rows[index])
+      var tempRow: IRow = {
+        type: ElementTypes.ROW,
+        id: idGenerator(5),
+        styles: {},
+        configs: {
+          cells: {}
+        }
+      }
+
+      for (let key of objectKeys) {
+        tempRow.configs.cells[key] = {
+          type: ElementTypes.CELL,
+          id: idGenerator(5),
+          styles: {},
+          configs: {
+            isActive: true,
+            value: rows[index][key]
+          },
+        }
+      }
+      preparedRows[index] = tempRow
     }
+
+    return preparedRows
+  }
+
+  /**
+   * prepare datasets data based on repeator's selected dataset
+   * @param {ISettings} settings - app settings
+   * @return {Object} - preapred bindingObject options
+   */
+  computeDatasets(settings?: ISettings | any): IDatasets | null {
+
+    let additional: any = {}
+
+    if (this.repeatorId && this.isChild) {
+
+      var parentSection = this.parent
+      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
+      var parentElement = settings[parentSection].elements[repeatorIndex]
+      var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
+      var columns: IRawColumn[] = displaySet.configs.columns
+      var key: string = displaySet.configs.key
+
+      for (let col of columns) {
+
+        // columns should contains child columns to be used inside repeator
+        if (col.columns && col.columns.length) {
+          var name = `${key}-${col.key}`
+          additional[name] = {
+            id: idGenerator(5),
+            configs: {
+              title: name,
+              key: col.key,
+              rows: [],
+              columns: prepareDataSetColumns(col.columns),
+            }
+          }
+        }
+      }
+    }
+    return merge({}, dataSetStore.dataSets, additional)
+  }
+}
+
+export class BindingObjectLike extends Element {
+
+  /**
+   * prepare bindingObject data based on repeator's selected dataset
+   * @param {ISettings} settings - app settings
+   * @return {IBindingObject} - preapred bindingObject options
+   */
+  computeBindingObject(settings?: ISettings | any): IBindingObject {
+
+    let additional: any = {}
+
+    // it's repeator's child
+    if (this.repeatorId && this.isChild) {
+
+      var parentSection = this.parent
+      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
+      var parentElement = settings[parentSection].elements[repeatorIndex]
+      var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
+      var columns: IRawColumn[] = displaySet.configs.columns
+      var key: string = displaySet.configs.key
+
+      for (let col of columns) {
+
+        // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
+        if (col.columns && col.columns.length)
+          continue
+
+        var name = `${key}-${col.key}`
+        additional[name] = []
+      }
+    }
+    return merge({}, bindingObjectStore.bindingObject, additional)
   }
 
 }
@@ -324,15 +504,13 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
   for (let set of keys) {
     var thisSet: IRawDataset = clone(sets[set]) // removing refrence to the original data.
     tmp = {
-      options: {
-        id: idGenerator(5),
-        configs: {
-          columns: prepareDataSetColumns(thisSet.columns),
-          rows: prepareDataSetRows(thisSet.rows || []),
-          title: thisSet.title,
-          key: thisSet.key
-        },
-      }
+      id: idGenerator(5),
+      configs: {
+        columns: prepareDataSetColumns(thisSet.columns),
+        rows: thisSet.rows,
+        title: thisSet.title,
+        key: thisSet.key
+      },
     }
     preparedSets[set] = tmp
   }
@@ -355,170 +533,24 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
     var col = columns[index]
 
     tmp = {
-      columns: col.columns || [], // if child has column
-      title: col.title,
-      key: col.key,
-      isActive: false,
-      hasResizer: columns.indexOf(col) !== columns.length - 1,
-      type: 'column',
-      options: {
-        id: idGenerator(5),
-        styles: {
-          width: col.options.styles.width ? col.options.styles.width : DEFAULTCOLUMNWIDTH,
-        },
-      }
+      type: ElementTypes.COLUMN,
+      id: idGenerator(5),
+      configs: {
+        columns: col.columns || [], // if child has column
+        title: col.title,
+        key: col.key,
+        isActive: false,
+        hasResizer: columns.indexOf(col) !== columns.length - 1,
+      },
+      styles: {
+        width: col.styles.width ? col.styles.width : DEFAULTCOLUMNWIDTH,
+      },
     }
 
     preparedColumns[index] = tmp
   }
 
   return preparedColumns as IColumn[]
-}
-
-/** converting normal row object to dataset row objects
- * @param {Object} rows - Raw rows.
- * @return {Object} - Prepared rows.
- */
-export function prepareDataSetRows(rows: any): IRow[] {
-
-  var preparedRows = []
-
-  for (let index = 0; index < rows.length; index++) {
-    var objectKeys = Object.keys(rows[index])
-    var tempRow: IRow = {
-      type: 'row',
-      options: {
-        id: idGenerator(5),
-        styles: {},
-        configs: {
-          cells: {}
-        }
-      },
-    }
-
-    for (let key of objectKeys) {
-      tempRow.options.configs.cells[key] = {
-        type: 'cell',
-        isActive: true,
-        options: {
-          id: idGenerator(5),
-          styles: {},
-          configs: {
-            value: rows[index][key]
-          },
-        }
-      }
-    }
-    preparedRows[index] = tempRow
-  }
-
-  return preparedRows
-}
-
-/**
- * set !important to all styles.
- * @param {Object} obj - raw styles
- * @return {Object} - styles with !important
- */
-export function initElementStyles(obj: any): object {
-
-  for (let key in obj)
-    if (obj[key].indexOf('!important') === -1)
-      obj[key] += ' !important'
-
-  return obj
-}
-
-/**
- * Initializing the element utilities for the created element
- * @param {HTMLElement} $el - element's html
- * @param {String} resizerQuery - resizers query
- * @param {Object} element - element's settings
- * @return {Void} - void
- */
-export function initializeGeneralElement($el: HTMLElement, resizerQuery: string, element: IElement): void {
-  let elem = new Element($el, resizerQuery, element)
-  elem.clickable()
-  elem.resizable()
-  elem.dragable()
-}
-
-/**
- * prepare bindingObject
- * if its a not child element it will display the bindingObject given by the user
- * if its appended to a reapeator it will display bindingObject prop and dataset bound data
- * @param {IElement} selectedElement - selected Element
- * @param {ISettings} settings - app settings
- * @return {IBindingObject} - preapred bindingObject options
- */
-export function computeBindingObject(selectedElement: IElement, settings?: ISettings | any): IBindingObject {
-
-  let additional: any = {}
-  var options = selectedElement.options
-
-  // it's repeator's child
-  if (options.repeatorId && options.isChild) {
-
-    var parentSection = selectedElement.options.parent
-    var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === options.repeatorId)
-    var parentElement = settings[parentSection].elements[repeatorIndex]
-    var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
-    var columns: IRawColumn[] = displaySet.options.configs.columns
-    var key: string = displaySet.options.configs.key
-
-    for (let col of columns) {
-
-      // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
-      if (col.columns && col.columns.length)
-        continue
-
-      var name = `${key}-${col.key}`
-      additional[name] = []
-    }
-  }
-  return merge({}, bindingObjectStore.bindingObject, additional)
-}
-
-/**
- * prepare datasets data based on repeator's selected dataset
- * @param {Array} columns - element's raw columns
- * @param {String} key - columns key
- * @return {Object} - preapred bindingObject options
- */
-export function computeDatasets(selectedElement: IElement, settings?: ISettings | any): IDatasets | null {
-
-  let additional: any = {}
-  var options = selectedElement.options
-
-  if (options.repeatorId && options.isChild) {
-
-    var parentSection = selectedElement.options.parent
-    var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === options.repeatorId)
-    var parentElement = settings[parentSection].elements[repeatorIndex]
-    var displaySet = parentElement.options.configs.dataSets[parentElement.options.configs.selectedDataSet]
-    var columns: IRawColumn[] = displaySet.options.configs.columns
-    var key: string = displaySet.options.configs.key
-
-    for (let col of columns) {
-
-      // columns should contains child columns to be used inside repeator
-      if (col.columns && col.columns.length) {
-        var name = `${key}-${col.key}`
-        additional[name] = {
-          options: {
-            id: idGenerator(5),
-            configs: {
-              title: name,
-              key: col.key,
-              rows: [],
-              columns: prepareDataSetColumns(col.columns),
-            }
-          }
-        }
-      }
-    }
-  }
-  return merge({}, dataSetStore.dataSets, additional)
 }
 
 /**
@@ -538,15 +570,15 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
       break
 
     case getDisplaySetModes.TEMPLATEBUILDERSEPRATE:
-      displaySet = selectedElement.options.configs.dataSets[selectedElement.options.configs.selectedDataSet]
+      displaySet = selectedElement.configs.dataSets[selectedElement.configs.selectedDataSet]
       break
 
     case getDisplaySetModes.TEMPLATEBUILDERCHILD:
     default:
-      var parentSection = selectedElement.options.parent
-      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.options.id === selectedElement.options.repeatorId)
+      var parentSection = selectedElement.parent
+      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === selectedElement.repeatorId)
       var repeatorElement = settings[parentSection].elements[repeatorIndex]
-      displaySet = repeatorElement.options.configs.dataSets[repeatorElement.options.configs.selectedDataSet]
+      displaySet = repeatorElement.configs.dataSets[repeatorElement.configs.selectedDataSet]
       break
   }
 

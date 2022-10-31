@@ -6,14 +6,12 @@ interface IRawDataset {
 }
 
 interface IDataset {
-  options: {
-    readonly id: string,
-    configs: {
-      readonly key: string,
-      title: string,
-      rows: IRow[],
-      columns: IColumn[]
-    }
+  readonly id: string,
+  configs: {
+    readonly key: string,
+    title: string,
+    rows: IRow[],
+    columns: IColumn[]
   }
 }
 
@@ -29,30 +27,29 @@ interface IRawColumn {
   readonly key: string
   title: string
   columns?: IRawColumn[]
-  options: {
-    styles?: any
-  }
+  styles?: any
 }
 
-interface IColumn extends IRawColumn {
+interface IColumn {
+  readonly id: string
   readonly type: string
-  hasResizer: boolean
-  isActive: boolean
-  options: {
-    readonly id: string
-    styles?: any
+  configs: {
+    readonly key: string,
+    hasResizer: boolean
+    columns: IColumn[]
+    title: string,
+    isActive: boolean,
   }
+  styles?: any
 }
 interface ICellValue {
+  readonly id: string
   type: string
-  isActive: boolean
-  options: {
-    readonly id: string
-    configs: {
-      value: string
-    }
-    styles: object
+  configs: {
+    isActive: boolean
+    value: string
   }
+  styles: object
 }
 interface ICell {
   [key: string]: ICellValue
@@ -60,13 +57,11 @@ interface ICell {
 
 interface IRow {
   readonly type: string
-  options: {
-    readonly id: string
-    configs: {
-      cells: ICell
-    }
-    styles: object
+  readonly id: string
+  configs: {
+    cells: ICell
   }
+  styles: object
 }
 
 interface IRawRow {

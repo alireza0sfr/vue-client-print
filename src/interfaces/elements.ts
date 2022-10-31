@@ -1,34 +1,55 @@
-interface IElement {
+import { ElementGrandParents, ElementParents } from '~/enums/element'
+
+export interface IElementOptions {
+  readonly parent: string
+  readonly grandParent: string
+  readonly id: string
+  configs: any,
+  styles: object
+  isChild: boolean
+  repeatorId?: string
+}
+
+export interface IElementCoordinates {
+  height: number
+  width: number
+  top: number
+  left: number
+}
+
+export interface IElement {
   readonly type: string
-  options: IElementOptions
+  readonly id: string
+  parent: string
+  grandParent: string
+  configs: any,
+  styles: object
+  isChild: boolean
+  repeatorId?: string
+
+  init(element: HTMLElement, resizerQuery: string): void
+  initStyles(styles: any): object
+  makeResizable(element: HTMLElement, resizerQuery: string): void
+  makeDragable(element: HTMLElement): void
+  makeClickable(element: HTMLElement): void
+  getCoordinates(): IElementCoordinates
+  validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
 }
 
-interface IElementOptions {
-    readonly parent: string
-    readonly grandParent: string
-    readonly id: string
-    configs: any,
-    styles: object
-    isChild: boolean
-    repeatorId?: string
-}
-
-interface IVariable {
+export interface IVariable {
   readonly uniqueId: string,
   readonly type: string,
   name: string,
   context: string,
 }
 
-type classType =
+export type classType =
   'textelement' | 'bindingobject' |
   'datetime' | 'imageelement' |
   'pagecounter' | 'repeator' |
   'textpattern' | 'variable' |
   'dataset' | 'row' | 'column'
 
-interface IBindingObject {
+export interface IBindingObject {
   [key: string]: string
 }
-
-export { IElement, IVariable, IBindingObject, IElementOptions, classType }
