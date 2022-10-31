@@ -64,7 +64,7 @@ export class Element implements IElement {
 
     this.initStyles()
     this.makeResizable()
-    this.makeResizable()
+    this.makeDragable()
     this.makeClickable()
   }
 
