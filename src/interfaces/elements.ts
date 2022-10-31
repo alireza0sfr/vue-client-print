@@ -25,6 +25,8 @@ export interface IEmptyElement {
   grandParent: ElementGrandParents
   styles: any
   configs: any
+  isChild: boolean
+  repeatorId: string
 }
 
 export interface IElement {
@@ -44,13 +46,6 @@ export interface IElement {
   makeClickable(element: HTMLElement): void
   getCoordinates(): IElementCoordinates
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
-}
-
-export interface IVariable {
-  readonly uniqueId: string,
-  readonly type: string,
-  name: string,
-  context: string,
 }
 
 export type classType =

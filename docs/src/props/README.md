@@ -57,10 +57,13 @@ maximumFileSize: Maximum file size in KB.
 ```ts
 [
   {
-    uniqueId: '',
-    name: '',
-    context: '',
+    id: 'test1'
     type: 'text',
+    grandParent: 'Print',
+    configs: {
+      name: 'name',
+      context: 'VCP',
+    }
   },
 ];
 ```

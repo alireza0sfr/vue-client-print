@@ -36,17 +36,6 @@ interface IColumn {
 }
 ```
 
-## IVariable
-
-```ts
-interface IVariable {
-  readonly uniqueId: string;
-  readonly type: string;
-  name: string;
-  context: string;
-}
-```
-
 ## IBindingObject
 
 ```ts

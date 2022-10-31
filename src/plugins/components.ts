@@ -18,20 +18,22 @@ import Resizers from '~/components/elements/Resizers.vue'
 import SectionTag from '~/components/SectionTag.vue'
 import Toggler from '~/components/Toggler.vue'
 
+import { ElementTypes } from '~/enums/element'
+
 export default function componentRegisterer(App: any): void {
 
   // elements
-  App.component('textelement', TextElement)
-  App.component('variable', Variable)
-  App.component('datetime', DateTime)
-  App.component('bindingobject', BindingObject)
-  App.component('pagecounter', PageCounter)
-  App.component('imageelement', ImageElement)
-  App.component('textpattern', TextPattern)
-  App.component('repeator', Repeator)
-  App.component('dataset', DataSet)
-  App.component('Column', Column)
-  App.component('Row', Row)
+  App.component(ElementTypes.TEXTELEMENT, TextElement)
+  App.component(ElementTypes.VARIABLE, Variable)
+  App.component(ElementTypes.DATETIME, DateTime)
+  App.component(ElementTypes.BINDINGOBJECT, BindingObject)
+  App.component(ElementTypes.PAGECOUNTER, PageCounter)
+  App.component(ElementTypes.IMAGEELEMENT, ImageElement)
+  App.component(ElementTypes.TEXTPATTERN, TextPattern)
+  App.component(ElementTypes.REPEATOR, Repeator)
+  App.component(ElementTypes.DATASET, DataSet)
+  App.component(ElementTypes.COLUMN, Column)
+  App.component(ElementTypes.ROW, Row)
 
   // general
   App.component('Print', Print)

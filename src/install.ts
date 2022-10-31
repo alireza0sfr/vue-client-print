@@ -4,11 +4,11 @@ import { idGenerator, encode2Base64, decodeFromBase64, clone, merge } from './pl
 import { createLocalI18n } from './plugins/i18n'
 import { BindingObjectGenerator } from './plugins/general-utilities'
 // import { IRawDataset, IRawRow, IRawColumn } from '~/interfaces/datasets'
-// import { IVariable, IBindingObject } from '~/interfaces/elements'
+// import { IBindingObject } from '~/interfaces/elements'
 
 
 export { encode2Base64, decodeFromBase64, merge, clone, idGenerator, BindingObjectGenerator }
-// export { IRawDataset as IDataset, IRawRow as IRow, IRawColumn as IColumn, IVariable, IBindingObject }
+// export { IRawDataset as IDataset, IRawRow as IRow, IRawColumn as IColumn, IBindingObject }
 
 export default {
   install: (app: any, options: any): void => {

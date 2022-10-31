@@ -7,8 +7,8 @@
 				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex; position: absolute;">
-				<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? element.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
-				<!-- <component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? element.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" /> -->
+				<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" />
+				<!-- <component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" /> -->
 			</div>
 			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
@@ -17,7 +17,7 @@
 		<div v-else>
 			<div v-for="(row, index) in displaySet.configs.rows" :key="row" :style="computedStyles">
 				<div style="display: flex; position: absolute;">
-					<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" :variable="element.type === 'variable'? element.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
+					<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" />
 				</div>
 				<Resizers :query="`${element.type}-${element.id}`" />
 			</div>

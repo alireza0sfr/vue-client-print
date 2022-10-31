@@ -9,17 +9,17 @@
 					<div id="componentsParent">
 
 						<div class="body-render-section" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]">
-							<component v-for="(element, index) in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.configs.uniqueId): {}" />
+							<component v-for="(element, index) in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 						</div>
 
 						<div id="bodyComponents" v-if="settings.body && settings.body.elements && settings.body.elements.length" class="body-render-section" :style="[{height: settings.body.height + 'in'}, settings.body.styles]">
-							<component v-for="(element, index) in settings.body.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.configs.uniqueId): {}" />
+							<component v-for="(element, index) in settings.body.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 						</div>
 
 						<slot v-else class="printData" name="printData"></slot>
 
 						<div class="body-render-section" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]">
-							<component v-for="(element, index) in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.configs.uniqueId): {}" />
+							<component v-for="(element, index) in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 						</div>
 					</div>
 				</div>
@@ -69,12 +69,12 @@
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
 								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
-									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
+									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
 							<div v-if="settings.footer.isFooterRepeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
-								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" :variable="element.type === 'variable'? settings.variables.find(x => x.uniqueId === element.configs.uniqueId): {}" />
+								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 							</div>
 						</div>
 					</div>
@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-	import { IVariable } from '~/interfaces/elements'
+	import { IElement } from '~/interfaces/elements'
 	import { IDatasets } from '~/interfaces/datasets'
 	import { ISettings, IConfigs } from '~/interfaces/general'
 	import { prepareDataSets } from '~/plugins/element-utilities'
@@ -353,7 +353,7 @@
 				this.locals.templateBuilderData = json
 				this.$refs.TemplateBuilder.settingsInitFunc()
 
-				let variables: IVariable[] = this.variables && this.variables.length ? this.variables : json.variables
+				let variables: IElement[] = this.variables && this.variables.length ? this.variables : json.variables
 				if (variables)
 					this.$refs.TemplateBuilder.setVariables([...variables])
 

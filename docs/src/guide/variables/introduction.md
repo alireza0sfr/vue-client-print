@@ -12,12 +12,14 @@ Variables are elements therefore, They inherits all the features and functionali
 
 ```ts
   options:object {
-  readonly uniqueId: string // unique id given by component
+  readonly id: string // unique id given by component
   readonly type: string // unique type given by component
   readonly parent: string // determines section that element is dropped into
   readonly grandParent: string // ONLY FOR REPEATOR ELEMENT! repeator's id that element is dropped into
-  name: string, // variable's name | default: ''
-  context: string, // variable's context | default: ''
+  configs: {
+    name: string, // variable's name | default: ''
+    context: string, // variable's context | default: ''
+  }
 }
 ```
 

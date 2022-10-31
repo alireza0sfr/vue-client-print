@@ -1,68 +1,51 @@
 <template>
-	<div v-if="variable">
-
-		<!-- If the variable is text -->
-		<div v-show="variable.type === 'text' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles" ref="textVariable">
-			<span class="content">
-				{{ variable.context }}
-			</span>
-			<Resizers :query="`variable-${this.settings.id}`" />
-		</div>
-
-		<!-- If the variable is image -->
-		<div v-show="variable.type === 'image' ? true : false" :id="settings.id" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element'" :style="settings.styles" ref="imageVariable">
-			<img class="image" :src="variable.context" alt="Image" />
-			<Resizers :query="`variable-${this.settings.id}`" />
-		</div>
-
+	<div :id="element.id" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles" ref="element">
+		<span v-if="element.configs.variableType === locals.VariableTypes.TEXT ? true : false" class="content">
+			{{ element.configs.context }}
+		</span>
+		<img v-else class="image" :src="element.configs.context" alt="Image" />
+		<Resizers :query="`${locals.ElementTypes.VARIABLE}-${element.id}`" />
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes, VariableTypes } from '~/enums/element'
+	import { IElement } from '~/interfaces/elements'
 	import { merge } from '~/plugins/general-utilities'
-	export default {
-		name: "Variable",
+	import { defineComponent } from 'vue'
+	export default defineComponent({
+		name: ElementTypes.VARIABLE,
 		props: {
-			options: Object,
-			variable: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder" && (this.$refs.textVariable || this.$refs.imageVariable)) { // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.imageVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
-				initializeGeneralElement(this.$refs.textVariable, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
 				locals: {
-					classType: "variable",
+					ElementTypes: ElementTypes,
+					VariableTypes: VariableTypes
 				},
-				settings: {
-					grandParent: 'TemplateBuilder',
-					id: 0,
-					configs: {
-						uniqueId: '',
-					},
+				element: {
 					styles: {
 						whiteSpace: "pre",
 						width: "150px",
 					},
-				},
+				} as IElement,
 			}
 		},
-	};
+	})
 </script>
 
 <style>

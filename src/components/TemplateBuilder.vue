@@ -36,36 +36,35 @@
 									<span>{{ _$t('template-builder.variables.list') }}</span>
 								</div>
 								<div class="variables-content-wrapper">
-									<div @click="createVariable()" style="text-align: center; margin-top: 10px">
+									<div @click="createVariable" style="text-align: center; margin-top: 10px">
 										<a class="a-btn">{{ _$t('template-builder.variables.add') }}</a>
 									</div>
 									<div class="variables">
-										<div :class="['variable',{selected:locals.selectedElement.configs.uniqueId ===variable.uniqueId}]" v-for="variable in locals.variables" :key="variable.uniqueId">
+										<div :class="['variable',{selected:locals.selectedElement.id === variable.id}]" v-for="variable in locals.variables" :key="variable.id">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
-														<input type="text" v-model="variable.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')" aria-describedby="inputGroup-sizing-sm" />
+														<input type="text" v-model="variable.configs.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')" aria-describedby="inputGroup-sizing-sm" />
 													</div>
 													<div class="variables-content-field" style="width: 40%">
-														<select class="input-form-control" v-model="variable.type" @change="onVariableTypeChange(variable)">
-															<option value="text">{{ _$t('template-builder.variables.text') }}</option>
-															<option value="image">{{ _$t('template-builder.variables.image') }}</option>
+														<select class="input-form-control" v-model="variable.configs.variableType" @change="onVariableTypeChange(variable)">
+															<option v-for="option in locals.VariableTypes" :value="option" :key="option">{{ _$t(`template-builder.variables.${option}`) }}</option>
 														</select>
 													</div>
 												</div>
-												<div draggable="true" class="variables-content-field small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable.uniqueId)" @dragend="finishedDraggingElement()">
+												<div draggable="true" class="variables-content-field small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable)" @dragend="finishedDraggingElement()">
 													<img style="height: 20px; width: 15px; cursor: move;" src="@/assets/images/drag.png" />
 												</div>
 											</div>
-											<div class="variables-row">
-												<div v-if="variable.type === 'text'" class="variables-content-field large">
-													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
+											<div class="variables-row" style="justify-content: flex-end;">
+												<div v-if="variable.configs.variableType === locals.VariableTypes.TEXT" class="variables-content-field large">
+													<input type="text" v-model="variable.configs.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
 												</div>
-												<div class="variables-content-field large" v-if="variable.type === 'image'">
-													<input type="file" accept="image/*" @change="onFileChange(variable.uniqueId, locals.fileEntryTypes.imageVariable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
+												<div class="variables-content-field large" v-if="variable.configs.variableType === locals.VariableTypes.IMAGE">
+													<input type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageVariable, variable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
-													<img @click="deleteVariable(variable.uniqueId)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
+													<img @click="deleteVariable(variable.id)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
 												</div>
 											</div>
 										</div>
@@ -90,7 +89,7 @@
 								</div>
 								<div style="display:none" class="toolbar-content-row">
 									<div class="variables-content-field">
-										<input type="file" @change="onFileChange(null, locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
+										<input type="file" @change="onFileChange(locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
 									</div>
 								</div>
 							</div>
@@ -330,7 +329,7 @@
 											</div>
 										</div>
 										<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === 'imageelement'">
-											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(null, locals.fileEntryTypes.imageElement)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
+											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageElement)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === 'bindingobject'">
 											<div class="toolbar-content-label">
@@ -679,24 +678,23 @@
 						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<div @click="(e) => clickedOnSection(e, 'header')" :style="[{height: settings.header.height + 'in' }, settings.header.styles]" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
-
-									<component v-for="element in settings.header.elements" :key="element.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :instance="element" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
+									<component v-for="element in settings.header.elements" :key="element.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :instance="element" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
 									<SectionTag :current="locals.selectedSection" tag="header" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'beforeBody')" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
+									<component v-for="element in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
 									<SectionTag :current="locals.selectedSection" tag="beforeBody" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'body')" :style="settings.body.styles" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
+									<component v-for="element in settings.body.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
 									<SectionTag :current="locals.selectedSection" tag="body" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'afterBody')" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'afterBody', e)" :variable="element.type === 'variable'? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
+									<component v-for="element in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'afterBody', e)" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
 									<SectionTag :current="locals.selectedSection" tag="afterBody" />
 								</div>
 								<div @click="(e) => clickedOnSection(e, 'footer')" :style="[{height: settings.footer.height + 'in'}, settings.footer.styles]" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent :variable="element.type === 'variable' ? locals.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
+									<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
 									<SectionTag :current="locals.selectedSection" tag="footer" />
 								</div>
 							</div>
@@ -709,9 +707,9 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
+	import { IElement, IEmptyElement } from '~/interfaces/elements'
 	import { fileEntryTypes } from '~/enums/general'
-	import { ElementParents, ElementTypes, StylesTargets } from '~/enums/element'
+	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { Element, BindingObjectLikeElement, DataSetLikeElement, EmptyElement } from '~/plugins/element-utilities'
@@ -743,6 +741,8 @@
 					fileEntryTypes: fileEntryTypes,
 					ElementTypes: ElementTypes,
 					elementType: ElementTypes.EMPTY,
+					VariableTypes: VariableTypes,
+					currentVariable: new EmptyElement as IElement | IEmptyElement,
 					selectedSection: null,
 					fullScreen: false,
 					templateHeight: 11.7,
@@ -801,12 +801,11 @@
 							},
 						},
 					},
-					variables: [],
+					variables: [] as IElement[],
 					bordersAllDirections: true,
 					tabName: 'settings',
 					isClicked: false,
 					clickedElementId: '',
-					uniqueId: 0,
 					selectedElement: new EmptyElement as IElement | IEmptyElement,
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
@@ -938,7 +937,7 @@
 			 * set variable list.
 			 * @param {Array} list - variable list
 			 */
-			setVariables(list: IVariable[]): void {
+			setVariables(list: IElement[]): void {
 				this.locals.variables = list
 			},
 
@@ -1133,9 +1132,7 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(parent: ElementParents, e: any): IElement | IEmptyElement {
-				let elementType = this.locals.elementType
-				let uniqueId = this.locals.uniqueId
+			createElement(parent: ElementParents, e: any, elementType: ElementTypes = this.locals.elementType): IElement | IEmptyElement {
 				var configs
 				var styles: any = {
 					top: e.offsetY ? e.offsetY + 'px' : 0,
@@ -1200,10 +1197,6 @@
 						configs = { imageSrc: this.configurations.imageSrc }
 						break
 
-					case ElementTypes.VARIABLE:
-						configs = { uniqueId: uniqueId }
-						break
-
 					default:
 						break
 				}
@@ -1214,14 +1207,14 @@
 			 * Creates variable in variables tab list.
 			 * @return {void} - void
 			 */
-			createVariable(): void {
-				let tmp: IVariable = {
-					uniqueId: idGenerator(5),
-					name: '',
-					type: 'text',
-					context: '',
+			createVariable(e: any): void {
+
+				var styles: any = {
+					direction: this.settings.pageDirections
 				}
-				this.locals.variables.push(tmp)
+
+				var variable: IElement = new Element(ElementTypes.VARIABLE, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles)
+				this.locals.variables.push(variable)
 			},
 
 			/**
@@ -1229,30 +1222,30 @@
 			 * @param {variable} variable - variable object
 			 * @return {void} - void
 			 */
-			onVariableTypeChange(variable: IVariable): void {
-				variable.context = ''
+			onVariableTypeChange(variable: IElement): void {
+				variable.configs.context = ''
 			},
 
 			/**
 			 * Deletes variable in variables tab list.
-			 * @param {string} uniqueId - variable unique id
+			 * @param {string} id - variable unique id
 			 * @return {void} - void
 			 */
-			deleteVariable(uniqueId: string): void {
-				let variablesList: IVariable[] = this.locals.variables
+			deleteVariable(id: string): void {
+				let variablesList: IElement[] = this.locals.variables
 				let footerElements: IElement[] = this.settings.footer.elements
 				let headerElements: IElement[] = this.settings.header.elements
 
 				function deleteFromHeader() {
 					for (let index = 0; index < headerElements.length; index++) {
-						if (elements[index].configs.uniqueId === uniqueId)
+						if (elements[index].id === id)
 							elements.splice(index, 1)
 					}
 				}
 
 				function deleteFromFooter() {
 					for (let index = 0; index < footerElements.length; index++) {
-						if (footerElements[index].configs.uniqueId === uniqueId)
+						if (footerElements[index].id === id)
 							footerElements.splice(index, 1)
 					}
 				}
@@ -1260,7 +1253,7 @@
 				deleteFromHeader()
 				deleteFromFooter()
 
-				let index = variablesList.findIndex(x => x.uniqueId === uniqueId)
+				let index = variablesList.findIndex(x => x.id === id)
 				if (index > -1)
 					variablesList.splice(index, 1)
 			},
@@ -1269,12 +1262,12 @@
 			/**
 			 * Method that triggers on element drag.
 			 * @param {ElementTypes} elementType - element type
-			 * @param {uniqueId} uniqueId - element unique id
+			 * @param {IElement} variable - element unique id
 			 * @return {void} - void
 			 */
-			startDraggingElement(elementType: ElementTypes, uniqueId: string): void {
+			startDraggingElement(elementType: ElementTypes, variable: IElement | IEmptyElement = new EmptyElement): void {
+				this.locals.currentVariable = variable
 				this.locals.elementType = elementType
-				this.locals.uniqueId = uniqueId
 				this.$refs.template.className += " dragged"
 			},
 
@@ -1282,6 +1275,8 @@
 			 * Method that triggers on element drop on header / footer.
 			 */
 			droppedElement(parent: string, parentElement: IElement, grandParent: string, e: any) {
+
+				var elementInstance: IElement | IEmptyElement
 
 				if (this.locals.elementType === ElementTypes.EMPTY)
 					return
@@ -1291,10 +1286,10 @@
 				 * @param {String} sectionId - section id that element is dropped to (parent)
 				 * @return {Object} element - adjusted element
 				 */
-				const adjustElementToPage = (element: any, sectionId: string): object => {
+				const adjustElementToPage = (element: IElement | IEmptyElement, sectionId: string): IElement | IEmptyElement => {
 					let elementWidth = element.styles.width || '30px'
 					let elementHeight = element.styles.height || '30px'
-					let containerRec = document.getElementById(sectionId).getBoundingClientRect()
+					let containerRec = document.getElementById(sectionId)!.getBoundingClientRect()
 					let sectionWidth = containerRec.width
 					let sectionHeight = containerRec.height
 
@@ -1314,23 +1309,29 @@
 					return element
 				}
 
+				if (this.locals.elementType === ElementTypes.VARIABLE) {
+					elementInstance = this.locals.currentVariable
+					elementInstance.styles.top = e.offsetY ? e.offsetY + 'px' : 0
+					elementInstance.styles.left = e.offsetX ? e.offsetX + 'px' : 0
+				}
+				else
+					elementInstance = this.createElement(computedParent, e)
+
 				var computedParent = parentElement ? grandParent : parent
-				var elem: IElement = this.createElement(computedParent, e)
 				var parentId = parentElement ? parentElement.id : `${parent}Template`
 
 
 				if (parentElement && parentElement.type === 'repeator') {// Element is dropped on another element.
 
-					elem.isChild = true
-					elem.repeatorId = parentElement.id
-					parentElement.configs.appendedElements[parentElement.configs.selectedDataSet].push(elem)
+					elementInstance.isChild = true
+					elementInstance.repeatorId = parentElement.id
+					parentElement.configs.appendedElements[parentElement.configs.selectedDataSet].push(elementInstance)
 				}
 				else
-					this.settings[computedParent].elements.push(elem)
+					this.settings[computedParent].elements.push(elementInstance)
 
-				elem = adjustElementToPage(elem, parentId)
+				elementInstance = adjustElementToPage(elementInstance, parentId)
 				this.locals.elementType = ElementTypes.EMPTY
-				this.locals.uniqueId = 0
 			},
 
 			/**
@@ -1342,10 +1343,11 @@
 
 			/**
 			 * Method that triggers on file change.
-			 * @param {uniqueId} uniqueId - variable | element unique id
+			 * @param {fileEntryTypes} type - enrty type
+			 * @param {IElement} variable - variable
 			 * @return {void} - void
 			 */
-			onFileChange(uniqueId: string, type: fileEntryTypes): void {
+			onFileChange(type: fileEntryTypes, variable: IElement | IEmptyElement = new EmptyElement): void {
 				let maximumFileSize = this.configurations.maximumFileSize * 1000
 				var file
 
@@ -1373,12 +1375,11 @@
 						break
 
 					case fileEntryTypes.imageVariable:
-						let variable = this.locals.variables.find(x => x['uniqueId'] === uniqueId)
 
 						file = getFile('variableImageFileControl')
 
 						if (fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
-							this.toBase64(file).then(res => variable.context = res)
+							this.toBase64(file).then(res => variable.configs.context = res)
 
 						break
 

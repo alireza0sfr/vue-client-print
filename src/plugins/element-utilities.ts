@@ -501,6 +501,8 @@ export class EmptyElement implements IEmptyElement {
   grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
   styles: any = {}
   configs: any = {}
+  isChild: boolean = false
+  repeatorId: string = ''
 }
 
 export const emptyId: string = '00000'

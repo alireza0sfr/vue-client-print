@@ -34,3 +34,8 @@ export enum StylesTargets {
   ODD = 'odd',
   EVEN = 'even'
 }
+
+export enum VariableTypes {
+  IMAGE = 'image',
+  TEXT = 'text'
+}
