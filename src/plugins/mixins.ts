@@ -1,4 +1,3 @@
-import { prepareDataSetRows } from '~/plugins/element-utilities'
 
 var mixins = {
   methods: {
@@ -42,13 +41,13 @@ var mixins = {
           opt.styles.position = 'relative'
 
           rows = this.clone(rows)
-          displaySet.options.configs.rows = rows
+          displaySet.configs.rows = rows
           break
         case 'dataset':
-          var stylesTarget = opt.configs.defaultRow[0].options.configs.stylesTarget
+          var stylesTarget = opt.configs.defaultRow[0].configs.stylesTarget
           var selectedDataSet = opt.configs.selectedDataSet
           var displaySet = opt.configs.dataSets[selectedDataSet] // use computeDataSet again to be updated
-          var columns = displaySet.options.configs.columns
+          var columns = displaySet.configs.columns
           var rows
 
           // settings dataset stylesTarget based on defualtRow's stylesTarget
@@ -63,40 +62,40 @@ var mixins = {
 
           // repeator's rows contains array therfore dataset should connect to child array
           if (childDataSetKey)
-            rows = dataSets[parentDataSetKey].options.configs.rows[index][childDataSetKey]
+            rows = dataSets[parentDataSetKey].configs.rows[index][childDataSetKey]
 
           // it's dataset appended to a repeator
           else if (opt.repeatorId)
-            rows = dataSets[selectedDataSet].options.configs.rows
+            rows = dataSets[selectedDataSet].configs.rows
 
           // it's normal dataset element
           else
             rows = dataSets[selectedDataSet].rows
 
           // removing refrence to prevent recursion
-          rows = prepareDataSetRows(this.clone(rows))
-          displaySet.options.configs.rows = rows
+          rows = this.clone(rows)
+          displaySet.configs.rows = rows
 
           // storing dataset height in originalColumnHeight to use it for column height
           opt.configs.originalColumnHeight = opt.styles.height
           opt.styles.height = 'auto'
 
           for (let row of rows) {
-            var objectKeys = Object.keys(row.options.configs.cells)
+            var objectKeys = Object.keys(row.configs.cells)
             for (let index = 0; index < objectKeys.length; index++) {
 
               // select styles manually to prevent some columns styles to be overwritten
-              let data = row.options.configs.cells[objectKeys[index]]
-              data.options.styles.width = columns[index].options.styles.width
-              data.options.styles.textAlign = columns[index].options.styles.textAlign
-              data.options.styles.fontWeight = columns[index].options.styles.fontWeight
-              data.options.styles.fontFamily = columns[index].options.styles.fontFamily
-              data.options.styles.fontSize = columns[index].options.styles.fontSize
-              data.options.styles.border = columns[index].options.styles.border
-              data.options.styles.borderTop = columns[index].options.styles.borderTop
-              data.options.styles.borderBottom = columns[index].options.styles.borderBottom
-              data.options.styles.borderLeft = columns[index].options.styles.borderLeft
-              data.options.styles.borderRight = columns[index].options.styles.borderRight
+              let data = row.configs.cells[objectKeys[index]]
+              data.styles.width = columns[index].styles.width
+              data.styles.textAlign = columns[index].styles.textAlign
+              data.styles.fontWeight = columns[index].styles.fontWeight
+              data.styles.fontFamily = columns[index].styles.fontFamily
+              data.styles.fontSize = columns[index].styles.fontSize
+              data.styles.border = columns[index].styles.border
+              data.styles.borderTop = columns[index].styles.borderTop
+              data.styles.borderBottom = columns[index].styles.borderBottom
+              data.styles.borderLeft = columns[index].styles.borderLeft
+              data.styles.borderRight = columns[index].styles.borderRight
 
               data.isActive = columns[index].isActive
             }
@@ -136,7 +135,7 @@ var mixins = {
             var dataSets = this.settings.configs.dataSets
             var selectedDataSet = this.settings.configs.selectedDataSet
             var displaySet = dataSets[selectedDataSet]
-            var rows = dataSets[selectedDataSet].options.configs.rows
+            var rows = dataSets[selectedDataSet].configs.rows
 
             // prepare bindingobject's data based on rows
             for (let key of Object.keys(bindingObject)) {

@@ -1,4 +1,4 @@
-import { ElementGrandParents, ElementParents } from '~/enums/element'
+import { ElementGrandParents, ElementParents, ElementTypes } from '~/enums/element'
 
 export interface IElementOptions {
   readonly parent: string
@@ -18,10 +18,10 @@ export interface IElementCoordinates {
 }
 
 export interface IElement {
-  readonly type: string
+  readonly type: ElementTypes
   readonly id: string
-  parent: string
-  grandParent: string
+  parent: ElementParents
+  grandParent: ElementGrandParents
   configs: any,
   styles: object
   isChild: boolean

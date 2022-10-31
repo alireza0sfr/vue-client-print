@@ -4,20 +4,20 @@
 		<!-- Template Builder -->
 		<div v-if="settings.grandParent === 'TemplateBuilder'">
 			<div class="repeator-name">
-				<span>{{displaySet.options.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex; position: absolute;">
-				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.options.id" :is="element.type" :options="element.options" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
-				<!-- <component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" /> -->
+				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
+				<!-- <component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" /> -->
 			</div>
 			<Resizers :query="`repeator-${settings.id}`" />
 		</div>
 
 		<!-- Print Preview -->
 		<div v-else>
-			<div v-for="(row, index) in displaySet.options.configs.rows" :key="row" :style="computedStyles">
+			<div v-for="(row, index) in displaySet.configs.rows" :key="row" :style="computedStyles">
 				<div style="display: flex; position: absolute;">
-					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" :key="element.options.id" :is="element.type" :options="prepareComponentsOptions(element.options, element.type, index, bindingObjectCallback)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.options.configs.uniqueId): {}" />
+					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
 				</div>
 				<Resizers :query="`repeator-${settings.id}`" />
 			</div>

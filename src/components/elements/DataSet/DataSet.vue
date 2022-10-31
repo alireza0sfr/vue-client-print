@@ -1,10 +1,10 @@
 <template>
 	<div :id="settings.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + settings.class + ' element'" :style="settings.styles">
 		<div v-if="settings.grandParent === 'TemplateBuilder'" class="dataset-name">
-			<span>{{displaySet.options.configs.title}} <img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="20" height="20" /></span>
+			<span>{{displaySet.configs.title}} <img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
-			<Column v-for="column in filteredCols" :key="column.options.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
+			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
 		<div class="rows">
 			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" @click.stop="$emit('clickedOnElement', row)" @styles-target-changed="stylesTargetChanged" /> <!-- Row is only clickable on TB and the default is added -->
@@ -27,7 +27,7 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
 			},
 			filteredCols() {
-				return this.setTotalWidth(this.displaySet.options.configs.columns.filter(x => x.isActive))
+				return this.setTotalWidth(this.displaySet.configs.columns.filter(x => x.isActive))
 			},
 			filteredRows() {
 				if (this.settings.grandParent === 'TemplateBuilder')
@@ -35,18 +35,18 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 
 				var index = 1
 				var stylesTarget = this.settings.configs.stylesTarget
-				for (let row of this.displaySet.options.configs.rows) {
+				for (let row of this.displaySet.configs.rows) {
 
 					if (
 						stylesTarget === 'even' && index % 2 === 0 || // index is even
 						stylesTarget === 'odd' && index % 2 === 1 || // index is odd
 						stylesTarget === 'all'
 					)
-						row.options.styles = merge(row.options.styles, this.locals.defaultRow[0].options.styles)
+						row.styles = merge(row.styles, this.locals.defaultRow[0].styles)
 
 					index += 1
 				}
-				return this.displaySet.options.configs.rows
+				return this.displaySet.configs.rows
 			}
 		},
 		mounted() {
@@ -122,10 +122,10 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 				const diffrence = e.detail.newValue.width - e.detail.oldValue.width
 				const ratio = diffrence / e.detail.oldValue.width
 
-				for (let col of this.displaySet.options.configs.columns) {
-					col.options.styles.width = toFloatVal(col.options.styles.width)
-					col.options.styles.width += ratio * col.options.styles.width
-					col.options.styles.width = col.options.styles.width + 'px'
+				for (let col of this.displaySet.configs.columns) {
+					col.styles.width = toFloatVal(col.styles.width)
+					col.styles.width += ratio * col.styles.width
+					col.styles.width = col.styles.width + 'px'
 				}
 			},
 
@@ -136,14 +136,14 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 				let width = 0
 				for (let col of cols) {
 
-					if (!col.options.styles.width)
+					if (!col.styles.width)
 						continue
 
-					if (typeof col.options.styles.width === 'string')
-						width += parseFloat(col.options.styles.width.split('p')[0])
+					if (typeof col.styles.width === 'string')
+						width += parseFloat(col.styles.width.split('p')[0])
 
 					else
-						width += col.options.styles.width
+						width += col.styles.width
 
 				}
 				this.settings.styles.width = width + 'px'
@@ -158,9 +158,9 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 			 * @return {void} void
 			 */
 			columnWidthChanged(newWidth, id) {
-				var columns = this.displaySet.options.configs.columns
+				var columns = this.displaySet.configs.columns
 
-				var index = columns.findIndex(x => x.options.id === id)
+				var index = columns.findIndex(x => x.id === id)
 				if (index < 0 && isNaN(newWidth)) // either column is not found or column has no neighbor
 					return
 
@@ -170,33 +170,33 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
 				var seconColumn = columns[secondIndex]
-				const startWidth = toFloatVal(thisColumn.options.styles.width) || 0
+				const startWidth = toFloatVal(thisColumn.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
 				const maxWidth = toFloatVal(this.settings.styles.width) - (columns.length * minWidth)
 
 				if (diffrence < 0) {
 
-					if (toFloatVal(thisColumn.options.styles.width) < minWidth)
+					if (toFloatVal(thisColumn.styles.width) < minWidth)
 						return
 
-					if (maxWidth < toFloatVal(seconColumn.options.styles.width))
+					if (maxWidth < toFloatVal(seconColumn.styles.width))
 						return
 				}
 
 				if (diffrence > 0) {
 
-					if (maxWidth < toFloatVal(thisColumn.options.styles.width))
+					if (maxWidth < toFloatVal(thisColumn.styles.width))
 						return
 
-					if (toFloatVal(seconColumn.options.styles.width) < minWidth)
+					if (toFloatVal(seconColumn.styles.width) < minWidth)
 						return
 
 				}
 
-				thisColumn.options.styles.width = newWidth + 'px'
-				seconColumn.options.styles.width = toFloatVal(seconColumn.options.styles.width) - diffrence
-				seconColumn.options.styles.width = seconColumn.options.styles.width + 'px'
+				thisColumn.styles.width = newWidth + 'px'
+				seconColumn.styles.width = toFloatVal(seconColumn.styles.width) - diffrence
+				seconColumn.styles.width = seconColumn.styles.width + 'px'
 			},
 
 			/**
@@ -210,17 +210,17 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 					resize: 'none',
 					height: this.calculateColumnHeight()
 				}
-				var computedStyles = merge(defaultColStyles, column.options.styles)
+				var computedStyles = merge(defaultColStyles, column.styles)
 				let tmp = {
 					grandParent: this.settings.grandParent,
 					hasResizer: column.hasResizer,
-					id: column.options.id,
+					id: column.id,
 					configs: {
 						title: column.title
 					},
 					styles: computedStyles,
 				}
-				merge(tmp.styles, column.options.styles)
+				merge(tmp.styles, column.styles)
 				return tmp
 			},
 			/**
@@ -230,13 +230,13 @@ import { toFloatVal, merge } from '~/plugins/general-utilities'
 			 */
 
 			prepareRowOptions(row) {
-				row.options.grandParent = this.settings.grandParent
-				row.options.configs.stylesTarget = this.settings.configs.stylesTarget
+				row.grandParent = this.settings.grandParent
+				row.configs.stylesTarget = this.settings.configs.stylesTarget
 				let defaultColStyles = {
 					display: 'flex',
 				}
-				row.options.styles = merge(row.options.styles, defaultColStyles)
-				return row.options
+				row.styles = merge(row.styles, defaultColStyles)
+				return row
 			}
 		}
 	}

@@ -54,73 +54,57 @@
 							{
 								title: 'new column',
 								key: 'new',
-								options: {
-									styles: {
-										width: '70px',
-									},
+								styles: {
+									width: '70px',
 								},
 							},
 							{
 								title: 'column 1',
 								key: 'center',
-								options: {
-									styles: {
-										width: '70px',
-									},
+								styles: {
+									width: '70px',
 								},
 							},
 							{
 								title: 'column 2',
 								key: 'account',
-								options: {
-									styles: {
-										width: '50px',
-									}
+								styles: {
+									width: '50px',
 								},
 								columns: [
 									{
 										title: 'column child 1',
 										key: 'ccenter',
-										options: {
-											styles: {
-												width: '70px',
-											},
-										}
+										styles: {
+											width: '70px',
+										},
 									},
 									{
 										title: 'column child 2',
 										key: 'caccount',
-										options: {
-											styles: {
-												width: '50px',
-											}
+										styles: {
+											width: '50px',
 										}
 									},
 									{
 										title: 'column child 3',
 										key: 'cdate',
-										options: {
-											styles: {
-												width: '50px',
-											}
+										styles: {
+											width: '50px',
 										}
 									},
 									{
 										title: 'column child 4',
 										key: 'cbalance',
-										options: {
-											styles: {
-												width: '50px',
-											}
+										styles: {
+											width: '50px',
 										}
 									},
 									{
 										title: 'column child 5',
 										key: 'ctype',
-										options: {
-											styles: {
-												width: '50px',
-											}
+										styles: {
+											width: '50px',
 										}
 									},
 								]
@@ -128,29 +112,23 @@
 							{
 								title: 'column 3',
 								key: 'date',
-								options: {
-									styles: {
-										width: '50px',
-									},
-								}
+								styles: {
+									width: '50px',
+								},
 							},
 							{
 								title: 'column 4',
 								key: 'balance',
-								options: {
-									styles: {
-										width: '40px',
-									},
-								}
+								styles: {
+									width: '40px',
+								},
 							},
 							{
 								title: 'column 5',
 								key: 'type',
-								options: {
-									styles: {
-										width: '90px',
-									},
-								}
+								styles: {
+									width: '90px',
+								},
 							},
 						],
 						rows: [
@@ -264,38 +242,30 @@
 							{
 								title: 'column 1',
 								key: 'center',
-								options: {
-									styles: {
-										width: '70px',
-									},
-								}
+								styles: {
+									width: '70px',
+								},
 							},
 							{
 								title: 'column 2',
 								key: 'account',
-								options: {
-									styles: {
-										width: '50px',
-									}
+								styles: {
+									width: '50px',
 								}
 							},
 							{
 								title: 'column 4',
 								key: 'balance',
-								options: {
-									styles: {
-										width: '40px',
-									},
-								}
+								styles: {
+									width: '40px',
+								},
 							},
 							{
 								title: 'column 5',
 								key: 'type',
-								options: {
-									styles: {
-										width: '90px',
-									},
-								}
+								styles: {
+									width: '90px',
+								},
 							},
 						],
 						rows: [],

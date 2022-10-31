@@ -1,6 +1,6 @@
 <template>
 	<div :id="settings.id" ref="element" :class="locals.classType + settings.class" :style="settings.styles">
-		<span v-for="row in filteredCells" :key="row" class="label" :style="row.options.styles">{{row.options.configs.value}}</span>
+		<span v-for="row in filteredCells" :key="row" class="label" :style="row.styles">{{row.configs.value}}</span>
 	</div>
 </template>
 

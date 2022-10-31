@@ -29,12 +29,10 @@ interface IRow {
 
 ```ts
 interface IColumn {
-  readonly key: string
-  title: string
-  columns?: IColumn[]
-  options: {
-    styles?: any
-  }
+  readonly key: string;
+  title: string;
+  columns?: IColumn[];
+  styles?: any;
 }
 ```
 
@@ -42,10 +40,10 @@ interface IColumn {
 
 ```ts
 interface IVariable {
-  readonly uniqueId: string,
-  readonly type: string,
-  name: string,
-  context: string,
+  readonly uniqueId: string;
+  readonly type: string;
+  name: string;
+  context: string;
 }
 ```
 
@@ -53,6 +51,6 @@ interface IVariable {
 
 ```ts
 interface IBindingObject {
-  [key: string]: string
+  [key: string]: string;
 }
 ```

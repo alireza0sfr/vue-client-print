@@ -31,6 +31,7 @@ sidebar: auto
 
 imageSrc: Given image for imageElement and variable with image type.
 usage:
+
 ```ts
 // it can be either imported image file or base64 encoded image
 import Logo from './assetsDir/Logo
@@ -42,6 +43,7 @@ import Logo from './assetsDir/Logo
   imageSrc: base64Image
 }
 ```
+
 [VCP's encodebase64 API](/apis/#encode2base64)
 
 maximumFileSize: Maximum file size in KB.
@@ -78,20 +80,16 @@ object = {
       {
         title: 'firstName',
         key: 'firstName',
-        options: {
           styles: {
             width: '70px',
           },
-        },
       },
       {
         title: 'lastName',
         key: 'lastName',
-        options: {
           styles: {
             width: '70px',
           },
-        },
       },
     ]
     rows: [
@@ -121,17 +119,13 @@ columns: [
       {
         title: 'Child Columns',
         key: 'child Columns',
-        options: {
           styles: {
             width: '70px',
           },
-        },
       },
     ]
-    options: {
       styles: {
         width: '70px',
-      },
     },
   },
 ];
