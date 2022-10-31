@@ -1,52 +1,48 @@
 <template>
-	<div :id="settings.id" :data-testid="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
 		<div class="content">
-			{{settings.configs.text}}
+			{{element.configs.text}}
 		</div>
-		<Resizers :query="`${this.locals.classType}-${settings.id}`" />
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { IElement } from '~/interfaces/elements'
 	import { merge } from '~/plugins/general-utilities'
-	export default {
-		name: "TextElement",
+	import { defineComponent } from 'vue'
+	export default defineComponent({
+		name: ElementTypes.TEXTELEMENT,
 		props: {
-			options: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
-				locals: {
-					classType: "textelement",
-				},
-				settings: {
+				element: {
 					configs: { text: this._$t('template-builder.elements.configs.type-text') },
 					styles: {
 						whiteSpace: "pre",
 						width: "150px",
 						fontWeight: "",
 					},
-				},
+				} as IElement,
 			}
 		},
-	};
+	})
 </script>
 
 <style>

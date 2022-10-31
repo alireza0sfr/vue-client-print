@@ -6,13 +6,13 @@
 			<span>
 				{{ element.configs.field === "" ? locals.text1 : locals.text + ' ' + element.configs.field }}
 			</span>
-			<Resizers :query="`${locals.ElementTypes.BINDINGOBJECT}-${element.id}`" />
+			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
 
 		<!-- If its the print mode -->
 		<div v-else>
 			{{ computedValue }}
-			<Resizers :query="`${locals.ElementTypes.BINDINGOBJECT}-${element.id}`" />
+			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
 
 	</div>
@@ -56,7 +56,6 @@
 		data() {
 			return {
 				locals: {
-					ElementTypes: ElementTypes,
 					ElementGrandParents: ElementGrandParents,
 					text: this._$t('template-builder.elements.bindingobject'),
 					text1: this._$t('template-builder.elements.binding-object-text')
