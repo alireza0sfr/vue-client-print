@@ -29,7 +29,7 @@ export enum ElementGrandParents {
   PRINT = 'print'
 }
 
-export enum StyleTargets {
+export enum StylesTargets {
   ALL = 'all',
   ODD = 'odd',
   EVEN = 'even'

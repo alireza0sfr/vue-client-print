@@ -1,4 +1,4 @@
-import { ElementGrandParents, StyleTargets } from '@/enums/element'
+import { ElementGrandParents, StylesTargets } from '@/enums/element'
 
 interface IRawDataset {
   readonly key: string
@@ -62,7 +62,8 @@ interface IRow {
   readonly id: string
   grandParent: ElementGrandParents
   configs: {
-    stylesTarget: StyleTargets
+    stylesTarget: StylesTargets
+    rowsHeight: string
     cells: ICell
   }
   styles: object

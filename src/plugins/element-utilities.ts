@@ -3,7 +3,7 @@ import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
 import { getDisplaySetModes } from '~/enums/general'
-import { ElementTypes, ElementGrandParents, ElementParents } from '~/enums/element'
+import { ElementTypes, ElementGrandParents, ElementParents, StylesTargets } from '~/enums/element'
 
 import { idGenerator, toFloatVal, clone, merge } from './general-utilities'
 
@@ -392,10 +392,13 @@ export class DataSetLikeElement extends Element {
       var objectKeys = Object.keys(rows[index])
       var tempRow: IRow = {
         type: ElementTypes.ROW,
+        grandParent: ElementGrandParents.PRINT,
         id: idGenerator(5),
         styles: {},
         configs: {
-          cells: {}
+          cells: {},
+          rowsHeight: 'auto',
+          stylesTarget: StylesTargets.ALL
         }
       }
 

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-	import { ElementGrandParents, ElementTypes, StyleTargets } from '~/enums/element'
+	import { ElementGrandParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
 	import { toFloatVal, merge } from '~/plugins/general-utilities'
@@ -41,9 +41,9 @@
 				for (let row of this.displaySet.configs.rows) {
 
 					if (
-						stylesTarget === StyleTargets.EVEN && index % 2 === 0 || // index is even
-						stylesTarget === StyleTargets.ODD && index % 2 === 1 || // index is odd
-						stylesTarget === StyleTargets.ALL
+						stylesTarget === StylesTargets.EVEN && index % 2 === 0 || // index is even
+						stylesTarget === StylesTargets.ODD && index % 2 === 1 || // index is odd
+						stylesTarget === StylesTargets.ALL
 					)
 						row.styles = merge(row.styles, this.element.configs.defaultRow.styles)
 
@@ -83,7 +83,7 @@
 			 * event triggered style target dropdown changes
 			 * @return {void} void
 			 */
-			stylesTargetChanged(target: StyleTargets): void {
+			stylesTargetChanged(target: StylesTargets): void {
 				this.element.configs.stylesTarget = target
 			},
 			/**
@@ -214,6 +214,8 @@
 
 				row.grandParent = this.element.grandParent
 				row.configs.stylesTarget = this.element.configs.stylesTarget
+				row.configs.cells = {}
+				row.configs.rowsHeight = 'auto'
 
 				let defaultColStyles = {
 					display: 'flex',

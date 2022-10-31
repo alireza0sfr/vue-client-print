@@ -401,7 +401,7 @@
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
-													<option v-for="option in locals.StyleTargets" :value="option" :key="option">{{ _$t(`template-builder.elements.configs.${option}`) }}</option>
+													<option v-for="option in locals.StylesTargets" :value="option" :key="option">{{ _$t(`template-builder.elements.configs.${option}`) }}</option>
 												</select>
 											</div>
 										</div>
@@ -711,7 +711,7 @@
 <script lang="ts">
 	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
 	import { fileEntryTypes } from '~/enums/general'
-	import { ElementParents, ElementTypes, StyleTargets } from '~/enums/element'
+	import { ElementParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { Element, BindingObjectLikeElement, DataSetLikeElement, EmptyElement } from '~/plugins/element-utilities'
@@ -739,7 +739,7 @@
 		data() {
 			return {
 				locals: {
-					StyleTargets: StyleTargets,
+					StylesTargets: StylesTargets,
 					fileEntryTypes: fileEntryTypes,
 					ElementTypes: ElementTypes,
 					elementType: ElementTypes.EMPTY,
@@ -1184,7 +1184,7 @@
 						var keys = Object.keys(datasets)
 
 						configs = {
-							stylesTarget: StyleTargets.ALL,
+							stylesTarget: StylesTargets.ALL,
 							selectedDataSet: keys[0],
 							dataSets: datasets,
 							defaultRow: this.locals.dataSetDefaultRow
