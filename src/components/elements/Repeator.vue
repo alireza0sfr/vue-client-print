@@ -1,71 +1,68 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element'" :style="settings.styles">
+	<div :id="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
 
 		<!-- Template Builder -->
-		<div v-if="settings.grandParent === 'TemplateBuilder'">
+		<div v-if="element.grandParent === ElementGrandParents.TEMPLATEBUILDER">
 			<div class="repeator-name">
 				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex; position: absolute;">
-				<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
-				<!-- <component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" /> -->
+				<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? element.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
+				<!-- <component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" :variable="element.type === 'variable'? element.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" /> -->
 			</div>
-			<Resizers :query="`repeator-${settings.id}`" />
+			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
 
 		<!-- Print Preview -->
 		<div v-else>
 			<div v-for="(row, index) in displaySet.configs.rows" :key="row" :style="computedStyles">
 				<div style="display: flex; position: absolute;">
-					<component v-for="element in settings.configs.appendedElements[settings.configs.selectedDataSet]" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" :variable="element.type === 'variable'? settings.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
+					<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" :variable="element.type === 'variable'? element.configs.variables.find(x =>x.uniqueId === element.configs.uniqueId): {}" />
 				</div>
-				<Resizers :query="`repeator-${settings.id}`" />
+				<Resizers :query="`${element.type}-${element.id}`" />
 			</div>
 		</div>
 
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { IBindingObject, IElement } from '~/interfaces/elements'
 	import { merge } from '~/plugins/general-utilities'
-	export default {
-		name: "Repeator",
+	import { defineComponent } from 'vue'
+	export default defineComponent({
+		name: ElementTypes.REPEATOR,
 		props: {
-			options: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		computed: {
 			computedStyles() {
-				return { height: this.settings.configs.originalHeight }
+				return { height: this.element.configs.originalHeight }
 			},
 			displaySet() {
-				return this.settings.configs.dataSets[this.settings.configs.selectedDataSet]
+				return this.element.configs.dataSets[this.element.configs.selectedDataSet]
 			},
 		},
 		mounted() {
-			if (this.settings.grandParent === 'TemplateBuilder') { // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
 				locals: {
-					classType: "repeator",
+					ElementGrandParents: ElementGrandParents
 				},
-				settings: {
-					grandParent: 'TemplateBuilder',
-					id: 0,
+				element: {
 					configs: {
 						dataSets: {},
 						selectedDataSet: '',
@@ -76,35 +73,32 @@ import { initElementStyles, initializeGeneralElement } from '~/plugins/element-u
 						width: '600px',
 						height: '60px'
 					}
-				},
+				} as IElement,
 			}
 		},
 		methods: {
 
 			/**
 			 * Callback function for bindingobject case on preapreComponentsElements in mixins.
-			 * @param {Object} options - Preview settings
+			 * @param {IElement} element - element instance
 			 * @param {Object} bindingObject - BindingObject
 			 * @param {String} key - Selected field from bindingObject
 			 * @param {Number} index - Component rendring loop index
 			 * @return {void} - void
 			 */
-			bindingObjectCallback(opt, bindingObject, key, index) {
+			bindingObjectCallback(element: IElement, bindingObject: IBindingObject, key: string, index: number): void {
 				if (bindingObject[key]) {
 
 					if (Array.isArray(bindingObject[key]))
-						opt.configs.value = bindingObject[key][index]
+						element.configs.value = bindingObject[key][index]
 
 					else
-						opt.configs.value = bindingObject[key]
+						element.configs.value = bindingObject[key]
 
 				}
 				else
-					opt.configs.value = ''
+					element.configs.value = ''
 			},
 		},
-	}
+	})
 </script>
-
-<style>
-</style>
