@@ -1,68 +1,67 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+	<div :id="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
 
 		<!-- If its the template builder mode -->
-		<div class="content" v-if="settings.grandParent === 'TemplateBuilder'">
+		<div class="content" v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
 			<span>
-				{{ settings.configs.field === "" ? locals.text1 : locals.text + ' ' + settings.configs.field }}
+				{{ element.configs.field === "" ? locals.text1 : locals.text + ' ' + element.configs.field }}
 			</span>
-			<Resizers :query="`bindingobject-${settings.id}`" />
+			<Resizers :query="`${locals.ElementTypes.BINDINGOBJECT}-${element.id}`" />
 		</div>
 
 		<!-- If its the print mode -->
 		<div v-else>
 			{{ computedValue }}
-			<Resizers :query="`bindingobject-${settings.id}`" />
+			<Resizers :query="`${locals.ElementTypes.BINDINGOBJECT}-${element.id}`" />
 		</div>
 
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
-import { toPersianDigits, merge } from '~/plugins/general-utilities'
-	export default {
-		name: "bindingobject",
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { IElement } from '~/interfaces/elements'
+	import { toPersianDigits, merge } from '~/plugins/general-utilities'
+	import { defineComponent } from 'vue'
+	export default defineComponent({
+		name: ElementTypes.BINDINGOBJECT,
 		props: {
-			options: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
+
 		},
 		computed: {
 			computedValue() {
 
-				if (this.settings.configs.persianNumbers) {
+				if (this.element.configs.persianNumbers) {
 
-					return toPersianDigits(this.settings.configs.value)
+					return toPersianDigits(this.element.configs.value)
 				}
 
-				return this.settings.configs.value
+				return this.element.configs.value
 			}
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
 				locals: {
-					classType: "bindingobject",
+					ElementTypes: ElementTypes,
+					ElementGrandParents: ElementGrandParents,
 					text: this._$t('template-builder.elements.bindingobject'),
 					text1: this._$t('template-builder.elements.binding-object-text')
 				},
-				settings: {
-					id: 0,
-					grandParent: 'TemplateBuilder',
+				element: {
 					configs: {
 						persianNumbers: false,
 						field: "",
@@ -72,10 +71,10 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 						whiteSpace: "pre",
 						width: "150px",
 					},
-				},
+				} as IElement,
 			}
 		},
-	};
+	})
 </script>
 
 <style>
