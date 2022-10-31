@@ -19,25 +19,20 @@ export interface IElementCoordinates {
 }
 
 export interface IEmptyElement {
-  readonly type: ElementTypes
-  readonly id: typeof emptyId
+  type: ElementTypes
+  id: typeof emptyId
   parent: ElementParents
   grandParent: ElementGrandParents
   styles: any
   configs: any
   isChild: boolean
-  repeatorId: string
+  repeatorId?: string
 }
 
-export interface IElement {
-  readonly type: ElementTypes
-  readonly id: string
-  parent: ElementParents
-  grandParent: ElementGrandParents
-  configs: any,
-  styles: any
-  isChild: boolean
-  repeatorId?: string
+export interface IElement extends IEmptyElement {
+  
+  $el?: HTMLElement
+  resizerQuery?: string
 
   init(element: HTMLElement, resizerQuery: string): void
   initStyles(styles: any): object

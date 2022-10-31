@@ -14,29 +14,15 @@ import piniaInstance from './pinia-instance'
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
 const dataSetStore = useDataSetStore(piniaInstance)
 
-export class Element implements IElement {
-
-  readonly type: ElementTypes
-  readonly id: string
-  protected _parent: ElementParents
-  protected _grandParent: ElementGrandParents
-  protected $el!: HTMLElement
-  protected resizerQuery!: string
-  configs: any
-  styles: any
-  isChild: boolean
-  repeatorId?: string
-
-  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, styles: any = {}, configs: any = {}, repeatorId: string = '') {
-    this.type = type
-    this.id = idGenerator(5)
-    this._parent = parent
-    this._grandParent = grandParent
-    this.configs = configs
-    this.styles = styles
-    this.isChild = false
-    this.repeatorId = repeatorId
-  }
+export class EmptyElement implements IEmptyElement {
+  type: ElementTypes = ElementTypes.EMPTY
+  id: string = emptyId
+  protected _parent: ElementParents = ElementParents.EMPTY
+  protected _grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
+  styles: any = {}
+  configs: any = {}
+  isChild: boolean = false
+  repeatorId?: string = ''
 
   get parent(): ElementParents {
     return this._parent
@@ -50,6 +36,38 @@ export class Element implements IElement {
   }
   set grandParent(value: ElementGrandParents) {
     this._grandParent = value
+  }
+}
+
+export class Element extends EmptyElement implements IElement {
+
+  protected _$el!: HTMLElement
+  protected _resizerQuery!: string
+
+  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, styles: any = {}, configs: any = {}, repeatorId: string = '') {
+    super()
+    this.type = type
+    this.id = idGenerator(5)
+    this._parent = parent
+    this._grandParent = grandParent
+    this.configs = configs
+    this.styles = styles
+    this.isChild = false
+    this.repeatorId = repeatorId
+  }
+
+  get $el(): HTMLElement {
+    return this._$el
+  }
+  set $el(value: HTMLElement) {
+    this._$el = value
+  }
+
+  get resizerQuery(): string {
+    return this._resizerQuery
+  }
+  set resizerQuery(value: string) {
+    this._resizerQuery = value
   }
 
   /**
@@ -492,17 +510,6 @@ export class BindingObjectLikeElement extends Element {
     return merge({}, bindingObjectStore.bindingObject, additional)
   }
 
-}
-
-export class EmptyElement implements IEmptyElement {
-  readonly type: ElementTypes = ElementTypes.EMPTY
-  readonly id: string = emptyId
-  parent: ElementParents = ElementParents.EMPTY
-  grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
-  styles: any = {}
-  configs: any = {}
-  isChild: boolean = false
-  repeatorId: string = ''
 }
 
 export const emptyId: string = '00000'
