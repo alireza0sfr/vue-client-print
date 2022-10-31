@@ -33,7 +33,7 @@ export interface IElement {
   parent: ElementParents
   grandParent: ElementGrandParents
   configs: any,
-  styles: object
+  styles: any
   isChild: boolean
   repeatorId?: string
 

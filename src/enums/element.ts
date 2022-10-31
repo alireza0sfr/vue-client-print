@@ -28,3 +28,9 @@ export enum ElementGrandParents {
   TEMPLATEBUILDER = 'templatebuilder',
   PRINT = 'print'
 }
+
+export enum StyleTargets {
+  ALL = 'all',
+  ODD = 'odd',
+  EVEN = 'even'
+}

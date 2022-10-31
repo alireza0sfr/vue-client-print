@@ -1,3 +1,5 @@
+import { ElementGrandParents, StyleTargets } from '@/enums/element'
+
 interface IRawDataset {
   readonly key: string
   title: string
@@ -58,7 +60,9 @@ interface ICell {
 interface IRow {
   readonly type: string
   readonly id: string
+  grandParent: ElementGrandParents
   configs: {
+    stylesTarget: StyleTargets
     cells: ICell
   }
   styles: object
