@@ -1,52 +1,50 @@
 <template>
-	<div :id="settings.id" :data-testid="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
 		<span class="content">
 			{{ computedValue }}
 		</span>
-		<Resizers :query="`datetime-${settings.id}`" />
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
-import { toPersianDigits, merge } from '~/plugins/general-utilities'
-	export default {
-		name: "DateTime",
+<script lang="ts">
+	import { toPersianDigits, merge } from '~/plugins/general-utilities'
+	import { IElement } from '~/interfaces/elements'
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { defineComponent } from 'vue'
+	export default defineComponent({
+		name: ElementTypes.DATETIME,
 		props: {
-			options: {
-				type: Object,
-			},
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder") // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		computed: {
 			computedValue() {
 
-				if (this.settings.configs.hasDate && this.settings.configs.hasTime)
-					return this.dateToday + ' ' + this.timeToday
+				if (this.element.configs.hasDate && this.element.configs.hasTime)
+					return this.locals.dateToday + ' ' + this.locals.timeToday
 
-				else if (this.settings.configs.hasDate && !this.settings.configs.hasTime)
-					return this.dateToday
+				else if (this.element.configs.hasDate && !this.element.configs.hasTime)
+					return this.locals.dateToday
 
-				else if (this.settings.configs.hasTime && !this.settings.configs.hasDate)
-					return this.timeToday
+				else if (this.element.configs.hasTime && !this.element.configs.hasDate)
+					return this.locals.timeToday
 
 				else
 					return ''
 			}
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 
-					if (this.settings.configs.persianDate)
+					if (this.element.configs.persianDate)
 						this.persianDate()
 					else
 						this.gregorianDate()
@@ -55,14 +53,11 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 		},
 		data() {
 			return {
-				dateToday: "",
-				timeToday: "",
 				locals: {
-					classType: "datetime",
+					dateToday: "",
+					timeToday: "",
 				},
-				settings: {
-					grandParent: 'TemplateBuilder',
-					id: 0,
+				element: {
 					configs: {
 						hasDate: true,
 						hasTime: true,
@@ -71,7 +66,7 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 					styles: {
 						width: '150px'
 					}
-				},
+				} as IElement,
 			}
 		},
 		methods: {
@@ -81,8 +76,8 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 
 			persianDate() {
 				let today = new Date().toLocaleDateString("fa-IR")
-				this.dateToday = today
-				this.timeToday = toPersianDigits(this.timeNow())
+				this.locals.dateToday = today
+				this.locals.timeToday = toPersianDigits(this.timeNow())
 			},
 
 			/**
@@ -95,8 +90,8 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 				var mm = String(today.getMonth() + 1).padStart(2, "0") //January is 0!
 				var yyyy = today.getFullYear()
 
-				this.dateToday = yyyy + "/" + dd + "/" + mm
-				this.timeToday = this.timeNow()
+				this.locals.dateToday = yyyy + "/" + dd + "/" + mm
+				this.locals.timeToday = this.timeNow()
 			},
 
 			/** 
@@ -113,7 +108,7 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 				)
 			},
 		},
-	};
+	})
 </script>
 
 <style>

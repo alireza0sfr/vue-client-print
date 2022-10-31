@@ -129,7 +129,7 @@ export function isObject(item: any): boolean {
  * @param {Number} n - given number
  * @return {string} - converted number
  */
-export function toPersianDigits(n: number): string {
+export function toPersianDigits(n: string): string {
   const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]
 
   return n.toString().replace(/\d/g, (x: any) => persianDigits[x])
