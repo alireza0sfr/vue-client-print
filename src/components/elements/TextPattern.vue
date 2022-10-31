@@ -1,63 +1,60 @@
 <template>
-	<div :id="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+	<div :id="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
 
 		<!-- If its the template builder mode -->
-		<div class="content" v-if="settings.grandParent === 'TemplateBuilder'">
+		<div class="content" v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
 			<span>
-				{{ settings.configs.text }}
+				{{ element.configs.text }}
 			</span>
-			<Resizers :query="`textpattern-${settings.id}`" />
+			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
 
 		<!-- If its the print mode -->
 		<div v-else>
 			{{ computedValue }}
-			<Resizers :query="`textpattern-${settings.id}`" />
+			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
 
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
-import { toPersianDigits, merge } from '~/plugins/general-utilities'
-	export default {
-		name: "TextPattern",
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { IElement } from '~/interfaces/elements'
+	import { defineComponent } from 'vue'
+	import { toPersianDigits, merge } from '~/plugins/general-utilities'
+	export default defineComponent({
+		name: ElementTypes.TEXTPATTERN,
 		props: {
-			options: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		computed: {
 			computedValue() {
-				if (this.settings.configs.persianNumbers) {
-					return toPersianDigits(this.settings.configs.value)
+				if (this.element.configs.persianNumbers) {
+					return toPersianDigits(this.element.configs.value)
 				}
-				return this.settings.configs.value
+				return this.element.configs.value
 			}
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
 				locals: {
-					classType: "textpattern",
+					ElementGrandParents: ElementGrandParents,
 				},
-				settings: {
-					grandParent: 'TemplateBuilder',
-					id: 0,
+				element: {
 					configs: {
 						persianNumbers: false,
 						text: this._$t('template-builder.elements.configs.pattern-input'),
@@ -67,10 +64,10 @@ import { toPersianDigits, merge } from '~/plugins/general-utilities'
 						whiteSpace: "pre",
 						width: "150px",
 					},
-				},
+				} as IElement,
 			}
 		},
-	};
+	})
 </script>
 
 <style>
