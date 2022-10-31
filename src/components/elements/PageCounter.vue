@@ -1,70 +1,64 @@
 <template>
-	<div :id="settings.id" :data-testid="settings.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="locals.classType + ' element content-wrapper'" :style="settings.styles">
+	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
 		<span class="content">
 			{{ computedCounter }}
 		</span>
-		<Resizers :query="`pagecounter-${settings.id}`" />
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
 </template>
 
-<script>
-import { initElementStyles, initializeGeneralElement } from '~/plugins/element-utilities'
-import { toPersianDigits, merge } from '~/plugins/general-utilities'
-	export default {
-		name: "PageCounter",
+<script lang="ts">
+	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { IElement } from '~/interfaces/elements'
+	import { defineComponent } from 'vue'
+	import { toPersianDigits, merge } from '~/plugins/general-utilities'
+	export default defineComponent({
+		name: ElementTypes.PAGECOUNTER,
 		props: {
-			options: Object,
+			instance: Object as () => IElement,
 		},
-		emits:['clickedOnElement', 'finished-editing-element'],
+		emits: ['clickedOnElement', 'finished-editing-element'],
 		mounted() {
-			if (this.settings.grandParent === "TemplateBuilder") {
-				initializeGeneralElement(this.$refs.element, `${this.locals.classType}-${this.settings.id}`, this.settings)
-			}
+			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 		},
 		computed: {
 			computedCounter() {
-				if (this.settings.grandParent === "TemplateBuilder") { // Initialize on moutned if its the template builder mode
-					if (this.settings.configs.completeForm) {
-						if (this.settings.configs.persianNumbers) {
+				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER) {
+					if (this.element.configs.completeForm) {
+						if (this.element.configs.persianNumbers) {
 							return toPersianDigits('صفحه ۱ از ۱')
 						}
 						return 'page 1 / 1'
 					}
-					if (this.settings.configs.persianNumbers) {
-						return toPersianDigits(this.settings.configs.counter)
+					if (this.element.configs.persianNumbers) {
+						return toPersianDigits(this.element.configs.counter)
 					}
 				}
-				return this.settings.configs.counter
+				return this.element.configs.counter
 			}
 		},
 		watch: {
-			options: {
+			instance: {
 				immediate: true,
-				deep: true,
 				handler(val) {
-					this.settings = merge(this.settings, val)
-					this.settings.styles = initElementStyles(this.settings.styles)
+					this.element = merge(val, this.element)
 				},
 			},
 		},
 		data() {
 			return {
-				locals: {
-					classType: "pagecounter",
-				},
-				settings: {
-					grandParent: 'TemplateBuilder',
-					id: 0,
+				element: {
 					configs: {
 						counter: '1',
 						persianNumbers: false,
 						completeForm: true,
 					},
 					styles: {},
-				},
+				} as IElement,
 			}
 		},
-	};
+	})
 </script>
 
 <style>
