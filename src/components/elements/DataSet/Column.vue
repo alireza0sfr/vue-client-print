@@ -1,7 +1,7 @@
 <template>
 	<div :id="element.id" ref="element" :class="element.type + element.class + ' element label'" :style="element.styles">
 		<span>{{element.configs.title}}</span>
-		<Resizers v-if="element.hasResizer" :query="`${element.type}-${element.id}`" :resizers="['right']" />
+		<Resizers v-if="element.configs.hasResizer" :query="`${element.type}-${element.id}`" :resizers="['right']" />
 	</div>
 </template>
 

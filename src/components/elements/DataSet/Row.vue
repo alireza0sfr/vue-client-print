@@ -23,7 +23,7 @@
 				var cells = this.element.configs.cells
 				var objectKeys = Object.keys(cells)
 				objectKeys.filter(x => {
-					if (cells[x].isActive)
+					if (cells[x].configs.isActive)
 						filtered.push(cells[x])
 				})
 				return filtered

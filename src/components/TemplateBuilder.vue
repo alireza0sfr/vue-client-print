@@ -383,11 +383,11 @@
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN">
 										<div class="toolbar-content-row">
 											<div style="width: 100%;" class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.isActive')}} ({{locals.selectedElement.title}})</label>
+												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.isActive')}} ({{locals.selectedElement.configs.title}})</label>
 											</div>
 											<div class="toolbar-content-field">
 												<label style="margin-right: 10px; display:flex" for="colActive">
-													<input style="flex-grow: unset;" type="checkbox" class="input-form-control" v-model="locals.selectedElement.isActive" id="colActive" />
+													<input style="flex-grow: unset;" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.isActive" id="colActive" />
 												</label>
 											</div>
 										</div>
@@ -428,7 +428,7 @@
 										</div>
 
 										<div class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
-											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler" :options="{ title: col.title }" v-model="col.isActive" />
+											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler" :options="{ title: col.configs.title }" v-model="col.configs.isActive" />
 										</div>
 									</div>
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.REPEATOR">
@@ -726,6 +726,7 @@
 		},
 		computed: {
 			bindingObjectComputed() {
+				debugger
 				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
 					return this.locals.selectedElement.computeBindingObject(this.settings)
 			},
@@ -757,11 +758,11 @@
 								cells: {
 									center: {
 										type: 'cell',
-										isActive: true,
 										id: idGenerator(5),
 										styles: {},
 										parent: this.options.parent,
 										configs: {
+											isActive: true,
 											value: ''
 										},
 									}
@@ -1454,7 +1455,7 @@
 						if (e.code === "Delete") { // element delete
 
 							if (this.locals.selectedElement.type === this.locals.ElementTypes.COLUMN) {  // it's a column.
-								this.locals.selectedElement.isActive = false
+								this.locals.selectedElement.configs.isActive = false
 								return
 							}
 
@@ -1488,7 +1489,7 @@
 												index = columns.findIndex(x => x.id === columnEl.id) // column index in dataset columns array
 
 												if (index > -1)
-													columns[index].isActive = false
+													columns[index].configs.isActive = false
 
 												return
 											} // Else normal splice will delete dataset.
