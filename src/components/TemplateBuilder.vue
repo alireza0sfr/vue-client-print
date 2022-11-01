@@ -1127,7 +1127,7 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(parent: ElementParents, e: any, elementType: ElementTypes = this.locals.elementType): IElement | IEmptyElement {
+			createElement(elementType: ElementTypes, parent: ElementParents, e?: any): IElement {
 				var configs
 				var styles: any = {
 					top: e.offsetY ? e.offsetY + 'px' : 0,
@@ -1137,9 +1137,6 @@
 
 
 				switch (elementType) {
-
-					case ElementTypes.EMPTY:
-						return new EmptyElement
 
 					case ElementTypes.REPEATOR:
 
@@ -1260,7 +1257,7 @@
 			 * @param {IElement} variable - element unique id
 			 * @return {void} - void
 			 */
-			startDraggingElement(elementType: ElementTypes, variable: IElement | IEmptyElement = new EmptyElement): void {
+			startDraggingElement(elementType: ElementTypes, variable: IElement): void {
 				this.locals.currentVariable = variable
 				this.locals.elementType = elementType
 				this.$refs.template.className += " dragged"
@@ -1269,64 +1266,92 @@
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent: ElementParents, e: any, parentElement: IElement, grandParent: ElementGrandParents) {
+			droppedElement(parent: ElementParents, e: any, parentElement?: IElement): void {
 
-				var elementInstance: IElement | IEmptyElement
 
-				if (this.locals.elementType === ElementTypes.EMPTY)
+				var elementInstance: IElement
+				var elementType: ElementTypes = this.locals.elementType
+				var isChild = parent === ElementParents.REPEATOR
+				var parentId: string = parentElement ? parentElement.id : `${parent}Template`
+
+				if (elementType === ElementTypes.EMPTY)
 					return
 
-				/** Controls if added element is outside page borders and adjust if so.
-				 * @param {Object} element - element object
-				 * @param {String} sectionId - section id that element is dropped to (parent)
-				 * @return {Object} element - adjusted element
-				 */
-				const adjustElementToPage = (element: IElement | IEmptyElement, sectionId: string): IElement | IEmptyElement => {
-					let elementWidth = element.styles.width || '30px'
-					let elementHeight = element.styles.height || '30px'
-					let containerRec = document.getElementById(sectionId)!.getBoundingClientRect()
-					let sectionWidth = containerRec.width
-					let sectionHeight = containerRec.height
-
-					// subtracting repeator title height for child element to make offsetTop accurate.
-					if (element.repeatorId)
-						sectionHeight -= 20
-
-					elementWidth = toFloatVal(elementWidth)
-					elementHeight = toFloatVal(elementHeight)
-
-					if (elementWidth + toFloatVal(element.styles.left) > sectionWidth)
-						element.styles.left = sectionWidth - elementWidth + 'px'
-
-					if (elementHeight + toFloatVal(element.styles.top) > sectionHeight)
-						element.styles.top = sectionHeight - elementHeight + 'px'
-
-					return element
-				}
-
-				if (this.locals.elementType === ElementTypes.VARIABLE) {
-					elementInstance = this.locals.currentVariable
+				if (elementType === ElementTypes.VARIABLE) {
+					elementInstance = this.locals.currentVariable as IElement
 					elementInstance.styles.top = e.offsetY ? e.offsetY + 'px' : 0
 					elementInstance.styles.left = e.offsetX ? e.offsetX + 'px' : 0
 				}
 				else
-					elementInstance = this.createElement(computedParent, e)
-
-				var computedParent = parentElement ? grandParent : parent
-				var parentId = parentElement ? parentElement.id : `${parent}Template`
+					elementInstance = this.createElement(elementType, parent, e)
 
 
-				if (parentElement && parentElement.type === this.locals.ElementTypes.REPEATOR) {// Element is dropped on another element.
-
-					elementInstance.isChild = true
-					elementInstance.repeatorId = parentElement.id
-					parentElement.configs.appendedElements[parentElement.configs.selectedDataSet].push(elementInstance)
+				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
+					elementType = ElementTypes.EMPTY
+					return
 				}
-				else
-					this.settings[computedParent].elements.push(elementInstance)
 
-				elementInstance = adjustElementToPage(elementInstance, parentId)
-				this.locals.elementType = ElementTypes.EMPTY
+				elementInstance = this.adjustElementToPage(elementInstance, parentId)
+
+				if (isChild) { // Element is dropped on another element.
+					elementInstance.isChild = true
+					elementInstance.repeatorId = parentElement!.id
+					parentElement!.configs.appendedElements[parentElement!.configs.selectedDataSet].push(elementInstance)
+				}
+				else {
+					this.settings[parent].elements.push(elementInstance)
+				}
+
+				elementType = ElementTypes.EMPTY
+			},
+
+			elementValidator(element: IElement, isChild: boolean = false, parentElement?: IElement): boolean {
+
+				const DISSALLOWED_CHILDTYPES = [ElementTypes.PAGECOUNTER, ElementTypes.REPEATOR]
+
+				if (isChild) {
+
+					if (DISSALLOWED_CHILDTYPES.includes(element.type)) {
+						var type = this._$t(`template-builder.elements.${element.type}`)
+						alert(this._$t('template-builder.validators.element-type-cant-be-child', { type: type }))
+						return false
+					}
+
+					// if child element wants to be parent element
+					if (parentElement!.isChild) {
+						alert(this._$t('template-builder.validators.child-cant-be-parent'))
+						return false
+					}
+				}
+				return true
+			},
+
+			/** Controls if added element is outside page borders and adjust if so.
+				* @param {Object} element - element object
+				* @param {String} sectionId - section id that element is dropped to (parent)
+				* @return {Object} element - adjusted element
+				*/
+			adjustElementToPage(element: IElement, sectionId: string): IElement {
+				let elementWidth = element.styles.width || '150px'
+				let elementHeight = element.styles.height || '30px'
+				let containerRec = document.getElementById(sectionId)!.getBoundingClientRect()
+				let sectionWidth = containerRec.width
+				let sectionHeight = containerRec.height
+
+				// subtracting repeator title height for child element to make offsetTop accurate.
+				if (element.repeatorId)
+					sectionHeight -= 20
+
+				elementWidth = toFloatVal(elementWidth)
+				elementHeight = toFloatVal(elementHeight)
+
+				if (elementWidth + toFloatVal(element.styles.left) > sectionWidth)
+					element.styles.left = sectionWidth - elementWidth + 'px'
+
+				if (elementHeight + toFloatVal(element.styles.top) > sectionHeight)
+					element.styles.top = sectionHeight - elementHeight + 'px'
+
+				return element
 			},
 
 			/**
@@ -1342,7 +1367,7 @@
 			 * @param {IElement} variable - variable
 			 * @return {void} - void
 			 */
-			onFileChange(type: fileEntryTypes, variable: IElement | IEmptyElement = new EmptyElement): void {
+			onFileChange(type: fileEntryTypes, variable: IElement): void {
 				let maximumFileSize = this.configurations.maximumFileSize * 1000
 				var file
 

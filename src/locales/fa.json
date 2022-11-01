@@ -48,6 +48,10 @@
       "repeat-header": "تکرار هدر",
       "repeat-footer": "تکرار فوتر",
       "elements": {
+        "validators": {
+          "element-type-cant-be-child": "{type} نمیتواند به تکرار شونده اضافه شود.",
+          "child-cant-be-parent": "نمیتوان به المنت درون تکرار شونده المنت اضافه کرد."
+        },
         "settings": "تنظیمات المنت ({elementType})",
         "repeator": "تکرار شونده",
         "name": "المنت ها",

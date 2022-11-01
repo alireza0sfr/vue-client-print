@@ -48,6 +48,10 @@
       "repeat-header": "Repeat Header",
       "repeat-footer": "Repeat Footer",
       "elements": {
+        "validators": {
+          "element-type-cant-be-child": "{type} can't be a child element",
+          "child-cant-be-parent": "Can't add a child to a child element"
+        },
         "settings": "{elementType}'s Settings",
         "name": "Elements",
         "repeator": "Repeator",

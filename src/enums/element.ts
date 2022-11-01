@@ -16,24 +16,17 @@ export enum ElementTypes {
 
 export enum ElementParents {
   HEADER = 'header',
-  BEFOREBODY = 'beforebody',
+  BEFOREBODY = 'beforeBody',
   BODY = 'body',
-  AFTERBODY = 'afterbody',
+  AFTERBODY = 'afterBody',
   FOOTER = 'footer',
-  ELEMENT = 'element',
+  REPEATOR = 'repeator',
   EMPTY = ''
 }
 
 export enum ElementGrandParents {
   TEMPLATEBUILDER = 'templatebuilder',
-  PRINT = 'print',
-  HEADER = 'header',
-  BEFOREBODY = 'beforebody',
-  BODY = 'body',
-  AFTERBODY = 'afterbody',
-  FOOTER = 'footer',
-  ELEMENT = 'element',
-  EMPTY = ''
+  PRINT = 'print'
 }
 
 export enum StylesTargets {
