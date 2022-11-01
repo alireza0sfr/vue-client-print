@@ -868,7 +868,7 @@
 			 */
 			deleteElement(element: IElement = this.locals.selectedElement) {
 
-				if (element instanceof EmptyElement)
+				if (element.type === ElementTypes.EMPTY)
 					return
 
 				var parent = this.locals.selectedElement.parent
@@ -899,7 +899,7 @@
 			 */
 			copyCurrentElement(e: any): void {
 
-				if (this.locals.selectedElement instanceof EmptyElement)
+				if (this.locals.selectedElement.type === ElementTypes.EMPTY)
 					return
 
 				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
@@ -910,7 +910,7 @@
 			 */
 			pasteCopiedElement(e: any): void {
 
-				if (this.locals.selectedElement instanceof EmptyElement)
+				if (this.locals.selectedElement === ElementTypes.EMPTY)
 					return
 
 				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
