@@ -161,7 +161,7 @@
 											<label for="repeatableHeaderControl">{{_$t('template-builder.repeat-header')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input class="input-form-control" type="checkbox" v-model="settings.header.isHeaderRepeatable" id="repeatableHeaderControl" />
+											<input class="input-form-control" type="checkbox" v-model="settings.header.repeatable" id="repeatableHeaderControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">
@@ -169,7 +169,7 @@
 											<label for="repeatableFooterControl">{{_$t('template-builder.repeat-footer')}}</label>
 										</div>
 										<div class="toolbar-content-field">
-											<input class="input-form-control" type="checkbox" v-model="settings.footer.isFooterRepeatable" id="repeatableFooterControl" />
+											<input class="input-form-control" type="checkbox" v-model="settings.footer.repeatable" id="repeatableFooterControl" />
 										</div>
 									</div>
 									<div class="toolbar-content-row">

@@ -68,12 +68,12 @@
 					<div id="printForm">
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
-								<div v-if="settings.header.isHeaderRepeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
+								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
 									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
-							<div v-if="settings.footer.isFooterRepeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
+							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
 								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 							</div>
 						</div>
@@ -228,18 +228,18 @@
 
 					defaultHeightOfPaper = this.settings.defaultHeightOfPaper
 
-					if (this.settings.header.isHeaderRepeatable || pageHeadersSize.length === 0) // if the header is reapeatable or its the first page
+					if (this.settings.header.repeatable || pageHeadersSize.length === 0) // if the header is repeatable or its the first page
 						headerHeight = this.settings.header.height
 					else
 						headerHeight = 0
 
 					let footerHeightLastPage = this.settings.footer.height
-					let headerHeightLastPage = this.settings.header.isHeaderRepeatable ? headerHeight : 0
+					let headerHeightLastPage = this.settings.header.repeatable ? headerHeight : 0
 					let pageBodySize = defaultHeightOfPaper - footerHeightLastPage - headerHeightLastPage
 					let isLastPage = remainingHeight - pageBodySize <= 0
 
 
-					if (this.settings.footer.isFooterRepeatable || isLastPage) // if the header is reapeatable or its the last page
+					if (this.settings.footer.repeatable || isLastPage) // if the header is repeatable or its the last page
 						footerHeight = this.settings.footer.height
 					else
 						footerHeight = 0

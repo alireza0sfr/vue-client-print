@@ -240,7 +240,7 @@ export function isEmpty(arg: object[] | object | string | undefined | null): boo
 export function getDefaultSettings(): ISettings {
   return {
     header: {
-      isHeaderRepeatable: true,
+      repeatable: true,
       height: 1,
       elements: [],
       styles: {},
@@ -260,7 +260,7 @@ export function getDefaultSettings(): ISettings {
       styles: {},
     },
     footer: {
-      isFooterRepeatable: true,
+      repeatable: true,
       height: 1,
       elements: [],
       styles: {},

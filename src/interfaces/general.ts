@@ -6,7 +6,7 @@ interface ISettings {
     elements: IElement[],
     styles: {},
     height: number,
-    isHeaderRepeatable: boolean,
+    repeatable: boolean,
   },
   beforeBody: {
     elements: IElement[],
@@ -26,7 +26,7 @@ interface ISettings {
     elements: IElement[],
     styles: {},
     height: number,
-    isFooterRepeatable: boolean,
+    repeatable: boolean,
   },
   defaultHeightOfPaper: number,
   defaultWidthOfPaper: number
