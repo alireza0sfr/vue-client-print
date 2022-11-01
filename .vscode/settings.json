@@ -20,7 +20,7 @@
   "vetur.format.defaultFormatterOptions": {
     "js-beautify-html": {
       "end_with_newline": true,
-      "wrap-attributes": true
+      "wrap-line-length": 200
     },
     "vscode-typescript": {
       "quote_type": "single"

@@ -9,3 +9,11 @@ export enum getDisplaySetModes {
   TEMPLATEBUILDERSEPRATE = 'templatebuilder_seprate',
   REPEATOR = 'repeator'
 }
+
+export enum TemplateBuilderSections {
+  HEADER = 'header',
+  BEFOREBODY = 'beforeBody',
+  BODY = 'body',
+  AFTERBODY = 'afterBody',
+  FOOTER = 'footer',
+}

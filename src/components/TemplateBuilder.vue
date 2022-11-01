@@ -44,7 +44,8 @@
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
-														<input type="text" v-model="variable.configs.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')" aria-describedby="inputGroup-sizing-sm" />
+														<input type="text" v-model="variable.configs.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')"
+															aria-describedby="inputGroup-sizing-sm" />
 													</div>
 													<div class="variables-content-field" style="width: 40%">
 														<select class="input-form-control" v-model="variable.configs.variableType" @change="onVariableTypeChange(variable)">
@@ -58,10 +59,12 @@
 											</div>
 											<div class="variables-row" style="justify-content: flex-end;">
 												<div v-if="variable.configs.variableType === locals.VariableTypes.TEXT" class="variables-content-field large">
-													<input type="text" v-model="variable.configs.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" v-model="variable.configs.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')"
+														aria-describedby="inputGroup-sizing-sm" />
 												</div>
 												<div class="variables-content-field large" v-if="variable.configs.variableType === locals.VariableTypes.IMAGE">
-													<input type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageVariable, variable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="variableImageFileControl" />
+													<input type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageVariable, variable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+														id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
 													<img @click="deleteVariable(variable.id)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
@@ -274,7 +277,8 @@
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
 											<div class="toolbar-content-field">
-												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
+													aria-describedby="inputGroup-sizing-sm"></textarea>
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME">
@@ -329,7 +333,8 @@
 											</div>
 										</div>
 										<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT">
-											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageElement)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
+											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageElement)" aria-label="Small"
+												aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT">
 											<div class="toolbar-content-label">
@@ -357,7 +362,8 @@
 										</div>
 										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
 											<div class="toolbar-content-field">
-												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"></textarea>
+												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
+													aria-describedby="inputGroup-sizing-sm"></textarea>
 											</div>
 										</div>
 										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
@@ -365,7 +371,8 @@
 												<label for="textPatternPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="textPatternPersianNumbersControl" />
+												<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
+													id="textPatternPersianNumbersControl" />
 											</div>
 										</div>
 									</div>
@@ -428,7 +435,8 @@
 										</div>
 
 										<div class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
-											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler" :options="{ title: col.configs.title }" v-model="col.configs.isActive" />
+											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler"
+												:options="{ title: col.configs.title }" v-model="col.configs.isActive" />
 										</div>
 									</div>
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.REPEATOR">
@@ -675,28 +683,12 @@
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
 							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
-						<div class="template-container" :style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
+						<div class="template-container"
+							:style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<div @click="(e) => clickedOnSection(e, 'header')" :style="[{height: settings.header.height + 'in' }, settings.header.styles]" id="headerTemplate" class="section header" @drop="(e) => droppedElement('header', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.header.elements" :key="element.id" @drop="(e) => droppedElement('element', element, 'header', e)" @dragenter.prevent @dragover.prevent :is="element.type" :instance="element" @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'header')" />
-									<SectionTag :current="locals.selectedSection" tag="header" />
-								</div>
-								<div @click="(e) => clickedOnSection(e, 'beforeBody')" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]" id="beforeBodyTemplate" class="section before-body" @drop="(e) => droppedElement('beforeBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'beforeBody', e)" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'beforeBody')" />
-									<SectionTag :current="locals.selectedSection" tag="beforeBody" />
-								</div>
-								<div @click="(e) => clickedOnSection(e, 'body')" :style="settings.body.styles" id="bodyTemplate" class="section body" @drop="(e) => droppedElement('body', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.body.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'body', e)" @dragenter.prevent @dragover.prevent @clickedOnElement="(child) => clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'body')" />
-									<SectionTag :current="locals.selectedSection" tag="body" />
-								</div>
-								<div @click="(e) => clickedOnSection(e, 'afterBody')" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]" id="afterBodyTemplate" class="section after-body" @drop="(e) => droppedElement('afterBody', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) => droppedElement('element', element, 'afterBody', e)" @clickedOnElement="(column) => clickedOnElement(column ? column : element)" @finished-editing-element="finishedEditingElement(element, 'afterBody')" />
-									<SectionTag :current="locals.selectedSection" tag="afterBody" />
-								</div>
-								<div @click="(e) => clickedOnSection(e, 'footer')" :style="[{height: settings.footer.height + 'in'}, settings.footer.styles]" id="footerTemplate" class="section footer" @drop="(e) => droppedElement('footer', null, null, e)" @dragenter.prevent @dragover.prevent>
-									<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="element" @drop="(e) =>droppedElement('element', element, 'footer', e)" @dragenter.prevent @dragover.prevent @clickedOnElement="(child) =>clickedOnElement(child ? child : element)" @finished-editing-element="finishedEditingElement(element, 'footer')" />
-									<SectionTag :current="locals.selectedSection" tag="footer" />
-								</div>
+								<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
+									:active="locals.selectedSection === section" :height="currentSection.height" :styles="currentSection.styles" @finishedEditingElement="finishedEditingElement"
+									@clickedOnElement="clickedOnElement" @clickedOnSection="clickedOnSection" @droppedElement="droppedElement" />
 							</div>
 						</div>
 					</div>
@@ -708,7 +700,7 @@
 
 <script lang="ts">
 	import { IElement, IEmptyElement } from '~/interfaces/elements'
-	import { fileEntryTypes } from '~/enums/general'
+	import { fileEntryTypes, TemplateBuilderSections } from '~/enums/general'
 	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
@@ -716,6 +708,7 @@
 	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { ElementGrandParents } from '@/enums/element'
+
 	export default {
 		name: "TemplateBuilder",
 		props: {
@@ -726,7 +719,6 @@
 		},
 		computed: {
 			bindingObjectComputed() {
-				debugger
 				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
 					return this.locals.selectedElement.computeBindingObject(this.settings)
 			},
@@ -738,13 +730,14 @@
 		data() {
 			return {
 				locals: {
+					sections: Object.values(TemplateBuilderSections),
 					StylesTargets: StylesTargets,
 					fileEntryTypes: fileEntryTypes,
 					ElementTypes: ElementTypes,
 					elementType: ElementTypes.EMPTY,
 					VariableTypes: VariableTypes,
 					currentVariable: new EmptyElement as IElement | IEmptyElement,
-					selectedSection: null,
+					selectedSection: null as TemplateBuilderSections | null,
 					fullScreen: false,
 					templateHeight: 11.7,
 					langs: fetchLangList(),
@@ -846,12 +839,12 @@
 
 			/**
 			 * Sets selected section.
-			 * @param {String} sectionName - clicked SectionName.
+			 * @param {String} section - clicked SectionName.
 			 */
-			clickedOnSection(e: any, sectionName: string): void {
+			clickedOnSection(section: TemplateBuilderSections, e: any): void {
 
 				if (e.target.id && e.target.id.includes('Template'))
-					this.locals.selectedSection = sectionName
+					this.locals.selectedSection = section
 			},
 			/**
 			 * Fullscreen TB view
@@ -1028,7 +1021,7 @@
 			 */
 			settingsInitFunc(): void {
 				setTimeout(() => {
-					this.sectionResizeHandler(['header', 'before-body', 'after-body', 'footer'])
+					this.sectionResizeHandler([TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY, TemplateBuilderSections.AFTERBODY, TemplateBuilderSections.FOOTER])
 					this.locals.scale = 1
 				}, 100)
 			},
@@ -1037,7 +1030,8 @@
 			 * Init resize functionality for sections.
 			 * @return {void} - void
 			 */
-			sectionResizeHandler(sections: string[]): void {
+			sectionResizeHandler(sections: TemplateBuilderSections[]): void {
+
 
 				for (let sectionName of sections) {
 					let section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
@@ -1061,20 +1055,20 @@
 					}
 
 					const doDrag = (e) => {
-						if (sectionName === 'header')
+						if (sectionName === TemplateBuilderSections.HEADER)
 							this.settings.header.height = convert2Inches(startHeight + e.clientY - startY)
 
-						else if (sectionName === 'before-body') {
+						else if (sectionName === TemplateBuilderSections.BEFOREBODY) {
 							this.settings.beforeBody.height = convert2Inches(startHeight + e.clientY - startY)
 							this.locals.templateHeight = parentHeight + this.settings.beforeBody.height - convert2Inches(startHeight)
 						}
 
-						else if (sectionName === 'after-body') {
+						else if (sectionName === TemplateBuilderSections.AFTERBODY) {
 							this.settings.afterBody.height = convert2Inches(startHeight + e.clientY - startY)
 							this.locals.templateHeight = parentHeight + this.settings.afterBody.height - convert2Inches(startHeight)
 						}
 
-						else // its footer
+						else if (sectionName === TemplateBuilderSections.FOOTER)
 							this.settings.footer.height = convert2Inches(startHeight - e.clientY + startY)
 
 					}
@@ -1275,7 +1269,7 @@
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent: string, parentElement: IElement, grandParent: string, e: any) {
+			droppedElement(parent: ElementParents, e: any, parentElement: IElement, grandParent: ElementGrandParents) {
 
 				var elementInstance: IElement | IEmptyElement
 
@@ -1564,9 +1558,9 @@
 			 * @param {Object} element - element
 			 * @return {void} - void
 			 */
-			finishedEditingElement(element: IElement, elementLocation: string): void {
+			finishedEditingElement(element: IElement, section: TemplateBuilderSections): void {
 
-				var array = this.settings[elementLocation].elements
+				var array = this.settings[section].elements
 
 				if (this.locals.selectedElement.isChild) { // it's a repeator.
 					let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId)

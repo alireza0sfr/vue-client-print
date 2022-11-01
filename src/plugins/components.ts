@@ -17,6 +17,7 @@ import TemplateBuilder from '~/components/TemplateBuilder.vue'
 import Resizers from '~/components/elements/Resizers.vue'
 import SectionTag from '~/components/SectionTag.vue'
 import Toggler from '~/components/Toggler.vue'
+import Section from '~/components/Section.vue'
 
 import { ElementTypes } from '~/enums/element'
 
@@ -40,5 +41,6 @@ export default function componentRegisterer(App: any): void {
   App.component('TemplateBuilder', TemplateBuilder)
   App.component('Resizers', Resizers)
   App.component('SectionTag', SectionTag)
+  App.component('Section', Section)
   App.component('Toggler', Toggler)
 }

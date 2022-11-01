@@ -20,13 +20,20 @@ export enum ElementParents {
   BODY = 'body',
   AFTERBODY = 'afterbody',
   FOOTER = 'footer',
-  REPEATOR = 'repeator',
+  ELEMENT = 'element',
   EMPTY = ''
 }
 
 export enum ElementGrandParents {
   TEMPLATEBUILDER = 'templatebuilder',
-  PRINT = 'print'
+  PRINT = 'print',
+  HEADER = 'header',
+  BEFOREBODY = 'beforebody',
+  BODY = 'body',
+  AFTERBODY = 'afterbody',
+  FOOTER = 'footer',
+  ELEMENT = 'element',
+  EMPTY = ''
 }
 
 export enum StylesTargets {
