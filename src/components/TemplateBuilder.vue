@@ -44,11 +44,11 @@
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
-														<input type="text" v-model="variable.configs.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')"
+														<input type="text" v-model="variable.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')"
 															aria-describedby="inputGroup-sizing-sm" />
 													</div>
 													<div class="variables-content-field" style="width: 40%">
-														<select class="input-form-control" v-model="variable.configs.variableType" @change="onVariableTypeChange(variable)">
+														<select class="input-form-control" v-model="variable.variableType" @change="onVariableTypeChange(variable)">
 															<option v-for="option in locals.VariableTypes" :value="option" :key="option">{{ _$t(`template-builder.variables.${option}`) }}</option>
 														</select>
 													</div>
@@ -58,11 +58,11 @@
 												</div>
 											</div>
 											<div class="variables-row" style="justify-content: flex-end;">
-												<div v-if="variable.configs.variableType === locals.VariableTypes.TEXT" class="variables-content-field large">
-													<input type="text" v-model="variable.configs.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')"
+												<div v-if="variable.variableType === locals.VariableTypes.TEXT" class="variables-content-field large">
+													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')"
 														aria-describedby="inputGroup-sizing-sm" />
 												</div>
-												<div class="variables-content-field large" v-if="variable.configs.variableType === locals.VariableTypes.IMAGE">
+												<div class="variables-content-field large" v-if="variable.variableType === locals.VariableTypes.IMAGE">
 													<input type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageVariable, variable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
 														id="variableImageFileControl" />
 												</div>
@@ -1137,8 +1137,9 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(elementType: ElementTypes, parent: ElementParents, e?: any): IElement {
-				var configs
+			createElement(elementType: ElementTypes, parent: ElementParents, e?: any, variable?: IVariable | IEmptyElement): IElement {
+
+				var configs: any
 				var styles: any = {
 					top: e.offsetY ? e.offsetY + 'px' : 0,
 					left: e.offsetX ? e.offsetX + 'px' : 0,
@@ -1147,6 +1148,12 @@
 
 
 				switch (elementType) {
+
+					case ElementTypes.VARIABLE:
+						configs = variable
+						configs.variableId = variable!.id
+						delete configs.id
+						break
 
 					case ElementTypes.REPEATOR:
 
@@ -1214,7 +1221,12 @@
 					direction: this.settings.pageDirections
 				}
 
-				var variable: any = new Element(ElementTypes.VARIABLE, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles)
+				var variable: IVariable = {
+					id: idGenerator(5),
+					name: '',
+					context: '',
+					variableType: VariableTypes.TEXT,
+				}
 				variablesStore.pushVariable(variable)
 			},
 
@@ -1223,8 +1235,8 @@
 			 * @param {variable} variable - variable object
 			 * @return {void} - void
 			 */
-			onVariableTypeChange(variable: IElement): void {
-				variable.configs.context = ''
+			onVariableTypeChange(variable: IVariable): void {
+				variable.context = ''
 			},
 
 			/**
@@ -1286,15 +1298,7 @@
 				if (elementType === ElementTypes.EMPTY)
 					return
 
-				if (elementType === ElementTypes.VARIABLE) {
-					elementInstance = this.locals.currentVariable as IElement
-					elementInstance.parent = parent
-					elementInstance.styles.top = e.offsetY ? e.offsetY + 'px' : 0
-					elementInstance.styles.left = e.offsetX ? e.offsetX + 'px' : 0
-				}
-				else
-					elementInstance = this.createElement(elementType, parent, e)
-
+				elementInstance = this.createElement(elementType, parent, e, this.locals.currentVariable)
 
 				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
 					elementType = ElementTypes.EMPTY
@@ -1409,7 +1413,7 @@
 						file = getFile('variableImageFileControl')
 
 						if (fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
-							this.toBase64(file).then(res => variable.configs.context = res)
+							this.toBase64(file).then(res => variable.context = res)
 
 						break
 
