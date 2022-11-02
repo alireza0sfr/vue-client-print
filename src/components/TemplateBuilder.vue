@@ -1001,6 +1001,14 @@
 
 				this.settings = merge(this.settings, jsonFile) // assign the changes
 
+				for (var section of this.locals.sections) {
+
+					for (let index = 0; index < this.settings[section].elements.length; index++) {
+						var elem = this.settings[section].elements[index]
+						this.settings[section].elements[index] = new Element(elem.type, ElementParents[section.toUpperCase()], ElementGrandParents.TEMPLATEBUILDER, elem.styles, elem.configs)
+					}
+				}
+
 				if (callback)
 					this.settings.callback = callback
 			},
