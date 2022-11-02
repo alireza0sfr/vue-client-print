@@ -21,7 +21,7 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
-	import { toPersianDigits, merge } from '~/plugins/general-utilities'
+	import { toPersianDigits, shallowMerge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	export default defineComponent({
 		name: ElementTypes.BINDINGOBJECT,
@@ -49,7 +49,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = merge(val, this.element)
+					this.element = shallowMerge(val, this.element)
 				},
 			},
 		},

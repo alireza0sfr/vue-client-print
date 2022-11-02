@@ -151,7 +151,7 @@ export function toFloatVal(val: string): number {
  * @param {Array} objects - Array of sources.
  * @return {Object} - Merged object.
  */
- export function merge<T>(target: any, ...sources: any[]): T {
+export function merge<T>(target: any, ...sources: any[]): T {
 
   if (!sources.length)
     return target
@@ -173,6 +173,30 @@ export function toFloatVal(val: string): number {
     }
   }
   return merge(target, ...sources)
+}
+export function shallowMerge<T>(target: any, ...sources: any[]): T {
+
+  if (!sources.length)
+    return target
+
+  const source = sources.shift()
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, {
+          [key]: {}
+        })
+        shallowMerge(target[key], source[key])
+      } else {
+        if (key in target === false)
+          Object.assign(target, {
+            [key]: source[key]
+          })
+      }
+    }
+  }
+  return shallowMerge(target, ...sources)
 }
 
 /**

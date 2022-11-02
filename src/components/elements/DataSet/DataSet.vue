@@ -17,7 +17,7 @@
 	import { ElementGrandParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
-	import { toFloatVal, merge } from '~/plugins/general-utilities'
+	import { toFloatVal, shallowMerge } from '~/plugins/general-utilities'
 	import { IColumn, IRow } from '@/interfaces/datasets'
 	export default defineComponent({
 		name: ElementTypes.DATASET,
@@ -60,7 +60,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = merge(val, this.element)
+					this.element = shallowMerge(val, this.element)
 				},
 			},
 		},

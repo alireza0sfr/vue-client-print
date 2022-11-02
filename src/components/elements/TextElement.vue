@@ -1,5 +1,6 @@
 <template>
-	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
+	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')"
+		:class="element.type + ' element content-wrapper'" :style="element.styles">
 		<div class="content">
 			{{element.configs.text}}
 		</div>
@@ -10,7 +11,7 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
-	import { merge } from '~/plugins/general-utilities'
+	import { shallowMerge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	export default defineComponent({
 		name: ElementTypes.TEXTELEMENT,
@@ -26,7 +27,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = merge(val, this.element)
+					this.element = shallowMerge(val, this.element)
 				},
 			},
 		},

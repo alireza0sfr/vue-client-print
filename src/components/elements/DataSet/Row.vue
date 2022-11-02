@@ -7,7 +7,7 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
-	import { merge } from '~/plugins/general-utilities'
+	import { shallowMerge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	import { ICell } from '@/interfaces/datasets'
 	export default defineComponent({
@@ -39,7 +39,7 @@
 
 					this.$emit('styles-target-changed', val.configs.stylesTarget)
 
-					this.element = merge(val, this.element)
+					this.element = shallowMerge(val, this.element)
 				},
 			},
 		},

@@ -29,7 +29,7 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IBindingObject, IElement } from '~/interfaces/elements'
-	import { merge } from '~/plugins/general-utilities'
+	import { shallowMerge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	export default defineComponent({
 		name: ElementTypes.REPEATOR,
@@ -53,7 +53,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = merge(val, this.element)
+					this.element = shallowMerge(val, this.element)
 				},
 			},
 		},
