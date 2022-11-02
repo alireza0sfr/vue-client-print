@@ -743,14 +743,14 @@
 					langs: fetchLangList(),
 					dataSetDefaultRow: [
 						{
-							type: 'row',
+							type: ElementTypes.ROW,
 							id: idGenerator(5),
 							parent: this.options.parent,
 							styles: {},
 							configs: {
 								cells: {
 									center: {
-										type: 'cell',
+										type: ElementTypes.CELL,
 										id: idGenerator(5),
 										styles: {},
 										parent: this.options.parent,
