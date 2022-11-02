@@ -57,6 +57,7 @@
         "repeator": "Repeator",
         "textelement": "Text Box",
         "datetime": "Date & Time",
+        "variable": "Variable",
         "pagecounter": "Page Counter",
         "row": "Row",
         "column": "Column",
