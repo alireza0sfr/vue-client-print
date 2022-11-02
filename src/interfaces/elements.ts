@@ -2,10 +2,10 @@ import { ElementGrandParents, ElementParents, ElementTypes, VariableTypes } from
 import { emptyId } from '~/plugins/element-utilities'
 
 export interface IElementCoordinates {
-  height: number
-  width: number
-  top: number
-  left: number
+  height: string
+  width: string
+  top: string
+  left: string
 }
 
 export interface IEmptyElement {

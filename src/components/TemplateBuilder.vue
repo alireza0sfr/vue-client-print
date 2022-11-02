@@ -1289,8 +1289,6 @@
 			 */
 			droppedElement(parent: ElementParents, e: any, parentElement?: IElement): void {
 
-
-				var elementInstance: IElement
 				var elementType: ElementTypes = this.locals.elementType
 				var isChild = parent === ElementParents.REPEATOR
 				var parentId: string = parentElement ? parentElement.id : `${parent}Template`
@@ -1298,7 +1296,7 @@
 				if (elementType === ElementTypes.EMPTY)
 					return
 
-				elementInstance = this.createElement(elementType, parent, e, this.locals.currentVariable)
+				var elementInstance: IElement = this.createElement(elementType, parent, e, this.locals.currentVariable)
 
 				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
 					elementType = ElementTypes.EMPTY
@@ -1456,35 +1454,36 @@
 			 * Adds an event listenner on delete button and then removes the element
 			 */
 			keyboardHandler(): void {
-				const toFloatVal = (val: string, elementId: string, style: string): number => {
-					if (val)
-						return parseFloat(val.split('p')[0])
-
-					return this.getCoordinates(elementId)[style]
-				}
 				const elementStyleChanger = (style: string, operator: string, e: any): void => {
 					e.preventDefault()
-					this.locals.selectedElement.styles[style] = toFloatVal(this.locals.selectedElement.styles[style], this.locals.selectedElement.id, style)
+					this.locals.selectedElement.styles[style] = toFloatVal(this.locals.selectedElement.styles[style])
 					this.locals.selectedElement.styles[style] = eval(`${this.locals.selectedElement.styles[style]} ${operator} 1`)
 					this.locals.selectedElement.styles[style] = this.locals.selectedElement.styles[style] + 'px'
 				}
 				const keyBinds = (e: any): void => {
 
-					if (this.locals.selectedSection) {
+					if (this.locals.selectedSection) { // section resize
+
+						const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
 
 						if (e.code === 'ArrowUp') {
 							e.preventDefault()
-							this.settings[this.locals.selectedSection].height -= 0.01
+							if (expandDownSections.includes(this.locals.selectedSection))
+								this.settings[this.locals.selectedSection].height -= 0.01
+							else
+								this.settings[this.locals.selectedSection].height += 0.01
 						}
 
 						if (e.code === 'ArrowDown') {
 							e.preventDefault()
-							this.settings[this.locals.selectedSection].height += 0.01
+							if (expandDownSections.includes(this.locals.selectedSection))
+								this.settings[this.locals.selectedSection].height += 0.01
+							else
+								this.settings[this.locals.selectedSection].height -= 0.01
 						}
 					}
 
 					else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
-
 						if (e.code === "Delete") { // element delete
 
 							if (this.locals.selectedElement.type === this.locals.ElementTypes.COLUMN) {  // it's a column.
@@ -1554,35 +1553,20 @@
 							else if (e.code === 'ArrowDown')
 								elementStyleChanger('height', '+', e)
 						}
-						else if (e.code === 'ArrowRight') { // element drag
-							elementStyleChanger('left', '+', e)
+						else if (!e.ctrlKey) { // element drag
+							if (e.code === 'ArrowRight')
+								elementStyleChanger('left', '+', e)
+							else if (e.code === 'ArrowLeft')
+								elementStyleChanger('left', '-', e)
+							else if (e.code === 'ArrowUp')
+								elementStyleChanger('top', '-', e)
+							else if (e.code === 'ArrowDown')
+								elementStyleChanger('top', '+', e)
 						}
-						else if (e.code === 'ArrowLeft')
-							elementStyleChanger('left', '-', e)
-						else if (e.code === 'ArrowUp')
-							elementStyleChanger('top', '-', e)
-						else if (e.code === 'ArrowDown')
-							elementStyleChanger('top', '+', e)
 					}
 				}
 				document.removeEventListener('keyup', keyBinds, false)
 				document.addEventListener('keydown', keyBinds, false)
-			},
-
-			/**
-			 * Gets coordinates of the given element.
-			 * @param {String} id - element id
-			 * @return {Object} - return Coordination
-			 */
-			getCoordinates(id: string): object {
-				let tmp = document.getElementById(id)
-				let compStyle = getComputedStyle(tmp)
-				return {
-					top: compStyle.getPropertyValue("top"),
-					left: compStyle.getPropertyValue("left"),
-					height: compStyle.getPropertyValue("height"),
-					width: compStyle.getPropertyValue("width"),
-				}
 			},
 
 			/**
@@ -1606,14 +1590,14 @@
 					if (index > -1) {
 						let repeator = array[index]
 						var children = repeator.configs.appendedElements[repeator.configs.selectedDataSet]
-						index = children.findIndex(x => x.id === this.locals.selectedElement.id)
+						index = children.findIndex((x: IElement) => x.id === this.locals.selectedElement.id)
 						if (index > -1)
-							children[index].styles = merge(children[index].styles, this.getCoordinates(children[index].id))
+							children[index].styles = merge(children[index].styles, children[index].getCoordinates())
 					}
 				}
 
 				let elem = array.find(x => x.id === element.id)
-				elem.styles = merge(elem.styles, this.getCoordinates(element.id))
+				elem.styles = merge(elem.styles, element.getCoordinates())
 			},
 
 			/**

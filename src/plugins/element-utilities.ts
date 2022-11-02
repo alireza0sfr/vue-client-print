@@ -327,11 +327,12 @@ export class Element extends EmptyElement implements IElement {
    * @return {IElementCoordinates}
    **/
   getCoordinates(): IElementCoordinates {
+    let compStyle = getComputedStyle(this.$el)
     return {
-      height: toFloatVal(this.$el.style.height),
-      width: toFloatVal(this.$el.style.width),
-      left: toFloatVal(this.$el.style.left),
-      top: toFloatVal(this.$el.style.top),
+      top: compStyle.getPropertyValue("top"),
+      left: compStyle.getPropertyValue("left"),
+      height: compStyle.getPropertyValue("height"),
+      width: compStyle.getPropertyValue("width"),
     }
   }
 
