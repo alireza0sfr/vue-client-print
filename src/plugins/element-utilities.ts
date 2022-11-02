@@ -408,30 +408,24 @@ export class DataSetLikeElement extends Element {
 
     for (let index = 0; index < rows.length; index++) {
       var objectKeys = Object.keys(rows[index])
-      var tempRow: IRow = {
-        type: ElementTypes.ROW,
-        grandParent: ElementGrandParents.PRINT,
-        id: idGenerator(5),
-        styles: {},
-        configs: {
-          cells: {},
-          rowsHeight: 'auto',
-          stylesTarget: StylesTargets.ALL
-        }
+
+      var configsRow: any = {
+        cells: {},
+        rowsHeight: 'auto',
+        stylesTarget: StylesTargets.ALL
       }
 
       for (let key of objectKeys) {
-        tempRow.configs.cells[key] = {
-          type: ElementTypes.CELL,
-          id: idGenerator(5),
-          styles: {},
-          configs: {
-            isActive: true,
-            value: rows[index][key]
-          },
+
+        var configsCell = {
+          isActive: true,
+          value: rows[index][key]
         }
+
+        configsRow.cells[key] = new Element(ElementTypes.CELL, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsCell)
       }
-      preparedRows[index] = tempRow
+
+      preparedRows[index] = new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsRow)
     }
 
     return preparedRows
@@ -460,15 +454,15 @@ export class DataSetLikeElement extends Element {
         // columns should contains child columns to be used inside repeator
         if (col.columns && col.columns.length) {
           var name = `${key}-${col.key}`
-          additional[name] = {
-            id: idGenerator(5),
-            configs: {
-              title: name,
-              key: col.key,
-              rows: [],
-              columns: prepareDataSetColumns(col.columns),
-            }
+
+          var configs = {
+            title: name,
+            key: col.key,
+            rows: [],
+            columns: prepareDataSetColumns(col.columns),
           }
+
+          additional[name] = new Element(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
         }
       }
     }
@@ -521,22 +515,20 @@ export const emptyId: string = '00000'
  */
 export function prepareDataSets(sets: IRawDatasets): IDatasets {
 
-  var tmp: object = {}
   var keys: string[] = Object.keys(sets)
   var preparedSets: any = {}
 
   for (let set of keys) {
     var thisSet: IRawDataset = clone(sets[set]) // removing refrence to the original data.
-    tmp = {
-      id: idGenerator(5),
-      configs: {
-        columns: prepareDataSetColumns(thisSet.columns),
-        rows: thisSet.rows,
-        title: thisSet.title,
-        key: thisSet.key
-      },
+
+    var configs = {
+      columns: prepareDataSetColumns(thisSet.columns),
+      rows: thisSet.rows,
+      title: thisSet.title,
+      key: thisSet.key
     }
-    preparedSets[set] = tmp
+
+    preparedSets[set] = new Element(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
   }
   return preparedSets
 }
@@ -550,31 +542,27 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
 
   const DEFAULTCOLUMNWIDTH = '70px'
 
-  let tmp = {}
   var preparedColumns = []
 
   for (let index = 0; index < columns.length; index++) {
     var col = columns[index]
 
-    tmp = {
-      type: ElementTypes.COLUMN,
-      id: idGenerator(5),
-      configs: {
-        columns: col.columns || [], // if child has column
-        title: col.title,
-        key: col.key,
-        isActive: false,
-        hasResizer: columns.indexOf(col) !== columns.length - 1,
-      },
-      styles: {
-        width: col.styles.width ? col.styles.width : DEFAULTCOLUMNWIDTH,
-      },
+    var configs = {
+      columns: col.columns || [], // if child has column
+      title: col.title,
+      key: col.key,
+      isActive: false,
+      hasResizer: columns.indexOf(col) !== columns.length - 1,
     }
 
-    preparedColumns[index] = tmp
+    var styles = {
+      width: col.styles.width ? col.styles.width : DEFAULTCOLUMNWIDTH,
+    }
+
+    preparedColumns[index] = new Element(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles, configs)
   }
 
-  return preparedColumns as IColumn[]
+  return preparedColumns
 }
 
 /**
