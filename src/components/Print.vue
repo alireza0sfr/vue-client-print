@@ -12,7 +12,8 @@
 							<component v-for="(element, index) in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 						</div>
 
-						<div id="bodyComponents" v-if="settings.body && settings.body.elements && settings.body.elements.length" class="body-render-section" :style="[{height: settings.body.height + 'in'}, settings.body.styles]">
+						<div id="bodyComponents" v-if="settings.body && settings.body.elements && settings.body.elements.length" class="body-render-section"
+							:style="[{height: settings.body.height + 'in'}, settings.body.styles]">
 							<component v-for="(element, index) in settings.body.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
 						</div>
 
@@ -85,14 +86,17 @@
 </template>
 
 <script lang="ts">
-	import { IElement } from '~/interfaces/elements'
 	import { IDatasets } from '~/interfaces/datasets'
-	import { ISettings, IConfigs } from '~/interfaces/general'
+	import { ISettings } from '~/interfaces/general'
 	import { prepareDataSets } from '~/plugins/element-utilities'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
 	import { convert2Pixels, convert2Inches, merge, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
 	import DefaultLogo from '@/assets/images/logo.png'
+	import { useVariablesStore } from '~/stores/variables'
+
+	const variablesStore = useVariablesStore()
+
 	export default {
 		name: "Print",
 		props: {
@@ -102,7 +106,7 @@
 			variables: { type: Array },
 			configurations: { type: Object },
 		},
-		emits:['print-success', 'print-error', 'preview-success', 'preview-failed'],
+		emits: ['print-success', 'print-error', 'preview-success', 'preview-failed'],
 		data() {
 			return {
 				locals: {
@@ -127,6 +131,12 @@
 				handler(val) {
 					this.locals.preparedDataSets = prepareDataSets(val)
 				},
+			},
+			variables: {
+				immediate: true,
+				handler(val) {
+					variablesStore.updateVariables(val)
+				},
 			}
 		},
 		mounted() {
@@ -138,9 +148,9 @@
 			 * Temp method to close modal before refactoring modal
 			 */
 			closeModal(id: string): void {
-      	document.getElementById(id)!.style.display = 'none'
+				document.getElementById(id)!.style.display = 'none'
 			},
-			
+
 			/**
 			 * set body elements parent components height.
 			 * @return {void} - void
@@ -352,10 +362,6 @@
 				json.callback = callback
 				this.locals.templateBuilderData = json
 				this.$refs.TemplateBuilder.settingsInitFunc()
-
-				let variables: IElement[] = this.variables && this.variables.length ? this.variables : json.variables
-				if (variables)
-					this.$refs.TemplateBuilder.setVariables([...variables])
 
 				this.$refs.TemplateBuilder.showModal()
 			},

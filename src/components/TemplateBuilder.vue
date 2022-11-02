@@ -40,7 +40,7 @@
 										<a class="a-btn">{{ _$t('template-builder.variables.add') }}</a>
 									</div>
 									<div class="variables">
-										<div :class="['variable',{selected:locals.selectedElement.id === variable.id}]" v-for="variable in locals.variables" :key="variable.id">
+										<div :class="['variable',{selected:locals.selectedElement.id === variable.id}]" v-for="variable in variablesList" :key="variable.id">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
@@ -699,7 +699,7 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IEmptyElement } from '~/interfaces/elements'
+	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections } from '~/enums/general'
 	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
@@ -708,6 +708,9 @@
 	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { ElementGrandParents } from '@/enums/element'
+	import { useVariablesStore } from '~/stores/variables'
+
+	const variablesStore = useVariablesStore()
 
 	export default {
 		name: "TemplateBuilder",
@@ -725,7 +728,10 @@
 			dataSetComputed() {
 				if (this.locals.selectedElement instanceof DataSetLikeElement)
 					return this.locals.selectedElement.computeDatasets(this.settings)
-			}
+			},
+			variablesList() {
+				return variablesStore.getVarialbesList
+			},
 		},
 		data() {
 			return {
@@ -795,7 +801,6 @@
 							},
 						},
 					},
-					variables: [] as IElement[],
 					bordersAllDirections: true,
 					tabName: 'settings',
 					isClicked: false,
@@ -927,13 +932,6 @@
 						array.push(this.locals.copiedElement)
 				}
 			},
-			/**
-			 * set variable list.
-			 * @param {Array} list - variable list
-			 */
-			setVariables(list: IElement[]): void {
-				this.locals.variables = list
-			},
 
 			/**
 			 * Save Changes on TB close.
@@ -957,9 +955,9 @@
 				if (this.settings.totalHeightOfAPaper < 0)
 					this.settings.totalHeightOfAPaper = 1.77
 
-				let tmp = this.settings
-				tmp.variables = this.locals.variables
-				return tmp
+				let tmp: any = this.settings
+				tmp.variables = this.variablesList
+				return tmp as IJson
 			},
 
 			/**
@@ -993,12 +991,15 @@
 			importFromSrcFile(srcFile: File): void {
 				var callback = this.settings.callback || null
 				this.settings = getDefaultSettings() // Set the settings to default value
-				var jsonFile: IJson = JSON.parse(decodeFromBase64(srcFile))
+				var jsonFile: any = JSON.parse(decodeFromBase64(srcFile))
+
+
+				if (jsonFile.variables) {
+					variablesStore.updateVariables(jsonFile.variables)
+					delete jsonFile.variables
+				}
+
 				this.settings = merge(this.settings, jsonFile) // assign the changes
-
-
-				if (this.settings.variables)
-					this.setVariables(this.settings.variables)
 
 				if (callback)
 					this.settings.callback = callback
@@ -1154,7 +1155,6 @@
 							selectedDataSet: keys[0],
 							dataSets: datasets,
 							appendedElements: {},
-							variables: this.locals.variables,
 						}
 
 						for (let key of keys)
@@ -1206,8 +1206,8 @@
 					direction: this.settings.pageDirections
 				}
 
-				var variable: IElement = new Element(ElementTypes.VARIABLE, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles)
-				this.locals.variables.push(variable)
+				var variable: any = new Element(ElementTypes.VARIABLE, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles)
+				variablesStore.pushVariable(variable)
 			},
 
 			/**
@@ -1225,7 +1225,7 @@
 			 * @return {void} - void
 			 */
 			deleteVariable(id: string): void {
-				let variablesList: IElement[] = this.locals.variables
+				let variablesList: IElement[] = this.variablesList
 				let footerElements: IElement[] = this.settings.footer.elements
 				let headerElements: IElement[] = this.settings.header.elements
 

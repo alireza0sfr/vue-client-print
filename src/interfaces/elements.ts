@@ -1,4 +1,4 @@
-import { ElementGrandParents, ElementParents, ElementTypes } from '~/enums/element'
+import { ElementGrandParents, ElementParents, ElementTypes, VariableTypes } from '~/enums/element'
 import { emptyId } from '~/plugins/element-utilities'
 
 export interface IElementCoordinates {
@@ -42,4 +42,11 @@ export type classType =
 
 export interface IBindingObject {
   [key: string]: string
+}
+
+export interface IVariable {
+  id: string
+  name: string
+  context: string
+  variableType: VariableTypes
 }

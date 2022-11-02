@@ -1,5 +1,5 @@
 import { IRawDataset } from './datasets'
-import { IElement } from './elements'
+import { IElement, IVariable } from './elements'
 
 interface ISettings {
   header: {
@@ -41,7 +41,7 @@ interface ISettings {
 }
 
 export interface IJson extends ISettings {
-  variables: IElement[]
+  variables: IVariable[]
 }
 
 interface IConfigs {
