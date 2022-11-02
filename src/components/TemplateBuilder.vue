@@ -702,7 +702,7 @@
 	import { IElement, IEmptyElement } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections } from '~/enums/general'
 	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
-	import { ISettings } from '~/interfaces/general'
+	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { Element, BindingObjectLikeElement, DataSetLikeElement, EmptyElement } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
@@ -940,18 +940,18 @@
 			 * @return {Object} - json file
 			 */
 			save(): void {
-				let settings: ISettings = this.export2Json()
+				let json: IJson = this.export2Json()
 
 				// this.terminateCopyPaste()
 
 				if (this.settings.callback)
-					this.settings.callback(settings)
+					this.settings.callback(json)
 			},
 			/**
 			 * Exports settings to json a file.
 			 * @return {Object} - json file
 			 */
-			export2Json(): ISettings {
+			export2Json(): IJson {
 				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
 				if (this.settings.totalHeightOfAPaper < 0)
@@ -967,8 +967,8 @@
 			 * @return {File} - save settings file in browser
 			 */
 			export2SrcFile(): void {
-				let settings: ISettings = this.export2Json()
-				settings = encode2Base64(JSON.stringify(settings)) // encoding the settings to export
+				let settings: IJson = this.export2Json()
+				var encoded: string = encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
 				var currentdate = new Date()
 				var defaultDesignName = 'vcp' + "_"
@@ -980,7 +980,7 @@
 
 				let fileName = this.settings.designName === '' ? defaultDesignName : this.settings.designName
 
-				var blob = new Blob([settings],
+				var blob = new Blob([encoded],
 					{ type: "text/plain;charset=utf-8" })
 				saveAs(blob, `${fileName}.vcp`)
 			},
@@ -993,7 +993,8 @@
 			importFromSrcFile(srcFile: File): void {
 				var callback = this.settings.callback || null
 				this.settings = getDefaultSettings() // Set the settings to default value
-				this.settings = merge(this.settings, JSON.parse(decodeFromBase64(srcFile))) // assign the changes
+				var jsonFile: IJson = JSON.parse(decodeFromBase64(srcFile))
+				this.settings = merge(this.settings, jsonFile) // assign the changes
 
 
 				if (this.settings.variables)

@@ -36,6 +36,12 @@ interface ISettings {
   pageSize: string,
   pageDirections: string,
   pageBorder: string,
+
+  callback?(json: IJson): void
+}
+
+export interface IJson extends ISettings {
+  variables: IElement[]
 }
 
 interface IConfigs {
