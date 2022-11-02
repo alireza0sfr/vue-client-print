@@ -4,7 +4,7 @@
 			{{ element.configs.context }}
 		</span>
 		<img v-else class="image" :src="element.configs.context" alt="Image" />
-		<Resizers :query="`${locals.ElementTypes.VARIABLE}-${element.id}`" />
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
 </template>
 

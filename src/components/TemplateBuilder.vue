@@ -1228,24 +1228,24 @@
 				let footerElements: IElement[] = this.settings.footer.elements
 				let headerElements: IElement[] = this.settings.header.elements
 
-				function deleteFromHeader() {
+				function tryDeleteFromHeader() { // try delete instances from header
 					for (let index = 0; index < headerElements.length; index++) {
-						if (elements[index].id === id)
-							elements.splice(index, 1)
+						if (headerElements[index].id === id)
+							headerElements.splice(index, 1)
 					}
 				}
 
-				function deleteFromFooter() {
+				function tryDeleteFromFooter() { // try delete instances from header
 					for (let index = 0; index < footerElements.length; index++) {
 						if (footerElements[index].id === id)
 							footerElements.splice(index, 1)
 					}
 				}
 
-				deleteFromHeader()
-				deleteFromFooter()
+				tryDeleteFromHeader()
+				tryDeleteFromFooter()
 
-				let index = variablesList.findIndex(x => x.id === id)
+				let index = variablesList.findIndex(x => x.id === id) // delete variable from variables list
 				if (index > -1)
 					variablesList.splice(index, 1)
 			},
@@ -1279,6 +1279,7 @@
 
 				if (elementType === ElementTypes.VARIABLE) {
 					elementInstance = this.locals.currentVariable as IElement
+					elementInstance.parent = parent
 					elementInstance.styles.top = e.offsetY ? e.offsetY + 'px' : 0
 					elementInstance.styles.left = e.offsetX ? e.offsetX + 'px' : 0
 				}
