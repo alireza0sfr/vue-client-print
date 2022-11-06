@@ -76,14 +76,14 @@
 					dataSetDefaultRow: [
 						{
 							type: ElementTypes.ROW,
-							id: idGenerator(5),
+							id: idGenerator(),
 							parent: ElementParents.EMPTY,
 							styles: {},
 							configs: {
 								cells: {
 									empty: {
 										type: ElementTypes.CELL,
-										id: idGenerator(5),
+										id: idGenerator(),
 										styles: {},
 										parent: ElementParents.EMPTY,
 										configs: {

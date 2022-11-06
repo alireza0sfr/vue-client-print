@@ -890,7 +890,7 @@
 				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
 					var parent = this.locals.selectedElement.parent
 					var array = this.settings[parent].elements
-					this.locals.copiedElement.id = idGenerator(5)
+					this.locals.copiedElement.id = idGenerator()
 					this.locals.copiedElement.styles.top = '0px'
 
 					if (this.locals.copiedElement.repeatorId) {
@@ -1153,7 +1153,7 @@
 				}
 
 				var variable: IVariable = {
-					id: idGenerator(5),
+					id: idGenerator(),
 					name: '',
 					context: '',
 					variableType: VariableTypes.TEXT,

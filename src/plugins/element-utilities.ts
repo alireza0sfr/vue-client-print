@@ -47,7 +47,7 @@ export class Element extends EmptyElement implements IElement {
   constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, styles: any = {}, configs: any = {}, repeatorId: string = '') {
     super()
     this.type = type
-    this.id = idGenerator(5)
+    this.id = idGenerator()
     this._parent = parent
     this._grandParent = grandParent
     this.configs = configs
