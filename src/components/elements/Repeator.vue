@@ -2,13 +2,13 @@
 	<div :id="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
 
 		<!-- Template Builder -->
-		<div v-if="element.grandParent === ElementGrandParents.TEMPLATEBUILDER">
+		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
 			<div class="repeator-name">
 				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
-			<div style="display: flex; position: absolute;">
-				<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" />
-				<!-- <component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, null)" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" /> -->
+			<div style="display: flex; position: relative;">
+				<component v-for="element in element.configs.appendedElements" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :instance="element"
+					@clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" />
 			</div>
 			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
@@ -17,7 +17,8 @@
 		<div v-else>
 			<div v-for="(row, index) in displaySet.configs.rows" :key="row" :style="computedStyles">
 				<div style="display: flex; position: absolute;">
-					<component v-for="element in element.configs.appendedElements[element.configs.selectedDataSet]" :key="element.id" :is="element.type" :options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" />
+					<component v-for="element in element.configs.appendedElements" :key="element.id" :is="element.type"
+						:options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" />
 				</div>
 				<Resizers :query="`${element.type}-${element.id}`" />
 			</div>
@@ -28,13 +29,15 @@
 
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
-	import { IBindingObject, IElement } from '~/interfaces/elements'
-	import { shallowMerge } from '~/plugins/general-utilities'
+	import { IBindingObject, IDataSetLikeElement, IElement } from '~/interfaces/elements'
+	import { isEmpty, shallowMerge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
+	import { emptyId } from '@/plugins/element-utilities'
+	import { IDatasets } from '@/interfaces/datasets'
 	export default defineComponent({
 		name: ElementTypes.REPEATOR,
 		props: {
-			instance: Object as () => IElement,
+			instance: Object as () => IDataSetLikeElement,
 		},
 		emits: ['clickedOnElement', 'finished-editing-element'],
 		computed: {
@@ -42,7 +45,19 @@
 				return { height: this.element.configs.originalHeight }
 			},
 			displaySet() {
-				return this.element.configs.dataSets[this.element.configs.selectedDataSet]
+
+				let dataSets: IDatasets | null = this.element.computeDatasets()
+
+				if (!dataSets)
+					return this.locals.emptySet
+
+				this.element.configs.dataSets = dataSets
+				var displaySet = dataSets![this.element.configs.selectedDataSet]
+
+				if (isEmpty(displaySet))
+					return this.locals.emptySet
+
+				return displaySet
 			},
 		},
 		mounted() {
@@ -60,20 +75,29 @@
 		data() {
 			return {
 				locals: {
+					emptySet: {
+						id: emptyId,
+						configs: {
+							title: 'empty',
+							key: 'empty',
+							rows: [],
+							columns: []
+						}
+					},
 					ElementGrandParents: ElementGrandParents
 				},
 				element: {
 					configs: {
 						dataSets: {},
 						selectedDataSet: '',
-						appendedElements: {},
+						appendedElements: [],
 						originalHeight: '0'
 					},
 					styles: {
 						width: '600px',
 						height: '60px'
 					}
-				} as IElement,
+				} as IDataSetLikeElement,
 			}
 		},
 		methods: {

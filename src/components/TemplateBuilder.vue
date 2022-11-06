@@ -926,7 +926,7 @@
 
 					if (this.locals.copiedElement.repeatorId) {
 						var repeator = array.find(x => x.id === this.locals.copiedElement.repeatorId)
-						repeator.configs.appendedElements[repeator.configs.selectedDataSet].push(this.locals.copiedElement)
+						repeator.configs.appendedElements.push(this.locals.copiedElement)
 					}
 					else
 						array.push(this.locals.copiedElement)
@@ -1156,26 +1156,7 @@
 						break
 
 					case ElementTypes.REPEATOR:
-
-						var datasets = this.dataSetComputed
-
-						if (isEmpty(datasets)) {
-							alert('[VCP] DataSet is empty')
-							throw Error('[VCP] DataSet is empty')
-						} // move to dropped element and validator for it
-
-						var keys = Object.keys(datasets)
-
-						configs = {
-							selectedDataSet: keys[0],
-							dataSets: datasets,
-							appendedElements: {},
-						}
-
-						for (let key of keys)
-							configs.appendedElements[key] = []
-
-						return new DataSetLikeElement(ElementTypes.REPEATOR, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
 
 					case ElementTypes.DATASET:
 
@@ -1290,7 +1271,7 @@
 			droppedElement(parent: ElementParents, e: any, parentElement?: IElement): void {
 
 				var elementType: ElementTypes = this.locals.elementType
-				var isChild = parent === ElementParents.REPEATOR
+				var isChild = parentElement && parentElement.type === ElementTypes.REPEATOR
 				var parentId: string = parentElement ? parentElement.id : `${parent}Template`
 
 				if (elementType === ElementTypes.EMPTY)
@@ -1308,7 +1289,7 @@
 				if (isChild) { // Element is dropped on another element.
 					elementInstance.isChild = true
 					elementInstance.repeatorId = parentElement!.id
-					parentElement!.configs.appendedElements[parentElement!.configs.selectedDataSet].push(elementInstance)
+					parentElement!.configs.appendedElements.push(elementInstance)
 				}
 				else {
 					this.settings[parent].elements.push(elementInstance)
@@ -1319,7 +1300,19 @@
 
 			elementValidator(element: IElement, isChild: boolean = false, parentElement?: IElement): boolean {
 
+				this.locals.selectedElement = element
+
 				const DISSALLOWED_CHILDTYPES = [ElementTypes.PAGECOUNTER, ElementTypes.REPEATOR]
+
+				if (element instanceof DataSetLikeElement && isEmpty(this.dataSetComputed)) {
+					alert('[VCP] DataSet is empty')
+					throw Error('[VCP] DataSet is empty')
+				}
+
+				if (element instanceof BindingObjectLikeElement && isEmpty(this.bindingObjectComputed)) {
+					alert('[VCP] BindingObject is empty')
+					throw Error('[VCP] BindingObject is empty')
+				}
 
 				if (isChild) {
 
@@ -1335,6 +1328,8 @@
 						return false
 					}
 				}
+
+				this.locals.selectedElement = new EmptyElement
 				return true
 			},
 
@@ -1506,7 +1501,7 @@
 
 								if (index > -1) {
 									let repeator = array[index]
-									var children = repeator.configs.appendedElements[repeator.configs.selectedDataSet]
+									var children = repeator.configs.appendedElements
 
 									index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
 
@@ -1589,7 +1584,7 @@
 					let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId)
 					if (index > -1) {
 						let repeator = array[index]
-						var children = repeator.configs.appendedElements[repeator.configs.selectedDataSet]
+						var children = repeator.configs.appendedElements
 						index = children.findIndex((x: IElement) => x.id === this.locals.selectedElement.id)
 						if (index > -1)
 							children[index].styles = merge(children[index].styles, children[index].getCoordinates())

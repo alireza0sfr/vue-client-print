@@ -20,7 +20,6 @@ export enum ElementParents {
   BODY = 'body',
   AFTERBODY = 'afterBody',
   FOOTER = 'footer',
-  REPEATOR = 'repeator',
   EMPTY = ''
 }
 

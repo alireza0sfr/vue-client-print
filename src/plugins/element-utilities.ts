@@ -5,7 +5,7 @@ import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColu
 import { getDisplaySetModes } from '~/enums/general'
 import { ElementTypes, ElementGrandParents, ElementParents, StylesTargets } from '~/enums/element'
 
-import { idGenerator, toFloatVal, clone, merge } from './general-utilities'
+import { idGenerator, toFloatVal, clone, merge, isEmpty } from './general-utilities'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
@@ -484,22 +484,25 @@ export class BindingObjectLikeElement extends Element {
 
     // it's repeator's child
     if (this.repeatorId && this.isChild) {
-
       var parentSection = this.parent
       var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
       var parentElement = settings[parentSection].elements[repeatorIndex]
-      var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
-      var columns: IRawColumn[] = displaySet.configs.columns
-      var key: string = displaySet.configs.key
 
-      for (let col of columns) {
+      // if user has selected a dataset
+      if (!isEmpty(parentElement.configs.dataSets) && !isEmpty(parentElement.configs.selectedDataSet)) {
+        var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
+        var columns: IColumn[] = displaySet.configs.columns
+        var key: string = displaySet.configs.key
 
-        // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
-        if (col.columns && col.columns.length)
-          continue
+        for (let col of columns) {
 
-        var name = `${key}-${col.key}`
-        additional[name] = []
+          // if columns contains child columns it means row data will be array and can't be assigned to bindingobject
+          if (col.configs.columns && col.configs.columns.length)
+            continue
+
+          var name = `${key}-${col.configs.key}`
+          additional[name] = []
+        }
       }
     }
     return merge({}, bindingObjectStore.bindingObject, additional)

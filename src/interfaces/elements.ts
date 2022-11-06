@@ -1,5 +1,7 @@
 import { ElementGrandParents, ElementParents, ElementTypes, VariableTypes } from '~/enums/element'
 import { emptyId } from '~/plugins/element-utilities'
+import { IRawRow, IRow, IDatasets } from './datasets'
+import { ISettings } from './general'
 
 export interface IElementCoordinates {
   height: string
@@ -20,7 +22,7 @@ export interface IEmptyElement {
 }
 
 export interface IElement extends IEmptyElement {
-  
+
   $el?: HTMLElement
   resizerQuery?: string
 
@@ -49,4 +51,13 @@ export interface IVariable {
   name: string
   context: string
   variableType: VariableTypes
+}
+
+export interface IDataSetLikeElement extends IElement {
+  prepareDataSetRows(rows: IRawRow[]): IRow[]
+  computeDatasets(settings?: ISettings | any): IDatasets | null
+}
+
+export interface BindingObjectLikeElement extends IElement {
+  computeBindingObject(settings?: ISettings | any): IBindingObject
 }
