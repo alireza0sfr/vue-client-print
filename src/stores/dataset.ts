@@ -12,10 +12,10 @@ export const useDataSetStore = defineStore('dataSets', {
   }),
 
   actions: {
-    updateDataSets (payload: IDatasets) {
+    update (payload: IDatasets) {
       this.dataSets = payload
     },
-    clearDataSets () {
+    clear () {
       this.$reset()
     }
   },

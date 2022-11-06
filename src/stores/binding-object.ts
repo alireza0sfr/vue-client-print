@@ -12,10 +12,10 @@ export const useBindingObjectStore = defineStore('bindingObject', {
   }),
 
   actions: {
-    updateBindingObject (payload: IBindingObject) {
+    update (payload: IBindingObject) {
       this.bindingObject = payload
     },
-    clearBindingObject () {
+    clear () {
       this.$reset()
     }
   },

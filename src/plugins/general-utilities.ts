@@ -308,7 +308,7 @@ export function getDefaultSettings(): ISettings {
  * @return {Object} - merged new settings and old/default settings
  */
 export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets): ISettings {
-  bindingObjectStore.updateBindingObject(bindingObject)
-  dataSetStore.updateDataSets(dataSets)
+  bindingObjectStore.update(bindingObject)
+  dataSetStore.update(dataSets)
   return merge<ISettings>(settings, updatedSettings)
 }
