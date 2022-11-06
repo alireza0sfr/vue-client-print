@@ -436,7 +436,8 @@
 
 									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row"
+										style="flex-wrap: wrap; justify-content: center;">
 										<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler"
 											:options="{ title: col.configs.title }" v-model="col.configs.isActive" />
 									</div>
@@ -1268,13 +1269,15 @@
 
 					if (DISSALLOWED_CHILDTYPES.includes(element.type)) {
 						var type = this._$t(`template-builder.elements.${element.type}`)
-						alert(this._$t('template-builder.validators.element-type-cant-be-child', { type: type }))
+						var alert = this._$t('template-builder.validators.element-type-cant-be-child', { type: type })
+						alert(alert)
 						return false
 					}
 
 					// if child element wants to be parent element
 					if (parentElement!.isChild) {
-						alert(this._$t('template-builder.validators.child-cant-be-parent'))
+						var alert = this._$t('template-builder.validators.child-cant-be-parent')
+						alert(alert)
 						return false
 					}
 				}
@@ -1330,12 +1333,15 @@
 
 				const fileValidator = (file: any, maximumFileSize: number, validTypes: string[]) => {
 
-					if (validTypes.length && !validTypes.includes(file.type))
-						return alert(this._$t('template-builder.alerts.format-notsupported'))
+					if (validTypes.length && !validTypes.includes(file.type)) {
+						var alert = this._$t('template-builder.alerts.format-notsupported')
+						return alert(alert)
+					}
 
-					if (file.size >= maximumFileSize) // Check if the file size is under 1MB the image size value is in bytes
-						return alert(this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize }))
-
+					if (file.size >= maximumFileSize) {// Check if the file size is under 1MB the image size value is in bytes
+						var alert = this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize })
+						return alert(alert)
+					}
 					return true
 				}
 
@@ -1365,8 +1371,10 @@
 
 						file = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
-						if (!file.name.includes('.vcp'))
-							return alert(this._$t('template-builder.alerts.format-notsupported'))
+						if (!file.name.includes('.vcp')) {
+							var alert = this._$t('template-builder.alerts.format-notsupported')
+							return alert(alert)
+						}
 
 						if (fileValidator(file, maximumFileSize, [])) {
 
