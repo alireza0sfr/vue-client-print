@@ -451,7 +451,7 @@ export class DataSetLikeElement extends Element {
    */
   computeDatasets(settings?: ISettings | any): IDatasets | null {
     
-    var storeAndLocal = merge({}, this.configs.dataSets, dataSetStore.dataSets)
+    var storeAndLocal = merge({}, this.configs.dataSets, dataSetStore.all)
 
     let additional: any = {}
 
@@ -527,7 +527,7 @@ export class BindingObjectLikeElement extends Element {
         }
       }
     }
-    return merge({}, bindingObjectStore.bindingObject, additional)
+    return merge({}, bindingObjectStore.all, additional)
   }
 
 }

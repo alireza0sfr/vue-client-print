@@ -18,5 +18,10 @@ export const useDataSetStore = defineStore('dataSets', {
     clearDataSets () {
       this.$reset()
     }
+  },
+  getters: {
+    all(state) {
+      return state.dataSets
+    }
   }
 })

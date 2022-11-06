@@ -18,5 +18,10 @@ export const useBindingObjectStore = defineStore('bindingObject', {
     clearBindingObject () {
       this.$reset()
     }
+  },
+  getters: {
+    all(state) {
+      return state.bindingObject
+    }
   }
 })
