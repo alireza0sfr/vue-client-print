@@ -4,10 +4,10 @@ import { IRawRow, IRow, IDatasets } from './datasets'
 import { ISettings } from './general'
 
 export interface IElementCoordinates {
-  height: string
-  width: string
-  top: string
-  left: string
+  height: string | number
+  width: string | number
+  top: string | number
+  left: string | number
 }
 
 export interface IEmptyElement {
@@ -31,7 +31,7 @@ export interface IElement extends IEmptyElement {
   makeResizable(element: HTMLElement, resizerQuery: string): void
   makeDragable(element: HTMLElement): void
   makeClickable(element: HTMLElement): void
-  getCoordinates(): IElementCoordinates
+  getCoordinates(returnType: string): IElementCoordinates
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
 }
 

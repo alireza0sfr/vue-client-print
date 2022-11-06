@@ -223,7 +223,7 @@ export class Element extends EmptyElement implements IElement {
               left: originalLeft,
               top: originalTop,
             },
-            newValue: this.getCoordinates(),
+            newValue: this.getCoordinates('numeric'),
             elementDetails: { $el: element, resizerQuery: resizerQuery, element: this }
           }
         })
@@ -266,7 +266,7 @@ export class Element extends EmptyElement implements IElement {
       element.dispatchEvent(
         new CustomEvent('drag-end', {
           detail: {
-            newValue: this.getCoordinates(),
+            newValue: this.getCoordinates('numeric'),
             elementDetails: { $el: element, element: this }
           }
         })
@@ -326,14 +326,26 @@ export class Element extends EmptyElement implements IElement {
    * returns element coordinates
    * @return {IElementCoordinates}
    **/
-  getCoordinates(): IElementCoordinates {
+  getCoordinates(returnType: string = 'string'): IElementCoordinates {
+
     let compStyle = getComputedStyle(this.$el)
-    return {
-      top: compStyle.getPropertyValue("top"),
-      left: compStyle.getPropertyValue("left"),
-      height: compStyle.getPropertyValue("height"),
-      width: compStyle.getPropertyValue("width"),
-    }
+
+    if (returnType === 'string')
+      return {
+        top: compStyle.getPropertyValue("top"),
+        left: compStyle.getPropertyValue("left"),
+        height: compStyle.getPropertyValue("height"),
+        width: compStyle.getPropertyValue("width"),
+      }
+
+    else
+      return {
+        top: toFloatVal(compStyle.getPropertyValue("top")),
+        left: toFloatVal(compStyle.getPropertyValue("left")),
+        height: toFloatVal(compStyle.getPropertyValue("height")),
+        width: toFloatVal(compStyle.getPropertyValue("width")),
+      }
+
   }
 
   /**
@@ -438,36 +450,46 @@ export class DataSetLikeElement extends Element {
    * @return {Object} - preapred bindingObject options
    */
   computeDatasets(settings?: ISettings | any): IDatasets | null {
+    
+    var storeAndLocal = merge({}, this.configs.dataSets, dataSetStore.dataSets)
 
     let additional: any = {}
 
-    if (this.repeatorId && this.isChild) {
+    if (this.repeatorId && this.isChild && settings) {
 
       var parentSection = this.parent
       var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
       var parentElement = settings[parentSection].elements[repeatorIndex]
-      var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
-      var columns: IRawColumn[] = displaySet.configs.columns
-      var key: string = displaySet.configs.key
 
-      for (let col of columns) {
+      // if user has selected a dataset
+      if (!isEmpty(parentElement.configs.dataSets) && !isEmpty(parentElement.configs.selectedDataSet)) {
 
-        // columns should contains child columns to be used inside repeator
-        if (col.columns && col.columns.length) {
-          var name = `${key}-${col.key}`
+        var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
+        var columns: IColumn[] = displaySet.configs.columns
+        var key: string = displaySet.configs.key
 
-          var configs = {
-            title: name,
-            key: col.key,
-            rows: [],
-            columns: prepareDataSetColumns(col.columns),
+        for (let col of columns) {
+
+          // columns should contains child columns to be used inside repeator
+          if (col.configs.columns && col.configs.columns.length) {
+            var name = `${key}-${col.configs.key}`
+
+            var configs = {
+              title: name,
+              key: col.configs.key,
+              rows: [],
+              columns: col.configs.columns,
+            }
+
+            var instance = new Element(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
+            this.configs.dataSets[name] = instance
+            additional[name] = instance
+
           }
-
-          additional[name] = new Element(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
         }
       }
     }
-    return merge({}, dataSetStore.dataSets, additional)
+    return merge({}, storeAndLocal, additional)
   }
 }
 
@@ -483,7 +505,7 @@ export class BindingObjectLikeElement extends Element {
     let additional: any = {}
 
     // it's repeator's child
-    if (this.repeatorId && this.isChild) {
+    if (this.repeatorId && this.isChild && settings) {
       var parentSection = this.parent
       var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
       var parentElement = settings[parentSection].elements[repeatorIndex]
@@ -511,6 +533,16 @@ export class BindingObjectLikeElement extends Element {
 }
 
 export const emptyId: string = '00000'
+
+export const emptyDataSet = {
+  id: emptyId,
+  configs: {
+    title: '',
+    key: 'empty',
+    rows: [],
+    columns: []
+  }
+}
 
 
 /**
@@ -552,7 +584,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
     var col = columns[index]
 
     var configs = {
-      columns: col.columns || [], // if child has column
+      columns: col.columns && col.columns.length ? prepareDataSetColumns(col.columns) : [], // if child has column
       title: col.title,
       key: col.key,
       isActive: false,

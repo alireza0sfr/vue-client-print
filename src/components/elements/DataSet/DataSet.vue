@@ -1,55 +1,60 @@
 <template>
-	<div :id="element.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
+	<div :id="element.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'"
+		:style="element.styles">
 		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" class="dataset-name">
 			<span>{{displaySet.configs.title}} <img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
 		<div class="columns">
-			<Column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :options="prepareColOptions(column)" @click.stop="$emit('clickedOnElement', column)" />
+			<column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :instance="column" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
-		<div class="rows">
-			<Row v-for="row in filteredRows" :key="row.id" :options="prepareRowOptions(row)" @click.stop="$emit('clickedOnElement', row)" @styles-target-changed="stylesTargetChanged" /> <!-- Row is only clickable on TB and the default is added -->
+		<div v-if="element.configs.selectedDataSet" class="rows">
+			<row v-for="row in filteredRows" :key="row.id" :instance="row" @click.stop="$emit('clickedOnElement', row)" @styles-target-changed="stylesTargetChanged" />
+			<!-- Row is only clickable on TB and the default is added -->
 		</div>
 		<Resizers :query=" `${element.type}-${element.id}`" />
 	</div>
 </template>
 
 <script lang="ts">
-	import { ElementGrandParents, ElementTypes, StylesTargets } from '~/enums/element'
-	import { IElement } from '~/interfaces/elements'
+	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets } from '~/enums/element'
+	import { IDataSetLikeElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
-	import { toFloatVal, shallowMerge } from '~/plugins/general-utilities'
-	import { IColumn, IRow } from '@/interfaces/datasets'
+	import { toFloatVal, shallowMerge, merge, idGenerator, isEmpty } from '~/plugins/general-utilities'
+	import { IColumn, IRow, IDatasets } from '@/interfaces/datasets'
+	import { emptyDataSet } from '@/plugins/element-utilities'
 	export default defineComponent({
 		name: ElementTypes.DATASET,
 		props: {
-			instance: Object as () => IElement,
+			instance: Object as () => IDataSetLikeElement,
 		},
 		emits: ['clickedOnElement', 'finished-editing-element'],
 		computed: {
 			displaySet() {
-				return this.element.configs.dataSets[this.element.configs.selectedDataSet]
+				let dataSets: IDatasets | null = this.element.computeDatasets()
+
+				if (!dataSets)
+					return emptyDataSet
+
+				this.element.configs.dataSets = dataSets
+				var displaySet = dataSets![this.element.configs.selectedDataSet]
+
+				if (isEmpty(displaySet))
+					return emptyDataSet
+
+				return displaySet
 			},
 			filteredCols() {
-				return this.setTotalWidth(this.displaySet.configs.columns.filter((x: IColumn) => x.configs.isActive))
+
+				if (isEmpty(this.displaySet))
+					return []
+
+				return this.prepareColumns(this.displaySet.configs.columns)
 			},
 			filteredRows() {
-				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
-					return this.element.configs.defaultRow
+				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER || isEmpty(this.displaySet))
+					return this.locals.dataSetDefaultRow
 
-				var index = 1
-				var stylesTarget = this.element.configs.stylesTarget
-				for (let row of this.displaySet.configs.rows) {
-
-					if (
-						stylesTarget === StylesTargets.EVEN && index % 2 === 0 || // index is even
-						stylesTarget === StylesTargets.ODD && index % 2 === 1 || // index is odd
-						stylesTarget === StylesTargets.ALL
-					)
-						row.styles = merge(row.styles, this.element.configs.defaultRow.styles)
-
-					index += 1
-				}
-				return this.displaySet.configs.rows
+				return this.prepareRows(this.displaySet.configs.rows)
 			}
 		},
 		mounted() {
@@ -67,15 +72,42 @@
 		data() {
 			return {
 				locals: {
-					ElementGrandParents: ElementGrandParents
+					ElementGrandParents: ElementGrandParents,
+					dataSetDefaultRow: [
+						{
+							type: ElementTypes.ROW,
+							id: idGenerator(5),
+							parent: ElementParents.EMPTY,
+							styles: {},
+							configs: {
+								cells: {
+									empty: {
+										type: ElementTypes.CELL,
+										id: idGenerator(5),
+										styles: {},
+										parent: ElementParents.EMPTY,
+										configs: {
+											isActive: true,
+											value: ''
+										},
+									}
+								}
+							}
+						},
+					],
 				},
 				element: {
+					configs: {
+						stylesTarget: StylesTargets.ALL,
+						selectedDataSet: '',
+						dataSets: {},
+					},
 					styles: {
 						height: "100px",
 						width: '300px',
 						minWidth: '70px'
 					},
-				} as IElement,
+				} as IDataSetLikeElement,
 			}
 		},
 		methods: {
@@ -117,6 +149,8 @@
 					col.styles.width = toFloatVal(col.styles.width)
 					col.styles.width += ratio * col.styles.width
 					col.styles.width = col.styles.width + 'px'
+
+					col.styles.height = this.calculateColumnHeight()
 				}
 			},
 
@@ -137,7 +171,10 @@
 						width += col.styles.width
 
 				}
-				this.element.styles.width = width + 'px'
+
+				if (width !== 0)
+					this.element.styles.width = width + 'px'
+
 				return cols
 			},
 
@@ -192,37 +229,42 @@
 
 			/**
 			 * Preparing Col options
-			 @param {Object} Column - Column data.
+			 @param {IColumn[]} Columns - Column data.
 			 @return {Object} - prepared options 
 			 */
-			prepareColOptions(column: IColumn): IColumn {
-				let defaultColStyles = {
-					position: 'relative',
-					resize: 'none',
-					height: this.calculateColumnHeight()
+			prepareColumns(columns: IColumn[]): IColumn[] {
+
+				this.setTotalWidth(columns)
+
+				for (var col of columns) {
+					col.styles.height = this.calculateColumnHeight()
 				}
-				column.styles = merge(defaultColStyles, column.styles)
-				return column
+
+				return columns
 			},
 			/**
 			 * Preparing Row options
-			 @param {Object} row - Row data.
+			 @param {IRow[]} rows - Row data.
 			 @return {Object} - prepared options 
 			 */
 
-			prepareRowOptions(row: IRow): IRow {
+			prepareRows(rows: IRow[]): IRow[] {
 
-				row.grandParent = this.element.grandParent
-				row.configs.stylesTarget = this.element.configs.stylesTarget
-				row.configs.cells = {}
-				row.configs.rowsHeight = 'auto'
+				var stylesTarget = this.element.configs.stylesTarget
+				for (let index = 1; index < this.displaySet.configs.rows.length; index++) {
+					var row = this.displaySet.configs.rows[index]
+					if (
+						stylesTarget === StylesTargets.EVEN && index % 2 === 0 || // index is even
+						stylesTarget === StylesTargets.ODD && index % 2 === 1 || // index is odd
+						stylesTarget === StylesTargets.ALL
+					)
+						row.styles = merge(row.styles, this.locals.dataSetDefaultRow[0].styles)
 
-				let defaultColStyles = {
-					display: 'flex',
+					row.grandParent = this.element.grandParent
+					row.configs.stylesTarget = this.element.configs.stylesTarget
 				}
 
-				row.styles = merge(row.styles, defaultColStyles)
-				return row
+				return rows
 			}
 		}
 	})

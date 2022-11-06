@@ -32,7 +32,7 @@
 	import { IBindingObject, IDataSetLikeElement, IElement } from '~/interfaces/elements'
 	import { isEmpty, shallowMerge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
-	import { emptyId } from '@/plugins/element-utilities'
+	import { emptyDataSet } from '@/plugins/element-utilities'
 	import { IDatasets } from '@/interfaces/datasets'
 	export default defineComponent({
 		name: ElementTypes.REPEATOR,
@@ -49,13 +49,13 @@
 				let dataSets: IDatasets | null = this.element.computeDatasets()
 
 				if (!dataSets)
-					return this.locals.emptySet
+					return emptyDataSet
 
 				this.element.configs.dataSets = dataSets
 				var displaySet = dataSets![this.element.configs.selectedDataSet]
 
 				if (isEmpty(displaySet))
-					return this.locals.emptySet
+					return emptyDataSet
 
 				return displaySet
 			},
@@ -75,15 +75,6 @@
 		data() {
 			return {
 				locals: {
-					emptySet: {
-						id: emptyId,
-						configs: {
-							title: 'empty',
-							key: 'empty',
-							rows: [],
-							columns: []
-						}
-					},
 					ElementGrandParents: ElementGrandParents
 				},
 				element: {

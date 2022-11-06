@@ -422,7 +422,7 @@
 										</div>
 									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET">
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET || locals.selectedElement.type === locals.ElementTypes.REPEATOR">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
@@ -434,23 +434,13 @@
 											</div>
 										</div>
 
-										<div class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
-											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler"
-												:options="{ title: col.configs.title }" v-model="col.configs.isActive" />
-										</div>
 									</div>
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.REPEATOR">
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].configs.title }}</option>
-												</select>
-											</div>
-										</div>
+
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row" style="flex-wrap: wrap; justify-content: center;">
+										<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler"
+											:options="{ title: col.configs.title }" v-model="col.configs.isActive" />
 									</div>
+
 								</div>
 
 								<!-- Element's Styles -->
@@ -722,6 +712,7 @@
 		},
 		computed: {
 			bindingObjectComputed() {
+				debugger
 				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
 					return this.locals.selectedElement.computeBindingObject(this.settings)
 			},
@@ -747,28 +738,6 @@
 					fullScreen: false,
 					templateHeight: 11.7,
 					langs: fetchLangList(),
-					dataSetDefaultRow: [
-						{
-							type: ElementTypes.ROW,
-							id: idGenerator(5),
-							parent: this.options.parent,
-							styles: {},
-							configs: {
-								cells: {
-									center: {
-										type: ElementTypes.CELL,
-										id: idGenerator(5),
-										styles: {},
-										parent: this.options.parent,
-										configs: {
-											isActive: true,
-											value: ''
-										},
-									}
-								}
-							}
-						},
-					],
 					copiedElement: null,
 					scale: 1,
 					pageSizeDictionary: {
@@ -1156,27 +1125,8 @@
 						break
 
 					case ElementTypes.REPEATOR:
-						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
-
 					case ElementTypes.DATASET:
-
-						var datasets = this.dataSetComputed
-
-						if (isEmpty(datasets)) {
-							alert('[VCP] DataSet is empty')
-							throw Error('[VCP] DataSet is empty')
-						} // move to dropped element and validator for it
-
-						var keys = Object.keys(datasets)
-
-						configs = {
-							stylesTarget: StylesTargets.ALL,
-							selectedDataSet: keys[0],
-							dataSets: datasets,
-							defaultRow: this.locals.dataSetDefaultRow
-						}
-
-						return new DataSetLikeElement(ElementTypes.DATASET, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
 
 					case ElementTypes.BINDINGOBJECT:
 					case ElementTypes.TEXTPATTERN:

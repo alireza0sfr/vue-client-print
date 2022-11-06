@@ -31,7 +31,10 @@
 		data() {
 			return {
 				element: {
-					styles: {},
+					styles: {
+						position: 'relative',
+						resize: 'none'
+					},
 				} as IElement,
 			}
 		},
