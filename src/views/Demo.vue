@@ -278,7 +278,7 @@
 				},
 				variables: [],
 				configs: {
-					language: 'fa'
+					language: 'en'
 				}
 			}
 		},
