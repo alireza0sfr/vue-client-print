@@ -10,7 +10,8 @@
       "settings": "تنظیمات",
       "alerts": {
         "format-notsupported": "فرمت فایل پشتیبانی نمی شود",
-        "fileSize-exceeded": "حجم فایل انتخابی از حجم مجاز بیشتر است."
+        "fileSize-exceeded": "حجم فایل انتخابی از حجم مجاز بیشتر است.",
+        "save-success": "ذخیره با موفقیت انجام شد"
       },
       "variables": {
         "variables": "متغیرها",

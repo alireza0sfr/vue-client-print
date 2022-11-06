@@ -9,7 +9,8 @@
       "name": "Template Builder",
       "alerts": {
         "format-notsupported": "File format is not supported!",
-        "fileSize-exceeded": "File size is too large!"
+        "fileSize-exceeded": "File size is too large!",
+        "save-success": "Save Success"
       },
       "variables": {
         "type": "Type",

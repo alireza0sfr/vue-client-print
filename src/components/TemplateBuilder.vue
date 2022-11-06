@@ -914,6 +914,9 @@
 
 				if (this.settings.callback)
 					this.settings.callback(json)
+
+				var text = this._$t('template-builder.alerts.save-success')
+				alert(text)
 			},
 			/**
 			 * Exports settings to json a file.
@@ -1269,15 +1272,15 @@
 
 					if (DISSALLOWED_CHILDTYPES.includes(element.type)) {
 						var type = this._$t(`template-builder.elements.${element.type}`)
-						var alert = this._$t('template-builder.validators.element-type-cant-be-child', { type: type })
-						alert(alert)
+						var text = this._$t('template-builder.validators.element-type-cant-be-child', { type: type })
+						alert(text)
 						return false
 					}
 
 					// if child element wants to be parent element
 					if (parentElement!.isChild) {
-						var alert = this._$t('template-builder.validators.child-cant-be-parent')
-						alert(alert)
+						var text = this._$t('template-builder.validators.child-cant-be-parent')
+						alert(text)
 						return false
 					}
 				}
@@ -1334,13 +1337,13 @@
 				const fileValidator = (file: any, maximumFileSize: number, validTypes: string[]) => {
 
 					if (validTypes.length && !validTypes.includes(file.type)) {
-						var alert = this._$t('template-builder.alerts.format-notsupported')
-						return alert(alert)
+						var text = this._$t('template-builder.alerts.format-notsupported')
+						return alert(text)
 					}
 
 					if (file.size >= maximumFileSize) {// Check if the file size is under 1MB the image size value is in bytes
-						var alert = this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize })
-						return alert(alert)
+						var text = this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize })
+						return alert(text)
 					}
 					return true
 				}
@@ -1372,8 +1375,8 @@
 						file = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
 
 						if (!file.name.includes('.vcp')) {
-							var alert = this._$t('template-builder.alerts.format-notsupported')
-							return alert(alert)
+							var text = this._$t('template-builder.alerts.format-notsupported')
+							return alert(text)
 						}
 
 						if (fileValidator(file, maximumFileSize, [])) {
