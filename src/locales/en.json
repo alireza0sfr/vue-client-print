@@ -94,14 +94,20 @@
           "pattern-input": "Please Type Your Pattern"
         },
         "styles": {
+          "positions": {
+            "top": "Top",
+            "center": "Center",
+            "bottom": "Bottom",
+            "left": "Left",
+            "right": "Right"
+          },
           "name": "{elementType}'s Styles",
           "text-align": "Text Horizental Align",
           "align-items": "Text Vertical Align",
           "top": "Top",
-          "bottom": "Bottom",
           "left": "Left",
-          "center": "Center",
-          "right": "Right",
+          "width": "Width",
+          "height": "Height",
           "text-color": "Text Color",
           "background-color": "Background Color",
           "font-size": "Font Size",

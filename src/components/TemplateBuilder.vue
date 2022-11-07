@@ -456,9 +456,9 @@
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.styles.textAlign" class="input-form-control" id="elementTextAlignControl">
-													<option value="right">{{_$t('template-builder.elements.styles.right')}}</option>
-													<option value="center">{{_$t('template-builder.elements.styles.center')}}</option>
-													<option value="left">{{_$t('template-builder.elements.styles.left')}}</option>
+													<option value="right">{{_$t('template-builder.elements.styles.positions.right')}}</option>
+													<option value="center">{{_$t('template-builder.elements.styles.positions.center')}}</option>
+													<option value="left">{{_$t('template-builder.elements.styles.positions.left')}}</option>
 												</select>
 											</div>
 										</div>
@@ -468,9 +468,9 @@
 											</div>
 											<div class="toolbar-content-field">
 												<select v-model="locals.selectedElement.styles.alignItems" class="input-form-control" id="elementTextAlignControl">
-													<option value="flex-start">{{_$t('template-builder.elements.styles.top')}}</option>
-													<option value="center">{{_$t('template-builder.elements.styles.center')}}</option>
-													<option value="flex-end">{{_$t('template-builder.elements.styles.bottom')}}</option>
+													<option value="flex-start">{{_$t('template-builder.elements.styles.positions.top')}}</option>
+													<option value="center">{{_$t('template-builder.elements.styles.positions.center')}}</option>
+													<option value="flex-end">{{_$t('template-builder.elements.styles.positions.bottom')}}</option>
 												</select>
 											</div>
 										</div>
@@ -589,6 +589,38 @@
 														{{_$t('template-builder.elements.styles.left-to-right')}}
 													</div>
 												</label>
+											</div>
+										</div>
+										<div class="toolbar-content-row">
+											<div class="toolbar-content-label">
+												<span>{{_$t('template-builder.elements.styles.top')}}</span>
+											</div>
+											<div class="toolbar-content-field">
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.top" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											</div>
+										</div>
+										<div class="toolbar-content-row">
+											<div class="toolbar-content-label">
+												<span>{{_$t('template-builder.elements.styles.left')}}</span>
+											</div>
+											<div class="toolbar-content-field">
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.left" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											</div>
+										</div>
+										<div class="toolbar-content-row">
+											<div class="toolbar-content-label">
+												<span>{{_$t('template-builder.elements.styles.width')}}</span>
+											</div>
+											<div class="toolbar-content-field">
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.width" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											</div>
+										</div>
+										<div class="toolbar-content-row">
+											<div class="toolbar-content-label">
+												<span>{{_$t('template-builder.elements.styles.height')}}</span>
+											</div>
+											<div class="toolbar-content-field">
+												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.height" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>

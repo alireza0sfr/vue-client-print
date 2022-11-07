@@ -94,14 +94,20 @@
           "pattern-input": "الگوی خود را وارد نمایید."
         },
         "styles": {
+          "positions": {
+            "top": "بالا",
+            "center": "وسط",
+            "bottom": "پایین",
+            "left": "چپ",
+            "right": "راست"
+          },
           "name": "استایل المنت ({elementType})",
           "text-align": "مکان نوشته افقی",
           "align-items": "مکان نوشته عمودی",
-          "top": "بالا",
-          "bottom": "پایین",
-          "left": "چپ",
-          "center": "وسط",
-          "right": "راست",
+          "top": "فاصله از بالا",
+          "left": "فاصله از چپ",
+          "width": "عرض",
+          "height": "ارتفاع",
           "text-color": "رنگ نوشته",
           "background-color": "رنگ پس زمینه",
           "font-size": "اندازه فونت",
