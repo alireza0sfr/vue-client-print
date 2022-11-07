@@ -25,13 +25,13 @@
 						<div class="toolbar-content">
 							<!-- Tabs -->
 							<div class="tabs">
-								<a class="tab selected" @click="switchTabs('settings', $refs.settings)" ref="settings">{{_$t('template-builder.settings')}}</a>
-								<a class="tab" @click="switchTabs('variables', $refs.variables)" ref="variables">{{ _$t('template-builder.variables.variables') }}</a>
-								<a class="tab" @click="switchTabs('others', $refs.others)" ref="others">{{ _$t('template-builder.others') }}</a>
+								<a class="tab selected" @click="switchTabs(locals.tabs.SETTINGS)" ref="settings">{{_$t('template-builder.settings')}}</a>
+								<a class="tab" @click="switchTabs(locals.tabs.VARIABLES)" ref="variables">{{ _$t('template-builder.variables.variables') }}</a>
+								<a class="tab" @click="switchTabs(locals.tabs.OTHERS)" ref="others">{{ _$t('template-builder.others') }}</a>
 							</div>
 
 							<!-- Variables Tab -->
-							<div v-show="locals.tabName === 'variables'" class="variables-tab">
+							<div v-show="locals.activeTab === locals.tabs.VARIABLES" class="variables-tab">
 								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
 									<span>{{ _$t('template-builder.variables.list') }}</span>
 								</div>
@@ -76,7 +76,7 @@
 							</div>
 
 							<!-- Others Tab  -->
-							<div v-show="locals.tabName === 'others'" class="others-tab">
+							<div v-show="locals.activeTab === locals.tabs.OTHERS" class="others-tab">
 								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
 									<span>{{_$t('template-builder.save')}}</span>
 								</div>
@@ -98,7 +98,7 @@
 							</div>
 
 							<!-- Settings Tab -->
-							<div v-show="locals.tabName === 'settings'" class="settings-tab">
+							<div v-show="locals.activeTab === locals.tabs.SETTINGS" class="settings-tab">
 
 								<!-- Settings -->
 								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
@@ -723,7 +723,7 @@
 
 <script lang="ts">
 	import { IElement, IEmptyElement, IVariable, ICreateElementExtraArgs } from '~/interfaces/elements'
-	import { fileEntryTypes, TemplateBuilderSections } from '~/enums/general'
+	import { fileEntryTypes, TemplateBuilderSections, Tabs } from '~/enums/general'
 	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
@@ -759,6 +759,7 @@
 		data() {
 			return {
 				locals: {
+					tabs: Tabs,
 					sections: Object.values(TemplateBuilderSections),
 					StylesTargets: StylesTargets,
 					fileEntryTypes: fileEntryTypes,
@@ -803,7 +804,7 @@
 						},
 					},
 					bordersAllDirections: true,
-					tabName: 'settings',
+					activeTab: Tabs.SETTINGS,
 					isClicked: false,
 					clickedElementId: '',
 					selectedElement: new EmptyElement as IElement | IEmptyElement,
@@ -1096,15 +1097,21 @@
 
 			/**
 			 * Swtich between tabs in toolbar.
-			 * @param {String} tabName - tab name
+			 * @param {String} tabName - tabName
 			 * @param {HTMLElement} tab - selected tab element
 			 * @return {void} - void
 			 */
-			switchTabs(tabName: string, tab: HTMLElement): void {
-				let slecetdTab = document.getElementsByClassName('tab selected')[0]
-				slecetdTab.classList.remove('selected')
+			switchTabs(tabName: Tabs): void {
+
+				if (tabName === this.locals.activeTab)
+					return
+
+				let previousTab = document.getElementsByClassName('tab selected')[0]
+				var tab = this.$refs[tabName] as HTMLElement
+
+				previousTab.classList.remove('selected')
 				tab.classList.add('selected')
-				this.locals.tabName = tabName
+				this.locals.activeTab = tabName
 			},
 
 			/**
@@ -1134,6 +1141,11 @@
 				this.locals.clickedElementId = element.id
 				this.locals.isClicked = true
 				this.locals.selectedSection = null
+
+				if (this.locals.selectedElement.type === ElementTypes.VARIABLE)
+					this.switchTabs(Tabs.VARIABLES)
+				else
+					this.switchTabs(Tabs.SETTINGS)
 			},
 
 			/**

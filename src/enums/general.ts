@@ -17,3 +17,9 @@ export enum TemplateBuilderSections {
   AFTERBODY = 'afterBody',
   FOOTER = 'footer',
 }
+
+export enum Tabs {
+  SETTINGS = 'settings',
+  VARIABLES = 'variables',
+  OTHERS = 'others'
+}
