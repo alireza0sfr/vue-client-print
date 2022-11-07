@@ -23,7 +23,7 @@ export const useVariablesStore = defineStore('variables', {
       if (!this.variables)
         return null
 
-      var index = this.variables?.findIndex(x => x.id === payload.id)
+      var index = this.variables?.findIndex(x => x.variableId === payload.variableId)
       if (index > -1)
         this.variables![index] = payload
     },
@@ -33,7 +33,16 @@ export const useVariablesStore = defineStore('variables', {
         this.variables = [payload]
 
       this.variables.push(payload)
-    }
+    },
+    deleteById(id: string) {
+
+      if (!this.variables)
+        return
+
+      let index = this.variables.findIndex(x => x.variableId === id) // delete variable from variables list
+      if (index > -1)
+        this.variables.splice(index, 1)
+    },
   },
   getters: {
     getVariableById: (state) => {
@@ -42,7 +51,7 @@ export const useVariablesStore = defineStore('variables', {
         if (!state.variables)
           return null
 
-        var index: number = state.variables?.findIndex((x: IVariable) => x.id === id)
+        var index: number = state.variables?.findIndex((x: IVariable) => x.variableId === id)
         if (index > -1)
           return state.variables![index]
 

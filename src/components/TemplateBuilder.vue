@@ -40,7 +40,7 @@
 										<a class="a-btn">{{ _$t('template-builder.variables.add') }}</a>
 									</div>
 									<div class="variables">
-										<div :class="['variable',{selected:locals.selectedElement.id === variable.id}]" v-for="variable in variablesList" :key="variable.id">
+										<div :class="['variable',{selected:locals.selectedElement.configs.variableId === variable.variableId}]" v-for="variable in variablesList" :key="variable.variableId">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
@@ -67,7 +67,7 @@
 														id="variableImageFileControl" />
 												</div>
 												<div class="variables-content-field small">
-													<img @click="deleteVariable(variable.id)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
+													<img @click="deleteVariable(variable.variableId)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
 												</div>
 											</div>
 										</div>
@@ -713,7 +713,6 @@
 		},
 		computed: {
 			bindingObjectComputed() {
-				debugger
 				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
 					return this.locals.selectedElement.computeBindingObject(this.settings)
 			},
@@ -1124,8 +1123,6 @@
 
 					case ElementTypes.VARIABLE:
 						configs = variable
-						configs.variableId = variable!.id
-						delete configs.id
 						break
 
 					case ElementTypes.REPEATOR:
@@ -1150,14 +1147,10 @@
 			 * Creates variable in variables tab list.
 			 * @return {void} - void
 			 */
-			createVariable(e: any): void {
-
-				var styles: any = {
-					direction: this.settings.pageDirections
-				}
+			createVariable(): void {
 
 				var variable: IVariable = {
-					id: idGenerator(),
+					variableId: idGenerator(),
 					name: '',
 					context: '',
 					variableType: VariableTypes.TEXT,
@@ -1179,31 +1172,16 @@
 			 * @param {string} id - variable unique id
 			 * @return {void} - void
 			 */
-			deleteVariable(id: string): void {
-				let variablesList: IElement[] = this.variablesList
-				let footerElements: IElement[] = this.settings.footer.elements
-				let headerElements: IElement[] = this.settings.header.elements
+			deleteVariable(variableId: string): void {
 
-				function tryDeleteFromHeader() { // try delete instances from header
-					for (let index = 0; index < headerElements.length; index++) {
-						if (headerElements[index].id === id)
-							headerElements.splice(index, 1)
+				for (let section of this.locals.sections) {
+					for (let index = 0; index < this.settings[section].elements.length; index++) {
+						if (this.settings[section].elements[index].configs.variableId === variableId)
+							this.settings[section].elements.splice(index, 1)
 					}
 				}
 
-				function tryDeleteFromFooter() { // try delete instances from header
-					for (let index = 0; index < footerElements.length; index++) {
-						if (footerElements[index].id === id)
-							footerElements.splice(index, 1)
-					}
-				}
-
-				tryDeleteFromHeader()
-				tryDeleteFromFooter()
-
-				let index = variablesList.findIndex(x => x.id === id) // delete variable from variables list
-				if (index > -1)
-					variablesList.splice(index, 1)
+				variablesStore.deleteById(variableId)
 			},
 
 

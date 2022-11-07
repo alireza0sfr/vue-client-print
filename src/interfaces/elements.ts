@@ -47,7 +47,7 @@ export interface IBindingObject {
 }
 
 export interface IVariable {
-  id: string
+  variableId: string
   name: string
   context: string
   variableType: VariableTypes
