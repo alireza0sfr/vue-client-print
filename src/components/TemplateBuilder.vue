@@ -39,7 +39,7 @@
 									<div @click="createVariable" style="text-align: center; margin-top: 10px">
 										<a class="a-btn">{{ _$t('template-builder.variables.add') }}</a>
 									</div>
-									<div class="variables">
+									<div :id="`${locals.elementType.VARIABLE}_Settings`" class="variables settings-section">
 										<div :class="['variable',{selected:locals.selectedElement.configs.variableId === variable.variableId}]" v-for="variable in variablesList" :key="variable.variableId">
 											<div class="variables-row">
 												<div class="variables-row large">
@@ -265,129 +265,148 @@
 								</div>
 
 								<!-- Element's Settings -->
-								<div v-if="locals.selectedElement.type !== locals.ElementTypes.EMPTY">
+								<div v-if="locals.selectedElement.type !== locals.ElementTypes.EMPTY && locals.selectedElement.type !== locals.ElementTypes.VARIABLE">
 									<div class="toolbar-header">
 										<span>{{_$t('template-builder.elements.settings', {elementType: _$t(`template-builder.elements.${locals.selectedElement.type}`)})}}</span>
 									</div>
+
 									<div class="toolbar-content-wrapper">
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
-											<div style="text-align: center; width: 100%">
-												<span>{{_$t('template-builder.elements.configs.type-text')}}</span>
+
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT" :id="`${locals.ElementTypes.TEXTELEMENT}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div style="text-align: center; width: 100%">
+													<span>{{_$t('template-builder.elements.configs.type-text')}}</span>
+												</div>
+											</div>
+											<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
+												<div class="toolbar-content-field">
+													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
+														aria-describedby="inputGroup-sizing-sm"></textarea>
+												</div>
 											</div>
 										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
-											<div class="toolbar-content-field">
-												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
-													aria-describedby="inputGroup-sizing-sm"></textarea>
+
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME" :id="`${locals.ElementTypes.DATETIME}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="hasDateControl">{{_$t('template-builder.elements.configs.date')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasDate" id="hasDateControl" />
+												</div>
+											</div>
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="hasTimeControl">{{_$t('template-builder.elements.configs.time')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasTime" id="hasTimeControl" />
+												</div>
+											</div>
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="persiaDateControl">{{_$t('template-builder.elements.configs.solar-date')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.persianDate" id="persiaDateControl" />
+												</div>
 											</div>
 										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME">
-											<div class="toolbar-content-label">
-												<label for="hasDateControl">{{_$t('template-builder.elements.configs.date')}}</label>
+
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.PAGECOUNTER" :id="`${locals.ElementTypes.PAGECOUNTER}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="persianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="persianNumbersControl" />
+												</div>
 											</div>
-											<div class="toolbar-content-field">
-												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasDate" id="hasDateControl" />
-											</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME">
-											<div class="toolbar-content-label">
-												<label for="hasTimeControl">{{_$t('template-builder.elements.configs.time')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasTime" id="hasTimeControl" />
-											</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME">
-											<div class="toolbar-content-label">
-												<label for="persiaDateControl">{{_$t('template-builder.elements.configs.solar-date')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.persianDate" id="persiaDateControl" />
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="completeFormControl">{{_$t('template-builder.elements.configs.use-complete-format')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.completeForm" id="completeFormControl" />
+												</div>
 											</div>
 										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.PAGECOUNTER">
-											<div class="toolbar-content-label">
-												<label for="persianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
+
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT" :id="`${locals.ElementTypes.IMAGEELEMENT}_Settings`" class="element-settings">
+											<div class="toolbar-content-row" style="flex-direction: column">
+												<label for="elementImageFileControl">{{_$t('template-builder.elements.configs.upload-image-text')}}</label>
+												<div class="imageelement-text">{{_$t('template-builder.elements.configs.maximum-file-size')}}</div>
+												<div class="imageelement-text">{{_$t('template-builder.elements.configs.accepted-formats')}}</div>
+												<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png, *. jpeg</div>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="persianNumbersControl" />
+											<div class="toolbar-content-row">
+												<div style="width: 100%;" class="toolbar-content-field">
+													<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">{{_$t('template-builder.elements.configs.upload-image')}}</a>
+												</div>
 											</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.PAGECOUNTER">
-											<div class="toolbar-content-label">
-												<label for="completeFormControl">{{_$t('template-builder.elements.configs.use-complete-format')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.completeForm" id="completeFormControl" />
-											</div>
-										</div>
-										<div class="toolbar-content-row" style="flex-direction: column" v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT">
-											<label for="elementImageFileControl">{{_$t('template-builder.elements.configs.upload-image-text')}}</label>
-											<div class="imageelement-text">{{_$t('template-builder.elements.configs.maximum-file-size')}}</div>
-											<div class="imageelement-text">{{_$t('template-builder.elements.configs.accepted-formats')}}</div>
-											<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png, *. jpeg</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT">
-											<div style="width: 100%;" class="toolbar-content-field">
-												<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">{{_$t('template-builder.elements.configs.upload-image')}}</a>
+											<div style="display: none;" class="toolbar-content-row">
+												<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageElement)" aria-label="Small"
+													aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 											</div>
 										</div>
-										<div style="display: none;" class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT">
-											<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageElement)" aria-label="Small"
-												aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT">
-											<div class="toolbar-content-label">
-												<label for="bindingObjectPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
+
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT" :id="`${locals.ElementTypes.BINDINGOBJECT}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="bindingObjectPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
+												</div>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
-											</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT">
-											<div class="toolbar-content-label">
-												<label for="bindingObjectControl">{{_$t('template-builder.elements.configs.data-type')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<select class="input-form-control" v-model="locals.selectedElement.configs.field" id="bindingObjectControl">
-													<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
-												</select>
-											</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
-											<div style="text-align: center; width: 100%">
-												<span>{{_$t('template-builder.elements.configs.type-text')}}</span>
-												<p>{{_$t('template-builder.elements.configs.textpattern-example', {name: '{name}'})}}</p>
+											<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT">
+												<div class="toolbar-content-label">
+													<label for="bindingObjectControl">{{_$t('template-builder.elements.configs.data-type')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<select class="input-form-control" v-model="locals.selectedElement.configs.field" id="bindingObjectControl">
+														<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
+													</select>
+												</div>
 											</div>
 										</div>
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
-											<div class="toolbar-content-field">
-												<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
-													aria-describedby="inputGroup-sizing-sm"></textarea>
+
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN" :id="`${locals.ElementTypes.TEXTPATTERN}_Settings`" class="element-settings">
+											<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
+												<div style="text-align: center; width: 100%">
+													<span>{{_$t('template-builder.elements.configs.type-text')}}</span>
+													<p>{{_$t('template-builder.elements.configs.textpattern-example', {name: '{name}'})}}</p>
+												</div>
 											</div>
-										</div>
-										<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
-											<div class="toolbar-content-label">
-												<label for="textPatternPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
+											<div>
+												<div class="toolbar-content-field">
+													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
+														aria-describedby="inputGroup-sizing-sm"></textarea>
+												</div>
 											</div>
-											<div class="toolbar-content-field">
-												<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
-													id="textPatternPersianNumbersControl" />
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="textPatternPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
+														id="textPatternPersianNumbersControl" />
+												</div>
 											</div>
-										</div>
-									</div>
-									<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
-										<div class="toolbar-content-label">
-											<label for="textpatternControl">{{_$t('template-builder.elements.configs.fields')}}</label>
-										</div>
-										<div class="toolbar-content-field">
-											<select class="input-form-control" id="textpatternControl">
-												<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
-											</select>
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="textpatternControl">{{_$t('template-builder.elements.configs.fields')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<select class="input-form-control" id="textpatternControl">
+														<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
+													</select>
+												</div>
+											</div>
 										</div>
 									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN">
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="element-settings">
 										<div class="toolbar-content-row">
 											<div style="width: 100%;" class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.isActive')}} ({{locals.selectedElement.configs.title}})</label>
@@ -400,7 +419,7 @@
 										</div>
 									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW">
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW" :id="`${locals.ElementTypes.ROW}_Settings`" class="element-settings">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.stylesTarget')}}</label>
@@ -422,7 +441,8 @@
 										</div>
 									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET || locals.selectedElement.type === locals.ElementTypes.REPEATOR">
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET || locals.selectedElement.type === locals.ElementTypes.REPEATOR"
+										:id="`${locals.selectedElement.type}_Settings`" class="element-settings">
 										<div class="toolbar-content-row">
 											<div class="toolbar-content-label">
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
@@ -436,7 +456,7 @@
 
 									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row"
+									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row element-settings"
 										style="flex-wrap: wrap; justify-content: center;">
 										<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler"
 											:options="{ title: col.configs.title }" v-model="col.configs.isActive" />
@@ -1146,6 +1166,16 @@
 					this.switchTabs(Tabs.VARIABLES)
 				else
 					this.switchTabs(Tabs.SETTINGS)
+
+				var settingsSection = document.getElementById(`${this.locals.selectedElement.type}_Settings`)
+
+				if (settingsSection)
+					settingsSection.scrollIntoView({
+						behavior: "smooth",
+						block: "start",
+						inline: "nearest"
+					})
+
 			},
 
 			/**
