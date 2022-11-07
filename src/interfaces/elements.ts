@@ -35,12 +35,12 @@ export interface IElement extends IEmptyElement {
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
 }
 
-export type classType =
-  'textelement' | 'bindingobject' |
-  'datetime' | 'imageelement' |
-  'pagecounter' | 'repeator' |
-  'textpattern' | 'variable' |
-  'dataset' | 'row' | 'column'
+export interface ICreateElementExtraArgs {
+  e?: any,
+  variable?: IVariable | IEmptyElement,
+  styles?: any,
+  configs?: any
+}
 
 export interface IBindingObject {
   [key: string]: string

@@ -690,7 +690,7 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
+	import { IElement, IEmptyElement, IVariable, ICreateElementExtraArgs } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections } from '~/enums/general'
 	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
@@ -977,7 +977,7 @@
 
 					for (let index = 0; index < this.settings[section].elements.length; index++) {
 						var elem = this.settings[section].elements[index]
-						this.settings[section].elements[index] = new Element(elem.type, ElementParents[section.toUpperCase()], ElementGrandParents.TEMPLATEBUILDER, elem.styles, elem.configs)
+						this.settings[section].elements[index] = this.createElement(elem.type, ElementParents[section.toUpperCase()], { styles: elem.styles, configs: elem.configs })
 					}
 				}
 
@@ -1109,20 +1109,20 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(elementType: ElementTypes, parent: ElementParents, e?: any, variable?: IVariable | IEmptyElement): IElement {
+			createElement(elementType: ElementTypes, parent: ElementParents, extraArgs?: ICreateElementExtraArgs): IElement {
 
-				var configs: any
-				var styles: any = {
-					top: e.offsetY ? e.offsetY + 'px' : 0,
-					left: e.offsetX ? e.offsetX + 'px' : 0,
+				var configs: any = merge({}, extraArgs?.configs || {})
+				var baseStyles = {
+					top: extraArgs?.e?.offsetY + 'px' || '0px',
+					left: extraArgs?.e?.offsetX + 'px' || '0px',
 					direction: this.settings.pageDirections
 				}
-
+				var styles: any = merge(baseStyles, extraArgs?.styles || {})
 
 				switch (elementType) {
 
 					case ElementTypes.VARIABLE:
-						configs = variable
+						configs = merge(extraArgs?.variable || {}, configs)
 						break
 
 					case ElementTypes.REPEATOR:
@@ -1134,7 +1134,7 @@
 						return new BindingObjectLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
 
 					case ElementTypes.IMAGEELEMENT:
-						configs = { imageSrc: this.configurations.imageSrc }
+						configs = merge({ imageSrc: this.configurations.imageSrc }, configs)
 						break
 
 					default:
@@ -1209,7 +1209,7 @@
 				if (elementType === ElementTypes.EMPTY)
 					return
 
-				var elementInstance: IElement = this.createElement(elementType, parent, e, this.locals.currentVariable)
+				var elementInstance: IElement = this.createElement(elementType, parent, { e, variable: this.locals.currentVariable })
 
 				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
 					elementType = ElementTypes.EMPTY
