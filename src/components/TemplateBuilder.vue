@@ -458,8 +458,8 @@
 
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row element-settings"
 										style="flex-wrap: wrap; justify-content: center;">
-										<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" class="toolbar-content-label column-toggler"
-											:options="{ title: col.configs.title }" v-model="col.configs.isActive" />
+										<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" @click="togglerClicked(col)"
+											class="toolbar-content-label column-toggler" :options="prepareTogglerOptions(col)" />
 									</div>
 
 								</div>
@@ -752,6 +752,7 @@
 	import { saveAs } from 'file-saver'
 	import { ElementGrandParents } from '@/enums/element'
 	import { useVariablesStore } from '~/stores/variables'
+	import { IColumn, IDataset } from '@/interfaces/datasets'
 
 	const variablesStore = useVariablesStore()
 
@@ -847,6 +848,42 @@
 			this.keyboardHandler()
 		},
 		methods: {
+
+			/**
+			 * prepare toggler options and decide for isActive
+			 * @param {IColumn} col - toggler bound col.
+			 * @return {Object} toggler options
+			 */
+			prepareTogglerOptions(col: IColumn): object {
+				var isActive = false
+				var element = this.locals.selectedElement
+				var displaySet: IDataset = element.configs.dataSets[element.configs.selectedDataSet]
+				var columns: IColumn[] = displaySet.configs.columns
+				var index: number = columns.findIndex((x: IColumn) => x.configs.key === col.configs.key)
+
+				if (index > -1)
+					isActive = true
+
+				return { title: col.configs.title, isActive }
+			},
+
+			/**
+			 * add/delete clicked column to/from dataset columns
+			 * @param {IColumn} col - toggler bound col.
+			 * @return {Void} void
+			 */
+			togglerClicked(col: IColumn): void {
+				var element = this.locals.selectedElement
+				var displaySet: IDataset = element.configs.dataSets[element.configs.selectedDataSet]
+				var columns: IColumn[] = displaySet.configs.columns
+				var index: number = columns.findIndex((x: IColumn) => x.configs.key === col.configs.key)
+
+				if (index > -1)
+					columns.splice(index, 1)
+
+				else
+					columns.push(col)
+			},
 
 			/**
 			 * Temp method to close modal before refactoring modal

@@ -30,12 +30,11 @@
 		emits: ['clickedOnElement', 'finished-editing-element'],
 		computed: {
 			displaySet() {
-				let dataSets: IDatasets | null = this.element.computeDatasets()
+				let dataSets: IDatasets = this.element.configs.dataSets
 
 				if (!dataSets)
 					return emptyDataSet
 
-				this.element.configs.dataSets = dataSets
 				var displaySet = dataSets![this.element.configs.selectedDataSet]
 
 				if (isEmpty(displaySet))
@@ -45,16 +44,30 @@
 			},
 			filteredCols() {
 
-				if (isEmpty(this.displaySet))
-					return []
+				var columns: IColumn[]
 
-				return this.prepareColumns(this.displaySet.configs.columns)
+				if (isEmpty(this.displaySet))
+					columns = []
+				else
+					columns = this.displaySet.configs.columns
+
+				return this.prepareColumns(columns)
 			},
 			filteredRows() {
 				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER || isEmpty(this.displaySet))
 					return this.locals.dataSetDefaultRow
 
 				return this.prepareRows(this.displaySet.configs.rows)
+			}
+		},
+		created() {
+			if (isEmpty(this.element.configs.dataSets)) {
+				var dataSets = this.element.computeDatasets() || {}
+
+				for (var key of Object.keys(dataSets))
+					dataSets[key].configs.columns = []
+
+				this.element.configs.dataSets = dataSets
 			}
 		},
 		mounted() {
@@ -233,6 +246,9 @@
 			 @return {Object} - prepared options 
 			 */
 			prepareColumns(columns: IColumn[]): IColumn[] {
+
+				if (!columns.length)
+					return []
 
 				this.setTotalWidth(columns)
 

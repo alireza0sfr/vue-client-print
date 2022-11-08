@@ -450,10 +450,9 @@ export class DataSetLikeElement extends Element {
    * @return {Object} - preapred bindingObject options
    */
   computeDatasets(settings?: ISettings | any): IDatasets | null {
-    
-    var storeAndLocal = merge({}, dataSetStore.all, this.configs.dataSets)
 
     let additional: any = {}
+    var clonedStore: IDatasets = clone(dataSetStore.all) || {}
 
     if (this.repeatorId && this.isChild && settings) {
 
@@ -489,7 +488,7 @@ export class DataSetLikeElement extends Element {
         }
       }
     }
-    return merge({}, storeAndLocal, additional)
+    return merge({}, clonedStore, additional)
   }
 }
 
