@@ -50,8 +50,9 @@
 					columns = []
 				else
 					columns = this.displaySet.configs.columns
+					var sorted: IColumn[] = columns.sort((a: IColumn, b: IColumn) => a.configs.order - b.configs.order)
 
-				return this.prepareColumns(columns)
+				return this.prepareColumns(sorted)
 			},
 			filteredRows() {
 				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER || isEmpty(this.displaySet))

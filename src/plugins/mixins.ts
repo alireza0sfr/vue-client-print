@@ -97,7 +97,6 @@ var mixins = {
               data.styles.borderLeft = columns[index].styles.borderLeft
               data.styles.borderRight = columns[index].styles.borderRight
 
-              data.configs.isActive = columns[index].isActive
             }
           }
           break

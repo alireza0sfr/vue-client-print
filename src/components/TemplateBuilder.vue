@@ -409,11 +409,11 @@
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="element-settings">
 										<div class="toolbar-content-row">
 											<div style="width: 100%;" class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.isActive')}} ({{locals.selectedElement.configs.title}})</label>
+												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.order')}} ({{locals.selectedElement.configs.title}})</label>
 											</div>
 											<div class="toolbar-content-field">
-												<label style="margin-right: 10px; display:flex" for="colActive">
-													<input style="flex-grow: unset;" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.isActive" id="colActive" />
+												<label for="colActive">
+													<input style="flex-grow: unset;" type="number" class="input-form-control" v-model="locals.selectedElement.configs.order" id="colActive" />
 												</label>
 											</div>
 										</div>

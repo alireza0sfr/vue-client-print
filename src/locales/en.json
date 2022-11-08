@@ -69,6 +69,7 @@
         "textpattern": "Text Pattern",
         "configs": {
           "isActive": "Active",
+          "order": "Order",
           "datasets": "Data",
           "stylesTarget": "Row Styles Target",
           "even": "Even",

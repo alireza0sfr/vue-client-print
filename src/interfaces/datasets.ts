@@ -40,7 +40,7 @@ interface IColumn {
     hasResizer: boolean
     columns: IColumn[]
     title: string,
-    isActive: boolean,
+    order: number,
   }
   styles?: any
 }
