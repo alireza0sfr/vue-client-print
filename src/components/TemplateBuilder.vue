@@ -1531,10 +1531,8 @@
 					else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
 						if (e.code === "Delete") { // element delete
 
-							if (this.locals.selectedElement.type === this.locals.ElementTypes.COLUMN) {  // it's a column.
-								this.locals.selectedElement.configs.isActive = false
+							if (this.locals.selectedElement.type === this.locals.ElementTypes.COLUMN)  // it's a column (columns should be deleted using toggler)
 								return
-							}
 
 							if (this.locals.selectedElement.type === this.locals.ElementTypes.ROW)  // it's a row (row is not deletable).
 								return
@@ -1555,25 +1553,8 @@
 
 									index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
 
-									if (index > -1) {
-
-										if (children[index].type === this.locals.ElementTypes.DATASET) { // It's a dataset..
-											let columnEl = document.getElementsByClassName('column element selected')[0]
-
-											if (columnEl) { //  Delete is triggered on a column.
-
-												let columns = children[index].configs.dataSets[children[index].configs.selectedDataSet].configs.columns
-												index = columns.findIndex(x => x.id === columnEl.id) // column index in dataset columns array
-
-												if (index > -1)
-													columns[index].configs.isActive = false
-
-												return
-											} // Else normal splice will delete dataset.
-										}
-
+									if (index > -1)
 										children.splice(index, 1)
-									}
 								}
 								return
 							}
