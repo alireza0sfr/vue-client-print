@@ -827,7 +827,6 @@
 					bordersAllDirections: true,
 					activeTab: Tabs.SETTINGS,
 					isClicked: false,
-					clickedElementId: '',
 					selectedElement: new EmptyElement as IElement | IEmptyElement,
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
 				},
@@ -1195,7 +1194,6 @@
 			 */
 			clickedOnElement(element: IElement): void {
 				this.locals.selectedElement = element
-				this.locals.clickedElementId = element.id
 				this.locals.isClicked = true
 				this.locals.selectedSection = null
 
@@ -1506,89 +1504,105 @@
 					this.locals.selectedElement.styles[style] = this.locals.selectedElement.styles[style] + 'px'
 				}
 				const keyBinds = (e: any): void => {
+					const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
 
-					if (this.locals.selectedSection) { // section resize
+					if (e.code === 'ArrowUp') {
+						e.preventDefault()
 
-						const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
+						if (this.locals.selectedSection) { // section resize 
 
-						if (e.code === 'ArrowUp') {
-							e.preventDefault()
 							if (expandDownSections.includes(this.locals.selectedSection))
 								this.settings[this.locals.selectedSection].height -= 0.01
 							else
 								this.settings[this.locals.selectedSection].height += 0.01
 						}
 
-						if (e.code === 'ArrowDown') {
-							e.preventDefault()
+						else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
+							if (e.ctrlKey) // element resize
+								elementStyleChanger('height', '-', e)
+							else // element drag
+								elementStyleChanger('top', '-', e)
+						}
+
+					}
+
+					if (e.code === 'ArrowDown') {
+						e.preventDefault()
+
+						if (this.locals.selectedSection) { // section resize 
+
 							if (expandDownSections.includes(this.locals.selectedSection))
 								this.settings[this.locals.selectedSection].height += 0.01
 							else
 								this.settings[this.locals.selectedSection].height -= 0.01
+						}
+
+						else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
+							if (e.ctrlKey) // element resize
+								elementStyleChanger('height', '+', e)
+							else // element drag
+								elementStyleChanger('top', '+', e)
 						}
 					}
 
-					else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
-						if (e.code === "Delete") { // element delete
+					if (e.code === 'ArrowRight') {
+						if (this.locals.selectedElement.type === ElementTypes.EMPTY)
+							return
 
-							if (this.locals.selectedElement.type === this.locals.ElementTypes.COLUMN)  // it's a column (columns should be deleted using toggler)
-								return
+						if (e.ctrlKey) // element resize
+							elementStyleChanger('width', '+', e)
+						else // element drag
+							elementStyleChanger('left', '+', e)
 
-							if (this.locals.selectedElement.type === this.locals.ElementTypes.ROW)  // it's a row (row is not deletable).
-								return
+					}
 
-							var parent = this.locals.selectedElement.parent
-							var array = this.settings[parent].elements
+					if (e.code === 'ArrowLeft') {
+						if (this.locals.selectedElement.type === ElementTypes.EMPTY)
+							return
 
-							if (!parent)
-								return
+						if (e.ctrlKey) // element resize
+							elementStyleChanger('width', '-', e)
+						else // element drag
+							elementStyleChanger('left', '-', e)
+					}
 
-							if (this.locals.selectedElement.isChild) { // it's a repeator.
+					if (e.code === "Delete") { // element delete
 
-								let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId) // repeator index in elements array
+						const NOTDELETABLE = [ElementTypes.EMPTY, ElementTypes.COLUMN, ElementTypes.ROW]
 
-								if (index > -1) {
-									let repeator = array[index]
-									var children = repeator.configs.appendedElements
+						if (NOTDELETABLE.includes(this.locals.selectedElement.type))
+							return
 
-									index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
+						var parent = this.locals.selectedElement.parent
+						var array: IElement[] = this.settings[parent].elements
 
-									if (index > -1)
-										children.splice(index, 1)
-								}
-								return
+						if (parent === ElementParents.EMPTY || !array.length)
+							return
+
+						if (this.locals.selectedElement.isChild) { // it's a repeator's child element.
+
+							let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId) // repeator index in elements array
+
+							if (index > -1) {
+								let repeator = array[index]
+								var children: IElement[] = repeator.configs.appendedElements
+
+								index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
+
+								if (index > -1)
+									children.splice(index, 1)
 							}
+						}
 
-							// it's a normal element.
-							let id = this.locals.clickedElementId
-
-							let index = array.findIndex(x => x.id === id)
+						else { // it's a normal element.
+							let index = array.findIndex(x => x.id === this.locals.selectedElement.id)
 
 							if (index > -1) {
 								array.splice(index, 1)
 								this.locals.selectedElement = new EmptyElement
 							}
 						}
-						else if (e.ctrlKey) { // element resize
-							if (e.code === 'ArrowRight')
-								elementStyleChanger('width', '+', e)
-							else if (e.code === 'ArrowLeft')
-								elementStyleChanger('width', '-', e)
-							else if (e.code === 'ArrowUp')
-								elementStyleChanger('height', '-', e)
-							else if (e.code === 'ArrowDown')
-								elementStyleChanger('height', '+', e)
-						}
-						else if (!e.ctrlKey) { // element drag
-							if (e.code === 'ArrowRight')
-								elementStyleChanger('left', '+', e)
-							else if (e.code === 'ArrowLeft')
-								elementStyleChanger('left', '-', e)
-							else if (e.code === 'ArrowUp')
-								elementStyleChanger('top', '-', e)
-							else if (e.code === 'ArrowDown')
-								elementStyleChanger('top', '+', e)
-						}
+
 					}
 				}
 				document.removeEventListener('keyup', keyBinds, false)
