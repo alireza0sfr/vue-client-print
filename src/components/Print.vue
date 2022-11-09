@@ -86,6 +86,7 @@
 </template>
 
 <script lang="ts">
+	import { IBindingObject } from '~/interfaces/elements'
 	import { IDatasets } from '~/interfaces/datasets'
 	import { ISettings } from '~/interfaces/general'
 	import { prepareDataSets } from '~/plugins/element-utilities'
@@ -101,7 +102,7 @@
 		name: "Print",
 		props: {
 			options: { type: Object },
-			bindingObject: { type: Object },
+			bindingObject: Object as () => IBindingObject,
 			dataSets: { type: Object, default: () => ({}) },
 			variables: { type: Array },
 			configurations: { type: Object },
@@ -112,9 +113,9 @@
 				locals: {
 					totalPages: 0,
 					templateBuilderData: {},
-					pageBodiesSizes: [],
-					pageFootersSizes: [],
-					pageHeadersSizes: [],
+					pageBodiesSizes: [] as number[],
+					pageFootersSizes: [] as number[],
+					pageHeadersSizes: [] as number[],
 					preparedDataSets: null as IDatasets | null
 				},
 				settings: getDefaultSettings(),
@@ -159,7 +160,7 @@
 				const parent = document.getElementById('componentsParent')
 				const body = document.getElementById('bodyComponents')
 				var maxBottom = 0
-				var elementWithMaxBottom
+				var elementWithMaxBottom: any
 				// @ts-ignore
 				for (let child of body.children) {
 					if (child.getBoundingClientRect().bottom > maxBottom) {
@@ -167,9 +168,9 @@
 						elementWithMaxBottom = child
 					}
 				}
-				var bodyHeight = elementWithMaxBottom.offsetTop + elementWithMaxBottom.getBoundingClientRect().height // body height in pixels
+				var bodyHeight = elementWithMaxBottom!.offsetTop + elementWithMaxBottom.getBoundingClientRect().height // body height in pixels
 				this.settings.body.height = convert2Inches(bodyHeight) // body height in inches
-				parent.style.height = this.settings.beforeBody.height + this.settings.body.height + this.settings.afterBody.height + 'in'
+				parent!.style.height = this.settings.beforeBody.height + this.settings.body.height + this.settings.afterBody.height + 'in'
 			},
 
 			/**
@@ -185,7 +186,7 @@
 					style: [
 						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}",
 					], // some custom styles needed for print
-					onLoadingEnd: (res) => this.$emit('print-success', res),
+					onLoadingEnd: (res: any) => this.$emit('print-success', res),
 					onError: (err) => this.$emit('print-error', err)
 				})
 			},
@@ -201,6 +202,7 @@
 			 * sync system language with given configs.
 			 */
 			syncLanguage(): void {
+				// @ts-ignore
 				this._$i18n.locale = this.configs.language
 			},
 
@@ -286,7 +288,7 @@
 				let context = canvas.getContext("2d")
 				img.src = imgBase64
 				img.onload = () => {
-					context.drawImage(
+					context!.drawImage(
 						img, // img
 						0, // sx
 						sy * scale, // sy
@@ -316,16 +318,16 @@
 
 					domtoimage
 						.toBlob(domNode, { // Converting the body from slot to blob and raising the scale to get better quality
-							width: domNode.clientWidth * scale,
-							height: domNode.clientHeight * scale,
+							width: domNode!.clientWidth * scale,
+							height: domNode!.clientHeight * scale,
 							style: { transform: "scale(" + scale + ")", transformOrigin: transformOrigin },
 						})
-						.then((res) => {
+						.then((res: any) => {
 							var reader = new FileReader()
 							reader.readAsDataURL(res)
 							reader.onloadend = () => {
 								var result = reader.result
-								let compStyles = window.getComputedStyle(document.getElementById("toBeConverted"))
+								let compStyles = window.getComputedStyle(document.getElementById("toBeConverted") as Element)
 								let imgHeight = compStyles.getPropertyValue("height")
 								let totalPagesHeight = convert2Inches(parseInt(imgHeight)) // The total size of the given div to be printed in inches
 
@@ -337,18 +339,18 @@
 
 									for (let index = 0; index < convertedElement.length; index++) { // Removing the existing canvas and Appening the results to parents
 
-										this.removeAllChildNodes(convertedElement[index])
+										this.removeAllChildNodes(convertedElement[index] as HTMLElement)
 
 										let computedSy = index * convert2Pixels(this.locals.pageBodiesSizes[index])
-										let finalResult = this.canvasMaker(result, computedSy, index)
-										convertedElement[index].appendChild(finalResult)
+										let finalResult = this.canvasMaker(result as any, computedSy, index)
+										convertedElement[index].appendChild(finalResult as any)
 									}
-									document.getElementById('loadingModal').style.display = 'none'
+									document.getElementById('loadingModal')!.style.display = 'none'
 								})
 							}
 							resolve(res)
 						})
-						.catch(err => reject(err))
+						.catch((err: any) => reject(err))
 				})
 			},
 
@@ -358,12 +360,13 @@
 			 * @param {Function} callback - callback function
 			 * @return {void} - void
 			 */
-			templateBuilder(json: ISettings, callback: Function): void {
+			templateBuilder(json: ISettings, callback: (val: ISettings) => void): void {
 				json.callback = callback
-				this.locals.templateBuilderData = json
-				this.$refs.TemplateBuilder.settingsInitFunc()
 
-				this.$refs.TemplateBuilder.showModal()
+				const TB: any = this.$refs.TemplateBuilder
+				this.locals.templateBuilderData = json
+				TB.settingsInitFunc()
+				TB.showModal()
 			},
 
 			/**
@@ -372,9 +375,9 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				this.settings = prepareSettings(this.settings, json, this.bindingObject, this.locals.preparedDataSets)
-				document.getElementById("printModal").style.display = "block"
-				document.getElementById('loadingModal').style.display = 'block'
+				this.settings = prepareSettings(this.settings, json, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets)
+				document.getElementById("printModal")!.style.display = "block"
+				document.getElementById('loadingModal')!.style.display = 'block'
 
 				setTimeout(() => {
 					this.convert2Image()
@@ -389,10 +392,10 @@
 			 */
 			editWhileInPreview(): void {
 				let printModal = document.getElementById("printModal")
-				printModal.style.display = "none"
-				this.templateBuilder(this.settings, (val) => {
-					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.locals.preparedDataSets)
-					this.printPreview()
+				printModal!.style.display = "none"
+				this.templateBuilder(this.settings, (val: ISettings): void => {
+					this.settings = prepareSettings(this.settings, val, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets)
+					this.printPreview(this.settings)
 				})
 			},
 		},

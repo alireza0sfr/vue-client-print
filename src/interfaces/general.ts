@@ -15,6 +15,7 @@ interface ISettings {
   },
   body: {
     elements: IElement[],
+    height?: number
     styles: {},
   },
   afterBody: {
