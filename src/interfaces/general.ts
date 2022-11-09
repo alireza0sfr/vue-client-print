@@ -1,7 +1,5 @@
-import { IRawDataset } from './datasets'
 import { IElement, IVariable } from './elements'
-
-interface ISettings {
+export interface ISettings {
   header: {
     elements: IElement[],
     styles: {},
@@ -45,9 +43,7 @@ export interface IJson extends ISettings {
   variables: IVariable[]
 }
 
-interface IConfigs {
-  maximumFileSize: number,
+export interface IConfigs {
+  maximumFileSize: number
   language: string
 }
-
-export { ISettings, IConfigs }
