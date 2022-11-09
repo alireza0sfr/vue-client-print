@@ -1506,7 +1506,7 @@
 				const keyBinds = (e: any): void => {
 					const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
 
-					if (e.code === 'ArrowUp') {
+					if (e.keyCode === 38) { // 38:ArrowUp
 						e.preventDefault()
 
 						if (this.locals.selectedSection) { // section resize 
@@ -1526,7 +1526,7 @@
 
 					}
 
-					if (e.code === 'ArrowDown') {
+					if (e.keyCode === 40) { // 40:ArrowDown
 						e.preventDefault()
 
 						if (this.locals.selectedSection) { // section resize 
@@ -1545,7 +1545,7 @@
 						}
 					}
 
-					if (e.code === 'ArrowRight') {
+					if (e.keyCode === 39) { // 39:ArrowRight
 						if (this.locals.selectedElement.type === ElementTypes.EMPTY)
 							return
 
@@ -1556,7 +1556,7 @@
 
 					}
 
-					if (e.code === 'ArrowLeft') {
+					if (e.keyCode === 37) { // 41:ArrowLeft
 						if (this.locals.selectedElement.type === ElementTypes.EMPTY)
 							return
 
@@ -1566,7 +1566,7 @@
 							elementStyleChanger('left', '-', e)
 					}
 
-					if (e.code === "Delete") { // element delete
+					if (e.keyCode === 46) { // // 46:Delete
 
 						const NOTDELETABLE = [ElementTypes.EMPTY, ElementTypes.COLUMN, ElementTypes.ROW]
 
