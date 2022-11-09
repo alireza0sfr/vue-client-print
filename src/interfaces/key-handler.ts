@@ -1,15 +1,15 @@
 export interface IShortcut {
   keyCode: number
   altKey?: boolean
-  shiftKey: boolean
+  shiftKey?: boolean
   ctrlKey?: boolean
 }
 
 export interface IRequest {
   name: string,
   shortcut: IShortcut
-  handler(instance: IKeyboardHandler, e: any): any
-  test?(instance: IKeyboardHandler, e: any): boolean
+  handler(e: any, instance: IKeyboardHandler): any
+  test?(e: any, instance: IKeyboardHandler): boolean
   occurance?: Occurances
 }
 

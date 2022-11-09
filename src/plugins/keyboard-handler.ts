@@ -34,9 +34,11 @@ export default class KeyboardHandler implements IKeyboardHandler {
       (typeof x.shortcut.ctrlKey === 'undefined' || x.shortcut.ctrlKey === e.ctrlKey) &&
       (typeof x.shortcut.altKey === 'undefined' || x.shortcut.altKey === e.altKey) &&
       (typeof x.shortcut.shiftKey === 'undefined' || x.shortcut.shiftKey === e.shiftKey))
-
-    if (request)
-      request.handler(this, e)
+      
+      if (request) {
+      e.preventDefault()
+      request.handler(e, this)
+    }
   }
 
 
@@ -51,7 +53,7 @@ export default class KeyboardHandler implements IKeyboardHandler {
         req.test = this.defaultTestMethod
 
       if (!req.occurance)
-        req.occurance = Occurances.AFTER
+        req.occurance = Occurances.BEFORE
 
     }
 
