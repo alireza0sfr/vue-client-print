@@ -753,6 +753,7 @@
 	import { ElementGrandParents } from '@/enums/element'
 	import { useVariablesStore } from '~/stores/variables'
 	import { IColumn, IDataset } from '@/interfaces/datasets'
+	import KeyboardHandler from '~/plugins/keyboard-handler'
 
 	const variablesStore = useVariablesStore()
 
@@ -1492,126 +1493,214 @@
 			 * Adds an event listenner on delete button and then removes the element
 			 */
 			keyboardHandler(): void {
-				const elementStyleChanger = (style: string, operator: string, e: any): void => {
-					e.preventDefault()
+				const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
+				const elementStyleChanger = (style: string, operator: string): void => {
 					this.locals.selectedElement.styles[style] = toFloatVal(this.locals.selectedElement.styles[style])
 					this.locals.selectedElement.styles[style] = eval(`${this.locals.selectedElement.styles[style]} ${operator} 1`)
 					this.locals.selectedElement.styles[style] = this.locals.selectedElement.styles[style] + 'px'
 				}
-				const keyBinds = (e: any): void => {
-					const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
 
-					if (e.keyCode === 38) { // 38:ArrowUp
-						e.preventDefault()
+				var requests = [
+					{
+						name: 'element-section-arrowup',
+						shortcut: {
+							keyCode: 38, // 38:ArrowUp,
+							ctrlKey: false,
+						},
+						test: () => {
+							return this.locals.selectedSection !== null || this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
 
-						if (this.locals.selectedSection) { // section resize 
+							if (this.locals.selectedSection) { // section resize 
 
-							if (expandDownSections.includes(this.locals.selectedSection))
-								this.settings[this.locals.selectedSection].height -= 0.01
-							else
-								this.settings[this.locals.selectedSection].height += 0.01
-						}
+								if (expandDownSections.includes(this.locals.selectedSection))
+									this.settings[this.locals.selectedSection].height -= 0.01
+								else
+									this.settings[this.locals.selectedSection].height += 0.01
+							}
 
-						else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
-							if (e.ctrlKey) // element resize
-								elementStyleChanger('height', '-', e)
-							else // element drag
-								elementStyleChanger('top', '-', e)
-						}
+							else if (this.locals.selectedElement.type !== ElementTypes.EMPTY)
+								elementStyleChanger('top', '-')
+						},
+					},
+					{
+						name: 'element-drag',
+						shortcut: {
+							keyCode: 38, // 38:ArrowUp,
+							ctrlKey: true
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							elementStyleChanger('height', '-')
+						},
+					},
+					{
+						name: 'element-section-arrowdown',
+						shortcut: {
+							keyCode: 40, // 40:ArrowDown,
+							ctrlKey: false,
+						},
+						test: () => {
+							return this.locals.selectedSection !== null || this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
 
-					}
+							if (this.locals.selectedSection) { // section resize 
 
-					if (e.keyCode === 40) { // 40:ArrowDown
-						e.preventDefault()
+								if (expandDownSections.includes(this.locals.selectedSection))
+									this.settings[this.locals.selectedSection].height += 0.01
+								else
+									this.settings[this.locals.selectedSection].height -= 0.01
+							}
 
-						if (this.locals.selectedSection) { // section resize 
-
-							if (expandDownSections.includes(this.locals.selectedSection))
-								this.settings[this.locals.selectedSection].height += 0.01
-							else
-								this.settings[this.locals.selectedSection].height -= 0.01
-						}
-
-						else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
-							if (e.ctrlKey) // element resize
-								elementStyleChanger('height', '+', e)
-							else // element drag
-								elementStyleChanger('top', '+', e)
-						}
-					}
-
-					if (e.keyCode === 39) { // 39:ArrowRight
-						if (this.locals.selectedElement.type === ElementTypes.EMPTY)
-							return
-
-						if (e.ctrlKey) // element resize
-							elementStyleChanger('width', '+', e)
-						else // element drag
-							elementStyleChanger('left', '+', e)
-
-					}
-
-					if (e.keyCode === 37) { // 41:ArrowLeft
-						if (this.locals.selectedElement.type === ElementTypes.EMPTY)
-							return
-
-						if (e.ctrlKey) // element resize
-							elementStyleChanger('width', '-', e)
-						else // element drag
-							elementStyleChanger('left', '-', e)
-					}
-
-					if (e.keyCode === 46) { // // 46:Delete
-
-						const NOTDELETABLE = [ElementTypes.EMPTY, ElementTypes.COLUMN, ElementTypes.ROW]
-
-						if (NOTDELETABLE.includes(this.locals.selectedElement.type))
-							return
-
-						var parent = this.locals.selectedElement.parent
-						var array: IElement[] = this.settings[parent].elements
-
-						if (parent === ElementParents.EMPTY || !array.length)
-							return
-
-						if (this.locals.selectedElement.isChild) { // it's a repeator's child element.
-
-							let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId) // repeator index in elements array
-
-							if (index > -1) {
-								let repeator = array[index]
-								var children: IElement[] = repeator.configs.appendedElements
-
-								index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
-
-								if (index > -1)
-									children.splice(index, 1)
+							else if (this.locals.selectedElement.type !== ElementTypes.EMPTY) {
+								elementStyleChanger('top', '+')
 							}
 						}
+					},
+					{
+						name: 'element-arrowdown',
+						shortcut: {
+							keyCode: 40, // 40:ArrowDown,
+							ctrlKey: true
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							elementStyleChanger('height', '+')
+						},
+					},
+					{
+						name: 'element-arrowright',
+						shortcut: {
+							keyCode: 39, // 39:ArrowRight,
+							ctrlKey: false,
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							elementStyleChanger('left', '+')
+						}
+					},
+					{
+						name: 'element-ctrl-arrowright',
+						shortcut: {
+							keyCode: 39, // 39:ArrowRight,
+							ctrlKey: true,
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							elementStyleChanger('width', '+')
+						}
+					},
+					{
+						name: 'element-arrowleft',
+						shortcut: {
+							keyCode: 37, // 37:ArrowLeft,
+							ctrlKey: false,
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							elementStyleChanger('left', '-')
+						}
+					},
+					{
+						name: 'element-ctrl-arrowleft',
+						shortcut: {
+							keyCode: 37, // 37:ArrowLeft,
+							ctrlKey: true,
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							elementStyleChanger('width', '-')
+						}
+					},
+					{
+						name: 'element-ctrl-arrowleft',
+						shortcut: {
+							keyCode: 46, // 46:Delete,
+							ctrlKey: false,
+						},
+						// test: () => {
+						// 	return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						// },
+						handler: () => {
+							const NOTDELETABLE = [ElementTypes.EMPTY, ElementTypes.COLUMN, ElementTypes.ROW]
 
-						else { // it's a normal element.
-							let index = array.findIndex(x => x.id === this.locals.selectedElement.id)
+							if (NOTDELETABLE.includes(this.locals.selectedElement.type))
+								return
 
-							if (index > -1) {
-								array.splice(index, 1)
-								this.locals.selectedElement = new EmptyElement
+							var parent = this.locals.selectedElement.parent
+							var array: IElement[] = this.settings[parent].elements
+
+							if (parent === ElementParents.EMPTY || !array.length)
+								return
+
+							if (this.locals.selectedElement.isChild) { // it's a repeator's child element.
+
+								let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId) // repeator index in elements array
+
+								if (index > -1) {
+									let repeator = array[index]
+									var children: IElement[] = repeator.configs.appendedElements
+
+									index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
+
+									if (index > -1)
+										children.splice(index, 1)
+								}
+							}
+
+							else { // it's a normal element.
+								let index = array.findIndex(x => x.id === this.locals.selectedElement.id)
+
+								if (index > -1) {
+									array.splice(index, 1)
+									this.locals.selectedElement = new EmptyElement
+								}
 							}
 						}
+					},
+					{
+						name: 'element-copy',
+						shortcut: {
+							keyCode: 67, // 67:C,
+							ctrlKey: true,
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							this.copyElement(this.locals.selectedElement as IElement)
+						}
+					},
+					{
+						name: 'element-paste',
+						shortcut: {
+							keyCode: 86, // 86:V,
+							ctrlKey: true,
+						},
+						test: () => {
+							return this.locals.selectedElement.type !== ElementTypes.EMPTY
+						},
+						handler: () => {
+							this.pasteCopiedElement()
+						}
+					},
+				]
 
-					}
-
-					if (e.keyCode === 67 && e.ctrlKey) {
-						e.preventDefault()
-						this.copyElement(this.locals.selectedElement as IElement)
-					}
-
-					if (e.keyCode === 86 && e.ctrlKey) {
-						e.preventDefault()
-						this.pasteCopiedElement()
-					}
-				}
-				document.removeEventListener('keyup', keyBinds, false)
-				document.addEventListener('keydown', keyBinds, false)
+				new KeyboardHandler(requests)
 			},
 
 			/**
