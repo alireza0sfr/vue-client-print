@@ -792,7 +792,7 @@
 					fullScreen: false,
 					templateHeight: 11.7,
 					langs: fetchLangList(),
-					copiedElement: null,
+					copiedElement: new EmptyElement as IElement | IEmptyElement,
 					scale: 1,
 					pageSizeDictionary: {
 						landscape: {
@@ -843,7 +843,6 @@
 			}
 		},
 		mounted() {
-			this.initCopyPaste()
 			this.keyboardHandler()
 		},
 		methods: {
@@ -944,51 +943,49 @@
 			},
 
 			/**
-			 * Init copy paste listenners.
+			 * @param {IElement} element - element to copy/paste.
+			 * validate Copy
 			 */
-			initCopyPaste(): void {
-				document.addEventListener("keydown", this.copyCurrentElement, false)
-				document.addEventListener("keyup", this.pasteCopiedElement, false)
-			},
-			/**
-			 * Terminate copy paste listenners.
-			 */
-			terminateCopyPaste(): void {
-				document.removeEventListener("keydown", this.copyCurrentElement, false)
-				document.removeEventListener("keyup", this.pasteCopiedElement, false)
+			validateCopy(element: IElement | IEmptyElement): boolean {
+				const NOTCOPYABLE = [ElementTypes.EMPTY, ElementTypes.ROW, ElementTypes.CELL, ElementTypes.COLUMN]
+
+				if (NOTCOPYABLE.includes(element.type))
+					return false
+
+				return true
 			},
 			/**
 			 * Copy selected element.
 			 */
-			copyCurrentElement(e: any): void {
+			copyElement(element: IElement): void {
 
-				if (this.locals.selectedElement.type === ElementTypes.EMPTY)
+				if (!this.validateCopy(element))
 					return
 
-				if (e.keyCode == 67 && e.ctrlKey) // 67 = c
-					this.locals.copiedElement = clone(this.locals.selectedElement)
+				this.locals.copiedElement = this.createElement(element.type, element.parent, { styles: element.styles, configs: element.configs })
 			},
 			/**
 			 * Paste copied element.
 			 */
-			pasteCopiedElement(e: any): void {
+			pasteCopiedElement(): void {
 
-				if (this.locals.selectedElement === ElementTypes.EMPTY)
+				var element = this.locals.copiedElement
+
+				if (!this.validateCopy(element))
 					return
 
-				if (e.keyCode == 86 && e.ctrlKey) { // 86 = v
-					var parent = this.locals.selectedElement.parent
-					var array = this.settings[parent].elements
-					this.locals.copiedElement.id = idGenerator()
-					this.locals.copiedElement.styles.top = '0px'
+				var parent = this.locals.selectedElement.parent
+				var array = this.settings[parent].elements
 
-					if (this.locals.copiedElement.repeatorId) {
-						var repeator = array.find(x => x.id === this.locals.copiedElement.repeatorId)
-						repeator.configs.appendedElements.push(this.locals.copiedElement)
-					}
-					else
-						array.push(this.locals.copiedElement)
+				element.parent = parent
+				element.styles.top = '0px'
+
+				if (element.repeatorId) {
+					var repeator = array.find(x => x.id === element.repeatorId)
+					repeator.configs.appendedElements.push(element)
 				}
+				else
+					array.push(element)
 			},
 
 			/**
@@ -997,8 +994,6 @@
 			 */
 			save(): void {
 				let json: IJson = this.export2Json()
-
-				// this.terminateCopyPaste()
 
 				if (this.settings.callback)
 					this.settings.callback(json)
@@ -1603,6 +1598,16 @@
 							}
 						}
 
+					}
+
+					if (e.keyCode === 67 && e.ctrlKey) {
+						e.preventDefault()
+						this.copyElement(this.locals.selectedElement as IElement)
+					}
+
+					if (e.keyCode === 86 && e.ctrlKey) {
+						e.preventDefault()
+						this.pasteCopiedElement()
 					}
 				}
 				document.removeEventListener('keyup', keyBinds, false)
