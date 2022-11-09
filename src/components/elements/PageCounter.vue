@@ -1,5 +1,6 @@
 <template>
-	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
+	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')"
+		:class="element.type + ' element content-wrapper'" :style="element.styles">
 		<span class="content">
 			{{ computedCounter }}
 		</span>
@@ -24,18 +25,18 @@
 		},
 		computed: {
 			computedCounter() {
-				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER) {
-					if (this.element.configs.completeForm) {
-						if (this.element.configs.persianNumbers) {
-							return toPersianDigits('صفحه ۱ از ۱')
-						}
-						return 'page 1 / 1'
-					}
-					if (this.element.configs.persianNumbers) {
-						return toPersianDigits(this.element.configs.counter)
-					}
-				}
-				return this.element.configs.counter
+
+				var currentPage = this.element.configs.currentPage
+				var totalPages = this.element.configs.totalPages
+				var result = currentPage
+
+				if (this.element.configs.completeForm)
+					result = this._$t('template-builder.pagecounter', { currentPage, totalPages })
+
+				if (this.element.configs.persianNumbers)
+					result = toPersianDigits(result)
+
+				return result
 			}
 		},
 		watch: {
@@ -50,7 +51,8 @@
 			return {
 				element: {
 					configs: {
-						counter: '1',
+						currentPage: 1,
+						totalPages: 1,
 						persianNumbers: false,
 						completeForm: true,
 					},

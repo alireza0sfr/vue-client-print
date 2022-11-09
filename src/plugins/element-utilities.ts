@@ -1,4 +1,4 @@
-import { IElement, IBindingObject, IElementCoordinates, IEmptyElement } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -631,4 +631,59 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
 
   return displaySet
 
+}
+
+export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
+  // var element = clone(instance)
+  var element: any = instance
+  element.grandParent = ElementGrandParents.PRINT
+
+  switch (element.type) {
+
+    case ElementTypes.PAGECOUNTER:
+
+      element.configs.currentPage = extraArgs.index || 1
+      element.configs.totalPages = extraArgs.totalPages || 1
+      break
+
+    case ElementTypes.TEXTPATTERN:
+      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.settings)
+      let matches = [], // an array to collect the strings that are matches
+        types = [],
+        regex = /{([^{]*?\w)(?=\})}/gim,
+        text = element.configs.text,
+        curMatch
+
+      while ((curMatch = regex.exec(text))) {
+        types.push(curMatch[1])
+        matches.push(curMatch[0])
+      }
+
+      for (let index = 0; index < types.length; index++) {
+        text = text.replace(
+          "{" + types[index] + "}",
+          bindingObject[types[index]]
+        )
+      }
+      element.configs.value = text
+      break
+
+    case ElementTypes.BINDINGOBJECT:
+      let field = element.configs.field
+      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.settings)
+
+      if (bindingObject[field])
+        element.configs.value = bindingObject[field]
+      else
+        element.configs.value = ''
+      break
+
+    case ElementTypes.VARIABLE:
+      element.styles.backgroundColor = 'white'
+      break
+
+    default:
+      break
+  }
+  return element
 }

@@ -58,6 +58,13 @@ export interface IDataSetLikeElement extends IElement {
   computeDatasets(settings?: ISettings | any): IDatasets | null
 }
 
-export interface BindingObjectLikeElement extends IElement {
+export interface IBindingObjectLikeElement extends IElement {
   computeBindingObject(settings?: ISettings | any): IBindingObject
+}
+
+export interface IPrepareInstanceExtraArgs {
+  index: number
+  settings: ISettings,
+  currentPage: number
+  totalPages: number
 }

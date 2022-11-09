@@ -14,7 +14,7 @@
 
 						<div id="bodyComponents" v-if="settings.body && settings.body.elements && settings.body.elements.length" class="body-render-section"
 							:style="[{height: settings.body.height + 'in'}, settings.body.styles]">
-							<component v-for="(element, index) in settings.body.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
+							<component v-for="(element, index) in settings.body.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
 						</div>
 
 						<slot v-else class="printData" name="printData"></slot>
@@ -86,10 +86,10 @@
 </template>
 
 <script lang="ts">
-	import { IBindingObject } from '~/interfaces/elements'
+	import { IBindingObject, IElement } from '~/interfaces/elements'
 	import { IDatasets } from '~/interfaces/datasets'
 	import { ISettings } from '~/interfaces/general'
-	import { prepareDataSets } from '~/plugins/element-utilities'
+	import { prepareDataSets, prepareElementInstance } from '~/plugins/element-utilities'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
 	import { convert2Pixels, convert2Inches, merge, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
@@ -145,6 +145,9 @@
 			this.syncLanguage()
 		},
 		methods: {
+			prepareElementInstance(element: IElement, index: number): IElement {
+				return prepareElementInstance(element, index)
+			},
 			/**
 			 * Temp method to close modal before refactoring modal
 			 */

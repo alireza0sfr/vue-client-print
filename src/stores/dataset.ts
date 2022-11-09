@@ -6,22 +6,31 @@ interface State {
 }
 
 export const useDataSetStore = defineStore('dataSets', {
-  
+
   state: (): State => ({
     dataSets: null,
   }),
 
   actions: {
-    update (payload: IDatasets) {
+    update(payload: IDatasets) {
       this.dataSets = payload
     },
-    clear () {
+    clear() {
       this.$reset()
     }
   },
   getters: {
     all(state) {
       return state.dataSets
+    },
+    getRowsByKey: (state) => {
+      return (key: string) => {
+
+        if (!state.dataSets)
+          return []
+
+        return state.dataSets[key].configs.rows
+      }
     }
   }
 })
