@@ -17,26 +17,12 @@ const dataSetStore = useDataSetStore(piniaInstance)
 export class EmptyElement implements IEmptyElement {
   type: ElementTypes = ElementTypes.EMPTY
   id: string = emptyId
-  protected _parent: ElementParents = ElementParents.EMPTY
-  protected _grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
+  parent: ElementParents = ElementParents.EMPTY
+  grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
   styles: any = {}
   configs: any = {}
   isChild: boolean = false
   repeatorId?: string = ''
-
-  get parent(): ElementParents {
-    return this._parent
-  }
-  set parent(value: ElementParents) {
-    this._parent = value
-  }
-
-  get grandParent(): ElementGrandParents {
-    return this._grandParent
-  }
-  set grandParent(value: ElementGrandParents) {
-    this._grandParent = value
-  }
 }
 
 export class Element extends EmptyElement implements IElement {
@@ -48,8 +34,8 @@ export class Element extends EmptyElement implements IElement {
     super()
     this.type = type
     this.id = idGenerator()
-    this._parent = parent
-    this._grandParent = grandParent
+    this.parent = parent
+    this.grandParent = grandParent
     this.configs = configs
     this.styles = styles
     this.isChild = false
@@ -450,8 +436,6 @@ export class DataSetLikeElement extends Element {
   computeDatasets(settings?: ISettings | any): IDatasets | null {
 
     let additional: any = {}
-    var clonedStore: IDatasets = clone(dataSetStore.all) || {}
-
     if (this.repeatorId && this.isChild && settings) {
 
       var parentSection = this.parent
@@ -486,7 +470,7 @@ export class DataSetLikeElement extends Element {
         }
       }
     }
-    return merge({}, clonedStore, additional)
+    return merge({}, dataSetStore.all, additional)
   }
 }
 
@@ -641,26 +625,16 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
   switch (element.type) {
 
     case ElementTypes.DATASET:
-      debugger
+
       var stylesTarget = element.configs.dataSetDefaultRow[0].configs.stylesTarget
       var selectedDataSet = element.configs.selectedDataSet
-      var displaySet = element.configs.dataSets[selectedDataSet] // use computeDataSet again to be updated
+      var displaySet = element.configs.dataSets[selectedDataSet]
       var columns = displaySet.configs.columns
       var storeRows = element.prepareDataSetRows(dataSetStore.getRowsByKey(selectedDataSet), columns)
 
       element.configs.stylesTarget = stylesTarget
       element.configs.originalColumnHeight = element.styles.height
       element.styles.height = 'auto'
-
-      // for (let row of storeRows) {
-      //   debugger
-      //   var objectKeys = Object.keys(row.configs.cells)
-      //   for (let index = 0; index < objectKeys.length; index++) {
-
-      //     let data = row.configs.cells[objectKeys[index]]
-      //     data.styles.width = columns[index].styles
-      //   }
-      // }
 
       displaySet.configs.rows = storeRows
       break
