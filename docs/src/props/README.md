@@ -22,10 +22,11 @@ sidebar: auto
 - Default:
 
 ```ts
-{
-  language: 'en',
-  maximumFileSize: 1000,
-  imageSrc: VCP LOGO
+interface IConfigs {
+  maximumFileSize: number;
+  language: string;
+  imageSrc: string;
+  direction: string;
 }
 ```
 

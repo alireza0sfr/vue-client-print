@@ -46,4 +46,6 @@ export interface IJson extends ISettings {
 export interface IConfigs {
   maximumFileSize: number
   language: string
+  imageSrc: string
+  direction: string
 }

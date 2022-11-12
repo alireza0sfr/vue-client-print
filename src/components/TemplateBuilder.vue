@@ -840,7 +840,7 @@
 				// deep: true,
 				immediate: true,
 				handler(val) {
-					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.dataSets)
+					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.dataSets, this.configurations)
 				},
 			}
 		},

@@ -88,7 +88,7 @@
 <script lang="ts">
 	import { IBindingObject, IElement } from '~/interfaces/elements'
 	import { IDatasets } from '~/interfaces/datasets'
-	import { ISettings } from '~/interfaces/general'
+	import { IConfigs, ISettings } from '~/interfaces/general'
 	import { prepareDataSets, prepareElementInstance } from '~/plugins/element-utilities'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
@@ -122,8 +122,9 @@
 				configs: {
 					maximumFileSize: 1000, // Maximum file size in KB
 					language: 'en',
-					imageSrc: DefaultLogo
-				}
+					imageSrc: DefaultLogo,
+					direction: 'rtl'
+				} as IConfigs
 			}
 		},
 		watch: {
@@ -378,7 +379,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				this.settings = prepareSettings(this.settings, json, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets)
+				this.settings = prepareSettings(this.settings, json, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets, this.configurations as IConfigs)
 				document.getElementById("printModal")!.style.display = "block"
 				document.getElementById('loadingModal')!.style.display = 'block'
 
@@ -397,7 +398,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal!.style.display = "none"
 				this.templateBuilder(this.settings, (val: ISettings): void => {
-					this.settings = prepareSettings(this.settings, val, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets)
+					this.settings = prepareSettings(this.settings, val, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets, this.configurations as IConfigs)
 					this.printPreview(this.settings)
 				})
 			},

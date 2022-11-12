@@ -1,6 +1,6 @@
 import { IDatasets } from '@/interfaces/datasets'
 import { IBindingObject } from '~/interfaces/elements'
-import { ISettings } from '~/interfaces/general'
+import { IConfigs, ISettings } from '~/interfaces/general'
 
 import piniaInstance from '~/plugins/pinia-instance'
 import { useBindingObjectStore } from '~/stores/binding-object'
@@ -307,8 +307,10 @@ export function getDefaultSettings(): ISettings {
  * @param {Object} val - new Settings
  * @return {Object} - merged new settings and old/default settings
  */
-export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets): ISettings {
+export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets, configs: IConfigs): ISettings {
   bindingObjectStore.update(bindingObject)
   dataSetStore.update(dataSets)
-  return merge<ISettings>(settings, updatedSettings)
+  var newSettings = merge<ISettings>(settings, updatedSettings)
+  newSettings.pageDirections = configs.direction
+  return newSettings
 }
