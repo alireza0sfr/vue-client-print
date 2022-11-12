@@ -101,7 +101,6 @@
 										styles: {},
 										parent: ElementParents.EMPTY,
 										configs: {
-											isActive: true,
 											value: ''
 										},
 									}

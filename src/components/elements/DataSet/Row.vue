@@ -52,8 +52,7 @@
 				var objectKeys = Object.keys(cells)
 
 				objectKeys.filter(x => {
-					if (cells[x].configs.isActive)
-						filtered.push(cells[x])
+					filtered.push(cells[x])
 
 				})
 				return filtered

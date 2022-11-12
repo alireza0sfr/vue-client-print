@@ -48,7 +48,6 @@ interface ICellValue {
   readonly id: string
   type: string
   configs: {
-    isActive: boolean
     value: string
   }
   styles: object

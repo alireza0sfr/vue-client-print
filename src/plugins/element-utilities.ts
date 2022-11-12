@@ -432,7 +432,6 @@ export class DataSetLikeElement extends Element {
       for (let key of objectKeys) {
 
         var configsCell = {
-          isActive: true,
           value: rows[index][key]
         }
 
