@@ -53,7 +53,8 @@ interface ICellValue {
   styles: object
 }
 interface ICell {
-  [key: string]: ICellValue
+  value: string
+  styles: any
 }
 
 interface IRow {
@@ -62,8 +63,7 @@ interface IRow {
   grandParent: ElementGrandParents
   configs: {
     stylesTarget: StylesTargets
-    rowsHeight: string
-    cells: ICell
+    cells: ICell[]
   }
   styles: object
 }

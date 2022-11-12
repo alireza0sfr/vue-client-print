@@ -50,13 +50,13 @@
 					columns = []
 				else
 					columns = this.displaySet.configs.columns
-					var sorted: IColumn[] = columns.sort((a: IColumn, b: IColumn) => a.configs.order - b.configs.order)
+				var sorted: IColumn[] = columns.sort((a: IColumn, b: IColumn) => a.configs.order - b.configs.order)
 
 				return this.prepareColumns(sorted)
 			},
 			filteredRows() {
 				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER || isEmpty(this.displaySet))
-					return this.locals.dataSetDefaultRow
+					return this.element.configs.dataSetDefaultRow
 
 				return this.prepareRows(this.displaySet.configs.rows)
 			}
@@ -87,33 +87,33 @@
 			return {
 				locals: {
 					ElementGrandParents: ElementGrandParents,
-					dataSetDefaultRow: [
-						{
-							type: ElementTypes.ROW,
-							id: idGenerator(),
-							parent: ElementParents.EMPTY,
-							styles: {},
-							configs: {
-								cells: {
-									empty: {
-										type: ElementTypes.CELL,
-										id: idGenerator(),
-										styles: {},
-										parent: ElementParents.EMPTY,
-										configs: {
-											value: ''
-										},
-									}
-								}
-							}
-						},
-					],
 				},
 				element: {
 					configs: {
 						stylesTarget: StylesTargets.ALL,
 						selectedDataSet: '',
 						dataSets: {},
+						dataSetDefaultRow: [
+							{
+								type: ElementTypes.ROW,
+								id: idGenerator(),
+								parent: ElementParents.EMPTY,
+								styles: {},
+								configs: {
+									cells: {
+										empty: {
+											type: ElementTypes.CELL,
+											id: idGenerator(),
+											styles: {},
+											parent: ElementParents.EMPTY,
+											configs: {
+												value: ''
+											},
+										}
+									}
+								}
+							},
+						]
 					},
 					styles: {
 						height: "100px",
@@ -274,10 +274,7 @@
 						stylesTarget === StylesTargets.ODD && index % 2 === 1 || // index is odd
 						stylesTarget === StylesTargets.ALL
 					)
-						row.styles = merge(row.styles, this.locals.dataSetDefaultRow[0].styles)
-
-					row.grandParent = this.element.grandParent
-					row.configs.stylesTarget = this.element.configs.stylesTarget
+						row.styles = merge(row.styles, this.element.configs.dataSetDefaultRow[0].styles)
 				}
 
 				return rows

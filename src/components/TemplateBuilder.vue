@@ -436,7 +436,7 @@
 												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.rowsHeight')}}</label>
 											</div>
 											<div class="toolbar-content-field">
-												<input type="number" class="input-form-control" v-model="locals.selectedElement.configs.rowsHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="number" class="input-form-control" v-model="locals.selectedElement.styles.minHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>

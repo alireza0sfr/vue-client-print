@@ -52,21 +52,14 @@
 						title: 'شناور',
 						columns: [
 							{
-								title: 'new column',
-								key: 'new',
-								styles: {
-									width: '70px',
-								},
-							},
-							{
-								title: 'column 1',
+								title: 'center',
 								key: 'center',
 								styles: {
 									width: '70px',
 								},
 							},
 							{
-								title: 'column 2',
+								title: 'account',
 								key: 'account',
 								styles: {
 									width: '50px',
@@ -110,21 +103,21 @@
 								]
 							},
 							{
-								title: 'column 3',
+								title: 'date',
 								key: 'date',
 								styles: {
 									width: '50px',
 								},
 							},
 							{
-								title: 'column 4',
+								title: 'balance',
 								key: 'balance',
 								styles: {
 									width: '40px',
 								},
 							},
 							{
-								title: 'column 5',
+								title: 'type',
 								key: 'type',
 								styles: {
 									width: '90px',
@@ -240,35 +233,43 @@
 						title: 'حساب',
 						columns: [
 							{
-								title: 'column 1',
+								title: 'center',
 								key: 'center',
 								styles: {
 									width: '70px',
 								},
 							},
 							{
-								title: 'column 2',
+								title: 'account',
 								key: 'account',
 								styles: {
 									width: '50px',
 								}
 							},
 							{
-								title: 'column 4',
+								title: 'balance',
 								key: 'balance',
 								styles: {
 									width: '40px',
 								},
 							},
 							{
-								title: 'column 5',
+								title: 'type',
 								key: 'type',
 								styles: {
 									width: '90px',
 								},
 							},
 						],
-						rows: [],
+						rows: [
+							{
+								center: 'center 1',
+								account: 'account 1',
+								date: 'date 1',
+								balance: 'balance 1',
+								type: 'type 1',
+							},
+						],
 					}
 				},
 				printOptions: {},

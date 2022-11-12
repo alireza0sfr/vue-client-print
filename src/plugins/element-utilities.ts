@@ -416,27 +416,25 @@ export class DataSetLikeElement extends Element {
    * @param {Object} rows - Raw rows.
    * @return {Object} - Prepared rows.
    */
-  prepareDataSetRows(rows: IRawRow[]): IRow[] {
+  prepareDataSetRows(rows: IRawRow[], columns: IColumn[]): IRow[] {
 
     var preparedRows = []
 
     for (let index = 0; index < rows.length; index++) {
-      var objectKeys = Object.keys(rows[index])
+      var activeKeys = columns.map(x => x.configs.key)
 
       var configsRow: any = {
-        cells: {},
-        rowsHeight: 'auto',
+        cells: [],
         stylesTarget: StylesTargets.ALL
       }
 
-      for (let key of objectKeys) {
-
-        var configsCell = {
+      for (let key of activeKeys)
+        configsRow.cells.push({
+          styles: {
+            width: columns.find(x => x.configs.key === key)?.styles.width || DEFAULTCOLUMNWIDTH
+          },
           value: rows[index][key]
-        }
-
-        configsRow.cells[key] = new Element(ElementTypes.CELL, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsCell)
-      }
+        })
 
       preparedRows[index] = new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsRow)
     }
@@ -543,6 +541,10 @@ export const emptyDataSet = {
   }
 }
 
+export const DEFAULTCOLUMNWIDTH = '70px'
+
+export const DEFAULTROWSHEIGHT = 'auto'
+
 
 /**
  * @param {Object} sets - Raw dataset.
@@ -574,8 +576,6 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
  * @return {Object} - Prepared columns.
  */
 export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
-
-  const DEFAULTCOLUMNWIDTH = '70px'
 
   var preparedColumns = []
 
@@ -639,6 +639,31 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
   element.grandParent = ElementGrandParents.PRINT
 
   switch (element.type) {
+
+    case ElementTypes.DATASET:
+      debugger
+      var stylesTarget = element.configs.dataSetDefaultRow[0].configs.stylesTarget
+      var selectedDataSet = element.configs.selectedDataSet
+      var displaySet = element.configs.dataSets[selectedDataSet] // use computeDataSet again to be updated
+      var columns = displaySet.configs.columns
+      var storeRows = element.prepareDataSetRows(dataSetStore.getRowsByKey(selectedDataSet), columns)
+
+      element.configs.stylesTarget = stylesTarget
+      element.configs.originalColumnHeight = element.styles.height
+      element.styles.height = 'auto'
+
+      // for (let row of storeRows) {
+      //   debugger
+      //   var objectKeys = Object.keys(row.configs.cells)
+      //   for (let index = 0; index < objectKeys.length; index++) {
+
+      //     let data = row.configs.cells[objectKeys[index]]
+      //     data.styles.width = columns[index].styles
+      //   }
+      // }
+
+      displaySet.configs.rows = storeRows
+      break
 
     case ElementTypes.PAGECOUNTER:
 
