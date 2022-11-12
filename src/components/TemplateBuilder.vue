@@ -1,7 +1,7 @@
 <template>
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
-		<div @click="deselectSection" id="templateBuilderModal" class="print-modal">
+		<div @click="deselectSection" id="templateBuilderModal" tabindex="0" class="print-modal">
 			<div id="fullscreenControl" class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
@@ -726,7 +726,8 @@
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
 							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
-						<div class="template-container"
+						<div class="template-container" tabindex="0"
+							id="templateContainer"
 							:style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
@@ -1493,6 +1494,7 @@
 			 * Adds an event listenner on delete button and then removes the element
 			 */
 			keyboardHandler(): void {
+				const FOCUSEL = document.getElementById('templateContainer')
 				const expandDownSections: TemplateBuilderSections[] = [TemplateBuilderSections.HEADER, TemplateBuilderSections.BEFOREBODY]
 				const elementStyleChanger = (style: string, operator: string): void => {
 					this.locals.selectedElement.styles[style] = toFloatVal(this.locals.selectedElement.styles[style])
@@ -1507,6 +1509,7 @@
 							keyCode: 38, // 38:ArrowUp,
 							ctrlKey: false,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedSection !== null || this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1530,6 +1533,7 @@
 							keyCode: 38, // 38:ArrowUp,
 							ctrlKey: true
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1546,6 +1550,7 @@
 						test: () => {
 							return this.locals.selectedSection !== null || this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
+						focusEl: FOCUSEL,
 						handler: () => {
 
 							if (this.locals.selectedSection) { // section resize 
@@ -1567,6 +1572,7 @@
 							keyCode: 40, // 40:ArrowDown,
 							ctrlKey: true
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1580,6 +1586,7 @@
 							keyCode: 39, // 39:ArrowRight,
 							ctrlKey: false,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1593,6 +1600,7 @@
 							keyCode: 39, // 39:ArrowRight,
 							ctrlKey: true,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1606,6 +1614,7 @@
 							keyCode: 37, // 37:ArrowLeft,
 							ctrlKey: false,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1619,6 +1628,7 @@
 							keyCode: 37, // 37:ArrowLeft,
 							ctrlKey: true,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1635,6 +1645,7 @@
 						// test: () => {
 						// 	return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						// },
+						focusEl: FOCUSEL,
 						handler: () => {
 							const NOTDELETABLE = [ElementTypes.EMPTY, ElementTypes.COLUMN, ElementTypes.ROW]
 
@@ -1678,6 +1689,7 @@
 							keyCode: 67, // 67:C,
 							ctrlKey: true,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},
@@ -1691,6 +1703,7 @@
 							keyCode: 86, // 86:V,
 							ctrlKey: true,
 						},
+						focusEl: FOCUSEL,
 						test: () => {
 							return this.locals.selectedElement.type !== ElementTypes.EMPTY
 						},

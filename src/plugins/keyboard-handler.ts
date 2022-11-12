@@ -27,15 +27,17 @@ export default class KeyboardHandler implements IKeyboardHandler {
   }
 
   handler(e: any, occurance: Occurances): void {
+
     var request = this.requests.find(x =>
       (x.test!(this, e)) &&
       (x.occurance === occurance) &&
+      (typeof x.focusEl === 'undefined' || x.focusEl.contains(document.activeElement)) &&
       (x.shortcut.keyCode === e.keyCode) &&
       (typeof x.shortcut.ctrlKey === 'undefined' || x.shortcut.ctrlKey === e.ctrlKey) &&
       (typeof x.shortcut.altKey === 'undefined' || x.shortcut.altKey === e.altKey) &&
       (typeof x.shortcut.shiftKey === 'undefined' || x.shortcut.shiftKey === e.shiftKey))
-      
-      if (request) {
+
+    if (request) {
       e.preventDefault()
       request.handler(e, this)
     }
@@ -54,6 +56,9 @@ export default class KeyboardHandler implements IKeyboardHandler {
 
       if (!req.occurance)
         req.occurance = Occurances.BEFORE
+
+      if (!req.focusEl)
+        req.focusEl = undefined
 
     }
 

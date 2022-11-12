@@ -309,6 +309,7 @@ export class Element extends EmptyElement implements IElement {
         selectedElements[index].classList.remove('selected')
       }
       element.classList.add('selected')
+      element.focus()
       element.dispatchEvent(
         new CustomEvent('click', {
           detail: {

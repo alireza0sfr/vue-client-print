@@ -9,6 +9,7 @@ export interface IRequest {
   name: string,
   shortcut: IShortcut
   handler(e: any, instance: IKeyboardHandler): any
+  focusEl?: HTMLElement | null
   test?(e: any, instance: IKeyboardHandler): boolean
   occurance?: Occurances
 }
