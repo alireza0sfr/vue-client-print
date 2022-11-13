@@ -79,8 +79,10 @@ export class Element extends EmptyElement implements IElement {
    */
   initStyles(styles: any = this.styles): object {
 
+    const EXCLUDEDSTYLES = ['color', 'backgroundColor']
+
     for (let key in styles)
-      if (styles[key].indexOf('!important') === -1)
+      if (styles[key].indexOf('!important') === -1 && !EXCLUDEDSTYLES.includes(key))
         styles[key] += ' !important'
 
     return styles
