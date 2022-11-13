@@ -15,12 +15,10 @@
 		props: {
 			instance: Object as () => IElement,
 		},
-		emits: ['styles-target-changed'],
 		watch: {
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.$emit('styles-target-changed', val.configs.stylesTarget)
 					this.element = shallowMerge(val, this.element)
 				},
 			},

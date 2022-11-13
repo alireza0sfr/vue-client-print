@@ -8,7 +8,7 @@
 			<column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :instance="column" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
 		<div v-if="element.configs.selectedDataSet" class="rows">
-			<row v-for="row in filteredRows" :key="row.id" :instance="row" @click.stop="$emit('clickedOnElement', row)" @styles-target-changed="stylesTargetChanged" />
+			<row v-for="row in filteredRows" :key="row.id" :instance="row" @click.stop="$emit('clickedOnElement', row)" />
 			<!-- Row is only clickable on TB and the default is added -->
 		</div>
 		<Resizers :query=" `${element.type}-${element.id}`" />
@@ -124,13 +124,6 @@
 			}
 		},
 		methods: {
-			/**
-			 * event triggered style target dropdown changes
-			 * @return {void} void
-			 */
-			stylesTargetChanged(target: StylesTargets): void {
-				this.element.configs.stylesTarget = target
-			},
 			/**
 			 * Calculate column height based on view.
 			 * @return {Number} column height
@@ -264,7 +257,9 @@
 			 @return {Object} - prepared options 
 			 */
 
-			prepareRows(rows: IRow[]): IRow[] {
+			prepareRows(rows: IRow[]): IRow[] {	
+
+				debugger
 
 				var stylesTarget = this.element.configs.stylesTarget
 				for (let index = 0; index < this.displaySet.configs.rows.length; index++) {
@@ -275,6 +270,7 @@
 						stylesTarget === StylesTargets.ALL
 					)
 						row.styles = merge(row.styles, this.element.configs.dataSetDefaultRow[0].styles)
+
 					row.styles.minHeight = this.element.configs.dataSetDefaultRow[0].styles.minHeight.toString() + 'px'
 				}
 
