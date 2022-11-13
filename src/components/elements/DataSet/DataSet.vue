@@ -1,5 +1,5 @@
 <template>
-	<div :id="element.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'"
+	<div :id="element.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'"
 		:style="element.styles">
 		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" class="dataset-name">
 			<span>{{displaySet.configs.title}} <img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="20" height="20" /></span>

@@ -1,5 +1,5 @@
 <template>
-	<div :id="element.id" ref="element" @click="$emit('clickedOnElement')" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
+	<div :id="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
 
 		<!-- Template Builder -->
 		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
@@ -7,8 +7,8 @@
 				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 			</div>
 			<div style="display: flex; position: relative;">
-				<component v-for="element in element.configs.appendedElements" @finished-editing-element="$emit('finished-editing-element')" :key="element.id" :is="element.type" :instance="element"
-					@clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @click.stop="$emit('clickedOnElement', element)" />
+				<component v-for="appendedElement in element.configs.appendedElements" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id" :is="appendedElement.type" :instance="appendedElement"
+					@clickedOnElement="(element) => $emit('clickedOnElement', element)" @click.stop="$emit('clickedOnElement', appendedElement)" />
 			</div>
 			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>

@@ -2,7 +2,7 @@
 	<div @click="(e) => $emit('clickedOnSection', section, e)" :style="[{height: height + 'in' }, styles]" :id="`${section}Template`" :class="[section, ' section']"
 		@drop="(e) => $emit('droppedElement', section, e)" @dragenter.prevent @dragover.prevent>
 		<component v-for="element in elements" tabindex="-1" :key="element.id" @drop.stop="(e) => $emit('droppedElement', section, e, element)" @dragenter.prevent @dragover.prevent :is="element.type"
-			:instance="element" @clickedOnElement="(child) => $emit('clickedOnElement', child ? child : element)" @finished-editing-element="$emit('finishedEditingElement', element, section)" />
+			:instance="element" @clickedOnElement="(element) => $emit('clickedOnElement', element)" @finished-editing-element="$emit('finishedEditingElement', element, section)" />
 		<SectionTag :active="active" :tag="section" />
 	</div>
 </template>
