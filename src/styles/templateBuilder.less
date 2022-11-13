@@ -529,6 +529,8 @@
 
   .dataset.element {
     border: 1px solid #dbdbdb;
+    display: flex;
+    flex-direction: column;
   }
 
   .column.element {
@@ -539,10 +541,12 @@
   .rows {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   .row {
     border-top: 1px solid #dbdbdb;
+    flex-grow: 1;
   }
 
   .label {
