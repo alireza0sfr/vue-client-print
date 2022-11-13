@@ -21,7 +21,7 @@
 	import { defineComponent } from 'vue'
 	import { toFloatVal, shallowMerge, merge, idGenerator, isEmpty } from '~/plugins/general-utilities'
 	import { IColumn, IRow, IDatasets } from '@/interfaces/datasets'
-	import { emptyDataSet } from '@/plugins/element-utilities'
+	import { emptyDataSet, Element } from '@/plugins/element-utilities'
 	export default defineComponent({
 		name: ElementTypes.DATASET,
 		props: {
@@ -93,27 +93,19 @@
 						stylesTarget: StylesTargets.ALL,
 						selectedDataSet: '',
 						dataSets: {},
-						dataSetDefaultRow: [
-							{
-								type: ElementTypes.ROW,
-								id: idGenerator(),
-								parent: ElementParents.EMPTY,
-								styles: {},
-								configs: {
-									cells: {
-										empty: {
-											type: ElementTypes.CELL,
-											id: idGenerator(),
-											styles: {},
-											parent: ElementParents.EMPTY,
-											configs: {
-												value: ''
-											},
-										}
-									}
+						dataSetDefaultRow: [new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, {
+							cells: {
+								empty: {
+									type: ElementTypes.CELL,
+									id: idGenerator(),
+									styles: {},
+									parent: ElementParents.EMPTY,
+									configs: {
+										value: ''
+									},
 								}
-							},
-						]
+							}
+						})]
 					},
 					styles: {
 						height: "100px",
@@ -258,8 +250,6 @@
 			 */
 
 			prepareRows(rows: IRow[]): IRow[] {	
-
-				debugger
 
 				var stylesTarget = this.element.configs.stylesTarget
 				for (let index = 0; index < this.displaySet.configs.rows.length; index++) {

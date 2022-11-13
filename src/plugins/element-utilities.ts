@@ -37,7 +37,13 @@ export class Element extends EmptyElement implements IElement {
     this.parent = parent
     this.grandParent = grandParent
     this.configs = configs
-    this.styles = styles
+
+    var baseStyles = {
+      color: '#000000',
+      backgroundColor: '#ffffff'
+    }
+
+    this.styles = merge(baseStyles, styles)
     this.isChild = false
     this.repeatorId = repeatorId
   }

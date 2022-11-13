@@ -1244,8 +1244,6 @@
 					top: extraArgs?.e?.offsetY + 'px' || '0px',
 					left: extraArgs?.e?.offsetX + 'px' || '0px',
 					direction: this.settings.pageDirections,
-					color: '#000000',
-					backgroundColor: '#ffffff'
 				}
 				var styles: any = merge(baseStyles, extraArgs?.styles || {})
 
