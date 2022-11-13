@@ -638,11 +638,29 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       var selectedDataSet = element.configs.selectedDataSet
       var displaySet = element.configs.dataSets[selectedDataSet]
       var columns = displaySet.configs.columns
-      var storeRows = element.prepareDataSetRows(dataSetStore.getRowsByKey(selectedDataSet), columns)
+      var storeRows: IRow[] = element.prepareDataSetRows(dataSetStore.getRowsByKey(selectedDataSet), columns)
 
       element.configs.stylesTarget = stylesTarget
       element.configs.originalColumnHeight = element.styles.height
       element.styles.height = 'auto'
+
+      for (let row of storeRows) {
+        for (let index = 0; index < row.configs.cells.length; index++) {
+
+          // select styles manually to prevent some row styles to be overwritten eg: bg-color / color
+          let data = row.configs.cells[index]
+          data.styles.width = columns[index].styles.width
+          data.styles.textAlign = columns[index].styles.textAlign
+          data.styles.fontWeight = columns[index].styles.fontWeight
+          data.styles.fontFamily = columns[index].styles.fontFamily
+          data.styles.fontSize = columns[index].styles.fontSize
+          data.styles.border = columns[index].styles.border
+          data.styles.borderTop = columns[index].styles.borderTop
+          data.styles.borderBottom = columns[index].styles.borderBottom
+          data.styles.borderLeft = columns[index].styles.borderLeft
+          data.styles.borderRight = columns[index].styles.borderRight
+        }
+      }
 
       displaySet.configs.rows = storeRows
       break
