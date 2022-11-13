@@ -726,8 +726,7 @@
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
 							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
-						<div class="template-container" tabindex="0"
-							id="templateContainer"
+						<div class="template-container" tabindex="0" id="templateContainer"
 							:style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
 							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
 								<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
@@ -991,11 +990,34 @@
 			},
 
 			/**
+			 * settings validator.
+			 * @param {IJson} settings - settings
+			 * @return {Boolean} - wether it's valid 
+			 */
+
+			validateJson(settings: IJson): boolean {
+				for (let section of this.locals.sections) {
+					var dataSetLikeElements = settings[section].elements.filter(x => x instanceof DataSetLikeElement)
+					for (var element of dataSetLikeElements) {
+						if (!element.configs.selectedDataSet) {
+							var text = this._$t('template-builder.alerts.select-dataset')
+							alert(text)
+							return false
+						}
+					}
+				}
+				return true
+			},
+
+			/**
 			 * Save Changes on TB close.
 			 * @return {Object} - json file
 			 */
 			save(): void {
 				let json: IJson = this.export2Json()
+
+				if (!this.validateJson(json))
+					return
 
 				if (this.settings.callback)
 					this.settings.callback(json)

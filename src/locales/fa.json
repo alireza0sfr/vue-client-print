@@ -11,7 +11,8 @@
       "alerts": {
         "format-notsupported": "فرمت فایل پشتیبانی نمی شود",
         "fileSize-exceeded": "حجم فایل انتخابی از حجم مجاز بیشتر است.",
-        "save-success": "ذخیره با موفقیت انجام شد"
+        "save-success": "ذخیره با موفقیت انجام شد",
+        "select-dataset": "داده دیتاست انتخاب نشده"
       },
       "variables": {
         "variables": "متغیرها",
