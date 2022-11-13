@@ -1,6 +1,6 @@
 <template>
-	<div :id="element.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'"
-		:style="element.styles">
+	<div :id="element.id" ref="element" @size-changed="dataSetResized" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')"
+		:class="element.type + ' element'" :style="element.styles">
 		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" class="dataset-name">
 			<span>{{displaySet.configs.title}} <img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
@@ -249,14 +249,14 @@
 			 @return {Object} - prepared options 
 			 */
 
-			prepareRows(rows: IRow[]): IRow[] {	
+			prepareRows(rows: IRow[]): IRow[] {
 
 				var stylesTarget = this.element.configs.stylesTarget
 				for (let index = 0; index < this.displaySet.configs.rows.length; index++) {
 					var row = this.displaySet.configs.rows[index]
 					if (
-						stylesTarget === StylesTargets.EVEN && index % 2 === 0 || // index is even
-						stylesTarget === StylesTargets.ODD && index % 2 === 1 || // index is odd
+						stylesTarget === StylesTargets.EVEN && (index + 1) % 2 === 0 || // index is even
+						stylesTarget === StylesTargets.ODD && (index + 1) % 2 === 1 || // index is odd
 						stylesTarget === StylesTargets.ALL
 					)
 						row.styles = merge(row.styles, this.element.configs.dataSetDefaultRow[0].styles)
