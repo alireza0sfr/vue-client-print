@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-	import { ElementGrandParents, ElementTypes } from '~/enums/element'
+	import { ElementGrandParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
 	import { shallowMerge } from '~/plugins/general-utilities'
 	import { DEFAULTROWSHEIGHT } from '~/plugins/element-utilities'
@@ -40,7 +40,7 @@
 				element: {
 					configs: {
 						cells: [],
-						stylesTarget: 'all'
+						stylesTarget: StylesTargets.ALL
 					},
 					styles: {
 						height: 'auto',

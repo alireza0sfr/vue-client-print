@@ -535,7 +535,7 @@ export const emptyDataSet = {
 
 export const DEFAULTCOLUMNWIDTH = '70px'
 
-export const DEFAULTROWSHEIGHT = 'auto'
+export const DEFAULTROWSHEIGHT = 20
 
 
 /**
