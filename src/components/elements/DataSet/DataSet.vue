@@ -267,7 +267,7 @@
 			prepareRows(rows: IRow[]): IRow[] {
 
 				var stylesTarget = this.element.configs.stylesTarget
-				for (let index = 1; index < this.displaySet.configs.rows.length; index++) {
+				for (let index = 0; index < this.displaySet.configs.rows.length; index++) {
 					var row = this.displaySet.configs.rows[index]
 					if (
 						stylesTarget === StylesTargets.EVEN && index % 2 === 0 || // index is even
@@ -275,7 +275,9 @@
 						stylesTarget === StylesTargets.ALL
 					)
 						row.styles = merge(row.styles, this.element.configs.dataSetDefaultRow[0].styles)
+					row.styles.minHeight = this.element.configs.dataSetDefaultRow[0].styles.minHeight.toString() + 'px'
 				}
+
 
 				return rows
 			}

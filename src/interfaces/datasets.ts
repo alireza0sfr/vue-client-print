@@ -65,7 +65,7 @@ interface IRow {
     stylesTarget: StylesTargets
     cells: ICell[]
   }
-  styles: object
+  styles: any
 }
 
 interface IRawRow {

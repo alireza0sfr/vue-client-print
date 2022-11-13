@@ -1,9 +1,7 @@
 <template>
-	<div :id="element.id" ref="element" :class="element.type">
-		<tr :style="element.styles">
-			<td v-for="cell in element.configs.cells" :style="cell.styles" :key="cell">{{cell.value}}</td>
-		</tr>
-	</div>
+	<tr :id="element.id" ref="element" :class="element.type" :style="element.styles">
+		<td v-for="cell in element.configs.cells" :style="cell.styles" :key="cell">{{cell.value}}</td>
+	</tr>
 </template>
 
 <script lang="ts">
