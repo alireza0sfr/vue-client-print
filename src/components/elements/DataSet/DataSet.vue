@@ -110,7 +110,6 @@
 					styles: {
 						height: "100px",
 						width: '300px',
-						minWidth: '70px'
 					},
 				} as IDataSetLikeElement,
 			}
