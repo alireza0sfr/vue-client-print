@@ -12,7 +12,6 @@
 		props: {
 			options: { type: Object, required: true },
 			modelValue: { type: [Boolean, String] },
-			tabindex: { type: [Number, String] },
 			startup: { type: Boolean, default: false },
 			disabled: { type: Boolean, default: false },
 		},
