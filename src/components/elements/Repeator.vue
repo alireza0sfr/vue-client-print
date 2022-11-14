@@ -94,8 +94,8 @@
 		methods: {
 			prepareElementInstance(appendedElement: IElement, index: number): IElement {
 				var extra = {
-					index,
-					settings: this.element.configs.settings,
+					index: index - 1, // v-for index start from 1
+					settings: this.element.configs.printSettings, // print settings stored in repeator
 					repeatorInstance: this.element
 				}
 

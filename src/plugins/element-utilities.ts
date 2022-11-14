@@ -700,8 +700,8 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 
     case ElementTypes.PAGECOUNTER:
 
-      element.configs.currentPage = extraArgs.index || 1
-      element.configs.totalPages = extraArgs.totalPages || 1
+      element.configs.currentPage = (extraArgs.index || 0) + 1
+      element.configs.totalPages = extraArgs.totalPages || 0
       break
 
     case ElementTypes.TEXTPATTERN:

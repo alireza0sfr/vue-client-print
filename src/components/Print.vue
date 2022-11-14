@@ -9,7 +9,7 @@
 					<div id="componentsParent">
 
 						<div class="body-render-section" :style="[{height: settings.beforeBody.height + 'in'}, settings.beforeBody.styles]">
-							<component v-for="(element, index) in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
+							<component v-for="(element, index) in settings.beforeBody.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
 						</div>
 
 						<div id="bodyComponents" v-if="settings.body && settings.body.elements && settings.body.elements.length" class="body-render-section"
@@ -20,7 +20,7 @@
 						<slot v-else class="printData" name="printData"></slot>
 
 						<div class="body-render-section" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]">
-							<component v-for="(element, index) in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
+							<component v-for="(element, index) in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
 						</div>
 					</div>
 				</div>
@@ -70,12 +70,12 @@
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
 								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
-									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
+									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
 							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
-								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareComponentsOptions(element, element.type, index)" />
+								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
 							</div>
 						</div>
 					</div>
@@ -148,7 +148,7 @@
 		methods: {
 			prepareElementInstance(element: IElement, index: number): IElement {
 				var extra = {
-					index,
+					index: index - 1, // v-for index start from 1
 					totalPages: this.locals.totalPages,
 					settings: this.settings,
 				}
