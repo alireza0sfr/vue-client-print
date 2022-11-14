@@ -1,26 +1,26 @@
 <template>
+	<div>
+		<!-- Template Builder -->
+		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" :id="element.id" ref="element" @click="$emit('clickedOnElement', element)"
+			@finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
+			<div class="repeator-name">
+				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+			</div>
+			<div style="display: flex; position: relative;">
+				<component v-for="appendedElement in element.configs.appendedElements" tabindex="-1" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id"
+					:is="appendedElement.type" :instance="appendedElement" @clickedOnElement="(element) => $emit('clickedOnElement', element)" @click.stop="$emit('clickedOnElement', appendedElement)" />
+			</div>
+			<Resizers :query="`${element.type}-${element.id}`" />
+		</div>
 
-	<!-- Template Builder -->
-	<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" :id="element.id" ref="element" @click="$emit('clickedOnElement', element)"
-		@finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
-		<div class="repeator-name">
-			<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
+		<!-- Print Preview -->
+		<div v-else :style="{height: computedContainerHeight + 'px'}">
+			<div v-for="(row, index) in displaySet.configs.rows" :id="element.id" :style="element.styles" :key="row">
+				<component v-for="appendedElement in element.configs.appendedElements" :key="appendedElement.id" :style="appendedElement.styles" :is="appendedElement.type"
+					:instance="prepareElementInstance(appendedElement, index)" />
+			</div>
 		</div>
-		<div style="display: flex; position: relative;">
-			<component v-for="appendedElement in element.configs.appendedElements" tabindex="-1" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id" :is="appendedElement.type"
-				:instance="appendedElement" @clickedOnElement="(element) => $emit('clickedOnElement', element)" @click.stop="$emit('clickedOnElement', appendedElement)" />
-		</div>
-		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
-
-	<!-- Print Preview -->
-	<div v-else :style="{height: computedContainerHeight + 'px'}">
-		<div v-for="(row, index) in displaySet.configs.rows" :id="element.id" :style="element.styles" :key="row">
-			<component v-for="appendedElement in element.configs.appendedElements" :key="appendedElement.id" :style="appendedElement.styles" :is="appendedElement.type"
-				:instance="prepareElementInstance(appendedElement, index)" />
-		</div>
-	</div>
-
 </template>
 
 <script lang="ts">
