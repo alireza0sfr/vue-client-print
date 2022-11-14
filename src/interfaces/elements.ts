@@ -1,6 +1,6 @@
 import { ElementGrandParents, ElementParents, ElementTypes, VariableTypes } from '~/enums/element'
 import { emptyId } from '~/plugins/element-utilities'
-import { IRawRow, IRow, IDatasets } from './datasets'
+import { IRawRow, IRow, IDatasets, IColumn } from './datasets'
 import { ISettings } from './general'
 
 export interface IElementCoordinates {
@@ -54,7 +54,7 @@ export interface IVariable {
 }
 
 export interface IDataSetLikeElement extends IElement {
-  prepareDataSetRows(rows: IRawRow[]): IRow[]
+  prepareDataSetRows(rows: IRawRow[], columns: IColumn[]): IRow[]
   computeDatasets(settings?: ISettings | any): IDatasets | null
 }
 
@@ -65,6 +65,7 @@ export interface IBindingObjectLikeElement extends IElement {
 export interface IPrepareInstanceExtraArgs {
   index: number
   settings: ISettings,
-  currentPage: number
-  totalPages: number
+  // currentPage: number
+  totalPages?: number
+  repeatorInstance?: IDataSetLikeElement
 }

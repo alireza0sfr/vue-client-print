@@ -1254,6 +1254,9 @@
 						break
 
 					case ElementTypes.REPEATOR:
+						configs.settings = this.settings
+						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+
 					case ElementTypes.DATASET:
 						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
 

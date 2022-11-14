@@ -147,7 +147,12 @@
 		},
 		methods: {
 			prepareElementInstance(element: IElement, index: number): IElement {
-				return prepareElementInstance(element, index)
+				var extra = {
+					index,
+					totalPages: this.locals.totalPages,
+					settings: this.settings,
+				}
+				return prepareElementInstance(element, extra)
 			},
 			/**
 			 * Temp method to close modal before refactoring modal

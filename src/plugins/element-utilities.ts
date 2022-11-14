@@ -707,8 +707,37 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       let field = element.configs.field
       var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.settings)
 
-      if (bindingObject[field])
-        element.configs.value = bindingObject[field]
+      if (element.repeatorId && extraArgs.repeatorInstance) {
+        var dataSets = extraArgs.repeatorInstance.computeDatasets()
+        var selectedDataSet = extraArgs.repeatorInstance.configs.selectedDataSet
+
+        if (!isEmpty(dataSets) && !isEmpty(selectedDataSet)) {
+          var displaySet: any = dataSets![selectedDataSet]
+          var columns = displaySet.configs.columns
+          var rows = displaySet.configs.rows
+
+          // prepare bindingobject's data based on rows
+          for (let key of Object.keys(bindingObject)) {
+
+            let childDataSetKey = key.split('-')[1]
+
+            if (childDataSetKey)
+              for (let row of rows)
+                (bindingObject[key] as unknown as any[]).push(row[childDataSetKey])
+          }
+        }
+      }
+
+      var selectedFieldData = bindingObject[field]
+
+      if (selectedFieldData) {
+
+        if (Array.isArray(selectedFieldData))
+          element.configs.value = bindingObject[field][extraArgs.index]
+        else
+          element.configs.value = bindingObject[field]
+
+      }
       else
         element.configs.value = ''
       break

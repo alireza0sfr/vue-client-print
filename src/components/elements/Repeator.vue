@@ -92,8 +92,14 @@
 			}
 		},
 		methods: {
-			prepareElementInstance(element: IElement, index: number): IElement {
-				return prepareElementInstance(element, index)
+			prepareElementInstance(appendedElement: IElement, index: number): IElement {
+				var extra = {
+					index,
+					settings: this.element.configs.settings,
+					repeatorInstance: this.element
+				}
+
+				return prepareElementInstance(appendedElement, extra)
 			},
 			/**
 			 * Callback function for bindingobject case on preapreComponentsElements in mixins.
