@@ -70,12 +70,12 @@
 						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
 								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
-									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
+									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
 							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
-								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
+								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 							</div>
 						</div>
 					</div>
@@ -148,7 +148,7 @@
 		methods: {
 			prepareElementInstance(element: IElement, index: number): IElement {
 				var extra = {
-					index: index - 1, // v-for index start from 1
+					index: index,
 					totalPages: this.locals.totalPages,
 					settings: this.settings,
 				}
