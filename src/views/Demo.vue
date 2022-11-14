@@ -67,35 +67,35 @@
 								columns: [
 									{
 										title: 'column child 1',
-										key: 'ccenter',
+										key: 'center',
 										styles: {
 											width: '70px',
 										},
 									},
 									{
 										title: 'column child 2',
-										key: 'caccount',
+										key: 'account',
 										styles: {
 											width: '50px',
 										}
 									},
 									{
 										title: 'column child 3',
-										key: 'cdate',
+										key: 'date',
 										styles: {
 											width: '50px',
 										}
 									},
 									{
 										title: 'column child 4',
-										key: 'cbalance',
+										key: 'balance',
 										styles: {
 											width: '50px',
 										}
 									},
 									{
 										title: 'column child 5',
-										key: 'ctype',
+										key: 'type',
 										styles: {
 											width: '50px',
 										}

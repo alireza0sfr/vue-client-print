@@ -1,4 +1,4 @@
-import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, ICreateElementExtraArgs } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -625,6 +625,12 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
 
 }
 
+/**
+ * Prepare element before rendering
+ * @param {Object} instance - element instance
+ * @param {ICreateElementExtraArgs} extraArgs - extraArgs
+ * @return {IElement} - prepare element
+ */
 export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
   // var element = clone(instance)
   var element: any = instance
@@ -648,13 +654,30 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       var selectedDataSet = element.configs.selectedDataSet
       var displaySet = element.configs.dataSets[selectedDataSet]
       var columns = displaySet.configs.columns
-      var storeRows: IRow[] = element.prepareDataSetRows(dataSetStore.getRowsByKey(selectedDataSet), columns)
+      var rows
 
       element.configs.stylesTarget = stylesTarget
       element.configs.originalColumnHeight = element.styles.height
       element.styles.height = 'auto'
 
-      for (let row of storeRows) {
+      // if selectedDataSet contains "-" it means repeator's rows contains array therfore dataset should connect to child array
+      var parentDataSetKey = selectedDataSet.split('-')[0]
+      var childDataSetKey = selectedDataSet.split('-')[1]
+
+      // repeator's rows contains array therfore dataset should connect to child array
+      if (childDataSetKey) {
+        let storeRows: any = dataSetStore.getRowsByKey(parentDataSetKey)
+        rows = storeRows[extraArgs.index][childDataSetKey]
+      }
+
+      // it's dataset appended to a repeator
+      else if (element.repeatorId) {
+        rows = dataSetStore.getRowsByKey(selectedDataSet)
+      }
+
+      rows = element.prepareDataSetRows(rows, columns)
+
+      for (let row of rows) {
         for (let index = 0; index < row.configs.cells.length; index++) {
 
           // select styles manually to prevent some row styles to be overwritten eg: bg-color / color
@@ -672,7 +695,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
         }
       }
 
-      displaySet.configs.rows = storeRows
+      displaySet.configs.rows = rows
       break
 
     case ElementTypes.PAGECOUNTER:
