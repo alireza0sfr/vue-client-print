@@ -1,38 +1,34 @@
 <template>
-	<div :id="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
 
-		<!-- Template Builder -->
-		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
-			<div class="repeator-name">
-				<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
-			</div>
-			<div style="display: flex; position: relative;">
-				<component v-for="appendedElement in element.configs.appendedElements" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id" :is="appendedElement.type" :instance="appendedElement"
-					@clickedOnElement="(element) => $emit('clickedOnElement', element)" @click.stop="$emit('clickedOnElement', appendedElement)" />
-			</div>
-			<Resizers :query="`${element.type}-${element.id}`" />
+	<!-- Template Builder -->
+	<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" :id="element.id" ref="element" @click="$emit('clickedOnElement', element)"
+		@finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles">
+		<div class="repeator-name">
+			<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 		</div>
-
-		<!-- Print Preview -->
-		<div v-else>
-			<div v-for="(row, index) in displaySet.configs.rows" :key="row" :style="computedStyles">
-				<div style="display: flex; position: absolute;">
-					<component v-for="element in element.configs.appendedElements" :key="element.id" :is="element.type"
-						:options="prepareComponentsOptions(element, element.type, index, bindingObjectCallback)" />
-				</div>
-				<Resizers :query="`${element.type}-${element.id}`" />
-			</div>
+		<div style="display: flex; position: relative;">
+			<component v-for="appendedElement in element.configs.appendedElements" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id" :is="appendedElement.type"
+				:instance="appendedElement" @clickedOnElement="(element) => $emit('clickedOnElement', element)" @click.stop="$emit('clickedOnElement', appendedElement)" />
 		</div>
-
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
+
+	<!-- Print Preview -->
+	<div v-else :style="{height: computedContainerHeight + 'px'}">
+		<div v-for="(row, index) in displaySet.configs.rows" :id="element.id" :style="element.styles" :key="row">
+			<component v-for="appendedElement in element.configs.appendedElements" :key="appendedElement.id" :style="appendedElement.styles" :is="appendedElement.type"
+				:instance="prepareElementInstance(appendedElement, index)" />
+		</div>
+	</div>
+
 </template>
 
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IBindingObject, IDataSetLikeElement, IElement } from '~/interfaces/elements'
-	import { isEmpty, shallowMerge } from '~/plugins/general-utilities'
+	import { isEmpty, shallowMerge, toFloatVal, merge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
-	import { emptyDataSet } from '@/plugins/element-utilities'
+	import { emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
 	import { IDatasets } from '@/interfaces/datasets'
 	export default defineComponent({
 		name: ElementTypes.REPEATOR,
@@ -41,8 +37,12 @@
 		},
 		emits: ['clickedOnElement', 'finished-editing-element'],
 		computed: {
-			computedStyles() {
-				return { height: this.element.configs.originalHeight }
+			computedContainerHeight() {
+				var result
+				result = toFloatVal(this.element.styles.height)
+				result -= 24
+				result *= this.displaySet.configs.rows.length
+				return result
 			},
 			displaySet() {
 
@@ -92,7 +92,9 @@
 			}
 		},
 		methods: {
-
+			prepareElementInstance(element: IElement, index: number): IElement {
+				return prepareElementInstance(element, index)
+			},
 			/**
 			 * Callback function for bindingobject case on preapreComponentsElements in mixins.
 			 * @param {IElement} element - element instance

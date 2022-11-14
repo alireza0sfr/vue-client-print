@@ -632,8 +632,18 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 
   switch (element.type) {
 
-    case ElementTypes.DATASET:
+    case ElementTypes.REPEATOR:
+      var selectedDataSet = element.configs.selectedDataSet
+      var displaySet = element.configs.dataSets[selectedDataSet]
+      var columns = displaySet.configs.columns
+      var storeRows: IRow[] = element.prepareDataSetRows(dataSetStore.getRowsByKey(selectedDataSet), columns)
 
+      element.styles.position = 'relative'
+
+      displaySet.configs.rows = storeRows
+      break
+
+    case ElementTypes.DATASET:
       var stylesTarget = element.configs.dataSetDefaultRow[0].configs.stylesTarget
       var selectedDataSet = element.configs.selectedDataSet
       var displaySet = element.configs.dataSets[selectedDataSet]
