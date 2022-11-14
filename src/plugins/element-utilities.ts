@@ -654,7 +654,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       var selectedDataSet = element.configs.selectedDataSet
       var displaySet = element.configs.dataSets[selectedDataSet]
       var columns = displaySet.configs.columns
-      var rows
+      var rows = dataSetStore.getRowsByKey(selectedDataSet)
 
       element.configs.stylesTarget = stylesTarget
       element.configs.originalColumnHeight = element.styles.height
@@ -668,11 +668,6 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       if (childDataSetKey) {
         let storeRows: any = dataSetStore.getRowsByKey(parentDataSetKey)
         rows = storeRows[extraArgs.index][childDataSetKey]
-      }
-
-      // it's dataset appended to a repeator
-      else if (element.repeatorId) {
-        rows = dataSetStore.getRowsByKey(selectedDataSet)
       }
 
       rows = element.prepareDataSetRows(rows, columns)
