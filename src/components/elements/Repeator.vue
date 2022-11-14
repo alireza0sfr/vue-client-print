@@ -100,28 +100,7 @@
 				}
 
 				return prepareElementInstance(appendedElement, extra)
-			},
-			/**
-			 * Callback function for bindingobject case on preapreComponentsElements in mixins.
-			 * @param {IElement} element - element instance
-			 * @param {Object} bindingObject - BindingObject
-			 * @param {String} key - Selected field from bindingObject
-			 * @param {Number} index - Component rendring loop index
-			 * @return {void} - void
-			 */
-			bindingObjectCallback(element: IElement, bindingObject: IBindingObject, key: string, index: number): void {
-				if (bindingObject[key]) {
-
-					if (Array.isArray(bindingObject[key]))
-						element.configs.value = bindingObject[key][index]
-
-					else
-						element.configs.value = bindingObject[key]
-
-				}
-				else
-					element.configs.value = ''
-			},
+			}
 		},
 	})
 </script>
