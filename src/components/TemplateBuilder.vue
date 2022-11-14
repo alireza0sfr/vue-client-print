@@ -1662,7 +1662,7 @@
 						}
 					},
 					{
-						name: 'element-ctrl-arrowleft',
+						name: 'element-delete',
 						shortcut: {
 							keyCode: 46, // 46:Delete,
 							ctrlKey: false,

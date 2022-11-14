@@ -31,7 +31,7 @@ export default class KeyboardHandler implements IKeyboardHandler {
     var request = this.requests.find(x =>
       (x.test!(this, e)) &&
       (x.occurance === occurance) &&
-      (typeof x.focusEl === 'undefined' || x.focusEl.contains(document.activeElement)) &&
+      (typeof x.focusEl === 'undefined' || x.focusEl!.contains(document.activeElement)) &&
       (x.shortcut.keyCode === e.keyCode) &&
       (typeof x.shortcut.ctrlKey === 'undefined' || x.shortcut.ctrlKey === e.ctrlKey) &&
       (typeof x.shortcut.altKey === 'undefined' || x.shortcut.altKey === e.altKey) &&

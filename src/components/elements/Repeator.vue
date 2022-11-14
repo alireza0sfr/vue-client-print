@@ -7,7 +7,7 @@
 			<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 		</div>
 		<div style="display: flex; position: relative;">
-			<component v-for="appendedElement in element.configs.appendedElements" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id" :is="appendedElement.type"
+			<component v-for="appendedElement in element.configs.appendedElements" tabindex="-1" @finished-editing-element="$emit('finished-editing-element')" :key="appendedElement.id" :is="appendedElement.type"
 				:instance="appendedElement" @clickedOnElement="(element) => $emit('clickedOnElement', element)" @click.stop="$emit('clickedOnElement', appendedElement)" />
 		</div>
 		<Resizers :query="`${element.type}-${element.id}`" />
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
-	import { IBindingObject, IDataSetLikeElement, IElement } from '~/interfaces/elements'
+	import { IDataSetLikeElement, IElement } from '~/interfaces/elements'
 	import { isEmpty, shallowMerge, toFloatVal, merge } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	import { emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
