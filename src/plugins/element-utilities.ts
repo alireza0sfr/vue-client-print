@@ -632,7 +632,7 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
  * @param {Object} configs - element's configs
  * @return {IElement} - prepare element
  */
-export function prepareElementInstance(instance: IElement, styles?: any, configs?: any): IElement {
+export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
   // var element = clone(instance)
   var element: any = instance
   element.grandParent = ElementGrandParents.PRINT
