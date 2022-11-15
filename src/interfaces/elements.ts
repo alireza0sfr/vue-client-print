@@ -34,14 +34,6 @@ export interface IElement extends IEmptyElement {
   getCoordinates(returnType: string): IElementCoordinates
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
 }
-
-export interface ICreateElementExtraArgs {
-  e?: any,
-  variable?: IVariable | IEmptyElement,
-  styles?: any,
-  configs?: any
-}
-
 export interface IBindingObject {
   [key: string]: string
 }

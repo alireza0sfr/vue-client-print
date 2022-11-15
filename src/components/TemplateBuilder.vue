@@ -742,15 +742,14 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IEmptyElement, IVariable, ICreateElementExtraArgs } from '~/interfaces/elements'
+	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections, Tabs } from '~/enums/general'
-	import { ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
+	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { Element, BindingObjectLikeElement, DataSetLikeElement, EmptyElement } from '~/plugins/element-utilities'
-	import { idGenerator, convert2Inches, toFloatVal, merge, clone, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement } from '~/plugins/element-utilities'
+	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
-	import { ElementGrandParents } from '@/enums/element'
 	import { useVariablesStore } from '~/stores/variables'
 	import { IColumn, IDataset } from '@/interfaces/datasets'
 	import KeyboardHandler from '~/plugins/keyboard-handler'
@@ -963,7 +962,7 @@
 				if (!this.validateCopy(element))
 					return
 
-				this.locals.copiedElement = this.createElement(element.type, element.parent, { styles: element.styles, configs: element.configs })
+				this.locals.copiedElement = this.createElement(element.type, element.parent, element.styles, element.configs)
 			},
 			/**
 			 * Paste copied element.
@@ -1085,7 +1084,7 @@
 
 					for (let index = 0; index < this.settings[section].elements.length; index++) {
 						var elem = this.settings[section].elements[index]
-						this.settings[section].elements[index] = this.createElement(elem.type, ElementParents[section.toUpperCase()], { styles: elem.styles, configs: elem.configs })
+						this.settings[section].elements[index] = this.createElement(elem.type, ElementParents[section.toUpperCase()], elem.styles, elem.configs)
 					}
 				}
 
@@ -1237,43 +1236,9 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(elementType: ElementTypes, parent: ElementParents, extraArgs?: ICreateElementExtraArgs): IElement {
-
-				var configs: any = merge({}, extraArgs?.configs || {})
-				var baseStyles = {
-					top: extraArgs?.e?.offsetY + 'px' || '0px',
-					left: extraArgs?.e?.offsetX + 'px' || '0px',
-					direction: this.settings.pageDirections,
-				}
-				var styles: any = merge(baseStyles, extraArgs?.styles || {})
-
-				switch (elementType) {
-
-					case ElementTypes.VARIABLE:
-						configs = merge(extraArgs?.variable || {}, configs)
-						break
-
-					case ElementTypes.REPEATOR:
-						configs.printSettings = this.settings
-						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
-
-					case ElementTypes.DATASET:
-						return new DataSetLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
-
-					case ElementTypes.BINDINGOBJECT:
-					case ElementTypes.TEXTPATTERN:
-						return new BindingObjectLikeElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
-
-					case ElementTypes.IMAGEELEMENT:
-						configs = merge({ imageSrc: this.configurations.imageSrc }, configs)
-						break
-
-					default:
-						break
-				}
-				return new Element(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs, '')
+			createElement(elementType: ElementTypes, parent: ElementParents, styles?: any, configs?: any): IElement {
+				return createElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs)
 			},
-
 			/**
 			 * Creates variable in variables tab list.
 			 * @return {void} - void
@@ -1328,6 +1293,31 @@
 				this.$refs.template.className += " dragged"
 			},
 
+			prepareNewElementsConfigs(elementType: ElementTypes): any {
+
+				let configs = {}
+
+				switch (elementType) {
+					case ElementTypes.VARIABLE:
+						configs = { variable: this.locals.currentVariable }
+						break
+
+					case ElementTypes.IMAGEELEMENT:
+						configs = { imageSrc: this.configurations!.imageSrc }
+						break
+
+					case ElementTypes.REPEATOR:
+						configs = { printSettings: this.settings }
+						break
+
+					default:
+						break
+				}
+
+				return configs
+
+			},
+
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
@@ -1340,7 +1330,15 @@
 				if (elementType === ElementTypes.EMPTY)
 					return
 
-				var elementInstance: IElement = this.createElement(elementType, parent, { e, variable: this.locals.currentVariable })
+				var baseStyles = {
+					top: e.offsetY + 'px' || '0px',
+					left: e.offsetX + 'px' || '0px',
+					direction: this.settings.pageDirections,
+				}
+
+				var configs = this.prepareNewElementsConfigs(elementType)
+
+				var elementInstance: IElement = this.createElement(elementType, parent, baseStyles, configs)
 
 				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
 					elementType = ElementTypes.EMPTY

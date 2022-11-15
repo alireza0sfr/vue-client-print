@@ -1,4 +1,4 @@
-import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, ICreateElementExtraArgs } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -430,7 +430,7 @@ export class DataSetLikeElement extends Element {
           value: rows[index][key]
         })
 
-      preparedRows[index] = new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsRow)
+      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsRow)
     }
 
     return preparedRows
@@ -470,7 +470,7 @@ export class DataSetLikeElement extends Element {
               columns: col.configs.columns,
             }
 
-            var instance = new Element(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
+            var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
             this.configs.dataSets[name] = instance
             additional[name] = instance
 
@@ -557,7 +557,7 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
       key: thisSet.key
     }
 
-    preparedSets[set] = new Element(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
+    preparedSets[set] = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
   }
   return preparedSets
 }
@@ -586,7 +586,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
       width: col.styles.width ? col.styles.width : DEFAULTCOLUMNWIDTH,
     }
 
-    preparedColumns[index] = new Element(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles, configs)
+    preparedColumns[index] = createElement(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles, configs)
   }
 
   return preparedColumns
@@ -628,10 +628,11 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
 /**
  * Prepare element before rendering
  * @param {Object} instance - element instance
- * @param {ICreateElementExtraArgs} extraArgs - extraArgs
+ * @param {Object} styles - element's styles
+ * @param {Object} configs - element's configs
  * @return {IElement} - prepare element
  */
-export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
+export function prepareElementInstance(instance: IElement, styles?: any, configs?: any): IElement {
   // var element = clone(instance)
   var element: any = instance
   element.grandParent = ElementGrandParents.PRINT
@@ -732,7 +733,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
         if (!isEmpty(dataSets) && !isEmpty(selectedDataSet)) {
           var displaySet: any = dataSets![selectedDataSet]
           var columns = displaySet.configs.columns
-          var rows = displaySet.configs.rows
+          let rows = displaySet.configs.rows
 
           // prepare bindingobject's data based on rows
           for (let key of Object.keys(bindingObject)) {
@@ -768,4 +769,27 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       break
   }
   return element
+}
+
+/**
+* create element.
+* @param {String} parent - element parent
+* @return {IElement} - returns instance of element class
+*/
+export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, styles: any = {}, configs: any = {}): IElement {
+
+  switch (elementType) {
+
+    case ElementTypes.REPEATOR:
+    case ElementTypes.DATASET:
+      return new DataSetLikeElement(elementType, parent, grandParent, styles, configs, '')
+
+    case ElementTypes.BINDINGOBJECT:
+    case ElementTypes.TEXTPATTERN:
+      return new BindingObjectLikeElement(elementType, parent, grandParent, styles, configs, '')
+
+    default:
+      break
+  }
+  return new Element(elementType, parent, grandParent, styles, configs, '')
 }
