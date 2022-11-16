@@ -746,7 +746,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.settings)
 
       if (element.repeatorId && extraArgs.repeatorInstance) {
-        var dataSets = extraArgs.repeatorInstance.computeDatasets()
+        var dataSets = extraArgs.repeatorInstance.configs.dataSets
         var selectedDataSet = extraArgs.repeatorInstance.configs.selectedDataSet
 
         if (!isEmpty(dataSets) && !isEmpty(selectedDataSet)) {
