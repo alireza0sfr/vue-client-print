@@ -52,7 +52,10 @@
       "elements": {
         "validators": {
           "element-type-cant-be-child": "{type} نمیتواند به تکرار شونده اضافه شود.",
-          "child-cant-be-parent": "نمیتوان به المنت درون تکرار شونده المنت اضافه کرد."
+          "child-cant-be-parent": "نمیتوان به المنت درون تکرار شونده المنت اضافه کرد.",
+          "dataset-is-empty": "دیتاست خالی هست",
+          "bindingobject-is-empty": "اتصال داده خالی است",
+          "pagecounter-parent": "شمارنده باید در هدر یا فوتر اضافه شود"
         },
         "variable": "متغیر",
         "settings": "تنظیمات المنت ({elementType})",

@@ -58,9 +58,9 @@ export interface IBindingObjectLikeElement extends IElement {
 }
 
 export interface IPrepareInstanceExtraArgs {
-  index: number
+  index: number // elementIndex
   settings: ISettings,
-  // currentPage: number
+  currentPage?: number
   totalPages?: number
   repeatorInstance?: IDataSetLikeElement
 }

@@ -52,7 +52,10 @@
       "elements": {
         "validators": {
           "element-type-cant-be-child": "{type} can't be a child element",
-          "child-cant-be-parent": "Can't add a child to a child element"
+          "child-cant-be-parent": "Can't add a child to a child element",
+          "dataset-is-empty": "Dataset is empty",
+          "bindingobject-is-empty": "Bindingobject is empty",
+          "pagecounter-parent": "Pagecounter must be added to Header or Footer only"
         },
         "settings": "{elementType}'s Settings",
         "name": "Elements",

@@ -1366,14 +1366,23 @@
 				const DISSALLOWED_CHILDTYPES = [ElementTypes.PAGECOUNTER, ElementTypes.REPEATOR]
 
 				if (element instanceof DataSetLikeElement && isEmpty(this.dataSetComputed)) {
-					alert('[VCP] DataSet is empty')
-					throw Error('[VCP] DataSet is empty')
+					var text = this._$t('template-builder.elements.validators.dataset-is-empty')
+					alert(text)
+					return false
 				}
 
 				if (element instanceof BindingObjectLikeElement && isEmpty(this.bindingObjectComputed)) {
-					alert('[VCP] BindingObject is empty')
-					throw Error('[VCP] BindingObject is empty')
+					var text = this._$t('template-builder.elements.validators.bindingobject-is-empty')
+					alert(text)
+					return false
 				}
+
+				if (element.type === ElementTypes.PAGECOUNTER && (element.parent !== ElementParents.HEADER && element.parent !== ElementParents.FOOTER)) {
+					var text = this._$t('template-builder.elements.validators.pagecounter-parent')
+					alert(text)
+					return false
+				}
+
 
 				if (isChild) {
 
