@@ -55,7 +55,7 @@
 				return this.prepareColumns(sorted)
 			},
 			filteredRows() {
-				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER || isEmpty(this.displaySet))
+				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
 					return this.element.configs.dataSetDefaultRow
 
 				return this.prepareRows(this.displaySet.configs.rows)

@@ -32,9 +32,9 @@
 			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
 				<div :dir="settings.pageDirections" class=" print-modal-header">
 					<div style="display: flex">
-						<a @click="editWhileInPreview()" :title="_$t('print.edit')" class="modal-icon" href="#">
+						<!-- <a @click="editWhileInPreview()" :title="_$t('print.edit')" class="modal-icon" href="#">
 							<img src="@/assets/images/edit.png" />
-						</a>
+						</a> -->
 						<a href="#" @click="printForm()" :title="_$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
@@ -400,6 +400,7 @@
 			 * @return {void} - void
 			 */
 			editWhileInPreview(): void {
+				//TODO should change element granParent between print and TB
 				let printModal = document.getElementById("printModal")
 				printModal!.style.display = "none"
 				this.templateBuilder(this.settings, (val: ISettings): void => {
