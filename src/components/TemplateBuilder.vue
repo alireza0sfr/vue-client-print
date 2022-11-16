@@ -1700,8 +1700,10 @@
 
 									index = children.findIndex(x => x.id === this.locals.selectedElement.id) // child index in repeator children array
 
-									if (index > -1)
+									if (index > -1) {
 										children.splice(index, 1)
+										this.locals.selectedElement = new EmptyElement
+									}
 								}
 							}
 
