@@ -33,6 +33,7 @@ export interface IElement extends IEmptyElement {
   makeClickable(element: HTMLElement): void
   getCoordinates(returnType: string): IElementCoordinates
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
+  clone(): IElement
 }
 export interface IBindingObject {
   [key: string]: string
@@ -48,10 +49,12 @@ export interface IVariable {
 export interface IDataSetLikeElement extends IElement {
   prepareDataSetRows(rows: IRawRow[], columns: IColumn[]): IRow[]
   computeDatasets(settings?: ISettings | any): IDatasets | null
+  clone(): IDataSetLikeElement
 }
 
 export interface IBindingObjectLikeElement extends IElement {
   computeBindingObject(settings?: ISettings | any): IBindingObject
+  clone(): IBindingObjectLikeElement
 }
 
 export interface IPrepareInstanceExtraArgs {

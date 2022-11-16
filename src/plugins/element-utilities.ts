@@ -1,4 +1,4 @@
-import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, IBindingObjectLikeElement, IDataSetLikeElement } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -76,6 +76,13 @@ export class Element extends EmptyElement implements IElement {
     this.makeResizable()
     this.makeDragable()
     this.makeClickable()
+  }
+
+  /**
+   * returns a new instance of this class with current state
+   * */
+  clone() {
+    return new Element(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
   }
 
   /**
@@ -406,6 +413,13 @@ export class Element extends EmptyElement implements IElement {
 
 export class DataSetLikeElement extends Element {
 
+  /**
+   * returns a new instance of this class with current state
+   * */
+  clone() {
+    return new DataSetLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+  }
+
   /** converting normal row object to dataset row objects
    * @param {Object} rows - Raw rows.
    * @return {Object} - Prepared rows.
@@ -483,6 +497,13 @@ export class DataSetLikeElement extends Element {
 }
 
 export class BindingObjectLikeElement extends Element {
+
+  /**
+   * returns a new instance of this class with current state
+   * */
+  clone() {
+    return new BindingObjectLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+  }
 
   /**
    * prepare bindingObject data based on repeator's selected dataset
@@ -628,13 +649,11 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
 /**
  * Prepare element before rendering
  * @param {Object} instance - element instance
- * @param {Object} styles - element's styles
- * @param {Object} configs - element's configs
+ * @param {IPrepareInstanceExtraArgs} extraArgs - element's styles
  * @return {IElement} - prepare element
  */
 export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
-  // var element = clone(instance)
-  var element: any = instance
+  var element: any = instance.clone()
   element.grandParent = ElementGrandParents.PRINT
 
   switch (element.type) {
@@ -773,7 +792,10 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 
 /**
 * create element.
-* @param {String} parent - element parent
+* @param {String} parent - element's parent
+* @param {String} parent - element's grandParent
+* @param {Object} styles - element's styles
+* @param {Object} configs - element's configs
 * @return {IElement} - returns instance of element class
 */
 export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, styles: any = {}, configs: any = {}): IElement {
