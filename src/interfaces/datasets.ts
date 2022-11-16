@@ -1,4 +1,4 @@
-import { ElementGrandParents, StylesTargets } from '@/enums/element'
+import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets } from '@/enums/element'
 
 interface IRawDataset {
   readonly key: string
@@ -34,7 +34,9 @@ interface IRawColumn {
 
 interface IColumn {
   readonly id: string
-  readonly type: string
+  readonly type: ElementTypes
+  parent: ElementParents
+  grandParent: ElementGrandParents
   configs: {
     readonly key: string,
     hasResizer: boolean

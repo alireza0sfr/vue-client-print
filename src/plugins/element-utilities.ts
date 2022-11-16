@@ -798,20 +798,51 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 * @param {Object} configs - element's configs
 * @return {IElement} - returns instance of element class
 */
-export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, styles: any = {}, configs: any = {}): IElement {
+export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, styles: any = {}, configs: any = {}, repeatorId: string = ''): IElement {
 
   switch (elementType) {
 
     case ElementTypes.REPEATOR:
     case ElementTypes.DATASET:
-      return new DataSetLikeElement(elementType, parent, grandParent, styles, configs, '')
+      return new DataSetLikeElement(elementType, parent, grandParent, styles, configs, repeatorId)
 
     case ElementTypes.BINDINGOBJECT:
     case ElementTypes.TEXTPATTERN:
-      return new BindingObjectLikeElement(elementType, parent, grandParent, styles, configs, '')
+      return new BindingObjectLikeElement(elementType, parent, grandParent, styles, configs, repeatorId)
 
     default:
       break
   }
   return new Element(elementType, parent, grandParent, styles, configs, '')
+}
+
+export function createInstnaceFromObject(element: IElement) {
+
+  const createColumnsInstanceFromObject = (columns: IColumn[]): IColumn[] => {
+    for (var col of columns) {
+
+      if (col.configs.columns)
+        createColumnsInstanceFromObject(col.configs.columns)
+
+      col = createElement(col.type, col.parent, col.grandParent, col.styles, col.configs)
+    }
+
+    return columns
+  }
+
+  switch (element.type) {
+    case ElementTypes.REPEATOR:
+    case ElementTypes.DATASET:
+
+      for (var set of Object.keys(element.configs.dataSets)) {
+        element.configs.dataSets[set].configs.columns = createColumnsInstanceFromObject(element.configs.dataSets[set].configs.columns)
+      }
+
+      return createElement(element.type, element.parent, element.grandParent, element.styles, element.configs, element.repeatorId)
+
+    default:
+      break
+  }
+
+  return createElement(element.type, element.parent, element.grandParent, element.styles, element.configs, element.repeatorId)
 }
