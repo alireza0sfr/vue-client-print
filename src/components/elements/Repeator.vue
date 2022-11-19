@@ -16,7 +16,7 @@
 		<!-- Print Preview -->
 		<div v-else :style="{height: computedContainerHeight + 'px'}">
 			<div v-for="(row, index) in displaySet.configs.rows" :id="element.id" :style="element.styles" :key="row">
-				<component v-for="appendedElement in element.configs.appendedElements" :key="appendedElement.id" :style="appendedElement.styles" :is="appendedElement.type"
+				<component v-for="appendedElement in element.configs.appendedElements" :key="appendedElement.id" :is="appendedElement.type"
 					:instance="prepareElementInstance(appendedElement, index)" />
 			</div>
 		</div>
