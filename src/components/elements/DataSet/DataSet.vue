@@ -82,6 +82,13 @@
 					this.element = shallowMerge(val, this.element)
 				},
 			},
+			'element.configs.selectedDataSet': {
+				immediate: true,
+				handler(val) {
+					if (val && this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+						this.element.configs.dataSets[val].configs.columns = []
+				}
+			},
 		},
 		data() {
 			return {

@@ -469,24 +469,26 @@ export class DataSetLikeElement extends Element {
 
         var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
         var columns: IColumn[] = displaySet.configs.columns
-        var key: string = displaySet.configs.key
+        var parentKey: string = displaySet.configs.key
+        var parentTitle: string = displaySet.configs.title
 
         for (let col of columns) {
 
           // columns should contains child columns to be used inside repeator
           if (col.configs.columns && col.configs.columns.length) {
-            var name = `${key}-${col.configs.key}`
+            var title = `${parentTitle}-${col.configs.title}`
+            var key = `${parentKey}-${col.configs.key}`
 
             var configs = {
-              title: name,
-              key: col.configs.key,
+              title,
+              key,
               rows: [],
               columns: col.configs.columns,
             }
 
             var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
-            this.configs.dataSets[name] = instance
-            additional[name] = instance
+            this.configs.dataSets[key] = instance
+            additional[key] = instance
 
           }
         }
