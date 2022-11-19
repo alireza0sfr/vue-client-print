@@ -82,7 +82,9 @@ export class Element extends EmptyElement implements IElement {
    * returns a new instance of this class with current state
    * */
   clone() {
-    return new Element(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+    var instance = new Element(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+    instance.id = this.id
+    return instance
   }
 
   /**
@@ -417,7 +419,9 @@ export class DataSetLikeElement extends Element {
    * returns a new instance of this class with current state
    * */
   clone() {
-    return new DataSetLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+    var instance = new DataSetLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+    instance.id = this.id
+    return instance
   }
 
   /** converting normal row object to dataset row objects
@@ -504,7 +508,9 @@ export class BindingObjectLikeElement extends Element {
    * returns a new instance of this class with current state
    * */
   clone() {
-    return new BindingObjectLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+    var instance = new BindingObjectLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
+    instance.id = this.id
+    return instance
   }
 
   /**
