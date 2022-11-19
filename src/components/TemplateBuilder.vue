@@ -647,7 +647,7 @@
 								</div>
 
 								<!-- Section's Styles -->
-								<div v-if="locals.selectedSection">
+								<div v-if="locals.selectedSection" :id="`${locals.selectedSection}Template_Settings`">
 									<div style="margin-top: 15px" class="toolbar-header">
 										<span>{{_$t('template-builder.sections.styles', {sectionName: locals.selectedSection})}}</span>
 									</div>
@@ -905,8 +905,22 @@
 			 */
 			clickedOnSection(section: TemplateBuilderSections, e: any): void {
 
-				if (e.target.id && e.target.id.includes('Template'))
+				if (e.target.id && e.target.id.includes('Template')) {
 					this.locals.selectedSection = section
+					this.switchTabs(Tabs.SETTINGS)
+
+					setTimeout(() => {
+
+						var settingsSection = document.getElementById(`${section}Template_Settings`)
+
+						if (settingsSection)
+							settingsSection.scrollIntoView({
+								behavior: "smooth",
+								block: "start",
+								inline: "nearest"
+							})
+					}, 1)
+				}
 			},
 			/**
 			 * Fullscreen TB view
