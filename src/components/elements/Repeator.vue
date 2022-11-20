@@ -43,7 +43,7 @@
 			},
 			displaySet() {
 
-				let dataSets: IDatasets | null = this.element.computeDatasets()
+				let dataSets = this.element.configs.dataSets
 
 				if (!dataSets)
 					return emptyDataSet
@@ -56,6 +56,10 @@
 
 				return displaySet
 			},
+		},
+		created() {
+			if (isEmpty(this.element.configs.dataSets))
+				this.element.configs.dataSets = this.element.computeDatasets(this.element.configs.printSettings) || {}
 		},
 		mounted() {
 			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)

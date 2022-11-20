@@ -492,7 +492,7 @@ export class DataSetLikeElement extends Element {
             }
 
             var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
-            this.configs.dataSets[key] = instance
+            // this.configs.dataSets[key] = instance
             additional[key] = instance
 
           }

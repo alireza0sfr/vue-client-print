@@ -1321,6 +1321,7 @@
 						break
 
 					case ElementTypes.REPEATOR:
+					case ElementTypes.DATASET:
 						configs = { printSettings: this.settings }
 						break
 

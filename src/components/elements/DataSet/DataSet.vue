@@ -63,7 +63,7 @@
 		},
 		created() {
 			if (isEmpty(this.element.configs.dataSets)) {
-				var dataSets = this.element.computeDatasets() || {}
+				var dataSets = this.element.computeDatasets(this.element.configs.printSettings) || {}
 
 				for (var key of Object.keys(dataSets))
 					dataSets[key].configs.columns = []
