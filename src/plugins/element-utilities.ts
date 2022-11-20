@@ -96,6 +96,13 @@ export class Element extends EmptyElement implements IElement {
    */
   initStyles(styles: any = this.styles): object {
 
+    // fixing center of element to mouse position
+    var cor = this.getCoordinates('float')
+    var newLeft = toFloatVal(this.styles.left) - (Number(cor.width) / 2)
+    var newTop = toFloatVal(this.styles.top) - (Number(cor.height) / 2)
+    this.styles.left = newLeft + 'px'
+    this.styles.top = newTop + 'px'
+
     const EXCLUDEDSTYLES = ['color', 'backgroundColor']
 
     for (let key in styles)
