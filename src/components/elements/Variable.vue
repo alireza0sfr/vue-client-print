@@ -1,6 +1,6 @@
 <template>
 	<div :id="element.id" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'"
-		:style="element.styles" ref="element">
+		:style="element.styles" ref="element" tabindex="-1">
 		<span v-if="element.configs.variableType === locals.VariableTypes.TEXT ? true : false" class="content">
 			{{ element.configs.context }}
 		</span>

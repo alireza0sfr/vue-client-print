@@ -1,6 +1,6 @@
 <template>
 	<div :id="element.id" :data-testid="element.id" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'"
-		:style="element.styles" ref="element">
+		:style="element.styles" ref="element" tabindex="-1">
 		<img class="image" :src="element.configs.imageSrc" alt="Image" />
 		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>

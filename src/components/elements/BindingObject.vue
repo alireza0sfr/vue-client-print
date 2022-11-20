@@ -1,6 +1,6 @@
 <template>
 	<div :id="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'"
-		:style="element.styles">
+		:style="element.styles" tabindex="-1">
 
 		<!-- If its the template builder mode -->
 		<div class="content" v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">

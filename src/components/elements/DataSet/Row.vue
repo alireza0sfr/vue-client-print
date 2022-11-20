@@ -1,5 +1,5 @@
 <template>
-	<tr :id="element.id" ref="element" :class="element.type" :style="element.styles">
+	<tr :id="element.id" ref="element" :class="element.type" :style="element.styles" tabindex="-1">
 		<td v-for="cell in element.configs.cells" :style="cell.styles" :key="cell">{{cell.value}}</td>
 	</tr>
 </template>

@@ -1,6 +1,6 @@
 <template>
 	<div :id="element.id" :data-testid="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')"
-		:class="element.type + ' element content-wrapper'" :style="element.styles">
+		:class="element.type + ' element content-wrapper'" :style="element.styles" tabindex="-1">
 		<span class="content">
 			{{ computedCounter }}
 		</span>
