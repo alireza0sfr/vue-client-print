@@ -26,7 +26,7 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IDataSetLikeElement, IElement } from '~/interfaces/elements'
-	import { isEmpty, shallowMerge, toFloatVal, merge } from '~/plugins/general-utilities'
+	import { isEmpty, toFloatVal } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	import { emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
 	import { IDatasets } from '@/interfaces/datasets'
@@ -68,7 +68,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 				},
 			},
 		},

@@ -7,7 +7,6 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
-	import { shallowMerge } from '~/plugins/general-utilities'
 	import { DEFAULTROWSHEIGHT } from '~/plugins/element-utilities'
 	import { defineComponent } from 'vue'
 	export default defineComponent({
@@ -19,7 +18,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 				},
 			},
 		},

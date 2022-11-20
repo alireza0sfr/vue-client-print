@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-	import { toPersianDigits, shallowMerge } from '~/plugins/general-utilities'
+	import { toPersianDigits } from '~/plugins/general-utilities'
 	import { IElement } from '~/interfaces/elements'
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { defineComponent } from 'vue'
@@ -42,7 +42,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 
 					if (this.element.configs.persianDate)
 						this.persianDate()

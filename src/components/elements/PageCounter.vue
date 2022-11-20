@@ -12,7 +12,7 @@
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
-	import { toPersianDigits, shallowMerge } from '~/plugins/general-utilities'
+	import { toPersianDigits } from '~/plugins/general-utilities'
 	export default defineComponent({
 		name: ElementTypes.PAGECOUNTER,
 		props: {
@@ -43,7 +43,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 				},
 			},
 		},

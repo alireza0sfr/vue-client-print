@@ -5,7 +5,7 @@ import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColu
 import { getDisplaySetModes } from '~/enums/general'
 import { ElementTypes, ElementGrandParents, ElementParents, StylesTargets } from '~/enums/element'
 
-import { idGenerator, toFloatVal, clone, merge, isEmpty } from './general-utilities'
+import { idGenerator, toFloatVal, clone, merge, isEmpty, instnaceMerge } from './general-utilities'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
@@ -82,9 +82,11 @@ export class Element extends EmptyElement implements IElement {
    * returns a new instance of this class with current state
    * */
   clone() {
-    var instance = new Element(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
-    instance.id = this.id
-    return instance
+    return Object.create(Object.getPrototypeOf(this), Object.getOwnPropertyDescriptors(this))
+  }
+
+  merge(...sources: any[]) {
+    return instnaceMerge<IElement>(this, ...sources)
   }
 
   /**
@@ -415,14 +417,6 @@ export class Element extends EmptyElement implements IElement {
 
 export class DataSetLikeElement extends Element {
 
-  /**
-   * returns a new instance of this class with current state
-   * */
-  clone() {
-    var instance = new DataSetLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
-    instance.id = this.id
-    return instance
-  }
 
   /** converting normal row object to dataset row objects
    * @param {Object} rows - Raw rows.
@@ -504,14 +498,6 @@ export class DataSetLikeElement extends Element {
 
 export class BindingObjectLikeElement extends Element {
 
-  /**
-   * returns a new instance of this class with current state
-   * */
-  clone() {
-    var instance = new BindingObjectLikeElement(this.type, this.parent, this.grandParent, this.styles, this.configs, this.repeatorId)
-    instance.id = this.id
-    return instance
-  }
 
   /**
    * prepare bindingObject data based on repeator's selected dataset

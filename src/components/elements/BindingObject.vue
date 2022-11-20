@@ -1,5 +1,6 @@
 <template>
-	<div :id="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'" :style="element.styles">
+	<div :id="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element content-wrapper'"
+		:style="element.styles">
 
 		<!-- If its the template builder mode -->
 		<div class="content" v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
@@ -21,7 +22,7 @@
 <script lang="ts">
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
-	import { toPersianDigits, shallowMerge } from '~/plugins/general-utilities'
+	import { toPersianDigits } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
 	export default defineComponent({
 		name: ElementTypes.BINDINGOBJECT,
@@ -49,7 +50,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 				},
 			},
 		},

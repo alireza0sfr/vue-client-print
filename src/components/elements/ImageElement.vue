@@ -1,5 +1,6 @@
 <template>
-	<div :id="element.id" :data-testid="element.id" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles" ref="element">
+	<div :id="element.id" :data-testid="element.id" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'"
+		:style="element.styles" ref="element">
 		<img class="image" :src="element.configs.imageSrc" alt="Image" />
 		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
@@ -9,7 +10,6 @@
 	import { ElementGrandParents, ElementTypes } from '~/enums/element'
 	import { IElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
-	import { shallowMerge } from '~/plugins/general-utilities'
 	export default defineComponent({
 		name: ElementTypes.IMAGEELEMENT,
 		props: {
@@ -24,7 +24,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 				},
 			},
 		},

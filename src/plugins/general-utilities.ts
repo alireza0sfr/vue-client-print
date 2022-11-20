@@ -150,7 +150,8 @@ export function toFloatVal(val: string): number {
 
 /**
  * Deep merge sources to target object recuresively.
- * @param {Array} objects - Array of sources.
+ * @param {Object} target - target to merge into
+ * @param {Array} sources - given objects to merge
  * @return {Object} - Merged object.
  */
 export function merge<T>(target: any, ...sources: any[]): T {
@@ -176,29 +177,38 @@ export function merge<T>(target: any, ...sources: any[]): T {
   }
   return merge(target, ...sources)
 }
-export function shallowMerge<T>(target: any, ...sources: any[]): T {
+
+/**
+ * merge instance of a class with given objects
+ * @param {Object} instance - class instance
+ * @param {Array} sources - given objects to merge
+ * @return {Object} - cloned instance.
+ */
+
+export function instnaceMerge<T>(instance: any, ...sources: any[]): T {
 
   if (!sources.length)
-    return target
+    return instance
 
   const source = sources.shift()
 
-  if (isObject(target) && isObject(source)) {
+  if (isEmpty(source))
+    return instance
+
+  if (instance === source)
+    return instance
+
+  if (isObject(instance) && isObject(source)) {
     for (const key in source) {
-      if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, {
-          [key]: {}
-        })
-        shallowMerge(target[key], source[key])
-      } else {
-        if (key in target === false)
-          Object.assign(target, {
-            [key]: source[key]
-          })
-      }
+
+      if (!instance[key])
+        instance[key] = source[key]
+
+      else if (isObject(source[key]))
+        instnaceMerge(instance[key], source[key])
     }
   }
-  return shallowMerge(target, ...sources)
+  return instnaceMerge(instance, ...sources)
 }
 
 /**

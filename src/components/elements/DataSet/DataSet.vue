@@ -19,7 +19,7 @@
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { IDataSetLikeElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
-	import { toFloatVal, shallowMerge, merge, idGenerator, isEmpty } from '~/plugins/general-utilities'
+	import { toFloatVal, merge, idGenerator, isEmpty } from '~/plugins/general-utilities'
 	import { IColumn, IRow, IDatasets } from '@/interfaces/datasets'
 	import { emptyDataSet, Element } from '@/plugins/element-utilities'
 	export default defineComponent({
@@ -79,7 +79,7 @@
 			instance: {
 				immediate: true,
 				handler(val) {
-					this.element = shallowMerge(val, this.element)
+					this.element = val.merge(this.element)
 				},
 			},
 			'element.configs.selectedDataSet': {
