@@ -26,6 +26,11 @@
 		computed: {
 			computedValue() {
 
+				if (this.element.configs.persianDate)
+					this.persianDate()
+				else
+					this.gregorianDate()
+
 				if (this.element.configs.hasDate && this.element.configs.hasTime)
 					return this.locals.dateToday + ' ' + this.locals.timeToday
 
@@ -44,11 +49,6 @@
 				immediate: true,
 				handler(val) {
 					this.element = val.merge(this.element)
-
-					if (this.element.configs.persianDate)
-						this.persianDate()
-					else
-						this.gregorianDate()
 				},
 			},
 		},
