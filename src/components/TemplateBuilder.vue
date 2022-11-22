@@ -1376,17 +1376,15 @@
 
 			elementValidator(element: IElement, isChild: boolean = false, parentElement?: IElement): boolean {
 
-				this.locals.selectedElement = element
-
 				const DISSALLOWED_CHILDTYPES = [ElementTypes.PAGECOUNTER, ElementTypes.REPEATOR]
 
-				if (element instanceof DataSetLikeElement && isEmpty(this.dataSetComputed)) {
+				if (element instanceof DataSetLikeElement && isEmpty(element.computeDatasets(this.settings))) {
 					var text = this._$t('template-builder.elements.validators.dataset-is-empty')
 					alert(text)
 					return false
 				}
 
-				if (element instanceof BindingObjectLikeElement && isEmpty(this.bindingObjectComputed)) {
+				if (element instanceof BindingObjectLikeElement && isEmpty(element.computeBindingObject(this.settings))) {
 					var text = this._$t('template-builder.elements.validators.bindingobject-is-empty')
 					alert(text)
 					return false
@@ -1422,7 +1420,6 @@
 					}
 				}
 
-				this.locals.selectedElement = new EmptyElement
 				return true
 			},
 
