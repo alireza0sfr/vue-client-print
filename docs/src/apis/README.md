@@ -4,20 +4,6 @@ sidebar: auto
 
 # API
 
-## Clone
-
-Make a copy of nested objects like [lodash cloneDeep](https://lodash.com/docs/4.17.15#cloneDeep).
-
-- Type: `function`
-- Params: `object`
-- Return: `object`
-- Sample:
-
-```ts
-import { clone } from 'vcp'
-clone(object: object): object
-```
-
 ## Merge
 
 Merge array of objects like [lodash merge](https://lodash.com/docs/4.17.15#merge).

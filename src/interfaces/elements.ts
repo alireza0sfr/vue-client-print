@@ -33,7 +33,6 @@ export interface IElement extends IEmptyElement {
   makeClickable(element: HTMLElement): void
   getCoordinates(returnType: string): IElementCoordinates
   validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
-  clone(): IElement
   merge(...sources: any[]): IElement
 }
 export interface IBindingObject {

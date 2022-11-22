@@ -5,7 +5,9 @@ import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColu
 import { getDisplaySetModes } from '~/enums/general'
 import { ElementTypes, ElementGrandParents, ElementParents, StylesTargets } from '~/enums/element'
 
-import { idGenerator, toFloatVal, clone, merge, isEmpty, instnaceMerge } from './general-utilities'
+import { idGenerator, toFloatVal, merge, isEmpty, instnaceMerge } from './general-utilities'
+
+import cloneDeep from 'lodash/cloneDeep'
 
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
@@ -76,13 +78,6 @@ export class Element extends EmptyElement implements IElement {
     this.makeResizable()
     this.makeDragable()
     this.makeClickable()
-  }
-
-  /**
-   * returns a new instance of this class with current state
-   * */
-  clone() {
-    return Object.create(Object.getPrototypeOf(this), Object.getOwnPropertyDescriptors(this))
   }
 
   merge(...sources: any[]) {
@@ -570,7 +565,7 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
   var preparedSets: any = {}
 
   for (let set of keys) {
-    var thisSet: IRawDataset = clone(sets[set]) // removing refrence to the original data.
+    var thisSet: IRawDataset = cloneDeep(sets[set]) // removing refrence to the original data.
 
     var configs = {
       columns: prepareDataSetColumns(thisSet.columns),
@@ -654,7 +649,7 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
  * @return {IElement} - prepare element
  */
 export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
-  var element: any = instance.clone()
+  var element: any = cloneDeep(instance)
   element.grandParent = ElementGrandParents.PRINT
 
   switch (element.type) {

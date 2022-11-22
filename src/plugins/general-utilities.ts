@@ -212,15 +212,6 @@ export function instnaceMerge<T>(instance: any, ...sources: any[]): T {
 }
 
 /**
- * Deep clone given object.
- * @param {Object} target - Target object.
- * @return {Object} - Cloned object.
- */
-export function clone<T>(target: T): T {
-  return JSON.parse(JSON.stringify(target))
-}
-
-/**
 * encode given string to base64.
 * @param {String} str - given string
 * @return {*} - base64
