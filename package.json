@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.4.0",
+    "@types/lodash": "^4.14.189",
     "@vitejs/plugin-vue": "^2.3.3",
     "@vitest/ui": "^0.24.3",
     "@vue/compiler-sfc": "^3.2.36",
