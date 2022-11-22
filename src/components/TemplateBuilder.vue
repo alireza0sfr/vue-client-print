@@ -1401,6 +1401,12 @@
 
 				if (isChild) {
 
+					if (!parentElement!.configs.selectedDataSet) {
+						var text = this._$t('template-builder.elements.validators.select-dataset-first')
+						alert(text)
+						return false
+					}
+
 					if (DISSALLOWED_CHILDTYPES.includes(element.type)) {
 						var type = this._$t(`template-builder.elements.${element.type}`)
 						var text = this._$t('template-builder.elements.validators.element-type-cant-be-child', { type: type })

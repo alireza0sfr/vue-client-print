@@ -55,7 +55,8 @@
           "child-cant-be-parent": "Can't add a child to a child element",
           "dataset-is-empty": "Dataset is empty",
           "bindingobject-is-empty": "Bindingobject is empty",
-          "pagecounter-parent": "Pagecounter must be added to Header or Footer only"
+          "pagecounter-parent": "Pagecounter must be added to Header or Footer only",
+          "select-dataset-first": "Select repeator's dataset first"
         },
         "settings": "{elementType}'s Settings",
         "name": "Elements",
