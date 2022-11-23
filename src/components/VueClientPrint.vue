@@ -1,7 +1,7 @@
 <template>
-	<div class="__VCP__" id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :options="settings" />
-		<PrintPreview ref="printPreview" :options="settings">
+	<div class="__VCP__" id="VCP">
+		<TemplateBuilder v-if="locals.appState === locals.AppStates.TEMPLATEBUILDER" ref="TemplateBuilder" :options="settings" />
+		<PrintPreview v-else-if="locals.appState === locals.AppStates.PRINTPREVIEW" ref="printPreview" :options="settings">
 			<template #printDataChild>
 				<slot name="printData" class="printData"></slot>
 			</template>
@@ -15,6 +15,7 @@
 	import { defineComponent } from 'vue'
 	import { IBindingObject } from '~/interfaces/elements'
 	import { prepareDataSets } from '~/plugins/element-utilities'
+	import { AppStates } from '~/enums/general'
 	import DefaultLogo from '@/assets/images/logo.png'
 
 	import { useVariablesStore } from '~/stores/variables'
@@ -75,6 +76,10 @@
 		},
 		data() {
 			return {
+				locals: {
+					appState: AppStates.EMPTY,
+					AppStates: AppStates,
+				},
 				settings: getDefaultSettings(),
 				configs: {
 					maximumFileSize: 1000, // Maximum file size in KB
@@ -92,18 +97,24 @@
 			 * @return {void} - void
 			 */
 			displayTemplateBuilder(json: ISettings, callback: (val: ISettings) => void): void {
-				json.callback = callback
+				this.locals.appState = AppStates.TEMPLATEBUILDER
 
-				const TB: any = this.$refs.TemplateBuilder
-				this.settings = json
-				TB.settingsInitFunc()
-				TB.showModal()
+				this.$nextTick(() => {
+					json.callback = callback
+					const TB: any = this.$refs.TemplateBuilder
+					this.settings = json
+					TB.settingsInitFunc()
+					TB.showModal()
+				})
 			},
 			displayPrintPreview(json: ISettings): void {
-				this.settings = prepareSettings(this.settings, json)
+				this.locals.appState = AppStates.PRINTPREVIEW
 
-				const PP: any = this.$refs.printPreview
-				PP.showModal()
+				this.$nextTick(() => {
+					this.settings = prepareSettings(this.settings, json)
+					const PP: any = this.$refs.printPreview
+					PP.showModal()
+				})
 			},
 		}
 	})

@@ -23,3 +23,9 @@ export enum Tabs {
   VARIABLES = 'variables',
   OTHERS = 'others'
 }
+
+export enum AppStates {
+  TEMPLATEBUILDER = 'templatebuilder',
+  PRINTPREVIEW = 'printpreview',
+  EMPTY = ''
+}
