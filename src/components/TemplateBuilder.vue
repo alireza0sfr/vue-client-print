@@ -762,7 +762,6 @@
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
-			dataSets: { type: Object, default: () => ({}) },
 		},
 		computed: {
 			bindingObjectComputed() {
@@ -838,8 +837,7 @@
 				// deep: true,
 				immediate: true,
 				handler(val) {
-					console.log('settings TB')
-					this.settings = prepareSettings(this.settings, val, this.dataSets)
+					this.settings = prepareSettings(this.settings, val)
 				},
 			}
 		},

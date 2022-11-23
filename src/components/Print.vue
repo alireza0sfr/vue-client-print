@@ -1,6 +1,6 @@
 <template>
 	<div class="__VCP__" id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :bindingObject="bindingObject" :dataSets="locals.preparedDataSets" :options="locals.templateBuilderData" />
+		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
 
 		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
@@ -98,10 +98,12 @@
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
 	import { useBindingObjectStore } from '~/stores/binding-object'
+	import { useDataSetStore } from '~/stores/dataset'
 
 	const variablesStore = useVariablesStore()
 	const generalStore = useGeneralStore()
 	const bindingObjectStore = useBindingObjectStore()
+	const dataSetStore = useDataSetStore()
 
 	export default {
 		name: "Print",
@@ -121,7 +123,6 @@
 					pageBodiesSizes: [] as number[],
 					pageFootersSizes: [] as number[],
 					pageHeadersSizes: [] as number[],
-					preparedDataSets: null as IDatasets | null
 				},
 				settings: getDefaultSettings(),
 				configs: {
@@ -152,7 +153,7 @@
 			dataSets: {
 				immediate: true,
 				handler(val) {
-					this.locals.preparedDataSets = prepareDataSets(val)
+					dataSetStore.update(prepareDataSets(val))
 				},
 			},
 			variables: {
@@ -386,7 +387,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				this.settings = prepareSettings(this.settings, json, this.locals.preparedDataSets as IDatasets)
+				this.settings = prepareSettings(this.settings, json)
 				document.getElementById("printModal")!.style.display = "block"
 				document.getElementById('loadingModal')!.style.display = 'block'
 
@@ -406,7 +407,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal!.style.display = "none"
 				this.templateBuilder(this.settings, (val: ISettings): void => {
-					this.settings = prepareSettings(this.settings, val, this.locals.preparedDataSets as IDatasets)
+					this.settings = prepareSettings(this.settings, val)
 					this.printPreview(this.settings)
 				})
 			},
