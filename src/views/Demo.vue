@@ -5,7 +5,7 @@
 		|
 		<a @click="templateBuilder()" href="#" :title="_$t('template-builder.name')">{{ _$t('template-builder.name') }}</a>
 
-		<Print ref="print" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configurations="configs">
+		<VCP ref="vcp" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configurations="configs">
 			<template v-slot:printData>
 				<table>
 					<thead>
@@ -33,16 +33,16 @@
 					</tbody>
 				</table>
 			</template>
-		</Print>
+		</VCP>
 	</div>
 </template>
 
 <script>
-	import Print from '~/components/Print.vue'
+	import VCP from '~/components/VueClientPrint.vue'
 	export default {
 		name: "DemoHome",
 		components: {
-			Print,
+			VCP,
 		},
 		data() {
 			return {
@@ -285,12 +285,12 @@
 		},
 		methods: {
 			templateBuilder() {
-				this.$refs.print.templateBuilder(this.printOptions, (json) => {
+				this.$refs.vcp.displayTemplateBuilder(this.printOptions, (json) => {
 					this.printOptions = json
 				})
 			},
 			printPreview() {
-				this.$refs.print.printPreview(this.printOptions)
+				this.$refs.vcp.displayPrintPreview(this.printOptions)
 			},
 		},
 	};

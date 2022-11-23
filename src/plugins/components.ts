@@ -12,7 +12,8 @@ import Column from '~/components/elements/DataSet/Column.vue'
 import Row from '~/components/elements/DataSet/Row.vue'
 
 // general
-import Print from '~/components/Print.vue'
+import VCP from '~/components/VueClientPrint.vue'
+import PrintPreview from '~/components/PrintPreview.vue'
 import TemplateBuilder from '~/components/TemplateBuilder.vue'
 import Resizers from '~/components/utils/Resizers.vue'
 import SectionTag from '~/components/utils/SectionTag.vue'
@@ -37,7 +38,8 @@ export default function componentRegisterer(App: any): void {
   App.component(ElementTypes.ROW, Row)
 
   // general
-  App.component('Print', Print)
+  App.component('VCP', VCP)
+  App.component('PrintPreview', PrintPreview)
   App.component('TemplateBuilder', TemplateBuilder)
   App.component('Resizers', Resizers)
   App.component('SectionTag', SectionTag)

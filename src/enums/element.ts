@@ -25,7 +25,7 @@ export enum ElementParents {
 
 export enum ElementGrandParents {
   TEMPLATEBUILDER = 'templatebuilder',
-  PRINT = 'print'
+  PRINTPREVIEW = 'printpreview'
 }
 
 export enum StylesTargets {

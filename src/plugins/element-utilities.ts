@@ -444,7 +444,7 @@ export class DataSetLikeElement extends Element {
           value: rows[index][key]
         })
 
-      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINT, {}, configsRow)
+      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINTPREVIEW, {}, configsRow)
     }
 
     return preparedRows
@@ -650,7 +650,7 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
  */
 export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
   var element: any = cloneDeep(instance)
-  element.grandParent = ElementGrandParents.PRINT
+  element.grandParent = ElementGrandParents.PRINTPREVIEW
 
   switch (element.type) {
 

@@ -1,7 +1,5 @@
 <template>
-	<div class="__VCP__" id="printPage">
-		<TemplateBuilder ref="TemplateBuilder" :options="locals.templateBuilderData" />
-
+	<div id="printPage">
 		<!-- Preparing body to create canvas -->
 		<div class="slotWrapper">
 			<div :style="{width: settings.defaultWidthOfPaper + 'in'}">
@@ -17,7 +15,7 @@
 							<component v-for="(element, index) in settings.body.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
 						</div>
 
-						<slot v-else class="printData" name="printData"></slot>
+						<slot v-else class="printData" name="printDataChild"></slot>
 
 						<div class="body-render-section" :style="[{height: settings.afterBody.height + 'in'}, settings.afterBody.styles]">
 							<component v-for="(element, index) in settings.afterBody.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index)" />
@@ -32,9 +30,6 @@
 			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
 				<div :dir="settings.pageDirections" class=" print-modal-header">
 					<div style="display: flex">
-						<!-- <a @click="editWhileInPreview()" :title="_$t('print.edit')" class="modal-icon" href="#">
-							<img src="@/assets/images/edit.png" />
-						</a> -->
 						<a href="#" @click="printForm()" :title="_$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
@@ -86,80 +81,34 @@
 </template>
 
 <script lang="ts">
-	import { IBindingObject, IElement } from '~/interfaces/elements'
-	import { IDatasets } from '~/interfaces/datasets'
-	import { IConfigs, ISettings } from '~/interfaces/general'
-	import { prepareDataSets, prepareElementInstance } from '~/plugins/element-utilities'
+	import { IElement } from '~/interfaces/elements'
+	import { prepareElementInstance } from '~/plugins/element-utilities'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
-	import { convert2Pixels, convert2Inches, merge, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
-	import DefaultLogo from '@/assets/images/logo.png'
-
-	import { useVariablesStore } from '~/stores/variables'
-	import { useGeneralStore } from '~/stores/general'
-	import { useBindingObjectStore } from '~/stores/binding-object'
-	import { useDataSetStore } from '~/stores/dataset'
-
-	const variablesStore = useVariablesStore()
-	const generalStore = useGeneralStore()
-	const bindingObjectStore = useBindingObjectStore()
-	const dataSetStore = useDataSetStore()
+	import { convert2Pixels, convert2Inches, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
 
 	export default {
 		name: "Print",
 		props: {
 			options: { type: Object },
-			bindingObject: Object as () => IBindingObject,
-			dataSets: { type: Object, default: () => ({}) },
-			variables: { type: Array },
-			configurations: { type: Object },
 		},
 		emits: ['print-success', 'print-error', 'preview-success', 'preview-failed'],
 		data() {
 			return {
 				locals: {
 					totalPages: 0,
-					templateBuilderData: {},
 					pageBodiesSizes: [] as number[],
 					pageFootersSizes: [] as number[],
 					pageHeadersSizes: [] as number[],
 				},
 				settings: getDefaultSettings(),
-				configs: {
-					maximumFileSize: 1000, // Maximum file size in KB
-					language: 'en',
-					imageSrc: DefaultLogo,
-					direction: 'rtl'
-				} as IConfigs
 			}
 		},
 		watch: {
-			bindingObject: {
+			options: {
 				immediate: true,
 				handler(val) {
-					bindingObjectStore.update(val)
-				}
-			},
-			configurations: {
-				immediate: true,
-				handler(val) {
-					this.configs = merge(this.configs, val)
-					generalStore.updateByKey('configurations', this.configs)
-
-					// @ts-ignore
-					this._$i18n.locale = this.configs.language
-				}
-			},
-			dataSets: {
-				immediate: true,
-				handler(val) {
-					dataSetStore.update(prepareDataSets(val))
-				},
-			},
-			variables: {
-				immediate: true,
-				handler(val) {
-					variablesStore.updateVariables(val)
+					this.settings = prepareSettings(this.settings, val)
 				},
 			}
 		},
@@ -366,19 +315,11 @@
 				})
 			},
 
-			/**
-			 * By Triggering this func template builder modal will be displayed.
-			 * @param {object} json - settings json
-			 * @param {Function} callback - callback function
-			 * @return {void} - void
-			 */
-			templateBuilder(json: ISettings, callback: (val: ISettings) => void): void {
-				json.callback = callback
+			showModal() {
+				document.getElementById("printModal")!.style.display = "block"
+				document.getElementById('loadingModal')!.style.display = 'block'
 
-				const TB: any = this.$refs.TemplateBuilder
-				this.locals.templateBuilderData = json
-				TB.settingsInitFunc()
-				TB.showModal()
+				this.printPreview()
 			},
 
 			/**
@@ -386,35 +327,13 @@
 			 * @param {object} json - settings json
 			 * @return {void} - void
 			 */
-			printPreview(json: ISettings): void {
-				this.settings = prepareSettings(this.settings, json)
-				document.getElementById("printModal")!.style.display = "block"
-				document.getElementById('loadingModal')!.style.display = 'block'
-
+			printPreview(): void {
 				setTimeout(() => {
 					this.convert2Image()
 						.then(res => this.$emit('preview-success', res))
 						.then(err => this.$emit('preview-failed', err))
 				}, 100)
 			},
-
-			/**
-			 * Shows template builder in print preview.
-			 * @return {void} - void
-			 */
-			editWhileInPreview(): void {
-				//TODO should change element granParent between print and TB
-				let printModal = document.getElementById("printModal")
-				printModal!.style.display = "none"
-				this.templateBuilder(this.settings, (val: ISettings): void => {
-					this.settings = prepareSettings(this.settings, val)
-					this.printPreview(this.settings)
-				})
-			},
 		},
 	};
 </script>
-
-<style lang="less">
-	@import "~/styles/print";
-</style>
