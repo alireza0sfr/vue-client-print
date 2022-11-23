@@ -751,16 +751,17 @@
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
+	import { useGeneralStore } from '~/stores/general'
 	import { IColumn, IDataset } from '@/interfaces/datasets'
 	import KeyboardHandler from '~/plugins/keyboard-handler'
 
 	const variablesStore = useVariablesStore()
+	const generalStore = useGeneralStore()
 
 	export default {
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
-			configurations: Object,
 			bindingObject: Object,
 			dataSets: { type: Object, default: () => ({}) },
 		},
@@ -838,7 +839,7 @@
 				// deep: true,
 				immediate: true,
 				handler(val) {
-					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.dataSets, this.configurations)
+					this.settings = prepareSettings(this.settings, val, this.bindingObject, this.dataSets)
 				},
 			}
 		},
@@ -1317,7 +1318,7 @@
 						break
 
 					case ElementTypes.IMAGEELEMENT:
-						configs = { imageSrc: this.configurations!.imageSrc }
+						configs = { imageSrc: generalStore.getByKey('configurations').imageSrc }
 						break
 
 					case ElementTypes.REPEATOR:
@@ -1465,7 +1466,7 @@
 			 * @return {void} - void
 			 */
 			onFileChange(type: fileEntryTypes, variable: IElement): void {
-				let maximumFileSize = this.configurations.maximumFileSize * 1000
+				let maximumFileSize = generalStore.getByKey('configurations').maximumFileSize * 1000
 				var file
 
 				const fileValidator = (file: any, maximumFileSize: number, validTypes: string[]) => {

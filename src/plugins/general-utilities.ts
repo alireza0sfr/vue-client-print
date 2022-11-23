@@ -1,13 +1,15 @@
 import { IDatasets } from '@/interfaces/datasets'
 import { IBindingObject } from '~/interfaces/elements'
-import { IConfigs, ISettings } from '~/interfaces/general'
+import { ISettings } from '~/interfaces/general'
 
 import piniaInstance from '~/plugins/pinia-instance'
 import { useBindingObjectStore } from '~/stores/binding-object'
 import { useDataSetStore } from '~/stores/dataset'
+import { useGeneralStore } from '~/stores/general'
 
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
 const dataSetStore = useDataSetStore(piniaInstance)
+const generalStore = useGeneralStore(piniaInstance)
 
 /**
  * Converts nested object to key value pair to be used in bindingObject.
@@ -308,10 +310,10 @@ export function getDefaultSettings(): ISettings {
  * @param {Object} val - new Settings
  * @return {Object} - merged new settings and old/default settings
  */
-export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets, configs: IConfigs): ISettings {
+export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets): ISettings {
   bindingObjectStore.update(bindingObject)
   dataSetStore.update(dataSets)
   var newSettings = merge<ISettings>(settings, updatedSettings)
-  newSettings.pageDirections = configs.direction
+  newSettings.pageDirections = generalStore.getByKey('configurations').direction
   return newSettings
 }
