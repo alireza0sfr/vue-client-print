@@ -310,8 +310,7 @@ export function getDefaultSettings(): ISettings {
  * @param {Object} val - new Settings
  * @return {Object} - merged new settings and old/default settings
  */
-export function prepareSettings(settings: ISettings, updatedSettings: ISettings, bindingObject: IBindingObject, dataSets: IDatasets): ISettings {
-  bindingObjectStore.update(bindingObject)
+export function prepareSettings(settings: ISettings, updatedSettings: ISettings, dataSets: IDatasets): ISettings {
   dataSetStore.update(dataSets)
   var newSettings = merge<ISettings>(settings, updatedSettings)
   newSettings.pageDirections = generalStore.getByKey('configurations').direction

@@ -94,11 +94,14 @@
 	import domtoimage from 'dom-to-image'
 	import { convert2Pixels, convert2Inches, merge, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
 	import DefaultLogo from '@/assets/images/logo.png'
+
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
+	import { useBindingObjectStore } from '~/stores/binding-object'
 
 	const variablesStore = useVariablesStore()
 	const generalStore = useGeneralStore()
+	const bindingObjectStore = useBindingObjectStore()
 
 	export default {
 		name: "Print",
@@ -130,11 +133,20 @@
 			}
 		},
 		watch: {
+			bindingObject: {
+				immediate: true,
+				handler(val) {
+					bindingObjectStore.update(val)
+				}
+			},
 			configurations: {
 				immediate: true,
 				handler(val) {
 					this.configs = merge(this.configs, val)
 					generalStore.updateByKey('configurations', this.configs)
+
+					// @ts-ignore
+					this._$i18n.locale = this.configs.language
 				}
 			},
 			dataSets: {
@@ -149,9 +161,6 @@
 					variablesStore.updateVariables(val)
 				},
 			}
-		},
-		mounted() {
-			this.syncLanguage()
 		},
 		methods: {
 			prepareElementInstance(element: IElement, index: number): IElement {
@@ -206,14 +215,6 @@
 					onLoadingEnd: (res: any) => this.$emit('print-success', res),
 					onError: (err) => this.$emit('print-error', err)
 				})
-			},
-
-			/**
-			 * sync system language with given configs.
-			 */
-			syncLanguage(): void {
-				// @ts-ignore
-				this._$i18n.locale = this.configs.language
 			},
 
 			/**
@@ -385,7 +386,7 @@
 			 * @return {void} - void
 			 */
 			printPreview(json: ISettings): void {
-				this.settings = prepareSettings(this.settings, json, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets)
+				this.settings = prepareSettings(this.settings, json, this.locals.preparedDataSets as IDatasets)
 				document.getElementById("printModal")!.style.display = "block"
 				document.getElementById('loadingModal')!.style.display = 'block'
 
@@ -405,7 +406,7 @@
 				let printModal = document.getElementById("printModal")
 				printModal!.style.display = "none"
 				this.templateBuilder(this.settings, (val: ISettings): void => {
-					this.settings = prepareSettings(this.settings, val, this.bindingObject as IBindingObject, this.locals.preparedDataSets as IDatasets)
+					this.settings = prepareSettings(this.settings, val, this.locals.preparedDataSets as IDatasets)
 					this.printPreview(this.settings)
 				})
 			},
