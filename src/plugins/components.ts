@@ -14,10 +14,10 @@ import Row from '~/components/elements/DataSet/Row.vue'
 // general
 import Print from '~/components/Print.vue'
 import TemplateBuilder from '~/components/TemplateBuilder.vue'
-import Resizers from '~/components/elements/Resizers.vue'
-import SectionTag from '~/components/SectionTag.vue'
-import Toggler from '~/components/Toggler.vue'
-import Section from '~/components/Section.vue'
+import Resizers from '~/components/utils/Resizers.vue'
+import SectionTag from '~/components/utils/SectionTag.vue'
+import Toggler from '~/components/utils/Toggler.vue'
+import Section from '~/components/utils/Section.vue'
 
 import { ElementTypes } from '~/enums/element'
 
