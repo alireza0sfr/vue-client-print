@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-	import { getDefaultSettings, merge, prepareSettings } from '~/plugins/general-utilities'
+	import { getDefaultSettings, merge, prepareSettings, validateJson } from '~/plugins/general-utilities'
 	import { IConfigs, ISettings } from '~/interfaces/general'
 	import { defineComponent } from 'vue'
 	import { IBindingObject } from '~/interfaces/elements'
@@ -99,7 +99,7 @@
 			 */
 			displayTemplateBuilder(callback: (val: ISettings) => void): void {
 				this.locals.appState = AppStates.TEMPLATEBUILDER
-				
+
 				this.$nextTick(() => {
 					this.settings.callback = callback
 					const TB: any = this.$refs.TemplateBuilder
@@ -108,6 +108,14 @@
 				})
 			},
 			displayPrintPreview(): void {
+
+				if (!validateJson(this.settings)) {
+					var text = this._$t('validators.json-is-not-validated')
+					alert(text)
+					return
+				}
+
+
 				this.locals.appState = AppStates.PRINTPREVIEW
 				this.$nextTick(() => {
 					const PP: any = this.$refs.printPreview

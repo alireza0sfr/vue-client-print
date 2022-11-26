@@ -1,14 +1,12 @@
-import { IDatasets } from '@/interfaces/datasets'
 import { IBindingObject } from '~/interfaces/elements'
-import { ISettings } from '~/interfaces/general'
+import { ISettings, IJson } from '~/interfaces/general'
+import { TemplateBuilderSections } from '~/enums/general'
+import { DataSetLikeElement } from '~/plugins/element-utilities'
+import i18nInstance from '~/plugins/i18n'
 
 import piniaInstance from '~/plugins/pinia-instance'
-import { useBindingObjectStore } from '~/stores/binding-object'
-import { useDataSetStore } from '~/stores/dataset'
 import { useGeneralStore } from '~/stores/general'
 
-const bindingObjectStore = useBindingObjectStore(piniaInstance)
-const dataSetStore = useDataSetStore(piniaInstance)
 const generalStore = useGeneralStore(piniaInstance)
 
 /**
@@ -315,4 +313,27 @@ export function prepareSettings(settings: ISettings, updatedSettings: ISettings)
   var newSettings = merge<ISettings>(settings, updatedSettings)
   newSettings.pageDirections = generalStore.getByKey('configurations').direction
   return newSettings
+}
+
+/**
+ * settings validator.
+ * @param {IJson} settings - settings
+ * @return {Boolean} - wether it's valid 
+ */
+
+export function validateJson(settings: IJson): boolean {
+  
+  var sections = Object.values(TemplateBuilderSections)
+  
+  for (let section of sections) {
+    var dataSetLikeElements = settings[section].elements.filter(x => x instanceof DataSetLikeElement)
+    for (var element of dataSetLikeElements) {
+      if (!element.configs.selectedDataSet) {
+        var text = i18nInstance.global.t('template-builder.alerts.select-dataset')
+        alert(text)
+        return false
+      }
+    }
+  }
+  return true
 }

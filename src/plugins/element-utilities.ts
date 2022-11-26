@@ -850,7 +850,7 @@ export function createInstnaceFromObject(element: IElement) {
   return createElement(element.type, element.parent, element.grandParent, element.states, element.styles, element.configs, element.repeatorId)
 }
 
-export function findElementsParentInstance(settings: ISettings | any, element: IElement): IElement {
+export function findElementsParentInstance(settings: ISettings | any, element: IElement): IDataSetLikeElement {
   var elements = settings[element.parent].elements
   var repeatorIndex = elements.findIndex((x: IElement) => x.id === element.repeatorId)
   return elements[repeatorIndex]

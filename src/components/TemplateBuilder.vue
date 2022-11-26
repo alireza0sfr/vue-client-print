@@ -748,7 +748,7 @@
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance } from '~/plugins/element-utilities'
-	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
+	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
@@ -1003,33 +1003,13 @@
 			},
 
 			/**
-			 * settings validator.
-			 * @param {IJson} settings - settings
-			 * @return {Boolean} - wether it's valid 
-			 */
-
-			validateJson(settings: IJson): boolean {
-				for (let section of this.locals.sections) {
-					var dataSetLikeElements = settings[section].elements.filter(x => x instanceof DataSetLikeElement)
-					for (var element of dataSetLikeElements) {
-						if (!element.configs.selectedDataSet) {
-							var text = this._$t('template-builder.alerts.select-dataset')
-							alert(text)
-							return false
-						}
-					}
-				}
-				return true
-			},
-
-			/**
 			 * Save Changes on TB close.
 			 * @return {Object} - json file
 			 */
 			save(): void {
 				let json: IJson = this.export2Json()
 
-				if (!this.validateJson(json))
+				if (!validateJson(json))
 					return
 
 				if (this.settings.callback)

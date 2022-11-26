@@ -135,5 +135,8 @@
           "right-to-left": "Right To Left"
         }
       }
+    },
+    "validators": {
+      "json-is-not-validated": "File is not validated!"
     }
   }

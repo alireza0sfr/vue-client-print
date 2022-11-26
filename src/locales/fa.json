@@ -135,5 +135,8 @@
           "right-to-left": "راست به چپ"
         }
       }
+    },
+    "validators": {
+      "json-is-not-validated": "فایل صحیح نمیباشد!"
     }
   }
