@@ -86,7 +86,7 @@
 			'element.configs.selectedDataSet': {
 				immediate: true,
 				handler(val) {
-					if (val && this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+					if (val && this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER && this.element.states.isNew)
 						this.element.configs.dataSets[val].configs.columns = []
 				}
 			},

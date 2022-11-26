@@ -83,8 +83,6 @@ export class Element extends EmptyElement implements IElement {
     this.makeResizable()
     this.makeDragable()
     this.makeClickable()
-
-    this.states.isNew = false
   }
 
   merge(...sources: any[]) {
@@ -659,7 +657,13 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
  * @return {IElement} - prepare element
  */
 export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
+
+  // stuff to be changed both in element and it's refrence to instance (in TB)
+  instance.states.isNew = false
+
   var element: any = cloneDeep(instance)
+
+  // stuff that only affect cloned element not refrence in TB
   element.grandParent = ElementGrandParents.PRINTPREVIEW
 
   switch (element.type) {
