@@ -15,10 +15,9 @@ export interface IEmptyElement {
   id: typeof emptyId
   parent: ElementParents
   grandParent: ElementGrandParents
-  isNew: boolean
+  states: IElementStates
   styles: any
   configs: any
-  isChild: boolean
   repeatorId?: string
 }
 
@@ -62,4 +61,9 @@ export interface IPrepareInstanceExtraArgs {
   currentPage?: number
   totalPages?: number
   repeatorInstance?: IDataSetLikeElement
+}
+
+export interface IElementStates {
+  isNew: boolean
+  isChild: boolean
 }

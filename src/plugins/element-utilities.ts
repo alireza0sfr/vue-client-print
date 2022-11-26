@@ -1,4 +1,4 @@
-import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, IBindingObjectLikeElement, IDataSetLikeElement } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, IElementStates, IBindingObjectLikeElement, IDataSetLikeElement } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -21,10 +21,12 @@ export class EmptyElement implements IEmptyElement {
   id: string = emptyId
   parent: ElementParents = ElementParents.EMPTY
   grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
-  isNew: boolean = true
+  states: IElementStates = {
+    isNew: true,
+    isChild: false
+  }
   styles: any = {}
   configs: any = {}
-  isChild: boolean = false
   repeatorId?: string = ''
 }
 
@@ -47,7 +49,6 @@ export class Element extends EmptyElement implements IElement {
     }
 
     this.styles = merge(baseStyles, styles)
-    this.isChild = false
     this.repeatorId = repeatorId
   }
 
@@ -80,7 +81,7 @@ export class Element extends EmptyElement implements IElement {
     this.makeDragable()
     this.makeClickable()
 
-    this.isNew = false
+    this.states.isNew = false
   }
 
   merge(...sources: any[]) {
@@ -95,7 +96,7 @@ export class Element extends EmptyElement implements IElement {
   initStyles(styles: any = this.styles): object {
     const EXCLUDEDSTYLES = ['color', 'backgroundColor']
 
-    if (this.isNew) {
+    if (this.states.isNew) {
 
       // fixing center of element to mouse position
       var cor = this.getCoordinates('float')
@@ -464,7 +465,7 @@ export class DataSetLikeElement extends Element {
   computeDatasets(settings?: ISettings | any): IDatasets | null {
 
     let additional: any = {}
-    if (this.repeatorId && this.isChild && settings) {
+    if (this.repeatorId && this.states.isChild && settings) {
 
       var parentSection = this.parent
       var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
@@ -517,7 +518,7 @@ export class BindingObjectLikeElement extends Element {
     let additional: any = {}
 
     // it's repeator's child
-    if (this.repeatorId && this.isChild && settings) {
+    if (this.repeatorId && this.states.isChild && settings) {
       var parentSection = this.parent
       var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
       var parentElement = settings[parentSection].elements[repeatorIndex]

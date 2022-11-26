@@ -1362,7 +1362,7 @@
 				elementInstance = this.adjustElementToPage(elementInstance, parentId)
 
 				if (isChild) { // Element is dropped on another element.
-					elementInstance.isChild = true
+					elementInstance.states.isChild = true
 					elementInstance.repeatorId = parentElement!.id
 					parentElement!.configs.appendedElements.push(elementInstance)
 				}
@@ -1412,7 +1412,7 @@
 					}
 
 					// if child element wants to be parent element
-					if (parentElement!.isChild) {
+					if (parentElement!.states.isChild) {
 						var text = this._$t('template-builder.elements.validators.child-cant-be-parent')
 						alert(text)
 						return false
@@ -1707,7 +1707,7 @@
 							if (parent === ElementParents.EMPTY || !array.length)
 								return
 
-							if (this.locals.selectedElement.isChild) { // it's a repeator's child element.
+							if (this.locals.selectedElement.states.isChild) { // it's a repeator's child element.
 
 								let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId) // repeator index in elements array
 
@@ -1783,7 +1783,7 @@
 
 				var array = this.settings[section].elements
 
-				if (this.locals.selectedElement.isChild) { // it's a repeator.
+				if (this.locals.selectedElement.states.isChild) { // it's a repeator.
 					let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId)
 					if (index > -1) {
 						let repeator = array[index]
