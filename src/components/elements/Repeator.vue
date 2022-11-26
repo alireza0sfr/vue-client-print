@@ -25,7 +25,7 @@
 	import { IDataSetLikeElement, IElement } from '~/interfaces/elements'
 	import { isEmpty, toFloatVal } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
-	import { emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
+	import { DataSetLikeElement, emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
 	import { IDatasets } from '@/interfaces/datasets'
 	export default defineComponent({
 		name: ElementTypes.REPEATOR,
@@ -71,6 +71,19 @@
 				handler(val) {
 					this.element = val.merge(this.element)
 				},
+			},
+			'element.configs.selectedDataSet': {
+				immediate: true,
+				handler(val) {
+					if (val && this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER) {
+
+						var dataSetElements = this.element.configs.appendedElements.filter((x: IElement) => x instanceof DataSetLikeElement && x.type === ElementTypes.DATASET)
+
+						for (var element of dataSetElements)
+							if (element.configs.selectedDataSet.includes('-')) // if has refrence to parent selected dataset
+								element.configs.selectedDataSet = ''
+					}
+				}
 			},
 		},
 		data() {
