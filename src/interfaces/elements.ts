@@ -15,6 +15,7 @@ export interface IEmptyElement {
   id: typeof emptyId
   parent: ElementParents
   grandParent: ElementGrandParents
+  isNew: boolean
   styles: any
   configs: any
   isChild: boolean

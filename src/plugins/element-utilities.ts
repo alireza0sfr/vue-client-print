@@ -21,6 +21,7 @@ export class EmptyElement implements IEmptyElement {
   id: string = emptyId
   parent: ElementParents = ElementParents.EMPTY
   grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
+  isNew: boolean = true
   styles: any = {}
   configs: any = {}
   isChild: boolean = false
@@ -78,6 +79,8 @@ export class Element extends EmptyElement implements IElement {
     this.makeResizable()
     this.makeDragable()
     this.makeClickable()
+
+    this.isNew = false
   }
 
   merge(...sources: any[]) {
@@ -90,15 +93,18 @@ export class Element extends EmptyElement implements IElement {
    * @return {Object} - styles with !important
    */
   initStyles(styles: any = this.styles): object {
-
-    // fixing center of element to mouse position
-    var cor = this.getCoordinates('float')
-    var newLeft = toFloatVal(this.styles.left) - (Number(cor.width) / 2)
-    var newTop = toFloatVal(this.styles.top) - (Number(cor.height) / 2)
-    this.styles.left = newLeft + 'px'
-    this.styles.top = newTop + 'px'
-
     const EXCLUDEDSTYLES = ['color', 'backgroundColor']
+
+    if (this.isNew) {
+
+      // fixing center of element to mouse position
+      var cor = this.getCoordinates('float')
+      var newLeft = toFloatVal(this.styles.left) - (Number(cor.width) / 2)
+      var newTop = toFloatVal(this.styles.top) - (Number(cor.height) / 2)
+      this.styles.left = newLeft + 'px'
+      this.styles.top = newTop + 'px'
+
+    }
 
     for (let key in styles)
       if (styles[key].indexOf('!important') === -1 && !EXCLUDEDSTYLES.includes(key))
