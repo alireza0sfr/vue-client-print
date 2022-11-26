@@ -48,19 +48,18 @@ export interface IVariable {
 
 export interface IDataSetLikeElement extends IElement {
   prepareDataSetRows(rows: IRawRow[], columns: IColumn[]): IRow[]
-  computeDatasets(settings?: ISettings | any): IDatasets | null
+  computeDatasets(parentElement?: IElement): IDatasets
 }
 
 export interface IBindingObjectLikeElement extends IElement {
-  computeBindingObject(settings?: ISettings | any): IBindingObject
+  computeBindingObject(parentElement?: IElement): IBindingObject
 }
 
 export interface IPrepareInstanceExtraArgs {
   index: number // elementIndex
-  settings: ISettings,
+  repeatorInstance: IDataSetLikeElement
   currentPage?: number
   totalPages?: number
-  repeatorInstance?: IDataSetLikeElement
 }
 
 export interface IElementStates {

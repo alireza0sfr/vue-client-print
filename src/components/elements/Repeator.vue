@@ -59,7 +59,7 @@
 		},
 		created() {
 			if (isEmpty(this.element.configs.dataSets))
-				this.element.configs.dataSets = this.element.computeDatasets(this.element.configs.printSettings) || {}
+				this.element.configs.dataSets = this.element.computeDatasets(this.element) || {}
 		},
 		mounted() {
 			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
@@ -109,7 +109,6 @@
 			prepareElementInstance(appendedElement: IElement, index: number): IElement {
 				var extra = {
 					index: index,
-					settings: this.element.configs.printSettings, // print settings stored in repeator
 					repeatorInstance: this.element
 				}
 

@@ -747,7 +747,7 @@
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES } from '~/plugins/element-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
@@ -767,11 +767,11 @@
 		computed: {
 			bindingObjectComputed() {
 				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
-					return this.locals.selectedElement.computeBindingObject(this.settings)
+					return this.locals.selectedElement.computeBindingObject(findElementsParentInstance(this.settings, this.locals.selectedElement))
 			},
 			dataSetComputed() {
 				if (this.locals.selectedElement instanceof DataSetLikeElement)
-					return this.locals.selectedElement.computeDatasets(this.settings)
+					return this.locals.selectedElement.computeDatasets(findElementsParentInstance(this.settings, this.locals.selectedElement))
 			},
 			variablesList() {
 				return variablesStore.getVarialbesList
@@ -1320,11 +1320,6 @@
 						configs = { imageSrc: generalStore.getByKey('configurations').imageSrc }
 						break
 
-					case ElementTypes.REPEATOR:
-					case ElementTypes.DATASET:
-						configs = { printSettings: this.settings }
-						break
-
 					default:
 						break
 				}
@@ -1366,6 +1361,7 @@
 					elementInstance = cloneDeep(elementInstance) // removing refrence to other instances therefore the modification only affects this instance
 					elementInstance.states.isChild = true
 					elementInstance.repeatorId = parentElement!.id
+					elementInstance.configs.repeatorInstance = parentElement
 					parentElement!.configs.appendedElements.push(elementInstance)
 				}
 				else {
@@ -1379,13 +1375,13 @@
 
 				const DISSALLOWED_CHILDTYPES = [ElementTypes.PAGECOUNTER, ElementTypes.REPEATOR]
 
-				if (element instanceof DataSetLikeElement && isEmpty(element.computeDatasets(this.settings))) {
+				if (element instanceof DataSetLikeElement && isEmpty(element.computeDatasets(parentElement))) {
 					var text = this._$t('template-builder.elements.validators.dataset-is-empty')
 					alert(text)
 					return false
 				}
 
-				if (element instanceof BindingObjectLikeElement && isEmpty(element.computeBindingObject(this.settings))) {
+				if (element instanceof BindingObjectLikeElement && isEmpty(element.computeBindingObject(parentElement))) {
 					var text = this._$t('template-builder.elements.validators.bindingobject-is-empty')
 					alert(text)
 					return false

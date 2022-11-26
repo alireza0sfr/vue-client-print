@@ -460,17 +460,13 @@ export class DataSetLikeElement extends Element {
 
   /**
    * prepare datasets data based on repeator's selected dataset
-   * @param {ISettings} settings - app settings
+   * @param {IElement} parentElement - parent's instance
    * @return {Object} - preapred bindingObject options
    */
-  computeDatasets(settings?: ISettings | any): IDatasets | null {
+  computeDatasets(parentElement: IElement): IDatasets {
 
     let additional: any = {}
-    if (this.repeatorId && this.states.isChild && settings) {
-
-      var parentSection = this.parent
-      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
-      var parentElement = settings[parentSection].elements[repeatorIndex]
+    if (this.repeatorId && this.states.isChild && parentElement) {
 
       // if user has selected a dataset
       if (!isEmpty(parentElement.configs.dataSets) && !isEmpty(parentElement.configs.selectedDataSet)) {
@@ -511,19 +507,15 @@ export class BindingObjectLikeElement extends Element {
 
   /**
    * prepare bindingObject data based on repeator's selected dataset
-   * @param {ISettings} settings - app settings
+   * @param {IElement} parentElement - parent element instance
    * @return {IBindingObject} - preapred bindingObject options
    */
-  computeBindingObject(settings?: ISettings | any): IBindingObject {
+  computeBindingObject(parentElement?: IElement): IBindingObject {
 
     let additional: any = {}
 
     // it's repeator's child
-    if (this.repeatorId && this.states.isChild && settings) {
-      var parentSection = this.parent
-      var repeatorIndex = settings[parentSection].elements.findIndex((x: IElement) => x.id === this.repeatorId)
-      var parentElement = settings[parentSection].elements[repeatorIndex]
-
+    if (this.repeatorId && this.states.isChild && parentElement) {
       // if user has selected a dataset
       if (!isEmpty(parentElement.configs.dataSets) && !isEmpty(parentElement.configs.selectedDataSet)) {
         var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
@@ -730,7 +722,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       break
 
     case ElementTypes.TEXTPATTERN:
-      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.settings)
+      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.repeatorInstance)
       let matches = [], // an array to collect the strings that are matches
         types = [],
         regex = /{([^{]*?\w)(?=\})}/gim,
@@ -753,7 +745,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 
     case ElementTypes.BINDINGOBJECT:
       let field = element.configs.field
-      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.settings)
+      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.repeatorInstance)
 
       if (element.repeatorId && extraArgs.repeatorInstance) {
         var dataSets = extraArgs.repeatorInstance.configs.dataSets
@@ -856,4 +848,10 @@ export function createInstnaceFromObject(element: IElement) {
   }
 
   return createElement(element.type, element.parent, element.grandParent, element.states, element.styles, element.configs, element.repeatorId)
+}
+
+export function findElementsParentInstance(settings: ISettings | any, element: IElement): IElement {
+  var elements = settings[element.parent].elements
+  var repeatorIndex = elements.findIndex((x: IElement) => x.id === element.repeatorId)
+  return elements[repeatorIndex]
 }
