@@ -754,7 +754,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
         if (!isEmpty(dataSets) && !isEmpty(selectedDataSet)) {
           var displaySet: any = dataSets![selectedDataSet]
           var columns = displaySet.configs.columns
-          let rows = displaySet.configs.rows
+          var rows = dataSetStore.getRowsByKey(selectedDataSet)
 
           // prepare bindingobject's data based on rows
           for (let key of Object.keys(bindingObject)) {
