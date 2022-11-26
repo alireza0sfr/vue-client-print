@@ -5,7 +5,7 @@
 		|
 		<a @click="templateBuilder()" href="#" :title="_$t('template-builder.name')">{{ _$t('template-builder.name') }}</a>
 
-		<VCP ref="vcp" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configurations="configs">
+		<VCP ref="vcp" :options="printOptions" :dataSets="dataSets" :bindingObject="bindingObject" :variables="variables" :configurations="configs">
 			<template v-slot:printData>
 				<table>
 					<thead>
@@ -285,12 +285,12 @@
 		},
 		methods: {
 			templateBuilder() {
-				this.$refs.vcp.displayTemplateBuilder(this.printOptions, (json) => {
+				this.$refs.vcp.displayTemplateBuilder((json) => {
 					this.printOptions = json
 				})
 			},
 			printPreview() {
-				this.$refs.vcp.displayPrintPreview(this.printOptions)
+				this.$refs.vcp.displayPrintPreview()
 			},
 		},
 	};

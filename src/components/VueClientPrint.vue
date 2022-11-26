@@ -18,6 +18,8 @@
 	import { AppStates } from '~/enums/general'
 	import DefaultLogo from '@/assets/images/logo.png'
 
+	import cloneDeep from 'lodash/cloneDeep'
+
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
 	import { useBindingObjectStore } from '~/stores/binding-object'
@@ -92,26 +94,22 @@
 		methods: {
 			/**
 			 * By Triggering this func template builder modal will be displayed.
-			 * @param {object} json - settings json
 			 * @param {Function} callback - callback function
 			 * @return {void} - void
 			 */
-			displayTemplateBuilder(json: ISettings, callback: (val: ISettings) => void): void {
+			displayTemplateBuilder(callback: (val: ISettings) => void): void {
 				this.locals.appState = AppStates.TEMPLATEBUILDER
-
+				
 				this.$nextTick(() => {
-					json.callback = callback
+					this.settings.callback = callback
 					const TB: any = this.$refs.TemplateBuilder
-					this.settings = json
 					TB.settingsInitFunc()
 					TB.showModal()
 				})
 			},
-			displayPrintPreview(json: ISettings): void {
+			displayPrintPreview(): void {
 				this.locals.appState = AppStates.PRINTPREVIEW
-
 				this.$nextTick(() => {
-					this.settings = prepareSettings(this.settings, json)
 					const PP: any = this.$refs.printPreview
 					PP.showModal()
 				})
