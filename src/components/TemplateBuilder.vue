@@ -753,6 +753,7 @@
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
 	import { IColumn, IDataset } from '@/interfaces/datasets'
+	import cloneDeep from 'lodash/cloneDeep'
 	import KeyboardHandler from '~/plugins/keyboard-handler'
 
 	const variablesStore = useVariablesStore()
@@ -1362,6 +1363,7 @@
 				elementInstance = this.adjustElementToPage(elementInstance, parentId)
 
 				if (isChild) { // Element is dropped on another element.
+					elementInstance = cloneDeep(elementInstance) // removing refrence to other instances therefore the modification only affects this instance
 					elementInstance.states.isChild = true
 					elementInstance.repeatorId = parentElement!.id
 					parentElement!.configs.appendedElements.push(elementInstance)
