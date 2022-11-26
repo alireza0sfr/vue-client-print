@@ -21,7 +21,7 @@
 	import { defineComponent } from 'vue'
 	import { toFloatVal, merge, idGenerator, isEmpty } from '~/plugins/general-utilities'
 	import { IColumn, IRow, IDatasets } from '@/interfaces/datasets'
-	import { emptyDataSet, Element } from '@/plugins/element-utilities'
+	import { emptyDataSet, Element, DEFAULTELEMENTSTATES } from '@/plugins/element-utilities'
 	export default defineComponent({
 		name: ElementTypes.DATASET,
 		props: {
@@ -50,6 +50,7 @@
 					columns = []
 				else
 					columns = this.displaySet.configs.columns
+
 				var sorted: IColumn[] = columns.sort((a: IColumn, b: IColumn) => a.configs.order - b.configs.order)
 
 				return this.prepareColumns(sorted)
@@ -100,7 +101,7 @@
 						stylesTarget: StylesTargets.ALL,
 						selectedDataSet: '',
 						dataSets: {},
-						dataSetDefaultRow: [new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, {
+						dataSetDefaultRow: [new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, {
 							cells: {
 								empty: {
 									type: ElementTypes.CELL,

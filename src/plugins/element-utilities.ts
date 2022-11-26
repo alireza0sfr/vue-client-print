@@ -16,15 +16,17 @@ import piniaInstance from './pinia-instance'
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
 const dataSetStore = useDataSetStore(piniaInstance)
 
+export const DEFAULTELEMENTSTATES: IElementStates = {
+  isNew: true,
+  isChild: false
+}
+
 export class EmptyElement implements IEmptyElement {
   type: ElementTypes = ElementTypes.EMPTY
   id: string = emptyId
   parent: ElementParents = ElementParents.EMPTY
   grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
-  states: IElementStates = {
-    isNew: true,
-    isChild: false
-  }
+  states: IElementStates = DEFAULTELEMENTSTATES
   styles: any = {}
   configs: any = {}
   repeatorId?: string = ''
@@ -35,13 +37,14 @@ export class Element extends EmptyElement implements IElement {
   protected _$el!: HTMLElement
   protected _resizerQuery!: string
 
-  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, styles: any = {}, configs: any = {}, repeatorId: string = '') {
+  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, states = DEFAULTELEMENTSTATES, styles: any = {}, configs: any = {}, repeatorId: string = '') {
     super()
     this.type = type
     this.id = idGenerator()
     this.parent = parent
     this.grandParent = grandParent
     this.configs = configs
+    this.states = states
 
     var baseStyles = {
       color: '#000000',
@@ -451,7 +454,7 @@ export class DataSetLikeElement extends Element {
           value: rows[index][key]
         })
 
-      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINTPREVIEW, {}, configsRow)
+      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINTPREVIEW, DEFAULTELEMENTSTATES, {}, configsRow)
     }
 
     return preparedRows
@@ -493,7 +496,7 @@ export class DataSetLikeElement extends Element {
               columns: col.configs.columns,
             }
 
-            var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
+            var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, configs)
             // this.configs.dataSets[key] = instance
             additional[key] = instance
 
@@ -581,7 +584,7 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
       key: thisSet.key
     }
 
-    preparedSets[set] = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, {}, configs)
+    preparedSets[set] = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, configs)
   }
   return preparedSets
 }
@@ -610,7 +613,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
       width: col.styles.width ? col.styles.width : DEFAULTCOLUMNWIDTH,
     }
 
-    preparedColumns[index] = createElement(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, styles, configs)
+    preparedColumns[index] = createElement(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, styles, configs)
   }
 
   return preparedColumns
@@ -796,27 +799,28 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 /**
 * create element.
 * @param {String} parent - element's parent
-* @param {String} parent - element's grandParent
+* @param {String} grandParent - element's grandParent
+* @param {IElementStates} states - element's states
 * @param {Object} styles - element's styles
 * @param {Object} configs - element's configs
 * @return {IElement} - returns instance of element class
 */
-export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, styles: any = {}, configs: any = {}, repeatorId: string = ''): IElement {
+export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, states: IElementStates = DEFAULTELEMENTSTATES, styles: any = {}, configs: any = {}, repeatorId: string = ''): IElement {
 
   switch (elementType) {
 
     case ElementTypes.REPEATOR:
     case ElementTypes.DATASET:
-      return new DataSetLikeElement(elementType, parent, grandParent, styles, configs, repeatorId)
+      return new DataSetLikeElement(elementType, parent, grandParent, states, styles, configs, repeatorId)
 
     case ElementTypes.BINDINGOBJECT:
     case ElementTypes.TEXTPATTERN:
-      return new BindingObjectLikeElement(elementType, parent, grandParent, styles, configs, repeatorId)
+      return new BindingObjectLikeElement(elementType, parent, grandParent, states, styles, configs, repeatorId)
 
     default:
       break
   }
-  return new Element(elementType, parent, grandParent, styles, configs, '')
+  return new Element(elementType, parent, grandParent, states, styles, configs, '')
 }
 
 export function createInstnaceFromObject(element: IElement) {
@@ -827,7 +831,7 @@ export function createInstnaceFromObject(element: IElement) {
       if (col.configs.columns)
         createColumnsInstanceFromObject(col.configs.columns)
 
-      col = createElement(col.type, col.parent, col.grandParent, col.styles, col.configs)
+      col = createElement(col.type, col.parent, col.grandParent, col.states, col.styles, col.configs)
     }
 
     return columns
@@ -841,11 +845,11 @@ export function createInstnaceFromObject(element: IElement) {
         element.configs.dataSets[set].configs.columns = createColumnsInstanceFromObject(element.configs.dataSets[set].configs.columns)
       }
 
-      return createElement(element.type, element.parent, element.grandParent, element.styles, element.configs, element.repeatorId)
+      return createElement(element.type, element.parent, element.grandParent, element.states, element.styles, element.configs, element.repeatorId)
 
     default:
       break
   }
 
-  return createElement(element.type, element.parent, element.grandParent, element.styles, element.configs, element.repeatorId)
+  return createElement(element.type, element.parent, element.grandParent, element.states, element.styles, element.configs, element.repeatorId)
 }

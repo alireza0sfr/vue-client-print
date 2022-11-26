@@ -742,12 +742,12 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IEmptyElement, IVariable } from '~/interfaces/elements'
+	import { IElement, IElementStates, IEmptyElement, IVariable } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections, Tabs } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement } from '~/plugins/element-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64 } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
@@ -975,7 +975,7 @@
 				if (!this.validateCopy(element))
 					return
 
-				this.locals.copiedElement = this.createElement(element.type, element.parent, element.styles, element.configs)
+				this.locals.copiedElement = this.createElement(element.type, element.parent, DEFAULTELEMENTSTATES, element.styles, element.configs)
 			},
 			/**
 			 * Paste copied element.
@@ -1097,7 +1097,7 @@
 
 					for (let index = 0; index < this.settings[section].elements.length; index++) {
 						var elem = this.settings[section].elements[index]
-						this.settings[section].elements[index] = this.createElement(elem.type, ElementParents[section.toUpperCase()], elem.styles, elem.configs)
+						this.settings[section].elements[index] = this.createElement(elem.type, ElementParents[section.toUpperCase()], elem.states, elem.styles, elem.configs)
 					}
 				}
 
@@ -1249,8 +1249,8 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(elementType: ElementTypes, parent: ElementParents, styles?: any, configs?: any): IElement {
-				return createElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, styles, configs)
+			createElement(elementType: ElementTypes, parent: ElementParents, states: IElementStates = DEFAULTELEMENTSTATES, styles?: any, configs?: any): IElement {
+				return createElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, states, styles, configs)
 			},
 			/**
 			 * Creates variable in variables tab list.
@@ -1352,7 +1352,7 @@
 
 				var configs = this.prepareNewElementsConfigs(elementType)
 
-				var elementInstance: IElement = this.createElement(elementType, parent, baseStyles, configs)
+				var elementInstance: IElement = this.createElement(elementType, parent, DEFAULTELEMENTSTATES, baseStyles, configs)
 
 				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
 					elementType = ElementTypes.EMPTY

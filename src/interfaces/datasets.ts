@@ -1,4 +1,5 @@
 import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets } from '@/enums/element'
+import { IElementStates } from './elements'
 
 interface IRawDataset {
   readonly key: string
@@ -37,6 +38,7 @@ interface IColumn {
   readonly type: ElementTypes
   parent: ElementParents
   grandParent: ElementGrandParents
+  states: IElementStates
   configs: {
     readonly key: string,
     hasResizer: boolean
