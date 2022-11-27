@@ -6,6 +6,7 @@ import i18nInstance from '~/plugins/i18n'
 
 import piniaInstance from '~/plugins/pinia-instance'
 import { useGeneralStore } from '~/stores/general'
+import { ElementTypes } from '~/enums/element'
 
 const generalStore = useGeneralStore(piniaInstance)
 
@@ -322,17 +323,34 @@ export function prepareSettings(settings: ISettings, updatedSettings: ISettings)
  */
 
 export function validateJson(settings: IJson): boolean {
-  
+
   var sections = Object.values(TemplateBuilderSections)
-  
+
   for (let section of sections) {
-    var dataSetLikeElements = settings[section].elements.filter(x => x instanceof DataSetLikeElement)
-    for (var element of dataSetLikeElements) {
-      if (!element.configs.selectedDataSet) {
-        var text = i18nInstance.global.t('template-builder.alerts.select-dataset')
-        alert(text)
-        return false
+
+    for (var element of settings[section].elements) {
+
+
+      if (element instanceof DataSetLikeElement) {
+
+        if (!element.configs.selectedDataSet) {
+          var text = i18nInstance.global.t('template-builder.alerts.select-dataset')
+          alert(text)
+          return false
+        }
+
+        if (element.type === ElementTypes.REPEATOR) {
+
+          for (var child of element.configs.appendedElements) {
+
+            child.states.isNew = false
+          }
+
+        }
+
       }
+
+      element.states.isNew = false
     }
   }
   return true

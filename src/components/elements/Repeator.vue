@@ -73,8 +73,8 @@
 			},
 			'element.configs.selectedDataSet': {
 				immediate: true,
-				handler(val) {
-					if (val && this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER) {
+				handler(val, oldVal) {
+					if (val && oldVal && val !== oldVal && this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER) {
 
 						var dataSetElements = this.element.configs.appendedElements.filter((x: IElement) => x instanceof DataSetLikeElement && x.type === ElementTypes.DATASET)
 

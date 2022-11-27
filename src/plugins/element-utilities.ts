@@ -650,9 +650,6 @@ export function getDisplaySet(selectedElement: IElement, settings: ISettings | I
  */
 export function prepareElementInstance(instance: IElement, extraArgs: IPrepareInstanceExtraArgs): IElement {
 
-  // stuff to be changed both in element and it's refrence to instance (in TB)
-  instance.states.isNew = false
-
   var element: any = cloneDeep(instance)
 
   // stuff that only affect cloned element not refrence in TB
