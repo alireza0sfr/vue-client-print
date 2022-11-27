@@ -863,3 +863,17 @@ export function createDataSetDetails(element: IDataSetLikeElement): IDataSetDeta
     dataSets: element.configs.dataSets
   }
 }
+
+export const DEFAULTDATASETROW = new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, {
+  cells: {
+    empty: {
+      type: ElementTypes.CELL,
+      id: idGenerator(),
+      styles: {},
+      parent: ElementParents.EMPTY,
+      configs: {
+        value: ''
+      },
+    }
+  }
+})

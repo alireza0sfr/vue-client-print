@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts">
-	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets } from '~/enums/element'
+	import { ElementGrandParents, ElementTypes, StylesTargets } from '~/enums/element'
 	import { IDataSetLikeElement } from '~/interfaces/elements'
 	import { defineComponent } from 'vue'
-	import { toFloatVal, merge, idGenerator, isEmpty } from '~/plugins/general-utilities'
+	import { toFloatVal, merge, isEmpty } from '~/plugins/general-utilities'
 	import { IColumn, IRow, IDatasets } from '@/interfaces/datasets'
-	import { emptyDataSet, Element, DEFAULTELEMENTSTATES } from '@/plugins/element-utilities'
+	import { emptyDataSet, DEFAULTDATASETROW } from '@/plugins/element-utilities'
 	export default defineComponent({
 		name: ElementTypes.DATASET,
 		props: {
@@ -101,19 +101,7 @@
 						stylesTarget: StylesTargets.ALL,
 						selectedDataSet: '',
 						dataSets: {},
-						dataSetDefaultRow: [new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, {
-							cells: {
-								empty: {
-									type: ElementTypes.CELL,
-									id: idGenerator(),
-									styles: {},
-									parent: ElementParents.EMPTY,
-									configs: {
-										value: ''
-									},
-								}
-							}
-						})]
+						dataSetDefaultRow: [DEFAULTDATASETROW]
 					},
 					styles: {
 						height: "100px",

@@ -77,14 +77,13 @@ export function findPropertyBasedOnPath(obj: object, path: string): any {
   return found
 }
 
-export const IDLENGTH = 5
 
 /**
  * Converts given image to base64.
  * @param {Number} n - number of digits
  * @return {String} - id
  */
-export function idGenerator(n: number = IDLENGTH): string {
+export function idGenerator(n: number = 5): string {
   return Math.random().toString(36).substr(2, n)
 }
 
