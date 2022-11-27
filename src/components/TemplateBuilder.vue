@@ -1315,7 +1315,6 @@
 
 				var elementType: ElementTypes = this.locals.elementType
 				var isChild = parentElement && parentElement.type === ElementTypes.REPEATOR
-				var parentId: string = parentElement ? parentElement.id : `${parent}Template`
 
 				if (elementType === ElementTypes.EMPTY)
 					return
@@ -1335,14 +1334,14 @@
 					return
 				}
 
-				elementInstance = this.adjustElementToPage(elementInstance, parentId)
+				elementInstance = this.adjustElementToPage(elementInstance)
 
-				if (isChild) { // Element is dropped on another element.
+				if (isChild && parentElement) { // Element is dropped on another element.
 					elementInstance = cloneDeep(elementInstance) // removing refrence to other instances therefore the modification only affects this instance
 					elementInstance.states.isChild = true
-					elementInstance.repeatorId = parentElement!.id
-					elementInstance.configs.repeatorInstance = parentElement
-					parentElement!.configs.appendedElements.push(elementInstance)
+					elementInstance.repeatorId = parentElement.id
+					elementInstance.configs.parentDataSets = parentElement.configs.dataSets
+					parentElement.configs.appendedElements.push(elementInstance)
 				}
 				else {
 					this.settings[parent].elements.push(elementInstance)
@@ -1402,10 +1401,10 @@
 
 			/** Controls if added element is outside page borders and adjust if so.
 				* @param {Object} element - element object
-				* @param {String} sectionId - section id that element is dropped to (parent)
 				* @return {Object} element - adjusted element
 				*/
-			adjustElementToPage(element: IElement, sectionId: string): IElement {
+			adjustElementToPage(element: IElement): IElement {
+				var sectionId = `${element.parent}Template`
 				let elementWidth = element.styles.width || '150px'
 				let elementHeight = element.styles.height || '30px'
 				let containerRec = document.getElementById(sectionId)!.getBoundingClientRect()
