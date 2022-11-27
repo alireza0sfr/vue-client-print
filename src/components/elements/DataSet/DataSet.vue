@@ -64,7 +64,7 @@
 		},
 		created() {
 			if (isEmpty(this.element.configs.dataSets)) {
-				var dataSets = this.element.computeDatasets(this.element.configs.repeatorInstance) || {}
+				var dataSets = this.element.computeDatasets(this.element.configs.dataSetDetails) || {}
 
 				for (var key of Object.keys(dataSets))
 					dataSets[key].configs.columns = []

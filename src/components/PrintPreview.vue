@@ -82,7 +82,7 @@
 
 <script lang="ts">
 	import { IElement } from '~/interfaces/elements'
-	import { findElementsParentInstance, prepareElementInstance } from '~/plugins/element-utilities'
+	import { findElementsParentInstance, prepareElementInstance, createDataSetDetails } from '~/plugins/element-utilities'
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
 	import { convert2Pixels, convert2Inches, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
@@ -117,7 +117,7 @@
 				var extra = {
 					index: index,
 					totalPages: this.locals.totalPages,
-					repeatorInstance: findElementsParentInstance(this.settings, element),
+					dataSetDetails: createDataSetDetails(findElementsParentInstance(this.settings, element)),
 				}
 				return prepareElementInstance(element, extra)
 			},

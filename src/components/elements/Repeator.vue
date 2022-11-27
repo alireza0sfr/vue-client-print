@@ -25,8 +25,7 @@
 	import { IDataSetLikeElement, IElement } from '~/interfaces/elements'
 	import { isEmpty, toFloatVal } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
-	import { DataSetLikeElement, emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
-	import { IDatasets } from '@/interfaces/datasets'
+	import { createDataSetDetails, DataSetLikeElement, emptyDataSet, prepareElementInstance } from '@/plugins/element-utilities'
 	export default defineComponent({
 		name: ElementTypes.REPEATOR,
 		props: {
@@ -109,7 +108,7 @@
 			prepareElementInstance(appendedElement: IElement, index: number): IElement {
 				var extra = {
 					index: index,
-					repeatorInstance: this.element
+					dataSetDetails: createDataSetDetails(this.element)
 				}
 
 				return prepareElementInstance(appendedElement, extra)

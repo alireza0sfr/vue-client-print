@@ -57,7 +57,7 @@ export interface IBindingObjectLikeElement extends IElement {
 
 export interface IPrepareInstanceExtraArgs {
   index: number // elementIndex
-  repeatorInstance: IDataSetLikeElement
+  dataSetDetails: IDataSetDetails
   currentPage?: number
   totalPages?: number
 }
@@ -65,4 +65,9 @@ export interface IPrepareInstanceExtraArgs {
 export interface IElementStates {
   isNew: boolean
   isChild: boolean
+}
+
+export interface IDataSetDetails {
+  selectedDataSet: string
+  dataSets: IDatasets
 }

@@ -742,12 +742,12 @@
 </template>
 
 <script lang="ts">
-	import { IElement, IElementStates, IEmptyElement, IVariable } from '~/interfaces/elements'
+	import { IElement, IElementStates, IEmptyElement, IVariable, IDataSetLikeElement } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections, Tabs } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance } from '~/plugins/element-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
@@ -766,12 +766,18 @@
 		},
 		computed: {
 			bindingObjectComputed() {
-				if (this.locals.selectedElement instanceof BindingObjectLikeElement)
-					return this.locals.selectedElement.computeBindingObject(findElementsParentInstance(this.settings, this.locals.selectedElement))
+				if (this.locals.selectedElement instanceof BindingObjectLikeElement) {
+					var element = findElementsParentInstance(this.settings, this.locals.selectedElement)
+					var dataSetDetails = createDataSetDetails(element)
+					return this.locals.selectedElement.computeBindingObject(dataSetDetails)
+				}
 			},
 			dataSetComputed() {
-				if (this.locals.selectedElement instanceof DataSetLikeElement)
-					return this.locals.selectedElement.computeDatasets(findElementsParentInstance(this.settings, this.locals.selectedElement))
+				if (this.locals.selectedElement instanceof DataSetLikeElement) {
+					var element = findElementsParentInstance(this.settings, this.locals.selectedElement)
+					var dataSetDetails = createDataSetDetails(element)
+					return this.locals.selectedElement.computeDatasets(dataSetDetails)
+				}
 			},
 			variablesList() {
 				return variablesStore.getVarialbesList
@@ -1311,7 +1317,7 @@
 			/**
 			 * Method that triggers on element drop on header / footer.
 			 */
-			droppedElement(parent: ElementParents, e: any, parentElement?: IElement): void {
+			droppedElement(parent: ElementParents, e: any, parentElement?: IDataSetLikeElement): void {
 
 				var elementType: ElementTypes = this.locals.elementType
 				var isChild = parentElement && parentElement.type === ElementTypes.REPEATOR
@@ -1340,7 +1346,7 @@
 					elementInstance = cloneDeep(elementInstance) // removing refrence to other instances therefore the modification only affects this instance
 					elementInstance.states.isChild = true
 					elementInstance.repeatorId = parentElement.id
-					elementInstance.configs.parentDataSets = parentElement.configs.dataSets
+					elementInstance.configs.dataSetDetails = createDataSetDetails(parentElement)
 					parentElement.configs.appendedElements.push(elementInstance)
 				}
 				else {

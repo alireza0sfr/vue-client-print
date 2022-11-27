@@ -1,4 +1,4 @@
-import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, IElementStates, IBindingObjectLikeElement, IDataSetLikeElement } from '~/interfaces/elements'
+import { IElement, IBindingObject, IElementCoordinates, IEmptyElement, IPrepareInstanceExtraArgs, IElementStates, IBindingObjectLikeElement, IDataSetLikeElement, IDataSetDetails } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
 import { IRawDataset, IRawColumn, IDatasets, IDataset, IRawDatasets, IRow, IColumn, IRawRow } from '~/interfaces/datasets'
 
@@ -460,18 +460,18 @@ export class DataSetLikeElement extends Element {
 
   /**
    * prepare datasets data based on repeator's selected dataset
-   * @param {IElement} parentElement - parent's instance
+   * @param {IDataSetDetails} dataSetDetails - parent element's dataset details
    * @return {Object} - preapred bindingObject options
    */
-  computeDatasets(parentElement: IElement): IDatasets {
+  computeDatasets(dataSetDetails?: IDataSetDetails): IDatasets {
 
     let additional: any = {}
-    if (this.repeatorId && this.states.isChild && parentElement) {
+    if (this.repeatorId && this.states.isChild && dataSetDetails) {
 
       // if user has selected a dataset
-      if (!isEmpty(parentElement.configs.dataSets) && !isEmpty(parentElement.configs.selectedDataSet)) {
+      if (!isEmpty(dataSetDetails.dataSets) && !isEmpty(dataSetDetails.selectedDataSet)) {
 
-        var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
+        var displaySet = dataSetDetails.dataSets[dataSetDetails.selectedDataSet]
         var columns: IColumn[] = displaySet.configs.columns
         var parentKey: string = displaySet.configs.key
         var parentTitle: string = displaySet.configs.title
@@ -507,18 +507,18 @@ export class BindingObjectLikeElement extends Element {
 
   /**
    * prepare bindingObject data based on repeator's selected dataset
-   * @param {IElement} parentElement - parent element instance
+   * @param {IDataSetDetails} dataSetDetails - parent element dataset details
    * @return {IBindingObject} - preapred bindingObject options
    */
-  computeBindingObject(parentElement?: IElement): IBindingObject {
+  computeBindingObject(dataSetDetails?: IDataSetDetails): IBindingObject {
 
     let additional: any = {}
 
     // it's repeator's child
-    if (this.repeatorId && this.states.isChild && parentElement) {
+    if (this.repeatorId && this.states.isChild && dataSetDetails) {
       // if user has selected a dataset
-      if (!isEmpty(parentElement.configs.dataSets) && !isEmpty(parentElement.configs.selectedDataSet)) {
-        var displaySet = parentElement.configs.dataSets[parentElement.configs.selectedDataSet]
+      if (!isEmpty(dataSetDetails.dataSets) && !isEmpty(dataSetDetails.selectedDataSet)) {
+        var displaySet = dataSetDetails.dataSets[dataSetDetails.selectedDataSet]
         var columns: IColumn[] = displaySet.configs.columns
         var key: string = displaySet.configs.key
 
@@ -722,7 +722,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
       break
 
     case ElementTypes.TEXTPATTERN:
-      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.repeatorInstance)
+      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.dataSetDetails)
       let matches = [], // an array to collect the strings that are matches
         types = [],
         regex = /{([^{]*?\w)(?=\})}/gim,
@@ -745,11 +745,11 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 
     case ElementTypes.BINDINGOBJECT:
       let field = element.configs.field
-      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.repeatorInstance)
+      var bindingObject: IBindingObject = element.computeBindingObject(extraArgs.dataSetDetails)
 
-      if (element.repeatorId && extraArgs.repeatorInstance) {
-        var dataSets = extraArgs.repeatorInstance.configs.dataSets
-        var selectedDataSet = extraArgs.repeatorInstance.configs.selectedDataSet
+      if (element.repeatorId && extraArgs.dataSetDetails) {
+        var dataSets = extraArgs.dataSetDetails.dataSets
+        let selectedDataSet = extraArgs.dataSetDetails.selectedDataSet
 
         if (!isEmpty(dataSets) && !isEmpty(selectedDataSet)) {
           var displaySet: any = dataSets![selectedDataSet]
@@ -854,4 +854,15 @@ export function findElementsParentInstance(settings: ISettings | any, element: I
   var elements = settings[element.parent].elements
   var repeatorIndex = elements.findIndex((x: IElement) => x.id === element.repeatorId)
   return elements[repeatorIndex]
+}
+
+export function createDataSetDetails(element: IDataSetLikeElement): IDataSetDetails {
+
+  if (!element)
+    return element
+
+  return {
+    selectedDataSet: element.configs.selectedDataSet,
+    dataSets: element.configs.dataSets
+  }
 }
