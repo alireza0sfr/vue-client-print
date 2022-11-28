@@ -1303,7 +1303,7 @@
 
 				switch (elementType) {
 					case ElementTypes.VARIABLE:
-						configs = { variable: this.locals.currentVariable }
+						configs = this.locals.currentVariable
 						break
 
 					case ElementTypes.IMAGEELEMENT:
