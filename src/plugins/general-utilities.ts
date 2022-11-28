@@ -346,13 +346,17 @@ export function validateJson(settings: IJson): boolean {
           for (var child of element.configs.appendedElements) {
 
             child.states.isNew = false
+            child.$el = undefined
           }
 
         }
 
       }
-
+      
+      // in large projects $el property gets larger and larger and creates a circular state in instance therefore instance cant be stringified
+      // but when TB opens again and new elements are created $el gets filled by init method again
       element.states.isNew = false
+      element.$el = undefined
     }
   }
   return true
