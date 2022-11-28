@@ -330,8 +330,8 @@
 			printPreview(): void {
 				setTimeout(() => {
 					this.convert2Image()
-						.then(res => this.$emit('preview-success', res))
-						.then(err => this.$emit('preview-failed', err))
+						.then((res: any) => this.$emit('preview-success', res))
+						.then((err: any) => this.$emit('preview-failed', err))
 				}, 100)
 			},
 		},

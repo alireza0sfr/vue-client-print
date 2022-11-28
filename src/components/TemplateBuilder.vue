@@ -749,17 +749,24 @@
 	import { fetchLangList } from '~/translations'
 	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createElementInstanceFromObject, } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
+	//@ts-ignore
 	import { saveAs } from 'file-saver'
-	import { useVariablesStore } from '~/stores/variables'
-	import { useGeneralStore } from '~/stores/general'
 	import { IColumn, IDataset } from '@/interfaces/datasets'
 	import cloneDeep from 'lodash/cloneDeep'
 	import KeyboardHandler from '~/plugins/keyboard-handler'
+	import { defineComponent } from 'vue'
+
+	import { useVariablesStore } from '~/stores/variables'
+	import { useGeneralStore } from '~/stores/general'
+	import { useDataSetStore } from '~/stores/dataset'
+	import { useBindingObjectStore } from '~/stores/binding-object'
 
 	const variablesStore = useVariablesStore()
 	const generalStore = useGeneralStore()
+	const dataSetStore = useDataSetStore()
+	const bindingObjectStore = useBindingObjectStore()
 
-	export default {
+	export default defineComponent({
 		name: "TemplateBuilder",
 		props: {
 			options: Object,
@@ -935,13 +942,13 @@
 				var TBContainer = document.getElementById('fullscreenControl')
 				if (this.locals.fullScreen) {
 					this.locals.fullScreen = false
-					TBContainer.style.margin = '2% auto'
-					TBContainer.style.width = '1090px'
+					TBContainer!.style.margin = '2% auto'
+					TBContainer!.style.width = '1090px'
 				}
 				else {
 					this.locals.fullScreen = true
-					TBContainer.style.margin = '2%'
-					TBContainer.style.width = 'unset'
+					TBContainer!.style.margin = '2%'
+					TBContainer!.style.width = 'unset'
 				}
 			},
 			/**
@@ -956,7 +963,7 @@
 				var parent = this.locals.selectedElement.parent
 				var array = this.settings[parent].elements
 
-				var index = array.findIndex(x => x.id === element.id)
+				var index = array.findIndex((x: IElement) => x.id === element.id)
 
 				if (index > -1)
 					array.splice(index, 1)
@@ -1001,7 +1008,7 @@
 				element.styles.top = '0px'
 
 				if (element.repeatorId) {
-					var repeator = array.find(x => x.id === element.repeatorId)
+					var repeator = array.find((x: IElement) => x.id === element.repeatorId)
 					repeator.configs.appendedElements.push(element)
 				}
 				else
@@ -1068,7 +1075,7 @@
 			 * @param {srcFile} srcFile - given srcFile
 			 * @return {void} - void
 			 */
-			importFromSrcFile(srcFile: File): void {
+			importFromSrcFile(srcFile: string): void {
 				var callback = this.settings.callback || null
 				this.settings = getDefaultSettings() // Set the settings to default value
 				var jsonFile: any = JSON.parse(decodeFromBase64(srcFile))
@@ -1127,7 +1134,7 @@
 
 
 				for (let sectionName of sections) {
-					let section = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
+					let section: any = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
 
 					var resizer = document.createElement("div")
 					resizer.className = "resizer"
@@ -1135,19 +1142,19 @@
 					section.appendChild(resizer)
 					resizer.addEventListener("mousedown", (e) => initDrag(e, section), false)
 
-					var startY, startHeight, parentHeight
+					var startY: number, startHeight: number, parentHeight: number
 
-					const initDrag = (e, section) => {
+					const initDrag = (e: any, section: HTMLElement) => {
 						startY = e.clientY
 						parentHeight = this.locals.templateHeight
 
-						startHeight = parseInt(document.defaultView.getComputedStyle(section).height, 10)
+						startHeight = parseInt(document.defaultView!.getComputedStyle(section).height, 10)
 
 						document.documentElement.addEventListener("mousemove", doDrag, false)
 						document.documentElement.addEventListener("mouseup", stopDrag, false)
 					}
 
-					const doDrag = (e) => {
+					const doDrag = (e: any) => {
 						if (sectionName === TemplateBuilderSections.HEADER)
 							this.settings.header.height = convert2Inches(startHeight + e.clientY - startY)
 
@@ -1166,7 +1173,7 @@
 
 					}
 
-					const stopDrag = (e) => {
+					const stopDrag = (e: any) => {
 						document.documentElement.removeEventListener("mousemove", doDrag, false)
 						document.documentElement.removeEventListener("mouseup", stopDrag, false)
 					}
@@ -1360,17 +1367,17 @@
 				elementType = ElementTypes.EMPTY
 			},
 
-			elementValidator(element: IElement, isChild: boolean = false, parentElement?: IElement): boolean {
+			elementValidator(element: IElement, isChild: boolean = false, parentElement?: IDataSetLikeElement): boolean {
 
 				const DISSALLOWED_CHILDTYPES = [ElementTypes.PAGECOUNTER, ElementTypes.REPEATOR]
 
-				if (element instanceof DataSetLikeElement && isEmpty(element.computeDatasets(parentElement))) {
+				if (element instanceof DataSetLikeElement && isEmpty(dataSetStore.all)) {
 					var text = this._$t('template-builder.elements.validators.dataset-is-empty')
 					alert(text)
 					return false
 				}
 
-				if (element instanceof BindingObjectLikeElement && isEmpty(element.computeBindingObject(parentElement))) {
+				if (element instanceof BindingObjectLikeElement && isEmpty(bindingObjectStore.all)) {
 					var text = this._$t('template-builder.elements.validators.bindingobject-is-empty')
 					alert(text)
 					return false
@@ -1441,7 +1448,7 @@
 			 * Method that triggers when drag is finished
 			 */
 			finishedDraggingElement(): void {
-				this.$refs.template.classList.remove("dragged")
+				(this.$refs.template as HTMLElement).classList.remove("dragged")
 			},
 
 			/**
@@ -1450,7 +1457,7 @@
 			 * @param {IElement} variable - variable
 			 * @return {void} - void
 			 */
-			onFileChange(type: fileEntryTypes, variable: IElement): void {
+			onFileChange(type: fileEntryTypes, variable: IVariable): void {
 				let maximumFileSize = generalStore.getByKey('configurations').maximumFileSize * 1000
 				var file
 
@@ -1468,7 +1475,7 @@
 					return true
 				}
 
-				const getFile = (id: string) => (<HTMLInputElement>document.getElementById(id)).files[0]
+				const getFile = (id: string) => (document.getElementById(id) as any).files[0]
 
 				switch (type) {
 					case fileEntryTypes.imageElement:
@@ -1476,7 +1483,7 @@
 						file = getFile('elementImageFileControl')
 
 						if (fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
-							this.toBase64(file).then(res => this.locals.selectedElement.configs.imageSrc = res)
+							this.toBase64(file).then((res: string) => this.locals.selectedElement.configs.imageSrc = res)
 
 						break
 
@@ -1485,14 +1492,14 @@
 						file = getFile('variableImageFileControl')
 
 						if (fileValidator(file, maximumFileSize, ['image/jpeg', 'image/png']))
-							this.toBase64(file).then(res => variable.context = res)
+							this.toBase64(file).then((res: string) => variable.context = res)
 
 						break
 
 					case fileEntryTypes.VCPSrcFile:
 					default:
 
-						file = (<HTMLInputElement>document.getElementById('fileSrcControl')).files[0]
+						file = getFile('fileSrcControl')
 
 						if (!file.name.includes('.vcp')) {
 							var text = this._$t('template-builder.alerts.format-notsupported')
@@ -1521,7 +1528,10 @@
 				return new Promise((resolve, reject) => {
 					const reader = new FileReader()
 					reader.readAsDataURL(file)
-					reader.onload = () => resolve(reader.result)
+					reader.onload = () => {
+						if (reader.result)
+							resolve(reader.result)
+					}
 					reader.onerror = (error) => reject(error)
 				})
 			},
@@ -1551,7 +1561,7 @@
 						},
 						handler: () => {
 
-							if (this.locals.selectedSection) { // section resize 
+							if (this.locals.selectedSection && this.locals.selectedSection !== TemplateBuilderSections.BODY) { // section resize 
 
 								if (expandDownSections.includes(this.locals.selectedSection))
 									this.settings[this.locals.selectedSection].height -= 0.01
@@ -1589,7 +1599,7 @@
 						focusEl: FOCUSEL,
 						handler: () => {
 
-							if (this.locals.selectedSection) { // section resize 
+							if (this.locals.selectedSection && this.locals.selectedSection !== TemplateBuilderSections.BODY) { // section resize 
 
 								if (expandDownSections.includes(this.locals.selectedSection))
 									this.settings[this.locals.selectedSection].height += 0.01
@@ -1758,7 +1768,7 @@
 			 * function to display modal
 			 */
 			showModal(): void {
-				document.getElementById("templateBuilderModal").style.display = "block"
+				document.getElementById("templateBuilderModal")!.style.display = "block"
 			},
 
 			/**
@@ -1770,20 +1780,20 @@
 
 				var array = this.settings[section].elements
 
-				if (this.locals.selectedElement.states.isChild) { // it's a repeator.
-					let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId)
-					
+				if (this.locals.selectedElement.states.isChild) { // it's a repeator's child.
+					let index = array.findIndex((x: IElement) => x.id === this.locals.selectedElement.repeatorId)
+
 					if (index > -1) {
 						var childrens = array[index].configs.appendedElements
-						
+
 						index = childrens.findIndex((x: IElement) => x.id === this.locals.selectedElement.id)
 						if (index > -1)
 							childrens[index].styles = merge(childrens[index].styles, childrens[index].getCoordinates())
 					}
 				}
 
-				let elem = array.find(x => x.id === element.id)
-				elem.styles = merge(elem.styles, element.getCoordinates())
+				let elem = array.find((x: IElement) => x.id === element.id)
+				elem!.styles = merge(elem!.styles, element.getCoordinates('numeric'))
 			},
 
 			/**
@@ -1792,8 +1802,8 @@
 			 * @return {void} - void
 			 */
 			clickedOnInput(id: string): void {
-				document.getElementById(id).click()
+				document.getElementById(id)!.click()
 			},
 		},
-	};
+	})
 </script>	
