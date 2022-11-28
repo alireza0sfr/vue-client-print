@@ -294,6 +294,7 @@
       position: absolute;
       right: 0;
       left: 0;
+      background-color: #aaa;
 
       &:hover,
       &:active {
@@ -304,26 +305,26 @@
     &.header,
     &.beforeBody {
       .resizer {
-        bottom: -10px;
+        bottom: 0;
       }
     }
 
     &.footer,
     &.afterBody {
       .resize {
-        top: -10px;
+        top: 0;
       }
     }
 
-    &.header,
-    &.beforeBody {
-      border-bottom: 10px @section-bd-color solid;
-    }
+    // &.header,
+    // &.beforeBody {
+    //   border-bottom: 10px @section-bd-color solid;
+    // }
 
-    &.afterBody,
-    &.footer {
-      border-top: 10px @section-bd-color solid;
-    }
+    // &.afterBody,
+    // &.footer {
+    //   border-top: 10px @section-bd-color solid;
+    // }
   }
 
   .section-tag.active {
