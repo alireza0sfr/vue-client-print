@@ -2,7 +2,7 @@
 	<span :class="['section-tag', {'active': active}]">{{_$t(`template-builder.sections.${tag}`)}}</span>
 </template>
 
-<script>
+<script lang="ts">
 	export default {
 		name: 'SectionTag',
 		props: {

@@ -37,7 +37,7 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 	import VCP from '~/components/VueClientPrint.vue'
 	export default {
 		name: "DemoHome",

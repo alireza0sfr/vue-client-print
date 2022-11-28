@@ -2,7 +2,7 @@
 	<div v-for="area in cleanedResizeables" :key="area" :class="`elem-resizer ${area} ${query} resizer-${size}`"></div>
 </template>
 
-<script>
+<script lang="ts">
 	export default {
 		name: 'Resizer',
 		props: {

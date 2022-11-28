@@ -2,7 +2,7 @@
 	<Demo />
 </template>
 
-<script>
+<script lang="ts">
 import Demo from '~/views/Demo.vue'
 export default {
   name: 'App',
