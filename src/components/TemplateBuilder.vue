@@ -747,7 +747,7 @@
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createInstnaceFromSrcFile,  } from '~/plugins/element-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createElementInstanceFromObject, } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
@@ -1085,7 +1085,10 @@
 
 					for (let index = 0; index < this.settings[section].elements.length; index++) {
 						var elem = this.settings[section].elements[index]
-						this.settings[section].elements[index] = createInstnaceFromSrcFile(elem)
+
+						if (elem instanceof Element === false)
+							this.settings[section].elements[index] = createElementInstanceFromObject(elem)
+
 					}
 				}
 

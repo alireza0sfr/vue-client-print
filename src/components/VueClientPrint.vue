@@ -10,18 +10,19 @@
 </template>
 
 <script lang="ts">
-	import { getDefaultSettings, merge, prepareSettings, validateJson } from '~/plugins/general-utilities'
+	import { getDefaultSettings, isEmpty, merge, prepareSettings, validateJson } from '~/plugins/general-utilities'
 	import { IConfigs, ISettings } from '~/interfaces/general'
 	import { defineComponent } from 'vue'
 	import { IBindingObject } from '~/interfaces/elements'
-	import { prepareDataSets } from '~/plugins/element-utilities'
-	import { AppStates } from '~/enums/general'
+	import { prepareDataSets, createElementInstanceFromObject } from '~/plugins/element-utilities'
+	import { AppStates, TemplateBuilderSections } from '~/enums/general'
 	import DefaultLogo from '@/assets/images/logo.png'
 
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
 	import { useBindingObjectStore } from '~/stores/binding-object'
 	import { useDataSetStore } from '~/stores/dataset'
+	import { cloneDeep } from 'lodash'
 
 	const variablesStore = useVariablesStore()
 	const generalStore = useGeneralStore()
@@ -54,11 +55,28 @@
 					this._$i18n.locale = this.configs.language
 				}
 			},
+			// options watch depends on configurations watch therefore should be after configurations watch
 			options: {
 				immediate: true,
 				handler(val) {
-					// should be after configurations watch
-					this.settings = prepareSettings(this.settings, val)
+
+					// creating instance of Element class for stringified elements
+					var cloned = cloneDeep(val)
+					if (!isEmpty(cloned)) {
+
+						for (var section of Object.values(TemplateBuilderSections)) {
+
+							for (let index = 0; index < cloned[section].elements.length; index++) {
+								var elem = cloned[section].elements[index]
+								
+								if (elem instanceof Element === false)
+									cloned[section].elements[index] = createElementInstanceFromObject(elem)
+							}
+						}
+					}
+
+
+					this.settings = prepareSettings(this.settings, cloned)
 				},
 			},
 			dataSets: {

@@ -816,7 +816,7 @@ export function createElement(elementType: ElementTypes, parent: ElementParents,
   return new Element(elementType, parent, grandParent, states, styles, configs, repeatorId)
 }
 
-export function createInstnaceFromSrcFile(element: IElement) {
+export function createElementInstanceFromObject(element: IElement) {
 
   const prepareColumns = (columns: IColumn[]): IColumn[] => {
     for (let index = 0; index < columns.length; index++) {
@@ -836,7 +836,7 @@ export function createInstnaceFromSrcFile(element: IElement) {
     case ElementTypes.REPEATOR:
 
       for (let index = 0; index < element.configs.appendedElements.length; index++)
-        element.configs.appendedElements[index] = createInstnaceFromSrcFile(element.configs.appendedElements[index])
+        element.configs.appendedElements[index] = createElementInstanceFromObject(element.configs.appendedElements[index])
 
       for (var set of Object.keys(element.configs.dataSets))
         element.configs.dataSets[set].configs.columns = prepareColumns(element.configs.dataSets[set].configs.columns)
