@@ -1793,7 +1793,7 @@
 				}
 
 				let elem = array.find((x: IElement) => x.id === element.id)
-				elem!.styles = merge(elem!.styles, element.getCoordinates('numeric'))
+				elem!.styles = merge(elem!.styles, element.getCoordinates('string'))
 			},
 
 			/**
