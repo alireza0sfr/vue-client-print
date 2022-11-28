@@ -11,7 +11,7 @@
 
 <script lang="ts">
 	import { getDefaultSettings, isEmpty, merge, prepareSettings, validateJson } from '~/plugins/general-utilities'
-	import { IConfigs, ISettings } from '~/interfaces/general'
+	import { IConfigs, IJson, ISettings } from '~/interfaces/general'
 	import { defineComponent } from 'vue'
 	import { IBindingObject } from '~/interfaces/elements'
 	import { prepareDataSets, createElementInstanceFromObject } from '~/plugins/element-utilities'
@@ -36,7 +36,6 @@
 			dataSets: { type: Object, default: () => ({}) },
 			variables: { type: Array },
 			configurations: { type: Object },
-			options: Object as () => ISettings
 		},
 		watch: {
 			bindingObject: {
@@ -54,30 +53,6 @@
 					// @ts-ignore
 					this._$i18n.locale = this.configs.language
 				}
-			},
-			// options watch depends on configurations watch therefore should be after configurations watch
-			options: {
-				immediate: true,
-				handler(val) {
-
-					// creating instance of Element class for stringified elements
-					var cloned = cloneDeep(val)
-					if (!isEmpty(cloned)) {
-
-						for (var section of Object.values(TemplateBuilderSections)) {
-
-							for (let index = 0; index < cloned[section].elements.length; index++) {
-								var elem = cloned[section].elements[index]
-								
-								if (elem instanceof Element === false)
-									cloned[section].elements[index] = createElementInstanceFromObject(elem)
-							}
-						}
-					}
-
-
-					this.settings = prepareSettings(this.settings, cloned)
-				},
 			},
 			dataSets: {
 				immediate: true,
@@ -113,7 +88,8 @@
 			 * @param {Function} callback - callback function
 			 * @return {void} - void
 			 */
-			displayTemplateBuilder(callback: (val: ISettings) => void): void {
+			displayTemplateBuilder(json: IJson, callback: (val: ISettings) => void): void {
+				this.prepareJson(json)
 				this.settings.callback = callback
 				this.locals.appState = AppStates.TEMPLATEBUILDER
 
@@ -123,7 +99,9 @@
 					TB.showModal()
 				})
 			},
-			displayPrintPreview(): void {
+			displayPrintPreview(json: ISettings): void {
+
+				this.prepareJson(json)
 
 				if (!validateJson(this.settings)) {
 					var text = this._$t('validators.json-is-not-validated')
@@ -137,6 +115,25 @@
 					const PP: any = this.$refs.printPreview
 					PP.showModal()
 				})
+			},
+			prepareJson(json: IJson): void {
+				// creating instance of Element class for stringified elements
+				var cloned = cloneDeep(json)
+				if (!isEmpty(cloned)) {
+
+					for (var section of Object.values(TemplateBuilderSections)) {
+
+						for (let index = 0; index < cloned[section].elements.length; index++) {
+							var elem = cloned[section].elements[index]
+
+							if (elem instanceof Element === false)
+								cloned[section].elements[index] = createElementInstanceFromObject(elem)
+						}
+					}
+				}
+
+
+				this.settings = prepareSettings(this.settings, cloned)
 			},
 		}
 	})
