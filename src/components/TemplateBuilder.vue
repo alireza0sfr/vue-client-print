@@ -92,7 +92,7 @@
 								</div>
 								<div style="display:none" class="toolbar-content-row">
 									<div class="variables-content-field">
-										<input type="file" @change="onFileChange(locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
+										<input type="file" accept=".vcp" @change="onFileChange(locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
 									</div>
 								</div>
 							</div>
@@ -747,7 +747,7 @@
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IJson } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails } from '~/plugins/element-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createInstnaceFromSrcFile,  } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
 	import { saveAs } from 'file-saver'
 	import { useVariablesStore } from '~/stores/variables'
@@ -1048,12 +1048,13 @@
 				var encoded: string = encode2Base64(JSON.stringify(settings)) // encoding the settings to export
 
 				var currentdate = new Date()
-				var defaultDesignName = 'vcp' + "_"
-					+ currentdate.getFullYear() + "_"
-					+ (currentdate.getMonth() + 1) + "_"
-					+ currentdate.getDate() + "_"
-					+ currentdate.getHours() + "_"
-					+ currentdate.getMinutes()
+				var defaultDesignName = 'vcp' + " "
+					+ currentdate.getFullYear() + "-"
+					+ (currentdate.getMonth() + 1) + "-"
+					+ currentdate.getDate() + " at "
+					+ currentdate.getHours() + "."
+					+ currentdate.getMinutes() + '.'
+					+ currentdate.getSeconds()
 
 				let fileName = this.settings.designName === '' ? defaultDesignName : this.settings.designName
 
@@ -1084,7 +1085,7 @@
 
 					for (let index = 0; index < this.settings[section].elements.length; index++) {
 						var elem = this.settings[section].elements[index]
-						this.settings[section].elements[index] = this.createElement(elem.type, ElementParents[section.toUpperCase()], elem.states, elem.styles, elem.configs)
+						this.settings[section].elements[index] = createInstnaceFromSrcFile(elem)
 					}
 				}
 
@@ -1768,12 +1769,13 @@
 
 				if (this.locals.selectedElement.states.isChild) { // it's a repeator.
 					let index = array.findIndex(x => x.id === this.locals.selectedElement.repeatorId)
+					
 					if (index > -1) {
-						let repeator = array[index]
-						var children = repeator.configs.appendedElements
-						index = children.findIndex((x: IElement) => x.id === this.locals.selectedElement.id)
+						var childrens = array[index].configs.appendedElements
+						
+						index = childrens.findIndex((x: IElement) => x.id === this.locals.selectedElement.id)
 						if (index > -1)
-							children[index].styles = merge(children[index].styles, children[index].getCoordinates())
+							childrens[index].styles = merge(childrens[index].styles, childrens[index].getCoordinates())
 					}
 				}
 

@@ -813,18 +813,20 @@ export function createElement(elementType: ElementTypes, parent: ElementParents,
     default:
       break
   }
-  return new Element(elementType, parent, grandParent, states, styles, configs, '')
+  return new Element(elementType, parent, grandParent, states, styles, configs, repeatorId)
 }
 
-export function createInstnaceFromObject(element: IElement) {
+export function createInstnaceFromSrcFile(element: IElement) {
 
-  const createColumnsInstanceFromObject = (columns: IColumn[]): IColumn[] => {
-    for (var col of columns) {
+  const prepareColumns = (columns: IColumn[]): IColumn[] => {
+    for (let index = 0; index < columns.length; index++) {
+
+      var col = columns[index]
 
       if (col.configs.columns)
-        createColumnsInstanceFromObject(col.configs.columns)
+        col.configs.columns = prepareColumns(col.configs.columns)
 
-      col = createElement(col.type, col.parent, col.grandParent, col.states, col.styles, col.configs)
+      columns[index] = createElement(col.type, col.parent, col.grandParent, col.states, col.styles, col.configs)
     }
 
     return columns
@@ -832,11 +834,23 @@ export function createInstnaceFromObject(element: IElement) {
 
   switch (element.type) {
     case ElementTypes.REPEATOR:
+
+      for (let index = 0; index < element.configs.appendedElements.length; index++)
+        element.configs.appendedElements[index] = createInstnaceFromSrcFile(element.configs.appendedElements[index])
+
+      for (var set of Object.keys(element.configs.dataSets))
+        element.configs.dataSets[set].configs.columns = prepareColumns(element.configs.dataSets[set].configs.columns)
+
+      var instance = createElement(element.type, element.parent, element.grandParent, element.states, element.styles, element.configs, element.repeatorId)
+      instance.id = element.id // syncing repeator's id with the old id becuase it gets new id from createElement
+      return instance
+
     case ElementTypes.DATASET:
 
-      for (var set of Object.keys(element.configs.dataSets)) {
-        element.configs.dataSets[set].configs.columns = createColumnsInstanceFromObject(element.configs.dataSets[set].configs.columns)
-      }
+      for (var set of Object.keys(element.configs.dataSets))
+        element.configs.dataSets[set].configs.columns = prepareColumns(element.configs.dataSets[set].configs.columns)
+
+      element.configs.dataSetDefaultRow = [DEFAULTDATASETROW]
 
       return createElement(element.type, element.parent, element.grandParent, element.states, element.styles, element.configs, element.repeatorId)
 

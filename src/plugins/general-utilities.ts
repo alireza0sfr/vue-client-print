@@ -338,6 +338,9 @@ export function validateJson(settings: IJson): boolean {
           return false
         }
 
+        for (var set of Object.keys(element.configs.dataSets))
+          element.configs.dataSets[set].configs.rows = []
+
         if (element.type === ElementTypes.REPEATOR) {
 
           for (var child of element.configs.appendedElements) {

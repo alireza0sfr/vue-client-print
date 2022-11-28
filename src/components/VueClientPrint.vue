@@ -18,8 +18,6 @@
 	import { AppStates } from '~/enums/general'
 	import DefaultLogo from '@/assets/images/logo.png'
 
-	import cloneDeep from 'lodash/cloneDeep'
-
 	import { useVariablesStore } from '~/stores/variables'
 	import { useGeneralStore } from '~/stores/general'
 	import { useBindingObjectStore } from '~/stores/binding-object'
@@ -98,10 +96,10 @@
 			 * @return {void} - void
 			 */
 			displayTemplateBuilder(callback: (val: ISettings) => void): void {
+				this.settings.callback = callback
 				this.locals.appState = AppStates.TEMPLATEBUILDER
 
 				this.$nextTick(() => {
-					this.settings.callback = callback
 					const TB: any = this.$refs.TemplateBuilder
 					TB.settingsInitFunc()
 					TB.showModal()
