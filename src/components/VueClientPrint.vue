@@ -16,6 +16,7 @@
 	import { IBindingObject } from '~/interfaces/elements'
 	import { prepareDataSets, createElementInstanceFromObject } from '~/plugins/element-utilities'
 	import { AppStates, TemplateBuilderSections } from '~/enums/general'
+	import Logger from '~/plugins/logger'
 	import DefaultLogo from '@/assets/images/logo.png'
 
 	import { useVariablesStore } from '~/stores/variables'
@@ -106,7 +107,7 @@
 
 				if (!validateJson(this.settings)) {
 					var text = this._$t('validators.json-is-not-validated')
-					alert(text)
+					Logger.alert(text, Logger.levels.ERROR)
 					return
 				}
 

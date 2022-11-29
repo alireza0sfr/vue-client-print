@@ -749,11 +749,13 @@
 	import { fetchLangList } from '~/translations'
 	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createElementInstanceFromObject, } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
+
 	//@ts-ignore
 	import { saveAs } from 'file-saver'
 	import { IColumn, IDataset } from '@/interfaces/datasets'
 	import cloneDeep from 'lodash/cloneDeep'
 	import KeyboardHandler from '~/plugins/keyboard-handler'
+	import Logger from '~/plugins/logger'
 	import { defineComponent } from 'vue'
 
 	import { useVariablesStore } from '~/stores/variables'
@@ -1029,7 +1031,7 @@
 					this.settings.callback(json)
 
 				var text = this._$t('template-builder.alerts.save-success')
-				alert(text)
+				Logger.alert(text)
 			},
 			/**
 			 * Exports settings to json a file.
@@ -1373,19 +1375,19 @@
 
 				if (element instanceof DataSetLikeElement && isEmpty(dataSetStore.all)) {
 					var text = this._$t('template-builder.elements.validators.dataset-is-empty')
-					alert(text)
+					Logger.alert(text, Logger.levels.ERROR)
 					return false
 				}
 
 				if (element instanceof BindingObjectLikeElement && isEmpty(bindingObjectStore.all)) {
 					var text = this._$t('template-builder.elements.validators.bindingobject-is-empty')
-					alert(text)
+					Logger.alert(text, Logger.levels.ERROR)
 					return false
 				}
 
 				if (element.type === ElementTypes.PAGECOUNTER && (element.parent !== ElementParents.HEADER && element.parent !== ElementParents.FOOTER)) {
 					var text = this._$t('template-builder.elements.validators.pagecounter-parent')
-					alert(text)
+					Logger.alert(text, Logger.levels.ERROR)
 					return false
 				}
 
@@ -1394,21 +1396,21 @@
 
 					if (!parentElement!.configs.selectedDataSet) {
 						var text = this._$t('template-builder.elements.validators.select-dataset-first')
-						alert(text)
+						Logger.alert(text, Logger.levels.ERROR)
 						return false
 					}
 
 					if (DISSALLOWED_CHILDTYPES.includes(element.type)) {
 						var type = this._$t(`template-builder.elements.${element.type}`)
 						var text = this._$t('template-builder.elements.validators.element-type-cant-be-child', { type: type })
-						alert(text)
+						Logger.alert(text, Logger.levels.ERROR)
 						return false
 					}
 
 					// if child element wants to be parent element
 					if (parentElement!.states.isChild) {
 						var text = this._$t('template-builder.elements.validators.child-cant-be-parent')
-						alert(text)
+						Logger.alert(text, Logger.levels.ERROR)
 						return false
 					}
 				}
@@ -1465,12 +1467,12 @@
 
 					if (validTypes.length && !validTypes.includes(file.type)) {
 						var text = this._$t('template-builder.alerts.format-notsupported')
-						return alert(text)
+						return Logger.alert(text, Logger.levels.ERROR)
 					}
 
 					if (file.size >= maximumFileSize) {// Check if the file size is under 1MB the image size value is in bytes
 						var text = this._$t('template-builder.alerts.fileSize-exceeded', { size: maximumFileSize })
-						return alert(text)
+						return Logger.alert(text, Logger.levels.ERROR)
 					}
 					return true
 				}
@@ -1503,7 +1505,8 @@
 
 						if (!file.name.includes('.vcp')) {
 							var text = this._$t('template-builder.alerts.format-notsupported')
-							return alert(text)
+							return Logger.alert(text, Logger.levels.ERROR)
+
 						}
 
 						if (fileValidator(file, maximumFileSize, [])) {
@@ -1511,7 +1514,7 @@
 							var fr = new FileReader()
 							fr.readAsText(file)
 							fr.onload = () => this.importFromSrcFile(fr.result)
-							fr.onerror = (err) => alert(err)
+							fr.onerror = (err) => Logger.alert(text, Logger.levels.ERROR)
 
 						}
 						break

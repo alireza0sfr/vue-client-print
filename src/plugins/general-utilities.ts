@@ -2,6 +2,7 @@ import { IBindingObject } from '~/interfaces/elements'
 import { ISettings, IJson } from '~/interfaces/general'
 import { TemplateBuilderSections } from '~/enums/general'
 import { DataSetLikeElement } from '~/plugins/element-utilities'
+import Logger from '~/plugins/logger'
 import i18nInstance from '~/plugins/i18n'
 
 import piniaInstance from '~/plugins/pinia-instance'
@@ -334,7 +335,7 @@ export function validateJson(settings: IJson): boolean {
 
         if (!element.configs.selectedDataSet) {
           var text = i18nInstance.global.t('template-builder.alerts.select-dataset')
-          alert(text)
+          Logger.alert(text, Logger.levels.ERROR)
           return false
         }
 
