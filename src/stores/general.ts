@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { IConfigs } from '~/interfaces/general'
 
 interface State {
   [key: string]: any

@@ -29,3 +29,21 @@ export enum AppStates {
   PRINTPREVIEW = 'printpreview',
   EMPTY = ''
 }
+
+export enum LoggerLevels {
+  LOG,
+  DEBUG,
+  INFO,
+  WARN,
+  ERROR,
+  OFF = 99
+}
+
+export enum LoggerBase {
+  DEBUG = '[LOGGER DEBUG]',
+  LOG = '[LOGGER LOG]',
+  WARN = '[LOGGER WARN]',
+  ERROR = '[LOGGER ERROR]',
+  INFO = '[LOGGER INFO]',
+  FORCE = '[LOGGER FORCE]',
+}

@@ -78,7 +78,8 @@
 					maximumFileSize: 1000, // Maximum file size in KB
 					language: 'en',
 					imageSrc: DefaultLogo,
-					direction: 'rtl'
+					direction: 'rtl',
+					useAlert: true
 				} as IConfigs,
 			}
 		},

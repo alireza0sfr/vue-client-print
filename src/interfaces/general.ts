@@ -1,4 +1,5 @@
 import { IElement, IVariable } from './elements'
+import { LoggerLevels } from '~/enums/general'
 export interface ISettings {
   header: {
     elements: IElement[],
@@ -48,4 +49,26 @@ export interface IConfigs {
   language: string
   imageSrc: string
   direction: string
+  useAlert: boolean
+}
+
+export interface ILogger {
+  isDevBuild: boolean
+  level: LoggerLevels
+  levels: typeof LoggerLevels
+  logOnBuild: boolean
+
+  validate(level: LoggerLevels, force: boolean): boolean
+  alert(message: any, level?: LoggerLevels, forceAlert?: boolean): void
+  time(func: () => any): void
+  debug(messages: any[]): void
+  log(messages: any[]): void
+  force(messages: any[]): void
+  warn(messages: any[]): void
+  error(messages: any[]): void
+  info(messages: any[]): void
+  getCurrentLevel(): LoggerLevels
+  setLevel(level: LoggerLevels): void
+  clear(): void
+  customHandler(func: () => any, level: LoggerLevels): void
 }
