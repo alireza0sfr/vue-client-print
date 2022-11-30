@@ -49,6 +49,9 @@
 				immediate: true,
 				handler(val) {
 					this.configs = merge(this.configs, val)
+
+					this.configs.header.styles = 'position:absolute;' + this.configs.header.styles
+
 					generalStore.updateByKey('configurations', this.configs)
 
 					// @ts-ignore
@@ -80,7 +83,11 @@
 					language: 'en',
 					imageSrc: DefaultLogo,
 					direction: 'rtl',
-					useAlert: true
+					useAlert: true,
+					header: {
+						context: '',
+						styles: 'font-size: 12px',
+					},
 				} as IConfigs,
 			}
 		},

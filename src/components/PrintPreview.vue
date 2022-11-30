@@ -86,6 +86,9 @@
 	import printJS from "print-js"
 	import domtoimage from 'dom-to-image'
 	import { convert2Pixels, convert2Inches, prepareSettings, getDefaultSettings } from '~/plugins/general-utilities'
+	import { useGeneralStore } from '~/stores/general'
+
+	const generalStore = useGeneralStore()
 
 	export default {
 		name: "Print",
@@ -154,10 +157,13 @@
 			 * @return {void} - void
 			 */
 			printForm(): void {
+				var configs = generalStore.getByKey('configurations')
 				// @ts-ignore
 				printJS({
 					printable: 'printForm',
 					type: 'html',
+					header: configs.header.context || '',
+					headerStyle: configs.header.styles || '',
 					scanStyles: false, // If true inline styles will be removed
 					style: [
 						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}",
