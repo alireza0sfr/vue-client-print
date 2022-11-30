@@ -1338,6 +1338,7 @@
 					top: e.offsetY + 'px' || '0px',
 					left: e.offsetX + 'px' || '0px',
 					direction: this.settings.pageDirections,
+					backgroundColor: elementType === ElementTypes.VARIABLE ? '#faecff' : ''
 				}
 
 				var configs = this.prepareNewElementsConfigs(elementType)
