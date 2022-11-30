@@ -14,9 +14,12 @@ export const useVariablesStore = defineStore('variables', {
   actions: {
     updateVariables(payload: IVariable[]) {
 
+      if (!payload.length)
+        this.validates = []
+
       for (var variable of payload) {
         var index = this.variables.findIndex((x: IVariable) => x.variableId === variable.variableId)
-        
+
         if (index === -1)
           this.variables.push(variable)
         else
