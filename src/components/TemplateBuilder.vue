@@ -1762,6 +1762,17 @@
 							this.pasteCopiedElement()
 						}
 					},
+					{
+						name: 'design-save',
+						shortcut: {
+							keyCode: 83, // 83:S,
+							ctrlKey: true,
+						},
+						focusEl: document.getElementById('templateBuilderModal'),
+						handler: () => {
+							this.save()
+						}
+					},
 				]
 
 				new KeyboardHandler(requests)
