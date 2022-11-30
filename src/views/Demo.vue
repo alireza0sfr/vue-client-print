@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-	import { IJson } from '~/interfaces/general'
+	import { ISettings } from '~/interfaces/general'
 	import VCP from '~/components/VueClientPrint.vue'
 	export default {
 		name: "DemoHome",
@@ -286,8 +286,8 @@
 		},
 		methods: {
 			templateBuilder() {
-				this.$refs.vcp.displayTemplateBuilder(this.printOptions, (json: IJson) => {
-					this.printOptions = json
+				this.$refs.vcp.displayTemplateBuilder(this.printOptions, (design: ISettings) => {
+					this.printOptions = design
 				})
 			},
 			printPreview() {

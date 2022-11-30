@@ -1,5 +1,5 @@
 import { IBindingObject } from '~/interfaces/elements'
-import { ISettings, IJson } from '~/interfaces/general'
+import { ISettings } from '~/interfaces/general'
 import { TemplateBuilderSections } from '~/enums/general'
 import { DataSetLikeElement } from '~/plugins/element-utilities'
 import Logger from '~/plugins/logger'
@@ -317,11 +317,11 @@ export function prepareSettings(updatedSettings: ISettings): ISettings {
 
 /**
  * settings validator.
- * @param {IJson} settings - settings
+ * @param {ISettings} settings - settings
  * @return {Boolean} - wether it's valid 
  */
 
-export function validateJson(settings: IJson): boolean {
+export function validateDesign(settings: ISettings): boolean {
 
   var sections = Object.values(TemplateBuilderSections)
 

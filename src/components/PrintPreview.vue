@@ -324,7 +324,6 @@
 
 			/**
 			 * By Triggering this func Print Preview modal will be displayed.
-			 * @param {object} json - settings json
 			 * @return {void} - void
 			 */
 			printPreview(): void {

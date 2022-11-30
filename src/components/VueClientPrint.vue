@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-	import { getDefaultSettings, isEmpty, merge, prepareSettings, validateJson } from '~/plugins/general-utilities'
-	import { IConfigs, IJson, ISettings } from '~/interfaces/general'
+	import { getDefaultSettings, isEmpty, merge, prepareSettings, validateDesign } from '~/plugins/general-utilities'
+	import { IConfigs, ISettings } from '~/interfaces/general'
 	import { defineComponent } from 'vue'
-	import { IBindingObject } from '~/interfaces/elements'
+	import { IBindingObject, IVariable } from '~/interfaces/elements'
 	import { prepareDataSets, createElementInstanceFromObject } from '~/plugins/element-utilities'
 	import { AppStates, TemplateBuilderSections } from '~/enums/general'
 	import Logger from '~/plugins/logger'
@@ -90,8 +90,8 @@
 			 * @param {Function} callback - callback function
 			 * @return {void} - void
 			 */
-			displayTemplateBuilder(json: IJson, callback: (val: ISettings) => void): void {
-				this.prepareJson(json)
+			displayTemplateBuilder(design: ISettings, callback: (val: ISettings) => void): void {
+				this.prepareDesign(design)
 				this.settings.callback = callback
 				this.locals.appState = AppStates.TEMPLATEBUILDER
 
@@ -101,11 +101,11 @@
 					TB.showModal()
 				})
 			},
-			displayPrintPreview(json: ISettings): void {
+			displayPrintPreview(design: ISettings): void {
 
-				this.prepareJson(json)
+				this.prepareDesign(design)
 
-				if (!validateJson(this.settings)) {
+				if (!validateDesign(this.settings)) {
 					var text = this._$t('validators.json-is-not-validated')
 					Logger.alert(text, Logger.levels.ERROR)
 					return
@@ -118,9 +118,12 @@
 					PP.showModal()
 				})
 			},
-			prepareJson(json: IJson): void {
+			fetchVariablesList(): IVariable[] {
+				return variablesStore.all
+			},
+			prepareDesign(design: ISettings): void {
 				// creating instance of Element class for stringified elements
-				var cloned = cloneDeep(json)
+				var cloned = cloneDeep(design)
 				if (!isEmpty(cloned)) {
 
 					for (var section of Object.values(TemplateBuilderSections)) {

@@ -37,11 +37,12 @@ export interface ISettings {
   pageDirections: string,
   pageBorder: string,
 
-  callback?(json: IJson): void
+  callback?(design: ISettings): void
 }
 
-export interface IJson extends ISettings {
+export interface IFile {
   variables: IVariable[]
+  design: ISettings
 }
 
 export interface IConfigs {

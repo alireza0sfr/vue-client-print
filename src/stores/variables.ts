@@ -2,44 +2,42 @@ import { IVariable } from '~/interfaces/elements'
 import { defineStore } from 'pinia'
 
 interface State {
-  variables: IVariable[] | null
+  variables: IVariable[]
 }
 
 export const useVariablesStore = defineStore('variables', {
 
   state: (): State => ({
-    variables: null,
+    variables: [],
   }),
 
   actions: {
     updateVariables(payload: IVariable[]) {
-      this.variables = payload
+
+      for (var variable of payload) {
+        var index = this.variables.findIndex((x: IVariable) => x.variableId === variable.variableId)
+        
+        if (index === -1)
+          this.variables.push(variable)
+        else
+          this.variables[index] = variable
+      }
+
     },
     clearVariables() {
       this.$reset()
     },
     updateSingleVariable(payload: IVariable) {
 
-      if (!this.variables)
-        return null
-
-      var index = this.variables?.findIndex(x => x.variableId === payload.variableId)
+      var index = this.variables?.findIndex((x: IVariable) => x.variableId === payload.variableId)
       if (index > -1)
         this.variables![index] = payload
     },
     pushVariable(payload: IVariable) {
-
-      if (!this.variables)
-        this.variables = [payload]
-
       this.variables.push(payload)
     },
     deleteById(id: string) {
-
-      if (!this.variables)
-        return
-
-      let index = this.variables.findIndex(x => x.variableId === id) // delete variable from variables list
+      let index = this.variables.findIndex((x: IVariable) => x.variableId === id) // delete variable from variables list
       if (index > -1)
         this.variables.splice(index, 1)
     },
@@ -47,10 +45,6 @@ export const useVariablesStore = defineStore('variables', {
   getters: {
     getVariableById: (state) => {
       return (id: string) => {
-
-        if (!state.variables)
-          return null
-
         var index: number = state.variables?.findIndex((x: IVariable) => x.variableId === id)
         if (index > -1)
           return state.variables![index]
@@ -58,11 +52,8 @@ export const useVariablesStore = defineStore('variables', {
         return null
       }
     },
-    getVarialbesList: (state) => {
-      if (state.variables)
-        return state.variables
-
-      return []
+    all: (state) => {
+      return state.variables
     }
   }
 })

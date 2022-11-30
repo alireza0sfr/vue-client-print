@@ -5,7 +5,7 @@
 			<div id="fullscreenControl" class="print-modal-content">
 				<div class="print-modal-header">
 					<div>
-						<a @click="save()" :title="_$t('template-builder.save')" class="modal-icon" href="#">
+						<a @click="save" :title="_$t('template-builder.save')" class="modal-icon" href="#">
 							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
@@ -745,10 +745,10 @@
 	import { IElement, IElementStates, IEmptyElement, IVariable, IDataSetLikeElement } from '~/interfaces/elements'
 	import { fileEntryTypes, TemplateBuilderSections, Tabs } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
-	import { IJson } from '~/interfaces/general'
+	import { IFile, ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
 	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createElementInstanceFromObject, } from '~/plugins/element-utilities'
-	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateJson } from '~/plugins/general-utilities'
+	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateDesign } from '~/plugins/general-utilities'
 
 	//@ts-ignore
 	import { saveAs } from 'file-saver'
@@ -789,7 +789,7 @@
 				}
 			},
 			variablesList() {
-				return variablesStore.getVarialbesList
+				return variablesStore.all
 			},
 		},
 		data() {
@@ -1019,16 +1019,16 @@
 
 			/**
 			 * Save Changes on TB close.
-			 * @return {Object} - json file
+			 * @return {Object} - design file
 			 */
 			save(): void {
-				let json: IJson = this.export2Json()
+				let design: ISettings = this.export2Json()
 
-				if (!validateJson(json))
+				if (!validateDesign(design))
 					return
 
 				if (this.settings.callback)
-					this.settings.callback(json)
+					this.settings.callback(design)
 
 				var text = this._$t('template-builder.alerts.save-success')
 				Logger.alert(text)
@@ -1037,15 +1037,13 @@
 			 * Exports settings to json a file.
 			 * @return {Object} - json file
 			 */
-			export2Json(): IJson {
+			export2Json(): ISettings {
 				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
 				if (this.settings.totalHeightOfAPaper < 0)
 					this.settings.totalHeightOfAPaper = 1.77
 
-				let tmp: any = this.settings
-				tmp.variables = this.variablesList
-				return tmp as IJson
+				return this.settings
 			},
 
 			/**
@@ -1053,8 +1051,8 @@
 			 * @return {File} - save settings file in browser
 			 */
 			export2SrcFile(): void {
-				let settings: IJson = this.export2Json()
-				var encoded: string = encode2Base64(JSON.stringify(settings)) // encoding the settings to export
+				var file: IFile = { design: this.export2Json(), variables: variablesStore.all }
+				var encoded: string = encode2Base64(JSON.stringify(file)) // encoding the settings to export
 
 				var currentdate = new Date()
 				var defaultDesignName = 'vcp' + " "
@@ -1065,7 +1063,7 @@
 					+ currentdate.getMinutes() + '.'
 					+ currentdate.getSeconds()
 
-				let fileName = this.settings.designName === '' ? defaultDesignName : this.settings.designName
+				let fileName = file.design.designName === '' ? defaultDesignName : file.design.designName
 
 				var blob = new Blob([encoded],
 					{ type: "text/plain;charset=utf-8" })
@@ -1080,15 +1078,13 @@
 			importFromSrcFile(srcFile: string): void {
 				var callback = this.settings.callback || null
 				this.settings = getDefaultSettings() // Set the settings to default value
-				var jsonFile: any = JSON.parse(decodeFromBase64(srcFile))
+				var designFile: IFile = JSON.parse(decodeFromBase64(srcFile))
 
 
-				if (jsonFile.variables) {
-					variablesStore.updateVariables(jsonFile.variables)
-					delete jsonFile.variables
-				}
+				if (designFile.variables)
+					variablesStore.updateVariables(designFile.variables)
 
-				this.settings = merge(this.settings, jsonFile) // assign the changes
+				this.settings = merge(this.settings, designFile.design) // assign the changes
 
 				for (var section of this.locals.sections) {
 
