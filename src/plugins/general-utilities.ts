@@ -306,12 +306,11 @@ export function getDefaultSettings(): ISettings {
 
 /**
  * Prepare settings on init
- * @param {ISettings} settings - old Settings
  * @param {ISettings} updatedSettings - updated Settings
  * @return {Object} - merged new settings and old/default settings
  */
-export function prepareSettings(settings: ISettings, updatedSettings: ISettings): ISettings {
-  var newSettings = merge<ISettings>(settings, updatedSettings)
+export function prepareSettings(updatedSettings: ISettings): ISettings {
+  var newSettings = merge<ISettings>(getDefaultSettings(), updatedSettings)
   newSettings.pageDirections = generalStore.getByKey('configurations').direction
   return newSettings
 }

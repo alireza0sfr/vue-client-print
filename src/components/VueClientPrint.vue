@@ -135,7 +135,7 @@
 				}
 
 
-				this.settings = prepareSettings(this.settings, cloned)
+				this.settings = prepareSettings(cloned)
 			},
 		}
 	})
