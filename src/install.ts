@@ -1,12 +1,12 @@
 import componentRegisterer from './plugins/components'
 import { idGenerator, encode2Base64, decodeFromBase64, merge } from './plugins/general-utilities'
 import { createLocalI18n } from './plugins/i18n'
-import { BindingObjectGenerator } from './plugins/general-utilities'
+import { keyValueGenerator } from './plugins/general-utilities'
 // import { IRawDataset, IRawRow, IRawColumn } from '~/interfaces/datasets'
 // import { IBindingObject } from '~/interfaces/elements'
 
 
-export { encode2Base64, decodeFromBase64, merge, idGenerator, BindingObjectGenerator }
+export { encode2Base64, decodeFromBase64, merge, idGenerator, keyValueGenerator }
 // export { IRawDataset as IDataset, IRawRow as IRow, IRawColumn as IColumn, IBindingObject }
 
 export default {

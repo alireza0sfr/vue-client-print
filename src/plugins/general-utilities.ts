@@ -17,7 +17,7 @@ const generalStore = useGeneralStore(piniaInstance)
  * @param {Object} displays - map to decide how to get the nested property.
  * @return {Object} - key value pair object
  */
-export function BindingObjectGenerator(source: any, displays: any): IBindingObject {
+export function keyValueGenerator(source: any, displays: any): any {
 
   let newObj: any = {}
 
@@ -30,18 +30,23 @@ export function BindingObjectGenerator(source: any, displays: any): IBindingObje
       newObj[key] = null
 
     // if property is (string or number) and without display
-    else if ((typeof source[key] === 'string' || typeof source[key] === 'number') && !currentDisplay)
+    if ((typeof source[key] === 'string' || typeof source[key] === 'number') && !currentDisplay)
       newObj[key] = source[key]
+  }
+
+  for (var key of Object.keys(displays)) {
+
+    var currentDisplay = displays[key]
 
     // if propperty has function as display
-    else if (typeof currentDisplay === 'function')
+    if (typeof currentDisplay === 'function' && source[key])
       newObj[key] = currentDisplay(source[key])
 
     // if property has a path to corresponding property as display
-    else
-      newObj[key] = findPropertyBasedOnPath(source[key], currentDisplay)
-
+    else if (typeof currentDisplay === 'string')
+      newObj[key] = findPropertyBasedOnPath(source, currentDisplay)
   }
+
   return newObj
 }
 
@@ -64,13 +69,19 @@ export function findPropertyBasedOnPath(obj: object, path: string): any {
     if (matchBrackets) { // it's array
       var property = matchBrackets[1]
       var index = parseInt(matchBrackets[2])
-      found = found[property][index]
+
+      if (found)
+        found = found[property][index]
+
       splittedPath.splice(0, 1)
     }
 
     else { // it's object
       var property = splittedPath[0]
-      found = found[property]
+
+      if (found)
+        found = found[property]
+
       splittedPath.splice(0, 1)
     }
   }
@@ -352,7 +363,7 @@ export function validateDesign(settings: ISettings): boolean {
         }
 
       }
-      
+
       // in large projects $el property gets larger and larger and creates a circular state in instance therefore instance cant be stringified
       // but when TB opens again and new elements are created $el gets filled by init method again
       element.states.isNew = false
