@@ -990,8 +990,9 @@
 
 				if (!this.validateCopy(element))
 					return
-
-				this.locals.copiedElement = this.createElement(element.type, element.parent, DEFAULTELEMENTSTATES, element.styles, element.configs)
+				console.log(element)
+				this.locals.copiedElement = cloneDeep(this.createElement(element.type, element.parent, DEFAULTELEMENTSTATES, element.styles, element.configs))
+				console.log(this.locals.copiedElement)
 			},
 			/**
 			 * Paste copied element.
