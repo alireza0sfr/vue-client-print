@@ -600,7 +600,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
     }
 
     var styles = {
-      width: col.styles.width ? col.styles.width : DEFAULTCOLUMNWIDTH,
+      width: col.styles?.width ? col.styles?.width : DEFAULTCOLUMNWIDTH,
     }
 
     preparedColumns[index] = createElement(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, styles, configs)
