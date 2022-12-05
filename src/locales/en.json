@@ -74,6 +74,7 @@
         "textpattern": "Text Pattern",
         "configs": {
           "isActive": "Active",
+          "title": "Title",
           "order": "Order",
           "datasets": "Data",
           "stylesTarget": "Row Styles Target",

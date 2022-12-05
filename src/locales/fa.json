@@ -74,6 +74,7 @@
         "textpattern": "متن الکویی",
         "configs": {
           "isActive": "فعال",
+          "title": "تیتر",
           "order": "ترتیب نمایش",
           "stylesTarget": "اعمال استایل روی",
           "even": "زوج",

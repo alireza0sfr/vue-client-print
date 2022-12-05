@@ -417,6 +417,17 @@
 												</label>
 											</div>
 										</div>
+
+										<div class="toolbar-content-row">
+											<div style="width: 100%;" class="toolbar-content-label">
+												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.title')}}</label>
+											</div>
+											<div class="toolbar-content-field">
+												<label for="colActive">
+													<input style="flex-grow: unset;" type="text" class="input-form-control" v-model="locals.selectedElement.configs.title" id="colActive" />
+												</label>
+											</div>
+										</div>
 									</div>
 
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW" :id="`${locals.ElementTypes.ROW}_Settings`" class="element-settings">
