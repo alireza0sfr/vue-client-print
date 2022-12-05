@@ -10,7 +10,7 @@
 		</div>
 
 		<!-- If its the print mode -->
-		<div v-else>
+		<div class="content" v-else>
 			{{ computedValue }}
 			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
