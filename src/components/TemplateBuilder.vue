@@ -902,11 +902,14 @@
 				var columns: IColumn[] = displaySet.configs.columns
 				var index: number = columns.findIndex((x: IColumn) => x.configs.key === col.configs.key)
 
+
 				if (index > -1)
 					columns.splice(index, 1)
 
-				else
+				else {
+					col.configs.order = columns.length + 1
 					columns.push(col)
+				}
 			},
 
 			/**
