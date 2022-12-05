@@ -1038,12 +1038,15 @@
 			 * @return {Object} - json file
 			 */
 			export2Json(): ISettings {
-				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.header.height - this.settings.footer.height
 
-				if (this.settings.totalHeightOfAPaper < 0)
-					this.settings.totalHeightOfAPaper = 1.77
+				var json: ISettings = cloneDeep(this.settings)
 
-				return this.settings
+				json.totalHeightOfAPaper = json.defaultHeightOfPaper - json.header.height - json.footer.height
+
+				if (json.totalHeightOfAPaper < 0)
+					json.totalHeightOfAPaper = 1.77
+
+				return json
 			},
 
 			/**
