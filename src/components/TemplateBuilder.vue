@@ -1026,7 +1026,7 @@
 
 				if (!design)
 					return
-				console.log(design)
+
 				if (this.settings.callback)
 					this.settings.callback(design)
 
