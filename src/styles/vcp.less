@@ -1,6 +1,7 @@
 @import './_variables.less';
 @import './templateBuilder.less';
 @import './modal.less';
+@import './toggler.less';
 
 .__VCP__ {
   * {
@@ -10,6 +11,9 @@
 
   .template-builder();
   .modal();
+  .toggler{
+    .toggler();
+  }
 
   .mainLoop {
     display: flex;

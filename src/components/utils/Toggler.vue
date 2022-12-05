@@ -1,5 +1,5 @@
 <template>
-	<span @click="clicked" :style="settings.styles" :class="['nk-toggler', isActive ? 'active' : '', settings.class]">
+	<span @click="clicked" :style="settings.styles" :class="['toggler', isActive ? 'active' : '', settings.class]">
 		<label>{{ settings.title }}</label>
 	</span>
 </template>
@@ -53,7 +53,3 @@
 		}
 	}
 </script>
-
-<style lang="less">
-	@import "~/styles/toggler.less";
-</style>
