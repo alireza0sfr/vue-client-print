@@ -1024,9 +1024,9 @@
 			save(): void {
 				let design: ISettings = this.export2Json()
 
-				if (!validateDesign(design))
+				if (!design)
 					return
-
+				console.log(design)
 				if (this.settings.callback)
 					this.settings.callback(design)
 
@@ -1037,7 +1037,7 @@
 			 * Exports settings to json a file.
 			 * @return {Object} - json file
 			 */
-			export2Json(): ISettings {
+			export2Json(): ISettings | void {
 
 				var json: ISettings = cloneDeep(this.settings)
 
@@ -1045,6 +1045,9 @@
 
 				if (json.totalHeightOfAPaper < 0)
 					json.totalHeightOfAPaper = 1.77
+
+				if (!validateDesign(json))
+					return
 
 				return json
 			},
