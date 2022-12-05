@@ -42,7 +42,8 @@
 			bindingObject: {
 				immediate: true,
 				handler(val) {
-					bindingObjectStore.update(val)
+					var cloned = cloneDeep(val)
+					bindingObjectStore.update(cloned)
 				}
 			},
 			configurations: {
@@ -61,13 +62,15 @@
 			dataSets: {
 				immediate: true,
 				handler(val) {
-					dataSetStore.update(prepareDataSets(val))
+					var cloned = cloneDeep(val)
+					dataSetStore.update(prepareDataSets(cloned))
 				},
 			},
 			variables: {
 				immediate: true,
 				handler(val) {
-					variablesStore.updateVariables(val)
+					var cloned = cloneDeep(val)
+					variablesStore.updateVariables(cloned)
 				},
 			},
 		},
