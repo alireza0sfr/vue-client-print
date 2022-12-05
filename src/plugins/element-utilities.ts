@@ -48,7 +48,7 @@ export class Element extends EmptyElement implements IElement {
 
     var baseStyles = {
       color: '#000000',
-      backgroundColor: '#ffffff'
+      backgroundColor: this.type === ElementTypes.VARIABLE ? '#faecff' : '#ffffff'
     }
 
     this.styles = merge(baseStyles, styles)

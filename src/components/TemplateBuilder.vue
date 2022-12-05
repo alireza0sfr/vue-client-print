@@ -990,9 +990,8 @@
 
 				if (!this.validateCopy(element))
 					return
-				console.log(element)
+
 				this.locals.copiedElement = cloneDeep(this.createElement(element.type, element.parent, DEFAULTELEMENTSTATES, element.styles, element.configs))
-				console.log(this.locals.copiedElement)
 			},
 			/**
 			 * Paste copied element.
@@ -1339,7 +1338,6 @@
 					top: e.offsetY + 'px' || '0px',
 					left: e.offsetX + 'px' || '0px',
 					direction: this.settings.pageDirections,
-					backgroundColor: elementType === ElementTypes.VARIABLE ? '#faecff' : ''
 				}
 
 				var configs = this.prepareNewElementsConfigs(elementType)
