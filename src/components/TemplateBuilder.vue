@@ -409,7 +409,7 @@
 									<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="element-settings">
 										<div class="toolbar-content-row">
 											<div style="width: 100%;" class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.order')}} ({{locals.selectedElement.configs.title}})</label>
+												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.order')}} ({{locals.selectedElement.configs.key}})</label>
 											</div>
 											<div class="toolbar-content-field">
 												<label for="colActive">
@@ -908,7 +908,7 @@
 
 				else {
 					col.configs.order = columns.length + 1
-					columns.push(col)
+					columns.push(cloneDeep(col))
 				}
 			},
 
