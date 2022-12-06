@@ -30,10 +30,9 @@
 				immediate: true,
 				handler(val) {
 					if (val) {
-						var $el: HTMLElement = this.$refs.element as HTMLElement
 						var resizerQuery: string = `${this.element.type}-${this.element.id}`
 						this.$nextTick(() => {
-							this.resizable($el, resizerQuery)
+							this.resizable(resizerQuery)
 						})
 					}
 				}
@@ -62,7 +61,7 @@
 			 * Column Private resiable
 			 * @emits {width-changed} call width-changed event and passes startWidth, newWidth, colId.
 			 */
-			resizable(element: HTMLElement, resizerQuery: string): void {
+			resizable(resizerQuery: string): void {
 
 				const resizers: any = document.querySelectorAll(`.elem-resizer.${resizerQuery}`)
 
@@ -74,7 +73,7 @@
 				const initDrag = (e: any, resizer: HTMLElement) => {
 					if (e.target.className.includes('elem-resizer')) { // If Clicking on the resizer
 						startX = e.clientX
-						startWidth = parseInt(document.defaultView!.getComputedStyle(element).width, 10)
+						startWidth = parseInt(document.defaultView!.getComputedStyle(this.$refs.element).width, 10)
 						document.onmousemove = (e) => doDrag(e, resizer)
 						document.onmouseup = stopDrag
 					}
