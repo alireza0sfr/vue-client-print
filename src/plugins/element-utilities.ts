@@ -699,11 +699,16 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
           data.styles.fontWeight = columns[index].styles.fontWeight
           data.styles.fontFamily = columns[index].styles.fontFamily
           data.styles.fontSize = columns[index].styles.fontSize
-          data.styles.border = columns[index].styles.border
-          data.styles.borderTop = columns[index].styles.borderTop
-          data.styles.borderBottom = columns[index].styles.borderBottom
-          data.styles.borderLeft = columns[index].styles.borderLeft
-          data.styles.borderRight = columns[index].styles.borderRight
+
+          if (columns[index].styles.border)
+            data.styles.border = columns[index].styles.border
+
+          else {
+            data.styles.borderTop = columns[index].styles.borderTop
+            data.styles.borderBottom = columns[index].styles.borderBottom
+            data.styles.borderLeft = columns[index].styles.borderLeft
+            data.styles.borderRight = columns[index].styles.borderRight
+          }
         }
       }
 
