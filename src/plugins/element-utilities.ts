@@ -886,7 +886,9 @@ export const DEFAULTDATASETROW = new Element(ElementTypes.ROW, ElementParents.EM
     empty: {
       type: ElementTypes.CELL,
       id: idGenerator(),
-      styles: {},
+      styles: {
+        minHeight: DEFAULTROWSHEIGHT
+      },
       parent: ElementParents.EMPTY,
       configs: {
         value: ''

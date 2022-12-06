@@ -21,7 +21,7 @@
 	import { defineComponent } from 'vue'
 	import { toFloatVal, merge, isEmpty } from '~/plugins/general-utilities'
 	import { IColumn, IRow, IDatasets } from '@/interfaces/datasets'
-	import { emptyDataSet, DEFAULTDATASETROW } from '@/plugins/element-utilities'
+	import { emptyDataSet, DEFAULTDATASETROW, DEFAULTROWSHEIGHT } from '@/plugins/element-utilities'
 	export default defineComponent({
 		name: ElementTypes.DATASET,
 		props: {
@@ -251,7 +251,8 @@
 					)
 						row.styles = merge(row.styles, this.element.configs.dataSetDefaultRow[0].styles)
 
-					row.styles.minHeight = this.element.configs.dataSetDefaultRow[0].styles.minHeight.toString() + 'px'
+					var minHeight = this.element.configs.dataSetDefaultRow[0].styles.minHeight || DEFAULTROWSHEIGHT
+					row.styles.minHeight = minHeight.toString() + 'px'
 				}
 
 
