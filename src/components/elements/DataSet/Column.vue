@@ -26,6 +26,18 @@
 					this.element = val.merge(this.element)
 				},
 			},
+			'element.configs.hasResizer': {
+				immediate: true,
+				handler(val) {
+					if (val) {
+						var $el: HTMLElement = this.$refs.element as HTMLElement
+						var resizerQuery: string = `${this.element.type}-${this.element.id}`
+						this.$nextTick(() => {
+							this.resizable($el, resizerQuery)
+						})
+					}
+				}
+			}
 		},
 		data() {
 			return {
@@ -43,9 +55,7 @@
 			*/
 			initialize() {
 				var $el: HTMLElement = this.$refs.element as HTMLElement
-				var resizerQuery: string = `${this.element.type}-${this.element.id}`
 				this.element.makeClickable($el)
-				this.resizable($el, resizerQuery)
 			},
 
 			/**

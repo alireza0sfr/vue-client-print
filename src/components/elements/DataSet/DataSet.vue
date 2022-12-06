@@ -11,7 +11,7 @@
 			<row v-for="row in filteredRows" :key="row.id" :instance="row" @click.stop="$emit('clickedOnElement', row)" />
 			<!-- Row is only clickable on TB and the default is added -->
 		</div>
-		<Resizers :query=" `${element.type}-${element.id}`" />
+		<Resizers :query="`${element.type}-${element.id}`" />
 	</div>
 </template>
 
@@ -44,13 +44,7 @@
 			},
 			filteredCols() {
 
-				var columns: IColumn[]
-
-				if (isEmpty(this.displaySet))
-					columns = []
-				else
-					columns = this.displaySet.configs.columns
-
+				var columns: IColumn[] = !isEmpty(this.displaySet) ? this.displaySet.configs.columns : []
 				var sorted: IColumn[] = columns.sort((a: IColumn, b: IColumn) => a.configs.order - b.configs.order)
 
 				return this.prepareColumns(sorted)
@@ -190,7 +184,7 @@
 
 				const secondIndex = index === columns.length ? index - 1 : index + 1
 				var thisColumn = columns[index]
-				var seconColumn = columns[secondIndex]
+				var secondColumn = columns[secondIndex]
 				const startWidth = toFloatVal(thisColumn.styles.width) || 0
 				const diffrence = newWidth - startWidth
 				const minWidth = 20
@@ -201,7 +195,7 @@
 					if (toFloatVal(thisColumn.styles.width) < minWidth)
 						return
 
-					if (maxWidth < toFloatVal(seconColumn.styles.width))
+					if (maxWidth < toFloatVal(secondColumn.styles.width))
 						return
 				}
 
@@ -210,14 +204,14 @@
 					if (maxWidth < toFloatVal(thisColumn.styles.width))
 						return
 
-					if (toFloatVal(seconColumn.styles.width) < minWidth)
+					if (toFloatVal(secondColumn.styles.width) < minWidth)
 						return
 
 				}
 
 				thisColumn.styles.width = newWidth + 'px'
-				seconColumn.styles.width = toFloatVal(seconColumn.styles.width) - diffrence
-				seconColumn.styles.width = seconColumn.styles.width + 'px'
+				secondColumn.styles.width = toFloatVal(secondColumn.styles.width) - diffrence
+				secondColumn.styles.width = secondColumn.styles.width + 'px'
 			},
 
 			/**
@@ -234,6 +228,7 @@
 
 				for (var col of columns) {
 					col.styles.height = this.calculateColumnHeight()
+					col.configs.hasResizer = columns.indexOf(col) !== columns.length - 1
 				}
 
 				return columns
