@@ -9,69 +9,6 @@
     // font-family: Tahoma;
   }
 
-  .mainLoop {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: auto;
-  }
-
-  .converted {
-    text-align: center;
-    flex-grow: 2;
-    overflow: hidden;
-  }
-
-  #printForm {
-    padding: 20px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: 100%;
-  }
-
-  .fa-print {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  #page {
-    width: max-content;
-  }
-
-  .mainHeader {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .mainLoop {
-    box-shadow: -1px 4px 10px 0px #818181;
-    margin-bottom: 25px;
-  }
-
-  .slotWrapper {
-    position: fixed;
-    left: 10000px;
-    direction: ltr;
-  }
-
-  .body-render-section {
-    position: relative;
-  }
-
-  .converted {
-    // margin-left: 10px;
-
-    canvas {
-      width: 100%;
-    }
-  }
-
-  .mainFooter {
-    position: relative;
-    overflow: hidden;
-  }
-
   ::-webkit-scrollbar {
     width: 17px;
     background-color: transparent;
@@ -85,7 +22,78 @@
     background-clip: content-box;
   }
 
-  table {
+  img:hover,
+  input:hover {
+    cursor: pointer;
+  }
+
+  input:disabled {
+    background-color: #cfcdcd;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    box-shadow: 0 0 3px rgba(70, 150, 203, 0.59);
+    outline: none;
+    border: 1px solid rgba(70, 150, 203, 0.6);
+  }
+
+  .m-0 {
+    margin: 0!important
+  }
+
+  .w-100 {
+    width: 100%!important
+  }
+
+  #@{base-name}-printForm {
+    padding: 20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+
+    .main-loop {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: auto;
+      box-shadow: -1px 4px 10px 0px #818181;
+      margin-bottom: 25px;
+    }
+
+    .main-header {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .converted {
+      text-align: center;
+      flex-grow: 2;
+      overflow: hidden;
+
+      canvas {
+        width: 100%;
+      }
+    }
+
+    .main-footer {
+      position: relative;
+      overflow: hidden;
+    }
+  }
+
+  .@{base-name}-slot-wrapper {
+    position: fixed;
+    left: 10000px;
+    direction: ltr;
+
+    .body-render-section {
+      position: relative;
+    }
+  }
+
+  .@{base-name} table {
     width: 100%;
 
     td,

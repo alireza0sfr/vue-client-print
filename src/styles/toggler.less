@@ -1,29 +1,31 @@
 @import './_variables.less';
 
-.__VCP__ .toggler {
-  position: relative;
-  height: 50px;
-  padding: 9px 24px;
-  padding-top: 10px;
-  background: #ffffff;
-  border: 1px solid #b5b5b5;
-  border-radius: 6px;
-  color: @primary-dark;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+.__VCP__ {
+  .@{base-name}-toggler {
+    position: relative;
+    height: 50px;
+    padding: 9px 24px;
+    padding-top: 10px;
+    background: #ffffff;
+    border: 1px solid #b5b5b5;
+    border-radius: 6px;
+    color: @primary-dark;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
-  &.active {
-    color: #ffffff;
-    background-color: @primary-dark;
-    border-color: transparent;
-  }
+    &.active {
+      color: #ffffff;
+      background-color: @primary-dark;
+      border-color: transparent;
+    }
 
-  label {
-    cursor: inherit;
-    margin-bottom: 0;
+    label {
+      cursor: inherit;
+      margin-bottom: 0;
+    }
   }
 }

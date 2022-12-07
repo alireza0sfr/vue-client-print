@@ -1,7 +1,7 @@
 <template>
 	<div id="printPage">
 		<!-- Preparing body to create canvas -->
-		<div class="slotWrapper">
+		<div class="vcp-slot-wrapper">
 			<div :style="{width: settings.defaultWidthOfPaper + 'in'}">
 				<div id="toBeConverted">
 					<div id="componentsParent">
@@ -26,19 +26,19 @@
 		</div>
 
 		<!-- Print Preview Modal-->
-		<div id="printModal" class="print-modal">
-			<div class="print-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
-				<div :dir="settings.pageDirections" class=" print-modal-header">
+		<div id="printModal" class="vcp-modal">
+			<div class="modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
+				<div :dir="settings.pageDirections" class="modal-header">
 					<div style="display: flex">
 						<a href="#" @click="printForm()" :title="_$t('print.name')" class="modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
 					</div>
 					<div>
-						<h3 class="title">{{_$t('print.print-preview')}}</h3>
+						<h3 class="modal-title">{{_$t('print.print-preview')}}</h3>
 					</div>
 					<div>
-						<span id="printModalCloseBtn" @click="closeModal('printModal')" class="close-btn">&times;</span>
+						<span id="printModalCloseBtn" @click="closeModal('printModal')" class="modal-close-btn">&times;</span>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
@@ -46,9 +46,9 @@
 
 					<!-- Loading popup modal -->
 
-					<div id="loadingModal" class="loading-modal animate-opacity">
-						<div class="loading-modal-content">
-							<div class="loading-modal-inner">
+					<div id="loadingModal" class="modal-loading">
+						<div class="modal-loading-content">
+							<div class="modal-loading-inner">
 								<!-- Spinner -->
 
 								<div class="sk-chase">
@@ -61,15 +61,15 @@
 							</div>
 						</div>
 					</div>
-					<div id="printForm">
-						<div v-for="index in locals.totalPages" :key="index" class="mainLoop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
+					<div id="vcp-printForm">
+						<div v-for="index in locals.totalPages" :key="index" class="main-loop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
-								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="mainHeader">
+								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="main-header">
 									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 								</div>
 							</div>
 							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
-							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="mainFooter">
+							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="main-footer">
 								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 							</div>
 						</div>
@@ -160,13 +160,13 @@
 				var configs = generalStore.getByKey('configurations')
 				// @ts-ignore
 				printJS({
-					printable: 'printForm',
+					printable: 'vcp-printForm',
 					type: 'html',
 					header: configs.header.context || '',
 					headerStyle: configs.header.styles || '',
 					scanStyles: false, // If true inline styles will be removed
 					style: [
-						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.mainHeader {position: relative;overflow: hidden;}.mainFooter {position: relative;overflow: hidden;}.converted canvas {width: 100%;}",
+						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.main-header {position: relative;overflow: hidden;}.main-footer {position: relative;overflow: hidden;}.vcp-converted canvas {width: 100%;}",
 					], // some custom styles needed for print
 					onLoadingEnd: (res: any) => this.$emit('print-success', res),
 					onError: (err) => this.$emit('print-error', err)

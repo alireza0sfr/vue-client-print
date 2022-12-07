@@ -1,5 +1,5 @@
 <template>
-	<span @click="clicked" :style="settings.styles" :class="['toggler', isActive ? 'active' : '', settings.class]">
+	<span @click="clicked" :style="settings.styles" :class="['vcp-toggler', isActive ? 'active' : '', settings.class]">
 		<label>{{ settings.title }}</label>
 	</span>
 </template>

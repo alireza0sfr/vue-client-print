@@ -1,24 +1,24 @@
 <template>
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
-		<div @click="deselectSection" id="templateBuilderModal" tabindex="0" class="print-modal">
-			<div id="fullscreenControl" class="print-modal-content">
-				<div class="print-modal-header">
+		<div @click="deselectSection" id="templateBuilderModal" tabindex="0" class="vcp-modal">
+			<div id="fullscreenControl" class="modal-content">
+				<div class="modal-header">
 					<div>
 						<a @click="save" :title="_$t('template-builder.save')" class="modal-icon" href="#">
 							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
 					<div>
-						<h3 class="title">{{ _$t('template-builder.name') }}</h3>
+						<h3 class="modal-title">{{ _$t('template-builder.name') }}</h3>
 					</div>
 
 					<div>
-						<span id="TemplateBuilderModalCloseBtn" @click="closeModal('templateBuilderModal')" class="close-btn">&times;</span>
+						<span id="TemplateBuilderModalCloseBtn" @click="closeModal('templateBuilderModal')" class="modal-close-btn">&times;</span>
 					</div>
 				</div>
 
-				<div class="template-builder-container">
+				<div class="vcp-template-builder-container">
 
 					<!-- Section 1 (Template Builder) -->
 					<div class="toolbar-container">
@@ -32,23 +32,24 @@
 
 							<!-- Variables Tab -->
 							<div v-show="locals.activeTab === locals.tabs.VARIABLES" class="variables-tab">
-								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
+								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
 									<span>{{ _$t('template-builder.variables.list') }}</span>
 								</div>
-								<div class="variables-content-wrapper">
-									<div @click="createVariable" style="text-align: center; margin-top: 10px">
-										<a class="a-btn">{{ _$t('template-builder.variables.add') }}</a>
+								<div class="toolbar-content-wrapper">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-field w-100">
+											<a @click="createVariable" class="button">{{ _$t('template-builder.variables.add') }}</a>
+										</div>
 									</div>
 									<div :id="`${locals.elementType.VARIABLE}_Settings`" class="variables settings-section">
 										<div :class="['variable',{selected:locals.selectedElement.configs.variableId === variable.variableId}]" v-for="variable in variablesList" :key="variable.variableId">
 											<div class="variables-row">
 												<div class="variables-row large">
 													<div class="variables-content-field" style="width: 60%">
-														<input type="text" v-model="variable.name" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.name')"
-															aria-describedby="inputGroup-sizing-sm" />
+														<input type="text" v-model="variable.name" aria-label="Small" :placeholder="_$t('template-builder.variables.name')" aria-describedby="inputGroup-sizing-sm" />
 													</div>
 													<div class="variables-content-field" style="width: 40%">
-														<select class="input-form-control" v-model="variable.variableType" @change="onVariableTypeChange(variable)">
+														<select v-model="variable.variableType" @change="onVariableTypeChange(variable)">
 															<option v-for="option in locals.VariableTypes" :value="option" :key="option">{{ _$t(`template-builder.variables.${option}`) }}</option>
 														</select>
 													</div>
@@ -59,8 +60,7 @@
 											</div>
 											<div class="variables-row" style="justify-content: flex-end;">
 												<div v-if="variable.variableType === locals.VariableTypes.TEXT" class="variables-content-field large">
-													<input type="text" v-model="variable.context" class="input-form-control" aria-label="Small" :placeholder="_$t('template-builder.variables.text')"
-														aria-describedby="inputGroup-sizing-sm" />
+													<input type="text" v-model="variable.context" aria-label="Small" :placeholder="_$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 												<div class="variables-content-field large" v-if="variable.variableType === locals.VariableTypes.IMAGE">
 													<input type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageVariable, variable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
@@ -77,22 +77,24 @@
 
 							<!-- Others Tab  -->
 							<div v-show="locals.activeTab === locals.tabs.OTHERS" class="others-tab">
-								<div class="toolbar-header variables-header" style="border-right: 1px solid #81c3ff">
+								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
 									<span>{{_$t('template-builder.save')}}</span>
 								</div>
-								<div class="toolbar-content-row">
-									<div style="width: 100%;" class="toolbar-content-field">
-										<a class="a-btn" @click="export2SrcFile()">{{_$t('template-builder.export')}}</a>
+								<div class="toolbar-content-wrapper">
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-field w-100">
+											<a class="button" @click="export2SrcFile()">{{_$t('template-builder.export')}}</a>
+										</div>
 									</div>
-								</div>
-								<div class="toolbar-content-row">
-									<div style="width: 100%;" class="toolbar-content-field">
-										<a class="a-btn" @click="clickedOnInput('fileSrcControl')">{{_$t('template-builder.import')}}</a>
+									<div class="toolbar-content-row">
+										<div class="toolbar-content-field w-100">
+											<a class="button" @click="clickedOnInput('fileSrcControl')">{{_$t('template-builder.import')}}</a>
+										</div>
 									</div>
-								</div>
-								<div style="display:none" class="toolbar-content-row">
-									<div class="variables-content-field">
-										<input type="file" accept=".vcp" @change="onFileChange(locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
+									<div style="display:none" class="toolbar-content-row">
+										<div class="variables-content-field">
+											<input type="file" accept=".vcp" @change="onFileChange(locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
+										</div>
 									</div>
 								</div>
 							</div>
@@ -198,64 +200,56 @@
 									<span>{{_$t('template-builder.elements.name')}}</span>
 								</div>
 								<div class="toolbar-content-wrapper" style="flex-direction: row" id="elementsMenu">
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+									<div class="toolbar-content-row m-0">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.TEXTELEMENT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/text.png" :alt="_$t('template-builder.elements.textelement')" />
 												<div class="element-title">{{_$t('template-builder.elements.textelement')}}</div>
 											</span>
 										</div>
-									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.DATETIME)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/timetable.png" :alt="_$t('template-builder.elements.datetime')" />
 												<div class="element-title">{{_$t('template-builder.elements.datetime')}}</div>
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+									<div class="toolbar-content-row m-0">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.PAGECOUNTER)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/pages.png" :alt="_$t('template-builder.elements.pagecounter')" />
 												<div class="element-title">{{_$t('template-builder.elements.pagecounter')}}</div>
 											</span>
 										</div>
-									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.IMAGEELEMENT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/image.png" alt="_$t('template-builder.elements.imageelement')" />
 												<div class="element-title">{{_$t('template-builder.elements.imageelement')}}</div>
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+									<div class="toolbar-content-row m-0">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.BINDINGOBJECT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/binding.png" :alt="_$t('template-builder.elements.bindingobject')" />
 												<div class="element-title">{{_$t('template-builder.elements.bindingobject')}}</div>
 											</span>
 										</div>
-									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.TEXTPATTERN)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/textpattern.png" :alt="_$t('template-builder.elements.textpattern')" />
 												<div class="element-title">{{_$t('template-builder.elements.textpattern')}}</div>
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+									<div class="toolbar-content-row m-0">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.DATASET)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="32" height="32" />
 												<div class="element-title">{{_$t('template-builder.elements.dataset')}}</div>
 											</span>
 										</div>
-									</div>
-									<div class="toolbar-content-row-elements">
-										<div class="toolbar-content-row-element">
+										<div class="element-draggble">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.REPEATOR)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="32" height="32" />
 												<div class="element-title">{{_$t('template-builder.elements.repeator')}}</div>
@@ -341,7 +335,7 @@
 											</div>
 											<div class="toolbar-content-row">
 												<div style="width: 100%;" class="toolbar-content-field">
-													<a class="a-btn" @click="clickedOnInput('elementImageFileControl')">{{_$t('template-builder.elements.configs.upload-image')}}</a>
+													<a class="button" @click="clickedOnInput('elementImageFileControl')">{{_$t('template-builder.elements.configs.upload-image')}}</a>
 												</div>
 											</div>
 											<div style="display: none;" class="toolbar-content-row">
@@ -404,75 +398,74 @@
 												</div>
 											</div>
 										</div>
-									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="element-settings">
-										<div class="toolbar-content-row">
-											<div style="width: 100%;" class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.order')}} ({{locals.selectedElement.configs.key}})</label>
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div style="width: 100%;" class="toolbar-content-label">
+													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.order')}} ({{locals.selectedElement.configs.key}})</label>
+												</div>
+												<div class="toolbar-content-field">
+													<label for="colActive">
+														<input style="flex-grow: unset;" type="number" class="input-form-control" v-model="locals.selectedElement.configs.order" id="colActive" />
+													</label>
+												</div>
 											</div>
-											<div class="toolbar-content-field">
-												<label for="colActive">
-													<input style="flex-grow: unset;" type="number" class="input-form-control" v-model="locals.selectedElement.configs.order" id="colActive" />
-												</label>
+
+											<div class="toolbar-content-row">
+												<div style="width: 100%;" class="toolbar-content-label">
+													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.title')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<label for="colActive">
+														<input style="flex-grow: unset;" type="text" class="input-form-control" v-model="locals.selectedElement.configs.title" id="colActive" />
+													</label>
+												</div>
 											</div>
 										</div>
 
-										<div class="toolbar-content-row">
-											<div style="width: 100%;" class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.title')}}</label>
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW" :id="`${locals.ElementTypes.ROW}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.stylesTarget')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<select v-model="locals.selectedElement.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
+														<option v-for="option in locals.StylesTargets" :value="option" :key="option">{{ _$t(`template-builder.elements.configs.${option}`) }}</option>
+													</select>
+												</div>
 											</div>
-											<div class="toolbar-content-field">
-												<label for="colActive">
-													<input style="flex-grow: unset;" type="text" class="input-form-control" v-model="locals.selectedElement.configs.title" id="colActive" />
-												</label>
-											</div>
-										</div>
-									</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW" :id="`${locals.ElementTypes.ROW}_Settings`" class="element-settings">
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.stylesTarget')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
-													<option v-for="option in locals.StylesTargets" :value="option" :key="option">{{ _$t(`template-builder.elements.configs.${option}`) }}</option>
-												</select>
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.rowsHeight')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<input type="number" class="input-form-control" v-model="locals.selectedElement.styles.minHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												</div>
 											</div>
 										</div>
 
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.rowsHeight')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<input type="number" class="input-form-control" v-model="locals.selectedElement.styles.minHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
-											</div>
-										</div>
-									</div>
-
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET || locals.selectedElement.type === locals.ElementTypes.REPEATOR"
-										:id="`${locals.selectedElement.type}_Settings`" class="element-settings">
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
-												<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
-											</div>
-											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
-													<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].configs.title }}</option>
-												</select>
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET || locals.selectedElement.type === locals.ElementTypes.REPEATOR"
+											:id="`${locals.selectedElement.type}_Settings`" class="element-settings">
+											<div class="toolbar-content-row">
+												<div class="toolbar-content-label">
+													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
+												</div>
+												<div class="toolbar-content-field">
+													<select v-model="locals.selectedElement.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+														<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].configs.title }}</option>
+													</select>
+												</div>
 											</div>
 										</div>
 
-									</div>
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row element-settings"
+											style="flex-wrap: wrap; justify-content: center;">
+											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" @click="togglerClicked(col)"
+												class="toolbar-content-label column-toggler" :options="prepareTogglerOptions(col)" />
+										</div>
 
-									<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row element-settings"
-										style="flex-wrap: wrap; justify-content: center;">
-										<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" @click="togglerClicked(col)"
-											class="toolbar-content-label column-toggler" :options="prepareTogglerOptions(col)" />
 									</div>
-
 								</div>
 
 								<!-- Element's Styles -->
@@ -730,20 +723,19 @@
 					</div>
 
 					<!-- Section 2 (Template)-->
-					<div style="overflow: auto; width: 100%; padding: 20px">
+					<div class="template-container" tabindex="0" id="templateContainer">
 						<div class="toolbar">
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
 							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
-						<div class="template-container" tabindex="0" id="templateContainer"
-							:style="{'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in','transform-origin': 'top right', transform: `scale(${locals.scale})`}">
-							<div ref="template" :style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder}" class="template" @click="deSelectAll">
-								<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
-									:active="locals.selectedSection === section" :height="currentSection.height" :styles="currentSection.styles" @finishedEditingElement="finishedEditingElement"
-									@clickedOnElement="clickedOnElement" @clickedOnSection="clickedOnSection" @droppedElement="droppedElement" />
-							</div>
+						<div ref="template"
+							:style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder, 'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in', transform: `scale(${locals.scale})`}"
+							class="template" @click="deSelectAll">
+							<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
+								:active="locals.selectedSection === section" :height="currentSection.height" :styles="currentSection.styles" @finishedEditingElement="finishedEditingElement"
+								@clickedOnElement="clickedOnElement" @clickedOnSection="clickedOnSection" @droppedElement="droppedElement" />
 						</div>
 					</div>
 				</div>

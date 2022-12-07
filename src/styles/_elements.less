@@ -1,0 +1,189 @@
+.element {
+  background-color: #ffffff;
+  text-align: center;
+  position: absolute;
+  width: 100px;
+  overflow: hidden;
+  min-height: 30px;
+  min-width: 20px;
+  z-index: 2;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.selected {
+    .elem-resizer {
+      position: absolute;
+      height: 6px;
+      width: 6px;
+      background-image: url('~/assets/images/resizer.svg');
+
+      &.tl {
+        left: 0;
+        top: 0;
+
+        &:hover {
+          cursor: nwse-resize;
+        }
+      }
+
+      &.top {
+        left: 50%;
+        top: 0px;
+
+        &:hover {
+          cursor: ns-resize;
+        }
+      }
+
+      &.tr {
+        right: 0;
+        top: 0;
+
+        &:hover {
+          cursor: nesw-resize;
+        }
+      }
+
+      &.left {
+        left: 0;
+        top: 50%;
+        transform: translate(0px, -4px);
+
+        &:hover {
+          cursor: ew-resize;
+        }
+      }
+
+      &.right {
+        right: 0;
+        top: 50%;
+        transform: translate(0px, -4px);
+
+        &:hover {
+          cursor: ew-resize;
+        }
+      }
+
+      &.bl {
+        left: 0;
+        bottom: 0;
+
+        &:hover {
+          cursor: nesw-resize;
+        }
+      }
+
+      &.bottom {
+        left: 50%;
+        bottom: 0;
+
+        &:hover {
+          cursor: ns-resize;
+        }
+      }
+
+      &.br {
+        right: 0;
+        bottom: 0;
+
+        &:hover {
+          cursor: nwse-resize;
+        }
+      }
+
+      &.right,
+      &.left {
+        &.resizer-large {
+          height: 100% !important;
+        }
+
+        &.resizer-small {
+          height: 5% !important;
+        }
+      }
+
+      &.top,
+      &.bottom {
+        .resizer-large {
+          width: 100% !important;
+        }
+
+        .resizer-small {
+          width: 5% !important;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    width: 100px;
+    border: 1px #aaa dashed;
+    border-radius: 4px;
+    cursor: move;
+  }
+
+  &.content-wrapper {
+    display: flex;
+    align-items: center;
+
+    .content {
+      flex-grow: 1;
+      white-space: break-spaces;
+    }
+  }
+
+  &.dataset {
+    border: 1px solid #dbdbdb;
+    display: flex;
+    flex-direction: column;
+
+    .columns {
+      display: flex;
+      direction: ltr;
+    }
+
+    .rows {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      direction: ltr;
+
+      .row {
+        border-top: 1px solid #dbdbdb;
+        flex-grow: 1;
+        display: flex;
+
+        .cell {
+          overflow: hidden;
+        }
+      }
+    }
+
+    .dataset-name {
+      text-align: right;
+      background-color: @dataset-bg;
+      white-space: pre;
+    }
+  }
+
+  &.repeator {
+    .repeator-name {
+      text-align: right;
+      background-color: @repeator-bg;
+      height: 24px;
+      white-space: pre;
+    }
+  }
+
+  &.imageelement img,
+  &.variable img {
+    width: 100%;
+    height: 100%;
+  }
+}
