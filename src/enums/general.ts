@@ -52,3 +52,9 @@ export enum PageOrientations {
   PORTRAIT = 'portrait',
   LANDSCAPE = 'landscape'
 }
+
+export enum PageSizes {
+  A3 = 'A3',
+  A4 = 'A4',
+  A5 = 'A5'
+}

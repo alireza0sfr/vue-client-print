@@ -1,5 +1,5 @@
 import { ISettings } from '~/interfaces/general'
-import { TemplateBuilderSections, PageOrientations } from '~/enums/general'
+import { TemplateBuilderSections, PageOrientations, PageSizes } from '~/enums/general'
 import { DataSetLikeElement } from '~/plugins/element-utilities'
 import Logger from '~/plugins/logger'
 import i18nInstance from '~/plugins/i18n'
@@ -308,7 +308,7 @@ export function getDefaultSettings(): ISettings {
     totalHeightOfAPaper: 10.4, // Useable height for body tag
     designName: '',
     pageOrientation: PageOrientations.PORTRAIT,
-    pageSize: 'a4',
+    pageSize: PageSizes.A4,
     pageDirections: 'rtl',
     pageBorder: '',
   }

@@ -134,9 +134,7 @@
 										</div>
 										<div class="vcp-toolbar-content-field">
 											<select class="vcp-input-form-control" v-model="settings.pageSize" @change="syncSizes()" id="pageSizeControl">
-												<option value="a3">A3</option>
-												<option value="a4">A4</option>
-												<option value="a5">A5</option>
+												<option v-for="option in locals.PageSizes" :value="option" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -748,7 +746,7 @@
 
 <script lang="ts">
 	import { IElement, IElementStates, IEmptyElement, IVariable, IDataSetLikeElement } from '~/interfaces/elements'
-	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations } from '~/enums/general'
+	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations, PageSizes } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IFile, ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
@@ -801,6 +799,7 @@
 			return {
 				locals: {
 					PageOrientations: PageOrientations,
+					PageSizes: PageSizes,
 					tabs: Tabs,
 					sections: Object.values(TemplateBuilderSections),
 					StylesTargets: StylesTargets,
