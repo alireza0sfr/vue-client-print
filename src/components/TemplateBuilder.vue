@@ -25,7 +25,7 @@
 						<div class="toolbar-content">
 							<!-- Tabs -->
 							<div class="vcp-tabs">
-								<a class="vcp-tab selected" @click="switchTabs(locals.tabs.SETTINGS)" ref="settings">{{_$t('template-builder.settings')}}</a>
+								<a class="vcp-tab" @click="switchTabs(locals.tabs.SETTINGS)" ref="settings">{{_$t('template-builder.settings')}}</a>
 								<a class="vcp-tab" @click="switchTabs(locals.tabs.VARIABLES)" ref="variables">{{ _$t('template-builder.variables.variables') }}</a>
 								<a class="vcp-tab" @click="switchTabs(locals.tabs.OTHERS)" ref="others">{{ _$t('template-builder.others') }}</a>
 							</div>
@@ -846,7 +846,7 @@
 						},
 					},
 					bordersAllDirections: true,
-					activeTab: Tabs.SETTINGS,
+					activeTab: '',
 					isClicked: false,
 					selectedElement: new EmptyElement as IElement | IEmptyElement,
 					fontSizes: [8, 10, 12, 14, 16, 18, 20, 22, 24, 30, 36, 42, 50, 58, 66, 74],
@@ -865,6 +865,7 @@
 		},
 		mounted() {
 			this.keyboardHandler()
+			this.switchTabs(Tabs.SETTINGS)
 		},
 		methods: {
 
@@ -1207,7 +1208,12 @@
 				let previousTab = document.getElementsByClassName('vcp-tab selected')[0]
 				var tab = this.$refs[tabName] as HTMLElement
 
-				previousTab.classList.remove('selected')
+				if (!tab)
+					return
+
+				if (previousTab)
+					previousTab.classList.remove('selected')
+
 				tab.classList.add('selected')
 				this.locals.activeTab = tabName
 			},
