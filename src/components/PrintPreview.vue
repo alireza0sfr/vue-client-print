@@ -62,14 +62,14 @@
 						</div>
 					</div>
 					<div id="vcp-printForm">
-						<div v-for="index in locals.totalPages" :key="index" class="main-loop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
+						<div v-for="index in locals.totalPages" :key="index" class="vcp-main-loop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
 							<div :style="{width: 'auto', border: settings.pageBorder}">
-								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="main-header">
+								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="vcp-main-header">
 									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 								</div>
 							</div>
-							<div class="converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
-							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="main-footer">
+							<div class="vcp-converted" :style="{ height: locals.pageBodiesSizes[index - 1] + 'in' }"></div>
+							<div v-if="settings.footer.repeatable ||index === locals.totalPages" :style="[{height: locals.pageFootersSizes[index - 1] + 'in'}, settings.footer.styles]" class="vcp-main-footer">
 								<component v-for="element in settings.footer.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 							</div>
 						</div>
@@ -166,7 +166,7 @@
 					headerStyle: configs.header.styles || '',
 					scanStyles: false, // If true inline styles will be removed
 					style: [
-						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.converted {text-align: center;flex-grow: 2;overflow: hidden;}.converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.main-header {position: relative;overflow: hidden;}.main-footer {position: relative;overflow: hidden;}.vcp-converted canvas {width: 100%;}",
+						".element {text-align: center;position: absolute;width: 100px;overflow: hidden;min-height: 20px;min-width: 20px;color: black;}.vcp-converted {text-align: center;flex-grow: 2;overflow: hidden;}.vcp-converted img {width: 8.26in;margin-top: 24px;margin-bottom: 24px;}.vcp-main-header {position: relative;overflow: hidden;}.vcp-main-footer {position: relative;overflow: hidden;}.vcp-converted canvas {width: 100%;}",
 					], // some custom styles needed for print
 					onLoadingEnd: (res: any) => this.$emit('print-success', res),
 					onError: (err) => this.$emit('print-error', err)
@@ -302,7 +302,7 @@
 
 								this.$nextTick(() => {  // Waits till the base template is generated and then appends the children
 
-									let convertedElement = document.getElementsByClassName("converted") // Element where children will be appended to
+									let convertedElement = document.getElementsByClassName("vcp-converted") // Element where children will be appended to
 
 									for (let index = 0; index < convertedElement.length; index++) { // Removing the existing canvas and Appening the results to parents
 

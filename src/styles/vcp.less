@@ -53,7 +53,7 @@
     overflow-x: hidden;
     height: 100%;
 
-    .main-loop {
+    .@{base-name}-main-loop {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -62,12 +62,12 @@
       margin-bottom: 25px;
     }
 
-    .main-header {
+    .@{base-name}-main-header {
       position: relative;
       overflow: hidden;
     }
 
-    .converted {
+    .@{base-name}-converted {
       text-align: center;
       flex-grow: 2;
       overflow: hidden;
@@ -77,7 +77,7 @@
       }
     }
 
-    .main-footer {
+    .@{base-name}-main-footer {
       position: relative;
       overflow: hidden;
     }
@@ -85,20 +85,11 @@
 
   .@{base-name}-slot-wrapper {
     position: fixed;
-    left: 10000px;
+    // left: 10000px;
     direction: ltr;
 
     .body-render-section {
       position: relative;
-    }
-  }
-
-  .@{base-name} table {
-    width: 100%;
-
-    td,
-    th {
-      border: 1px solid black;
     }
   }
 }
