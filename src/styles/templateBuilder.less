@@ -1,5 +1,5 @@
 @import './_variables.less';
-@import './_elements.less';
+@import (reference) './_elements.less';
 
 .__VCP__ {
   .@{base-name}-template-builder-container {
@@ -282,8 +282,8 @@
           box-shadow: inset 0 0 20px 16px rgb(235 233 233 / 88%);
         }
 
-        .element {
-          .element();
+        .@{base-name}-element {
+          .element;
         }
 
         #bodyTemplate {

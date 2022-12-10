@@ -1,7 +1,7 @@
 <template>
 	<!-- Template Builder -->
 	<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" :id="element.id" ref="element" @click="$emit('clickedOnElement', element)"
-		@finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' element'" :style="element.styles" tabindex="-1">
+		@finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' vcp-element'" :style="element.styles" tabindex="-1">
 		<div class="repeator-name">
 			<span>{{displaySet.configs.title}} <img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="20" height="20" /></span>
 		</div>

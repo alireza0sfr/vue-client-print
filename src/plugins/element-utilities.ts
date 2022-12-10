@@ -319,7 +319,7 @@ export class Element extends EmptyElement implements IElement {
 
     const onClick = (e: any) => {
       e.stopPropagation() // prevent event to call parent events aswell
-      let selectedElements = document.getElementsByClassName('element selected')
+      let selectedElements = document.getElementsByClassName('vcp-element selected')
       for (let index = 0; index < selectedElements.length; index++) {
         selectedElements[index].classList.remove('selected')
       }

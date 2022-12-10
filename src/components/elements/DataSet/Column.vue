@@ -1,5 +1,5 @@
 <template>
-	<div :id="element.id" ref="element" :class="element.type + ' element label'" :style="element.styles" tabindex="-1">
+	<div :id="element.id" ref="element" :class="element.type + ' vcp-element label'" :style="element.styles" tabindex="-1">
 		<span>{{element.configs.title}}</span>
 		<Resizers v-if="element.configs.hasResizer" :query="`${element.type}-${element.id}`" :resizers="['right']" />
 	</div>

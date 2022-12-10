@@ -1201,7 +1201,7 @@
 				if (tabName === this.locals.activeTab)
 					return
 
-				let previousTab = document.getElementsByClassName('tab selected')[0]
+				let previousTab = document.getElementsByClassName('vcp-tab selected')[0]
 				var tab = this.$refs[tabName] as HTMLElement
 
 				previousTab.classList.remove('selected')
@@ -1220,7 +1220,7 @@
 				}
 
 				this.locals.selectedElement = new EmptyElement
-				let selectedElements = document.getElementsByClassName("element selected")
+				let selectedElements = document.getElementsByClassName("vcp-element selected")
 				for (let index = 0; index < selectedElements.length; index++) {
 					selectedElements[index].classList.remove("selected")
 				}
