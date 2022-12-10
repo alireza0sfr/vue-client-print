@@ -54,7 +54,8 @@
 														</select>
 													</div>
 												</div>
-												<div draggable="true" class="vcp-variables-content-field vcp-small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable)" @dragend="finishedDraggingElement()">
+												<div draggable="true" class="vcp-variables-content-field vcp-small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable)"
+													@dragend="finishedDraggingElement()">
 													<img style="height: 20px; width: 15px; cursor: move;" src="@/assets/images/drag.png" />
 												</div>
 											</div>
@@ -655,7 +656,8 @@
 									<div style="margin-top: 15px" class="vcp-toolbar-header">
 										<span>{{_$t('template-builder.sections.styles', {sectionName: locals.selectedSection})}}</span>
 									</div>
-									<!-- <div class="vcp-toolbar-content-row">
+									<div class="vcp-toolbar-content-wrapper">
+										<!-- <div class="vcp-toolbar-content-row">
 										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.elements.styles.background-color')}}</span>
 										</div>
@@ -663,56 +665,57 @@
 											<input type="color" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div> -->
-									<div class="vcp-toolbar-content-row">
-										<div class="vcp-toolbar-content-label">
-											<span>{{_$t('template-builder.elements.styles.borders')}}</span>
-										</div>
-										<div class="vcp-toolbar-content-field" style="text-align: right">
-											<label for="bordersAlldirections">
-												<input class="vcp-input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
-												{{_$t('template-builder.elements.styles.border-on-all-directions')}}
-											</label>
-										</div>
-									</div>
-									<div class="vcp-toolbar-content-row" v-if="locals.bordersAllDirections">
-										<div class="vcp-toolbar-content-label">
-											<span>{{_$t('template-builder.elements.styles.border-style')}}</span>
-										</div>
-										<div class="vcp-toolbar-content-field">
-											<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
-										</div>
-									</div>
-									<div v-if="!locals.bordersAllDirections" style="width: 100%">
 										<div class="vcp-toolbar-content-row">
 											<div class="vcp-toolbar-content-label">
-												<span>{{_$t('template-builder.elements.styles.border-top')}}</span>
+												<span>{{_$t('template-builder.elements.styles.borders')}}</span>
 											</div>
-											<div class="vcp-toolbar-content-field">
-												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
-											</div>
-										</div>
-										<div class="vcp-toolbar-content-row">
-											<div class="vcp-toolbar-content-label">
-												<span>{{_$t('template-builder.elements.styles.border-right')}}</span>
-											</div>
-											<div class="vcp-toolbar-content-field">
-												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field" style="text-align: right">
+												<label for="bordersAlldirections">
+													<input class="vcp-input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
+													{{_$t('template-builder.elements.styles.border-on-all-directions')}}
+												</label>
 											</div>
 										</div>
-										<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-row" v-if="locals.bordersAllDirections">
 											<div class="vcp-toolbar-content-label">
-												<span>{{_$t('template-builder.elements.styles.border-bottom')}}</span>
+												<span>{{_$t('template-builder.elements.styles.border-style')}}</span>
 											</div>
 											<div class="vcp-toolbar-content-field">
-												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="vcp-toolbar-content-row">
-											<div class="vcp-toolbar-content-label">
-												<span>{{_$t('template-builder.elements.styles.border-left')}}</span>
+										<div v-if="!locals.bordersAllDirections" style="width: 100%">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
+													<span>{{_$t('template-builder.elements.styles.border-top')}}</span>
+												</div>
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												</div>
 											</div>
-											<div class="vcp-toolbar-content-field">
-												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
+													<span>{{_$t('template-builder.elements.styles.border-right')}}</span>
+												</div>
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												</div>
+											</div>
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
+													<span>{{_$t('template-builder.elements.styles.border-bottom')}}</span>
+												</div>
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												</div>
+											</div>
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
+													<span>{{_$t('template-builder.elements.styles.border-left')}}</span>
+												</div>
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												</div>
 											</div>
 										</div>
 									</div>
