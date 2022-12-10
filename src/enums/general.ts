@@ -47,3 +47,8 @@ export enum LoggerBase {
   INFO = '[LOGGER INFO]',
   FORCE = '[LOGGER FORCE]',
 }
+
+export enum PageOrientations {
+  PORTRAIT = 'portrait',
+  LANDSCAPE = 'landscape'
+}

@@ -145,9 +145,8 @@
 											<label for="pageOrientiationsControl">{{_$t('template-builder.page-orientation')}}</label>
 										</div>
 										<div class="vcp-toolbar-content-field">
-											<select class="vcp-input-form-control" @change="syncSizes()" v-model="settings.orientation" id="pageOrientiationsControl">
-												<option value="portrait">{{_$t('template-builder.vertical')}}</option>
-												<option value="landscape">{{_$t('template-builder.horizental')}}</option>
+											<select class="vcp-input-form-control" @change="syncSizes()" v-model="settings.pageOrientation" id="pageOrientiationsControl">
+												<option v-for="option in locals.PageOrientations" :value="option" :key="option">{{ _$t(`template-builder.${option}`) }}</option>
 											</select>
 										</div>
 									</div>
@@ -749,7 +748,7 @@
 
 <script lang="ts">
 	import { IElement, IElementStates, IEmptyElement, IVariable, IDataSetLikeElement } from '~/interfaces/elements'
-	import { fileEntryTypes, TemplateBuilderSections, Tabs } from '~/enums/general'
+	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IFile, ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
@@ -801,6 +800,7 @@
 		data() {
 			return {
 				locals: {
+					PageOrientations: PageOrientations,
 					tabs: Tabs,
 					sections: Object.values(TemplateBuilderSections),
 					StylesTargets: StylesTargets,
@@ -1125,9 +1125,9 @@
 
 				const errorValue = 0.2 // Subtracting this value to make the pages more accurate
 
-				this.settings.defaultHeightOfPaper = this.locals.pageSizeDictionary[this.settings.orientation][this.settings.pageSize]["height"] // Gettings the default sizes from the base dic
+				this.settings.defaultHeightOfPaper = this.locals.pageSizeDictionary[this.settings.pageOrientation][this.settings.pageSize]["height"] // Gettings the default sizes from the base dic
 				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.footer.height - this.settings.header.height - errorValue
-				this.settings.defaultWidthOfPaper = this.locals.pageSizeDictionary[this.settings.orientation][this.settings.pageSize]["width"]
+				this.settings.defaultWidthOfPaper = this.locals.pageSizeDictionary[this.settings.pageOrientation][this.settings.pageSize]["width"]
 			},
 
 			/**

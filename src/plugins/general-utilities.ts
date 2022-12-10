@@ -1,6 +1,5 @@
-import { IBindingObject } from '~/interfaces/elements'
 import { ISettings } from '~/interfaces/general'
-import { TemplateBuilderSections } from '~/enums/general'
+import { TemplateBuilderSections, PageOrientations } from '~/enums/general'
 import { DataSetLikeElement } from '~/plugins/element-utilities'
 import Logger from '~/plugins/logger'
 import i18nInstance from '~/plugins/i18n'
@@ -308,7 +307,7 @@ export function getDefaultSettings(): ISettings {
     defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
     totalHeightOfAPaper: 10.4, // Useable height for body tag
     designName: '',
-    orientation: 'portrait',
+    pageOrientation: PageOrientations.PORTRAIT,
     pageSize: 'a4',
     pageDirections: 'rtl',
     pageBorder: '',

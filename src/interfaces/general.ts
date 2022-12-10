@@ -1,5 +1,5 @@
 import { IElement, IVariable } from './elements'
-import { LoggerLevels } from '~/enums/general'
+import { LoggerLevels, PageOrientations } from '~/enums/general'
 export interface ISettings {
   header: {
     elements: IElement[],
@@ -32,7 +32,7 @@ export interface ISettings {
   defaultWidthOfPaper: number
   totalHeightOfAPaper: number
   designName: string,
-  orientation: string,
+  pageOrientation: PageOrientations,
   pageSize: string,
   pageDirections: string,
   pageBorder: string,
