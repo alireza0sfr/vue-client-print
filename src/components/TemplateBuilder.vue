@@ -2,19 +2,19 @@
 	<div id="templateBuilderPage" :dir="settings.pageDirections">
 		<!-- Preview Modal-->
 		<div @click="deselectSection" id="templateBuilderModal" tabindex="0" class="vcp-modal">
-			<div id="fullscreenControl" class="modal-content">
-				<div class="modal-header">
+			<div id="fullscreenControl" class="vcp-modal-content">
+				<div class="vcp-modal-header">
 					<div>
-						<a @click="save" :title="_$t('template-builder.save')" class="modal-icon" href="#">
+						<a @click="save" :title="_$t('template-builder.save')" class="vcp-modal-icon" href="#">
 							<img src="@/assets/images/floppy-disk.png" />
 						</a>
 					</div>
 					<div>
-						<h3 class="modal-title">{{ _$t('template-builder.name') }}</h3>
+						<h3 class="vcp-modal-title">{{ _$t('template-builder.name') }}</h3>
 					</div>
 
 					<div>
-						<span id="TemplateBuilderModalCloseBtn" @click="closeModal('templateBuilderModal')" class="modal-close-btn">&times;</span>
+						<span id="TemplateBuilderModalCloseBtn" @click="closeModal('templateBuilderModal')" class="vcp-modal-close-btn">&times;</span>
 					</div>
 				</div>
 

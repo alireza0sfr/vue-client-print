@@ -27,18 +27,18 @@
 
 		<!-- Print Preview Modal-->
 		<div id="printModal" class="vcp-modal">
-			<div class="modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
-				<div :dir="settings.pageDirections" class="modal-header">
+			<div class="vcp-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
+				<div :dir="settings.pageDirections" class="vcp-modal-header">
 					<div style="display: flex">
-						<a href="#" @click="printForm()" :title="_$t('print.name')" class="modal-icon">
+						<a href="#" @click="printForm()" :title="_$t('print.name')" class="vcp-modal-icon">
 							<img src="@/assets/images/printer.png" />
 						</a>
 					</div>
 					<div>
-						<h3 class="modal-title">{{_$t('print.print-preview')}}</h3>
+						<h3 class="vcp-modal-title">{{_$t('print.print-preview')}}</h3>
 					</div>
 					<div>
-						<span id="printModalCloseBtn" @click="closeModal('printModal')" class="modal-close-btn">&times;</span>
+						<span id="printModalCloseBtn" @click="closeModal('printModal')" class="vcp-modal-close-btn">&times;</span>
 					</div>
 				</div>
 				<div style="position: relative; min-height: 200px">
@@ -46,16 +46,16 @@
 
 					<!-- Loading popup modal -->
 
-					<div id="loadingModal" class="modal-loading">
-						<div class="modal-loading-content">
-							<div class="modal-loading-inner">
+					<div id="loadingModal" class="vcp-modal-loading">
+						<div class="vcp-modal-loading-content">
+							<div class="vcp-modal-loading-inner">
 								<!-- Spinner -->
 
-								<div class="sk-chase">
-									<div class="sk-chase-dot"></div>
-									<div class="sk-chase-dot"></div>
-									<div class="sk-chase-dot"></div>
-									<div class="sk-chase-dot"></div>
+								<div class="vcp-chaser">
+									<div class="vcp-chaser-dot"></div>
+									<div class="vcp-chaser-dot"></div>
+									<div class="vcp-chaser-dot"></div>
+									<div class="vcp-chaser-dot"></div>
 								</div>
 								<p style="margin-top: 20px">{{ _$t('print.proccessing') }}</p>
 							</div>
