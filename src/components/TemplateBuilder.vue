@@ -21,52 +21,52 @@
 				<div class="vcp-template-builder-container">
 
 					<!-- Section 1 (Template Builder) -->
-					<div class="toolbar-container">
+					<div class="vcp-toolbar-container">
 						<div class="toolbar-content">
 							<!-- Tabs -->
-							<div class="tabs">
-								<a class="tab selected" @click="switchTabs(locals.tabs.SETTINGS)" ref="settings">{{_$t('template-builder.settings')}}</a>
-								<a class="tab" @click="switchTabs(locals.tabs.VARIABLES)" ref="variables">{{ _$t('template-builder.variables.variables') }}</a>
-								<a class="tab" @click="switchTabs(locals.tabs.OTHERS)" ref="others">{{ _$t('template-builder.others') }}</a>
+							<div class="vcp-tabs">
+								<a class="vcp-tab selected" @click="switchTabs(locals.tabs.SETTINGS)" ref="settings">{{_$t('template-builder.settings')}}</a>
+								<a class="vcp-tab" @click="switchTabs(locals.tabs.VARIABLES)" ref="variables">{{ _$t('template-builder.variables.variables') }}</a>
+								<a class="vcp-tab" @click="switchTabs(locals.tabs.OTHERS)" ref="others">{{ _$t('template-builder.others') }}</a>
 							</div>
 
 							<!-- Variables Tab -->
-							<div v-show="locals.activeTab === locals.tabs.VARIABLES" class="variables-tab">
-								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
+							<div v-show="locals.activeTab === locals.tabs.VARIABLES">
+								<div class="vcp-toolbar-header" style="border-right: 1px solid #81c3ff">
 									<span>{{ _$t('template-builder.variables.list') }}</span>
 								</div>
-								<div class="toolbar-content-wrapper">
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-field w-100">
-											<a @click="createVariable" class="button">{{ _$t('template-builder.variables.add') }}</a>
+								<div class="vcp-toolbar-content-wrapper">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-field w-100">
+											<a @click="createVariable" class="vcp-button">{{ _$t('template-builder.variables.add') }}</a>
 										</div>
 									</div>
-									<div :id="`${locals.elementType.VARIABLE}_Settings`" class="variables settings-section">
-										<div :class="['variable',{selected:locals.selectedElement.configs.variableId === variable.variableId}]" v-for="variable in variablesList" :key="variable.variableId">
-											<div class="variables-row">
-												<div class="variables-row large">
-													<div class="variables-content-field" style="width: 60%">
+									<div :id="`${locals.elementType.VARIABLE}_Settings`" class="vcp-variables settings-section">
+										<div :class="['vcp-variable',{selected:locals.selectedElement.configs.variableId === variable.variableId}]" v-for="variable in variablesList" :key="variable.variableId">
+											<div class="vcp-variables-row">
+												<div class="vcp-variables-row vcp-large">
+													<div class="vcp-variables-content-field" style="width: 60%">
 														<input type="text" v-model="variable.name" aria-label="Small" :placeholder="_$t('template-builder.variables.name')" aria-describedby="inputGroup-sizing-sm" />
 													</div>
-													<div class="variables-content-field" style="width: 40%">
+													<div class="vcp-variables-content-field" style="width: 40%">
 														<select v-model="variable.variableType" @change="onVariableTypeChange(variable)">
 															<option v-for="option in locals.VariableTypes" :value="option" :key="option">{{ _$t(`template-builder.variables.${option}`) }}</option>
 														</select>
 													</div>
 												</div>
-												<div draggable="true" class="variables-content-field small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable)" @dragend="finishedDraggingElement()">
+												<div draggable="true" class="vcp-variables-content-field vcp-small" @dragstart="startDraggingElement(locals.ElementTypes.VARIABLE, variable)" @dragend="finishedDraggingElement()">
 													<img style="height: 20px; width: 15px; cursor: move;" src="@/assets/images/drag.png" />
 												</div>
 											</div>
-											<div class="variables-row" style="justify-content: flex-end;">
-												<div v-if="variable.variableType === locals.VariableTypes.TEXT" class="variables-content-field large">
+											<div class="vcp-variables-row" style="justify-content: flex-end;">
+												<div v-if="variable.variableType === locals.VariableTypes.TEXT" class="vcp-variables-content-field vcp-large">
 													<input type="text" v-model="variable.context" aria-label="Small" :placeholder="_$t('template-builder.variables.text')" aria-describedby="inputGroup-sizing-sm" />
 												</div>
-												<div class="variables-content-field large" v-if="variable.variableType === locals.VariableTypes.IMAGE">
+												<div class="vcp-variables-content-field vcp-large" v-if="variable.variableType === locals.VariableTypes.IMAGE">
 													<input type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageVariable, variable)" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
 														id="variableImageFileControl" />
 												</div>
-												<div class="variables-content-field small">
+												<div class="vcp-variables-content-field vcp-small">
 													<img @click="deleteVariable(variable.variableId)" style="width: 15px; height: 15px" src="@/assets/images/cancel.png" />
 												</div>
 											</div>
@@ -77,22 +77,22 @@
 
 							<!-- Others Tab  -->
 							<div v-show="locals.activeTab === locals.tabs.OTHERS" class="others-tab">
-								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
+								<div class="vcp-toolbar-header" style="border-right: 1px solid #81c3ff">
 									<span>{{_$t('template-builder.save')}}</span>
 								</div>
-								<div class="toolbar-content-wrapper">
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-field w-100">
-											<a class="button" @click="export2SrcFile()">{{_$t('template-builder.export')}}</a>
+								<div class="vcp-toolbar-content-wrapper">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-field w-100">
+											<a class="vcp-button" @click="export2SrcFile()">{{_$t('template-builder.export')}}</a>
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-field w-100">
-											<a class="button" @click="clickedOnInput('fileSrcControl')">{{_$t('template-builder.import')}}</a>
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-field w-100">
+											<a class="vcp-button" @click="clickedOnInput('fileSrcControl')">{{_$t('template-builder.import')}}</a>
 										</div>
 									</div>
-									<div style="display:none" class="toolbar-content-row">
-										<div class="variables-content-field">
+									<div style="display:none" class="vcp-toolbar-content-row">
+										<div class="vcp-variables-content-field">
 											<input type="file" accept=".vcp" @change="onFileChange(locals.fileEntryTypes.VCPSrcFile)" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="fileSrcControl" />
 										</div>
 									</div>
@@ -103,82 +103,82 @@
 							<div v-show="locals.activeTab === locals.tabs.SETTINGS" class="settings-tab">
 
 								<!-- Settings -->
-								<div class="toolbar-header" style="border-right: 1px solid #81c3ff">
+								<div class="vcp-toolbar-header" style="border-right: 1px solid #81c3ff">
 									<span>{{_$t('template-builder.print-settings')}}</span>
 								</div>
-								<div class="toolbar-content-wrapper" id="printConfigsMenu">
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+								<div class="vcp-toolbar-content-wrapper" id="printConfigsMenu">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.template-name')}}</span>
 										</div>
-										<div class="toolbar-content-field">
-											<input type="text" v-model="settings.designName" class="input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										<div class="vcp-toolbar-content-field">
+											<input type="text" v-model="settings.designName" class="vcp-input-form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.language')}}</span>
 										</div>
-										<div class="toolbar-content-field">
-											<select class="input-form-control" v-model="_$i18n.locale">
+										<div class="vcp-toolbar-content-field">
+											<select class="vcp-input-form-control" v-model="_$i18n.locale">
 												<option v-for="(lang, i) in locals.langs" :key="`Lang${i}`" :value="lang">
 													{{ lang }}
 												</option>
 											</select>
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<label for="pageSizeControl">{{_$t('template-builder.page-size')}}</label>
 										</div>
-										<div class="toolbar-content-field">
-											<select class="input-form-control" v-model="settings.pageSize" @change="syncSizes()" id="pageSizeControl">
+										<div class="vcp-toolbar-content-field">
+											<select class="vcp-input-form-control" v-model="settings.pageSize" @change="syncSizes()" id="pageSizeControl">
 												<option value="a3">A3</option>
 												<option value="a4">A4</option>
 												<option value="a5">A5</option>
 											</select>
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<label for="pageOrientiationsControl">{{_$t('template-builder.page-orientation')}}</label>
 										</div>
-										<div class="toolbar-content-field">
-											<select class="input-form-control" @change="syncSizes()" v-model="settings.orientation" id="pageOrientiationsControl">
+										<div class="vcp-toolbar-content-field">
+											<select class="vcp-input-form-control" @change="syncSizes()" v-model="settings.orientation" id="pageOrientiationsControl">
 												<option value="portrait">{{_$t('template-builder.vertical')}}</option>
 												<option value="landscape">{{_$t('template-builder.horizental')}}</option>
 											</select>
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.page-border')}}</span>
 										</div>
-										<div class="toolbar-content-field">
-											<input type="text" class="input-form-control" v-model="settings.pageBorder" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										<div class="vcp-toolbar-content-field">
+											<input type="text" class="vcp-input-form-control" v-model="settings.pageBorder" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<label for="repeatableHeaderControl">{{_$t('template-builder.repeat-header')}}</label>
 										</div>
-										<div class="toolbar-content-field">
-											<input class="input-form-control" type="checkbox" v-model="settings.header.repeatable" id="repeatableHeaderControl" />
+										<div class="vcp-toolbar-content-field">
+											<input class="vcp-input-form-control" type="checkbox" v-model="settings.header.repeatable" id="repeatableHeaderControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<label for="repeatableFooterControl">{{_$t('template-builder.repeat-footer')}}</label>
 										</div>
-										<div class="toolbar-content-field">
-											<input class="input-form-control" type="checkbox" v-model="settings.footer.repeatable" id="repeatableFooterControl" />
+										<div class="vcp-toolbar-content-field">
+											<input class="vcp-input-form-control" type="checkbox" v-model="settings.footer.repeatable" id="repeatableFooterControl" />
 										</div>
 									</div>
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.page-direction')}}</span>
 										</div>
-										<div class="toolbar-content-field" style="text-align: right">
+										<div class="vcp-toolbar-content-field" style="text-align: right">
 											<div>
 												<label for="pageDirections">
 													<input type="radio" name="pageDirections" id="pageDirections" value="rtl" v-model="settings.pageDirections" />
@@ -196,60 +196,60 @@
 								</div>
 
 								<!-- Elements -->
-								<div class="toolbar-header">
+								<div class="vcp-toolbar-header">
 									<span>{{_$t('template-builder.elements.name')}}</span>
 								</div>
-								<div class="toolbar-content-wrapper" style="flex-direction: row" id="elementsMenu">
-									<div class="toolbar-content-row m-0">
-										<div class="element-draggble">
+								<div class="vcp-toolbar-content-wrapper" style="flex-direction: row" id="elementsMenu">
+									<div class="vcp-toolbar-content-row m-0">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.TEXTELEMENT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/text.png" :alt="_$t('template-builder.elements.textelement')" />
 												<div class="element-title">{{_$t('template-builder.elements.textelement')}}</div>
 											</span>
 										</div>
-										<div class="element-draggble">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.DATETIME)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/timetable.png" :alt="_$t('template-builder.elements.datetime')" />
 												<div class="element-title">{{_$t('template-builder.elements.datetime')}}</div>
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row m-0">
-										<div class="element-draggble">
+									<div class="vcp-toolbar-content-row m-0">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.PAGECOUNTER)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/pages.png" :alt="_$t('template-builder.elements.pagecounter')" />
 												<div class="element-title">{{_$t('template-builder.elements.pagecounter')}}</div>
 											</span>
 										</div>
-										<div class="element-draggble">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.IMAGEELEMENT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/image.png" alt="_$t('template-builder.elements.imageelement')" />
 												<div class="element-title">{{_$t('template-builder.elements.imageelement')}}</div>
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row m-0">
-										<div class="element-draggble">
+									<div class="vcp-toolbar-content-row m-0">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.BINDINGOBJECT)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/binding.png" :alt="_$t('template-builder.elements.bindingobject')" />
 												<div class="element-title">{{_$t('template-builder.elements.bindingobject')}}</div>
 											</span>
 										</div>
-										<div class="element-draggble">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.TEXTPATTERN)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/textpattern.png" :alt="_$t('template-builder.elements.textpattern')" />
 												<div class="element-title">{{_$t('template-builder.elements.textpattern')}}</div>
 											</span>
 										</div>
 									</div>
-									<div class="toolbar-content-row m-0">
-										<div class="element-draggble">
+									<div class="vcp-toolbar-content-row m-0">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.DATASET)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="32" height="32" />
 												<div class="element-title">{{_$t('template-builder.elements.dataset')}}</div>
 											</span>
 										</div>
-										<div class="element-draggble">
+										<div class="vcp-element-draggable">
 											<span draggable="true" @dragstart="startDraggingElement(locals.ElementTypes.REPEATOR)" @dragend="finishedDraggingElement()">
 												<img src="@/assets/images/repeat.png" :alt="_$t('template-builder.elements.repeator')" width="32" height="32" />
 												<div class="element-title">{{_$t('template-builder.elements.repeator')}}</div>
@@ -260,209 +260,209 @@
 
 								<!-- Element's Settings -->
 								<div v-if="locals.selectedElement.type !== locals.ElementTypes.EMPTY && locals.selectedElement.type !== locals.ElementTypes.VARIABLE">
-									<div class="toolbar-header">
+									<div class="vcp-toolbar-header">
 										<span>{{_$t('template-builder.elements.settings', {elementType: _$t(`template-builder.elements.${locals.selectedElement.type}`)})}}</span>
 									</div>
 
-									<div class="toolbar-content-wrapper">
+									<div class="vcp-toolbar-content-wrapper">
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT" :id="`${locals.ElementTypes.TEXTELEMENT}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT" :id="`${locals.ElementTypes.TEXTELEMENT}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
 												<div style="text-align: center; width: 100%">
 													<span>{{_$t('template-builder.elements.configs.type-text')}}</span>
 												</div>
 											</div>
-											<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
-												<div class="toolbar-content-field">
-													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
+											<div class="vcp-toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
+												<div class="vcp-toolbar-content-field">
+													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="vcp-input-form-control" aria-label="Small"
 														aria-describedby="inputGroup-sizing-sm"></textarea>
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME" :id="`${locals.ElementTypes.DATETIME}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATETIME" :id="`${locals.ElementTypes.DATETIME}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="hasDateControl">{{_$t('template-builder.elements.configs.date')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasDate" id="hasDateControl" />
+												<div class="vcp-toolbar-content-field">
+													<input class="vcp-input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasDate" id="hasDateControl" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="hasTimeControl">{{_$t('template-builder.elements.configs.time')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasTime" id="hasTimeControl" />
+												<div class="vcp-toolbar-content-field">
+													<input class="vcp-input-form-control" type="checkbox" v-model="locals.selectedElement.configs.hasTime" id="hasTimeControl" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="persiaDateControl">{{_$t('template-builder.elements.configs.solar-date')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input class="input-form-control" type="checkbox" v-model="locals.selectedElement.configs.persianDate" id="persiaDateControl" />
+												<div class="vcp-toolbar-content-field">
+													<input class="vcp-input-form-control" type="checkbox" v-model="locals.selectedElement.configs.persianDate" id="persiaDateControl" />
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.PAGECOUNTER" :id="`${locals.ElementTypes.PAGECOUNTER}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.PAGECOUNTER" :id="`${locals.ElementTypes.PAGECOUNTER}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="persianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="persianNumbersControl" />
+												<div class="vcp-toolbar-content-field">
+													<input type="checkbox" class="vcp-input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="persianNumbersControl" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="completeFormControl">{{_$t('template-builder.elements.configs.use-complete-format')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.completeForm" id="completeFormControl" />
+												<div class="vcp-toolbar-content-field">
+													<input type="checkbox" class="vcp-input-form-control" v-model="locals.selectedElement.configs.completeForm" id="completeFormControl" />
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT" :id="`${locals.ElementTypes.IMAGEELEMENT}_Settings`" class="element-settings">
-											<div class="toolbar-content-row" style="flex-direction: column">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.IMAGEELEMENT" :id="`${locals.ElementTypes.IMAGEELEMENT}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row" style="flex-direction: column">
 												<label for="elementImageFileControl">{{_$t('template-builder.elements.configs.upload-image-text')}}</label>
-												<div class="imageelement-text">{{_$t('template-builder.elements.configs.maximum-file-size')}}</div>
-												<div class="imageelement-text">{{_$t('template-builder.elements.configs.accepted-formats')}}</div>
-												<div class="imageelement-text" style="direction: ltr; margin-top: 0px;">*.png, *. jpeg</div>
+												<div class="vcp-imageelement-text">{{_$t('template-builder.elements.configs.maximum-file-size')}}</div>
+												<div class="vcp-imageelement-text">{{_$t('template-builder.elements.configs.accepted-formats')}}</div>
+												<div class="vcp-imageelement-text" style="direction: ltr; margin-top: 0px;">*.png, *. jpeg</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div style="width: 100%;" class="toolbar-content-field">
-													<a class="button" @click="clickedOnInput('elementImageFileControl')">{{_$t('template-builder.elements.configs.upload-image')}}</a>
+											<div class="vcp-toolbar-content-row">
+												<div style="width: 100%;" class="vcp-toolbar-content-field">
+													<a class="vcp-button" @click="clickedOnInput('elementImageFileControl')">{{_$t('template-builder.elements.configs.upload-image')}}</a>
 												</div>
 											</div>
-											<div style="display: none;" class="toolbar-content-row">
+											<div style="display: none;" class="vcp-toolbar-content-row">
 												<input style="margin-right: 21px;" type="file" accept="image/*" @change="onFileChange(locals.fileEntryTypes.imageElement)" aria-label="Small"
 													aria-describedby="inputGroup-sizing-sm" id="elementImageFileControl" />
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT" :id="`${locals.ElementTypes.BINDINGOBJECT}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT" :id="`${locals.ElementTypes.BINDINGOBJECT}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="bindingObjectPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
+												<div class="vcp-toolbar-content-field">
+													<input type="checkbox" class="vcp-input-form-control" v-model="locals.selectedElement.configs.persianNumbers" id="bindingObjectPersianNumbersControl" />
 												</div>
 											</div>
-											<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.BINDINGOBJECT">
+												<div class="vcp-toolbar-content-label">
 													<label for="bindingObjectControl">{{_$t('template-builder.elements.configs.data-type')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<select class="input-form-control" v-model="locals.selectedElement.configs.field" id="bindingObjectControl">
+												<div class="vcp-toolbar-content-field">
+													<select class="vcp-input-form-control" v-model="locals.selectedElement.configs.field" id="bindingObjectControl">
 														<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
 													</select>
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN" :id="`${locals.ElementTypes.TEXTPATTERN}_Settings`" class="element-settings">
-											<div class="toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN" :id="`${locals.ElementTypes.TEXTPATTERN}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTPATTERN">
 												<div style="text-align: center; width: 100%">
 													<span>{{_$t('template-builder.elements.configs.type-text')}}</span>
 													<p>{{_$t('template-builder.elements.configs.textpattern-example', {name: '{name}'})}}</p>
 												</div>
 											</div>
 											<div>
-												<div class="toolbar-content-field">
-													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="input-form-control" aria-label="Small"
+												<div class="vcp-toolbar-content-field">
+													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="vcp-input-form-control" aria-label="Small"
 														aria-describedby="inputGroup-sizing-sm"></textarea>
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="textPatternPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input :dir="settings.pageDirections" type="checkbox" class="input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
+												<div class="vcp-toolbar-content-field">
+													<input :dir="settings.pageDirections" type="checkbox" class="vcp-input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
 														id="textPatternPersianNumbersControl" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="textpatternControl">{{_$t('template-builder.elements.configs.fields')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<select class="input-form-control" id="textpatternControl">
+												<div class="vcp-toolbar-content-field">
+													<select class="vcp-input-form-control" id="textpatternControl">
 														<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
 													</select>
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
-												<div style="width: 100%;" class="toolbar-content-label">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.COLUMN" :id="`${locals.ElementTypes.COLUMN}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
+												<div style="width: 100%;" class="vcp-toolbar-content-label">
 													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.order')}} ({{locals.selectedElement.configs.key}})</label>
 												</div>
-												<div class="toolbar-content-field">
+												<div class="vcp-toolbar-content-field">
 													<label for="colActive">
-														<input style="flex-grow: unset;" type="number" class="input-form-control" v-model="locals.selectedElement.configs.order" id="colActive" />
+														<input style="flex-grow: unset;" type="number" class="vcp-input-form-control" v-model="locals.selectedElement.configs.order" id="colActive" />
 													</label>
 												</div>
 											</div>
 
-											<div class="toolbar-content-row">
-												<div style="width: 100%;" class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div style="width: 100%;" class="vcp-toolbar-content-label">
 													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.title')}}</label>
 												</div>
-												<div class="toolbar-content-field">
+												<div class="vcp-toolbar-content-field">
 													<label for="colActive">
-														<input style="flex-grow: unset;" type="text" class="input-form-control" v-model="locals.selectedElement.configs.title" id="colActive" />
+														<input style="flex-grow: unset;" type="text" class="vcp-input-form-control" v-model="locals.selectedElement.configs.title" id="colActive" />
 													</label>
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW" :id="`${locals.ElementTypes.ROW}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.ROW" :id="`${locals.ElementTypes.ROW}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.stylesTarget')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<select v-model="locals.selectedElement.configs.stylesTarget" class="input-form-control" id="dataSetNameControl">
+												<div class="vcp-toolbar-content-field">
+													<select v-model="locals.selectedElement.configs.stylesTarget" class="vcp-input-form-control" id="dataSetNameControl">
 														<option v-for="option in locals.StylesTargets" :value="option" :key="option">{{ _$t(`template-builder.elements.configs.${option}`) }}</option>
 													</select>
 												</div>
 											</div>
 
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.rowsHeight')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="number" class="input-form-control" v-model="locals.selectedElement.styles.minHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<div class="vcp-toolbar-content-field">
+													<input type="number" class="vcp-input-form-control" v-model="locals.selectedElement.styles.minHeight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
 										</div>
 
 										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET || locals.selectedElement.type === locals.ElementTypes.REPEATOR"
-											:id="`${locals.selectedElement.type}_Settings`" class="element-settings">
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											:id="`${locals.selectedElement.type}_Settings`" class="vcp-element-settings">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<label for="dataSetNameControl">{{_$t('template-builder.elements.configs.datasets')}}</label>
 												</div>
-												<div class="toolbar-content-field">
-													<select v-model="locals.selectedElement.configs.selectedDataSet" class="input-form-control" id="dataSetNameControl">
+												<div class="vcp-toolbar-content-field">
+													<select v-model="locals.selectedElement.configs.selectedDataSet" class="vcp-input-form-control" id="dataSetNameControl">
 														<option v-for="dataset in Object.keys(dataSetComputed)" :value="dataset" :key="dataset">{{ dataSetComputed[dataset].configs.title }}</option>
 													</select>
 												</div>
 											</div>
 										</div>
 
-										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="toolbar-content-row element-settings"
+										<div v-if="locals.selectedElement.type === locals.ElementTypes.DATASET && locals.selectedElement.configs.selectedDataSet" class="vcp-toolbar-content-row vcp-element-settings"
 											style="flex-wrap: wrap; justify-content: center;">
 											<Toggler v-for="col in dataSetComputed[locals.selectedElement.configs.selectedDataSet].configs.columns" :key="col.id" @click="togglerClicked(col)"
-												class="toolbar-content-label column-toggler" :options="prepareTogglerOptions(col)" />
+												class="vcp-toolbar-content-label vcp-column-toggler" :options="prepareTogglerOptions(col)" />
 										</div>
 
 									</div>
@@ -470,137 +470,137 @@
 
 								<!-- Element's Styles -->
 								<div v-if="locals.selectedElement.type !== locals.ElementTypes.EMPTY">
-									<div style="margin-top: 15px" class="toolbar-header">
+									<div style="margin-top: 15px" class="vcp-toolbar-header">
 										<span>{{_$t('template-builder.elements.styles.name', {elementType: _$t(`template-builder.elements.${locals.selectedElement.type}`)})}}</span>
 									</div>
-									<div class="toolbar-content-wrapper" id="elementStylesMenu">
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-wrapper" id="elementStylesMenu">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<label for="elementTextAlignControl">{{_$t('template-builder.elements.styles.text-align')}}</label>
 											</div>
-											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.styles.textAlign" class="input-form-control" id="elementTextAlignControl">
+											<div class="vcp-toolbar-content-field">
+												<select v-model="locals.selectedElement.styles.textAlign" class="vcp-input-form-control" id="elementTextAlignControl">
 													<option value="right">{{_$t('template-builder.elements.styles.positions.right')}}</option>
 													<option value="center">{{_$t('template-builder.elements.styles.positions.center')}}</option>
 													<option value="left">{{_$t('template-builder.elements.styles.positions.left')}}</option>
 												</select>
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<label for="elementTextAlignControl">{{_$t('template-builder.elements.styles.align-items')}}</label>
 											</div>
-											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.styles.alignItems" class="input-form-control" id="elementTextAlignControl">
+											<div class="vcp-toolbar-content-field">
+												<select v-model="locals.selectedElement.styles.alignItems" class="vcp-input-form-control" id="elementTextAlignControl">
 													<option value="flex-start">{{_$t('template-builder.elements.styles.positions.top')}}</option>
 													<option value="center">{{_$t('template-builder.elements.styles.positions.center')}}</option>
 													<option value="flex-end">{{_$t('template-builder.elements.styles.positions.bottom')}}</option>
 												</select>
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.text-color')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="color" class="input-form-control" v-model="locals.selectedElement.styles.color" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="color" class="vcp-input-form-control" v-model="locals.selectedElement.styles.color" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.background-color')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="color" class="input-form-control" v-model="locals.selectedElement.styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="color" class="vcp-input-form-control" v-model="locals.selectedElement.styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.font-size')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<select class="input-form-control" v-model="locals.selectedElement.styles.fontSize" id="pageSizeControl">
+											<div class="vcp-toolbar-content-field">
+												<select class="vcp-input-form-control" v-model="locals.selectedElement.styles.fontSize" id="pageSizeControl">
 													<option v-for="option in locals.fontSizes" :key="option" :value="option + 'px'">{{ option }}</option>
 												</select>
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<label for="fontWeightControl">{{_$t('template-builder.elements.styles.font-weight')}}</label>
 											</div>
-											<div class="toolbar-content-field">
-												<select v-model="locals.selectedElement.styles.fontWeight" class="input-form-control" id="elementTextAlignControl">
+											<div class="vcp-toolbar-content-field">
+												<select v-model="locals.selectedElement.styles.fontWeight" class="vcp-input-form-control" id="elementTextAlignControl">
 													<option value="normal">{{_$t('template-builder.elements.styles.normal')}}</option>
 													<option value="bold">{{_$t('template-builder.elements.styles.bold')}}</option>
 												</select>
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.font-family')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.fontFamily" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.fontFamily" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.borders')}}</span>
 											</div>
-											<div class="toolbar-content-field" style="text-align: right">
+											<div class="vcp-toolbar-content-field" style="text-align: right">
 												<label for="bordersAlldirections">
-													<input class="input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
+													<input class="vcp-input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
 													{{_$t('template-builder.elements.styles.border-on-all-directions')}}
 												</label>
 											</div>
 										</div>
-										<div class="toolbar-content-row" v-if="locals.bordersAllDirections">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row" v-if="locals.bordersAllDirections">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.border-style')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 										<div v-if="locals.bordersAllDirections === false" style="width: 100%">
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<span>{{_$t('template-builder.elements.styles.border-top')}}</span>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<span>{{_$t('template-builder.elements.styles.border-right')}}</span>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<span>{{_$t('template-builder.elements.styles.border-bottom')}}</span>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
-											<div class="toolbar-content-row">
-												<div class="toolbar-content-label">
+											<div class="vcp-toolbar-content-row">
+												<div class="vcp-toolbar-content-label">
 													<span>{{_$t('template-builder.elements.styles.border-left')}}</span>
 												</div>
-												<div class="toolbar-content-field">
-													<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+												<div class="vcp-toolbar-content-field">
+													<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 												</div>
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.text-direction')}}</span>
 											</div>
-											<div class="toolbar-content-field" style="text-align: right">
+											<div class="vcp-toolbar-content-field" style="text-align: right">
 												<label for="elementDirections">
 													<div>
 														<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="locals.selectedElement.styles.direction" />
@@ -615,36 +615,36 @@
 												</label>
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.top')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.top" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.top" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.left')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.left" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.left" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.width')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.width" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.width" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.height')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="locals.selectedElement.styles.height" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="locals.selectedElement.styles.height" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>
@@ -652,67 +652,67 @@
 
 								<!-- Section's Styles -->
 								<div v-if="locals.selectedSection" :id="`${locals.selectedSection}Template_Settings`">
-									<div style="margin-top: 15px" class="toolbar-header">
+									<div style="margin-top: 15px" class="vcp-toolbar-header">
 										<span>{{_$t('template-builder.sections.styles', {sectionName: locals.selectedSection})}}</span>
 									</div>
-									<!-- <div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<!-- <div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.elements.styles.background-color')}}</span>
 										</div>
-										<div class="toolbar-content-field">
-											<input type="color" class="input-form-control" v-model="settings[locals.selectedSection].styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										<div class="vcp-toolbar-content-field">
+											<input type="color" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.backgroundColor" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div> -->
-									<div class="toolbar-content-row">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.elements.styles.borders')}}</span>
 										</div>
-										<div class="toolbar-content-field" style="text-align: right">
+										<div class="vcp-toolbar-content-field" style="text-align: right">
 											<label for="bordersAlldirections">
-												<input class="input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
+												<input class="vcp-input-form-control" style="display: inline-block" type="checkbox" v-model="locals.bordersAllDirections" id="bordersAlldirections" />
 												{{_$t('template-builder.elements.styles.border-on-all-directions')}}
 											</label>
 										</div>
 									</div>
-									<div class="toolbar-content-row" v-if="locals.bordersAllDirections">
-										<div class="toolbar-content-label">
+									<div class="vcp-toolbar-content-row" v-if="locals.bordersAllDirections">
+										<div class="vcp-toolbar-content-label">
 											<span>{{_$t('template-builder.elements.styles.border-style')}}</span>
 										</div>
-										<div class="toolbar-content-field">
-											<input type="text" class="input-form-control" v-model="settings[locals.selectedSection].styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+										<div class="vcp-toolbar-content-field">
+											<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div v-if="!locals.bordersAllDirections" style="width: 100%">
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.border-top')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="settings[locals.selectedSection].styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderTop" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.border-right')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="settings[locals.selectedSection].styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderRight" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.border-bottom')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="settings[locals.selectedSection].styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderBottom" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
-										<div class="toolbar-content-row">
-											<div class="toolbar-content-label">
+										<div class="vcp-toolbar-content-row">
+											<div class="vcp-toolbar-content-label">
 												<span>{{_$t('template-builder.elements.styles.border-left')}}</span>
 											</div>
-											<div class="toolbar-content-field">
-												<input type="text" class="input-form-control" v-model="settings[locals.selectedSection].styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<div class="vcp-toolbar-content-field">
+												<input type="text" class="vcp-input-form-control" v-model="settings[locals.selectedSection].styles.borderLeft" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 											</div>
 										</div>
 									</div>
@@ -723,8 +723,8 @@
 					</div>
 
 					<!-- Section 2 (Template)-->
-					<div class="template-container" tabindex="0" id="templateContainer">
-						<div class="toolbar">
+					<div class="vcp-template-container" tabindex="0" id="templateContainer">
+						<div class="vcp-toolbar">
 							<img src="@/assets/images/zoom-in.png" style="width: 16px" @click="locals.scale += 0.1" />
 							<img src="@/assets/images/zoom-out.png" style="width: 16px" @click="locals.scale -= 0.1" />
 							<img src="@/assets/images/delete.png" style="width: 16px" @click="deleteElement()" />
@@ -732,7 +732,7 @@
 						</div>
 						<div ref="template"
 							:style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder, 'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in', transform: `scale(${locals.scale})`}"
-							class="template" @click="deSelectAll">
+							class="vcp-template" @click="deSelectAll">
 							<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
 								:active="locals.selectedSection === section" :height="currentSection.height" :styles="currentSection.styles" @finishedEditingElement="finishedEditingElement"
 								@clickedOnElement="clickedOnElement" @clickedOnSection="clickedOnSection" @droppedElement="droppedElement" />
@@ -1144,10 +1144,10 @@
 
 
 				for (let sectionName of sections) {
-					let section: any = document.getElementsByClassName(`section ${sectionName}`)[0] // element to make resizable
+					let section: any = document.getElementsByClassName(`vcp-section ${sectionName}`)[0] // element to make resizable
 
 					var resizer = document.createElement("div")
-					resizer.className = "resizer"
+					resizer.className = "vcp-resizer"
 					resizer.style.height = "10px"
 					section.appendChild(resizer)
 					resizer.addEventListener("mousedown", (e) => initDrag(e, section), false)

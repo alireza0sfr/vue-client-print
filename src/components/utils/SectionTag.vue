@@ -1,5 +1,5 @@
 <template>
-	<span :class="['section-tag', {'active': active}]">{{_$t(`template-builder.sections.${tag}`)}}</span>
+	<span :class="['vcp-section-tag', {'active': active}]">{{_$t(`template-builder.sections.${tag}`)}}</span>
 </template>
 
 <script lang="ts">
