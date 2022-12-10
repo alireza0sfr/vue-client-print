@@ -8,6 +8,67 @@
   min-width: 20px;
   z-index: 2;
 
+  &.content-wrapper {
+    display: flex;
+    align-items: center;
+
+    .content {
+      flex-grow: 1;
+      white-space: break-spaces;
+    }
+  }
+
+  &.dataset {
+    border: 1px solid #dbdbdb;
+    display: flex;
+    flex-direction: column;
+
+    .columns {
+      display: flex;
+      direction: ltr;
+    }
+
+    .rows {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      direction: ltr;
+
+      .row {
+        border-top: 1px solid #dbdbdb;
+        flex-grow: 1;
+        display: flex;
+
+        .cell {
+          overflow: hidden;
+        }
+      }
+    }
+
+    .dataset-name {
+      text-align: right;
+      background-color: @dataset-bg;
+      white-space: pre;
+    }
+  }
+
+  &.repeator {
+    .repeator-name {
+      text-align: right;
+      background-color: @repeator-bg;
+      height: 24px;
+      white-space: pre;
+    }
+  }
+
+  &.imageelement img,
+  &.variable img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.selectable {
   &:active {
     cursor: grabbing;
   }
@@ -126,64 +187,5 @@
     border: 1px #aaa dashed;
     border-radius: 4px;
     cursor: move;
-  }
-
-  &.content-wrapper {
-    display: flex;
-    align-items: center;
-
-    .content {
-      flex-grow: 1;
-      white-space: break-spaces;
-    }
-  }
-
-  &.dataset {
-    border: 1px solid #dbdbdb;
-    display: flex;
-    flex-direction: column;
-
-    .columns {
-      display: flex;
-      direction: ltr;
-    }
-
-    .rows {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      direction: ltr;
-
-      .row {
-        border-top: 1px solid #dbdbdb;
-        flex-grow: 1;
-        display: flex;
-
-        .cell {
-          overflow: hidden;
-        }
-      }
-    }
-
-    .dataset-name {
-      text-align: right;
-      background-color: @dataset-bg;
-      white-space: pre;
-    }
-  }
-
-  &.repeator {
-    .repeator-name {
-      text-align: right;
-      background-color: @repeator-bg;
-      height: 24px;
-      white-space: pre;
-    }
-  }
-
-  &.imageelement img,
-  &.variable img {
-    width: 100%;
-    height: 100%;
   }
 }
