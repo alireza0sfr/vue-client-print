@@ -58,3 +58,8 @@ export enum PageSizes {
   A4 = 'A4',
   A5 = 'A5'
 }
+
+export enum Directions {
+  RTL = 'rtl',
+  LTR = 'ltr'
+}

@@ -132,8 +132,8 @@
           "border-bottom": "Border Bottom",
           "border-left": "Border Left",
           "text-direction": "Text Direction",
-          "left-to-right": "Left To Right",
-          "right-to-left": "Right To Left"
+          "ltr": "Left To Right",
+          "rtl": "Right To Left"
         }
       }
     },

@@ -1,5 +1,5 @@
 import { ISettings } from '~/interfaces/general'
-import { TemplateBuilderSections, PageOrientations, PageSizes } from '~/enums/general'
+import { TemplateBuilderSections, PageOrientations, PageSizes, Directions } from '~/enums/general'
 import { DataSetLikeElement } from '~/plugins/element-utilities'
 import Logger from '~/plugins/logger'
 import i18nInstance from '~/plugins/i18n'
@@ -309,7 +309,7 @@ export function getDefaultSettings(): ISettings {
     designName: '',
     pageOrientation: PageOrientations.PORTRAIT,
     pageSize: PageSizes.A4,
-    pageDirections: 'rtl',
+    pageDirections: Directions.RTL,
     pageBorder: '',
   }
 }
@@ -321,7 +321,12 @@ export function getDefaultSettings(): ISettings {
  */
 export function prepareSettings(updatedSettings: ISettings): ISettings {
   var newSettings = merge<ISettings>(getDefaultSettings(), updatedSettings)
-  newSettings.pageDirections = generalStore.getByKey('configurations').direction
+
+  var dir = generalStore.getByKey('configurations').direction
+
+  if (Object.values(Directions).includes(dir))
+    newSettings.pageDirections = dir
+
   return newSettings
 }
 

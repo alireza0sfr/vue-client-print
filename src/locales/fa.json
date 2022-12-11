@@ -132,8 +132,8 @@
           "border-bottom": "کادر پایین",
           "border-left": "کادر چپ",
           "text-direction": "جهت نوشته",
-          "left-to-right": "چپ به راست",
-          "right-to-left": "راست به چپ"
+          "ltr": "چپ به راست",
+          "rtl": "راست به چپ"
         }
       }
     },

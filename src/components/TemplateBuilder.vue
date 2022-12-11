@@ -177,16 +177,10 @@
 											<span>{{_$t('template-builder.page-direction')}}</span>
 										</div>
 										<div class="vcp-toolbar-content-field" style="text-align: right">
-											<div>
+											<div v-for="dir of Object.values(locals.Directions)" :key="dir">
 												<label for="pageDirections">
-													<input type="radio" name="pageDirections" id="pageDirections" value="rtl" v-model="settings.pageDirections" />
-													{{_$t('template-builder.elements.styles.right-to-left')}}
-												</label>
-											</div>
-											<div>
-												<label for="pageDirections">
-													<input type="radio" name="pageDirections" id="pageDirections" value="ltr" v-model="settings.pageDirections" />
-													{{_$t('template-builder.elements.styles.left-to-right')}}
+													<input type="radio" name="pageDirections" id="pageDirections" :value="dir" v-model="settings.pageDirections" />
+													{{_$t(`template-builder.elements.styles.${dir}`)}}
 												</label>
 											</div>
 										</div>
@@ -600,15 +594,9 @@
 											</div>
 											<div class="vcp-toolbar-content-field" style="text-align: right">
 												<label for="elementDirections">
-													<div>
-														<input type="radio" name="elementDirections" id="elementDirections" value="rtl" v-model="locals.selectedElement.styles.direction" />
-														{{_$t('template-builder.elements.styles.right-to-left')}}
-													</div>
-												</label>
-												<label for="elementDirections2">
-													<div>
-														<input type="radio" name="elementDirections" id="elementDirections2" value="ltr" v-model="locals.selectedElement.styles.direction" />
-														{{_$t('template-builder.elements.styles.left-to-right')}}
+													<div v-for="dir of Object.values(locals.Directions)" :key="dir">
+														<input type="radio" name="elementDirections" id="elementDirections" :value="dir" v-model="locals.selectedElement.styles.direction" />
+														{{_$t(`template-builder.elements.styles.${dir}`)}}
 													</div>
 												</label>
 											</div>
@@ -746,7 +734,7 @@
 
 <script lang="ts">
 	import { IElement, IElementStates, IEmptyElement, IVariable, IDataSetLikeElement } from '~/interfaces/elements'
-	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations, PageSizes } from '~/enums/general'
+	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations, PageSizes, Directions } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IFile, ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
@@ -799,6 +787,7 @@
 			return {
 				locals: {
 					PageOrientations: PageOrientations,
+					Directions: Directions,
 					PageSizes: PageSizes,
 					tabs: Tabs,
 					sections: Object.values(TemplateBuilderSections),

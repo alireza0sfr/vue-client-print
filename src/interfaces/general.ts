@@ -1,5 +1,5 @@
 import { IElement, IVariable } from './elements'
-import { LoggerLevels, PageOrientations, PageSizes } from '~/enums/general'
+import { LoggerLevels, Directions, PageOrientations, PageSizes } from '~/enums/general'
 export interface ISettings {
   header: {
     elements: IElement[],
@@ -34,7 +34,7 @@ export interface ISettings {
   designName: string,
   pageOrientation: PageOrientations,
   pageSize: PageSizes,
-  pageDirections: string,
+  pageDirections: Directions,
   pageBorder: string,
 
   callback?(design: ISettings): void
