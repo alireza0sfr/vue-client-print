@@ -28,7 +28,7 @@
 		<!-- Print Preview Modal-->
 		<div id="printModal" class="vcp-modal">
 			<div class="vcp-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
-				<div :dir="settings.pageDirections" class="vcp-modal-header">
+				<div :dir="settings.page.direction" class="vcp-modal-header">
 					<div style="display: flex">
 						<a href="#" @click="printForm()" :title="_$t('print.name')" class="vcp-modal-icon">
 							<img src="@/assets/images/printer.png" />
@@ -63,7 +63,7 @@
 					</div>
 					<div id="vcp-printForm">
 						<div v-for="index in locals.totalPages" :key="index" class="vcp-main-loop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
-							<div :style="{width: 'auto', border: settings.pageBorder}">
+							<div :style="{width: 'auto', border: settings.page.border}">
 								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="vcp-main-header">
 									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
 								</div>

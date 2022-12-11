@@ -1,5 +1,5 @@
 <template>
-	<div id="templateBuilderPage" :dir="settings.pageDirections">
+	<div id="templateBuilderPage" :dir="settings.page.direction">
 		<!-- Preview Modal-->
 		<div @click="deselectSection" id="templateBuilderModal" tabindex="0" class="vcp-modal">
 			<div id="fullscreenControl" class="vcp-modal-content">
@@ -133,7 +133,7 @@
 											<label for="pageSizeControl">{{_$t('template-builder.page-size')}}</label>
 										</div>
 										<div class="vcp-toolbar-content-field">
-											<select class="vcp-input-form-control" v-model="settings.pageSize" @change="syncSizes()" id="pageSizeControl">
+											<select class="vcp-input-form-control" v-model="settings.page.size" @change="syncSizes()" id="pageSizeControl">
 												<option v-for="option in locals.PageSizes" :value="option" :key="option">{{ option }}</option>
 											</select>
 										</div>
@@ -143,7 +143,7 @@
 											<label for="pageOrientiationsControl">{{_$t('template-builder.page-orientation')}}</label>
 										</div>
 										<div class="vcp-toolbar-content-field">
-											<select class="vcp-input-form-control" @change="syncSizes()" v-model="settings.pageOrientation" id="pageOrientiationsControl">
+											<select class="vcp-input-form-control" @change="syncSizes()" v-model="settings.page.orientation" id="pageOrientiationsControl">
 												<option v-for="option in locals.PageOrientations" :value="option" :key="option">{{ _$t(`template-builder.${option}`) }}</option>
 											</select>
 										</div>
@@ -153,7 +153,7 @@
 											<span>{{_$t('template-builder.page-border')}}</span>
 										</div>
 										<div class="vcp-toolbar-content-field">
-											<input type="text" class="vcp-input-form-control" v-model="settings.pageBorder" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
+											<input type="text" class="vcp-input-form-control" v-model="settings.page.border" aria-label="Small" aria-describedby="inputGroup-sizing-sm" />
 										</div>
 									</div>
 									<div class="vcp-toolbar-content-row">
@@ -179,7 +179,7 @@
 										<div class="vcp-toolbar-content-field" style="text-align: right">
 											<div v-for="dir of Object.values(locals.Directions)" :key="dir">
 												<label for="pageDirections">
-													<input type="radio" name="pageDirections" id="pageDirections" :value="dir" v-model="settings.pageDirections" />
+													<input type="radio" name="pageDirections" id="pageDirections" :value="dir" v-model="settings.page.direction" />
 													{{_$t(`template-builder.elements.styles.${dir}`)}}
 												</label>
 											</div>
@@ -266,7 +266,7 @@
 											</div>
 											<div class="vcp-toolbar-content-row" v-if="locals.selectedElement.type === locals.ElementTypes.TEXTELEMENT">
 												<div class="vcp-toolbar-content-field">
-													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="vcp-input-form-control" aria-label="Small"
+													<textarea :dir="settings.page.direction" v-model="locals.selectedElement.configs.text" class="vcp-input-form-control" aria-label="Small"
 														aria-describedby="inputGroup-sizing-sm"></textarea>
 												</div>
 											</div>
@@ -366,7 +366,7 @@
 											</div>
 											<div>
 												<div class="vcp-toolbar-content-field">
-													<textarea :dir="settings.pageDirections" v-model="locals.selectedElement.configs.text" class="vcp-input-form-control" aria-label="Small"
+													<textarea :dir="settings.page.direction" v-model="locals.selectedElement.configs.text" class="vcp-input-form-control" aria-label="Small"
 														aria-describedby="inputGroup-sizing-sm"></textarea>
 												</div>
 											</div>
@@ -375,7 +375,7 @@
 													<label for="textPatternPersianNumbersControl">{{_$t('template-builder.elements.configs.persian-digits')}}</label>
 												</div>
 												<div class="vcp-toolbar-content-field">
-													<input :dir="settings.pageDirections" type="checkbox" class="vcp-input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
+													<input :dir="settings.page.direction" type="checkbox" class="vcp-input-form-control" v-model="locals.selectedElement.configs.persianNumbers"
 														id="textPatternPersianNumbersControl" />
 												</div>
 											</div>
@@ -719,7 +719,7 @@
 							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
 						<div ref="template"
-							:style="{width: '100%', height: locals.templateHeight + 'in', border: settings.pageBorder, 'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in', transform: `scale(${locals.scale})`}"
+							:style="{width: '100%', height: locals.templateHeight + 'in', border: settings.page.border, 'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in', transform: `scale(${locals.scale})`}"
 							class="vcp-template" @click="deSelectAll">
 							<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
 								:active="locals.selectedSection === section" :height="currentSection.height" :styles="currentSection.styles" @finishedEditingElement="finishedEditingElement"
@@ -1113,9 +1113,9 @@
 
 				const errorValue = 0.2 // Subtracting this value to make the pages more accurate
 
-				this.settings.defaultHeightOfPaper = this.locals.pageSizeDictionary[this.settings.pageOrientation][this.settings.pageSize]["height"] // Gettings the default sizes from the base dic
+				this.settings.defaultHeightOfPaper = this.locals.pageSizeDictionary[this.settings.page.orientation][this.settings.page.size]["height"] // Gettings the default sizes from the base dic
 				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.footer.height - this.settings.header.height - errorValue
-				this.settings.defaultWidthOfPaper = this.locals.pageSizeDictionary[this.settings.pageOrientation][this.settings.pageSize]["width"]
+				this.settings.defaultWidthOfPaper = this.locals.pageSizeDictionary[this.settings.page.orientation][this.settings.page.size]["width"]
 			},
 
 			/**
@@ -1346,7 +1346,7 @@
 				var baseStyles = {
 					top: e.offsetY + 'px' || '0px',
 					left: e.offsetX + 'px' || '0px',
-					direction: this.settings.pageDirections,
+					direction: this.settings.page.direction,
 				}
 
 				var configs = this.prepareNewElementsConfigs(elementType)

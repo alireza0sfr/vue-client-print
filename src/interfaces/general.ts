@@ -28,16 +28,20 @@ export interface ISettings {
     height: number,
     repeatable: boolean,
   },
+  page: pageDetails,
   defaultHeightOfPaper: number,
   defaultWidthOfPaper: number
   totalHeightOfAPaper: number
   designName: string,
-  pageOrientation: PageOrientations,
-  pageSize: PageSizes,
-  pageDirections: Directions,
-  pageBorder: string,
 
   callback?(design: ISettings): void
+}
+
+export interface pageDetails {
+  size: PageSizes,
+  orientation: PageOrientations,
+  direction: Directions,
+  border: string,
 }
 
 export interface IFile {

@@ -303,14 +303,16 @@ export function getDefaultSettings(): ISettings {
       elements: [],
       styles: {},
     },
+    page: {
+      orientation: PageOrientations.PORTRAIT,
+      size: PageSizes.A4,
+      direction: Directions.RTL,
+      border: '',
+    },
     defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
     defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
     totalHeightOfAPaper: 10.4, // Useable height for body tag
     designName: '',
-    pageOrientation: PageOrientations.PORTRAIT,
-    pageSize: PageSizes.A4,
-    pageDirections: Directions.RTL,
-    pageBorder: '',
   }
 }
 
@@ -325,7 +327,7 @@ export function prepareSettings(updatedSettings: ISettings): ISettings {
   var dir = generalStore.getByKey('configurations').direction
 
   if (Object.values(Directions).includes(dir))
-    newSettings.pageDirections = dir
+    newSettings.page.direction = dir
 
   return newSettings
 }
