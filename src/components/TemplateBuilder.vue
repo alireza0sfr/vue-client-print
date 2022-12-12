@@ -1101,7 +1101,7 @@
 					let section: any = document.getElementsByClassName(`vcp-section ${sectionName}`)[0] // element to make resizable
 
 					var resizer = document.createElement("div")
-					resizer.className = "vcp-resizer"
+					resizer.className = "vcp-section-resizer"
 					resizer.style.height = "10px"
 					section.appendChild(resizer)
 					resizer.addEventListener("mousedown", (e) => initDrag(e, section), false)

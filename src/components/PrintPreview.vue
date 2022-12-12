@@ -191,8 +191,6 @@
 			 */
 			calculateSizes(totalPagesHeight: number): void {
 
-				const errorValue = 0.01 // Subtractable value to make the pages height more accurate
-
 				let pageHeadersSize = [],
 					pageFootersSize = [],
 					pageBodiesSize = [],
@@ -218,7 +216,7 @@
 					// if the header is repeatable or its the last page
 					footerHeight = this.settings.footer.repeatable || isLastPage ? this.settings.footer.height : 0
 
-					totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight - errorValue
+					totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight
 
 					remainingHeight -= totalBodySize
 					currentTotalPages += 1
