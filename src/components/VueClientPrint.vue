@@ -1,7 +1,7 @@
 <template>
 	<div @vcp-error="vcpError" class="__VCP__" id="VCP">
 		<TemplateBuilder v-if="locals.appState === locals.AppStates.TEMPLATEBUILDER" ref="TemplateBuilder" :options="settings" />
-		<PrintPreview v-else-if="locals.appState === locals.AppStates.PRINTPREVIEW" ref="printPreview" :options="settings">
+		<PrintPreview v-else-if="locals.appState === locals.AppStates.PRINTPREVIEW" ref="printPreview" :options="settings" @print-success="$emit('print-success')" @print-error="$emit('print-error')" @preview-success="$emit('preview-success')" @preview-failed="$emit('preview-failed')">
 			<template #printDataChild>
 				<slot name="printData" class="printData"></slot>
 			</template>
@@ -31,7 +31,7 @@
 	const dataSetStore = useDataSetStore()
 
 	export default defineComponent({
-		emits: ['vcp-error'],
+		emits: ['vcp-error', 'print-success', 'print-error', 'preview-success', 'preview-failed'],
 		name: 'VueClientPrint',
 		props: {
 			bindingObject: Object as () => IBindingObject,
