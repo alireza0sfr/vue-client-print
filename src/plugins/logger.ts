@@ -9,6 +9,7 @@ class Logger implements ILogger {
   level: LoggerLevels
   levels: typeof LoggerLevels = LoggerLevels
   logOnBuild: boolean
+  readonly DISPATCHELEMENTID: string
 
   constructor(level = LoggerLevels.LOG, logOnBuild = false) {
 
@@ -16,6 +17,7 @@ class Logger implements ILogger {
     this.isDevBuild = import.meta.env.DEV
     this.level = level
     this.logOnBuild = logOnBuild
+    this.DISPATCHELEMENTID = 'VCP'
   }
 
   validate(level: LoggerLevels, force?: boolean) {
@@ -39,12 +41,15 @@ class Logger implements ILogger {
       if (generalStore.getByKey('configurations').useAlert || forceAlert)
         alert(message)
 
-      else if (level === LoggerLevels.ERROR)
+      else if (level === LoggerLevels.ERROR) {
         this.error(message)
+        this.dispatchEvent('vcp-error', message)
+      }
 
       else
         this.log(message)
     }
+
   }
 
   time(func: () => any): void {
@@ -97,6 +102,18 @@ class Logger implements ILogger {
   customHandler(func: () => any, level = LoggerLevels.LOG): void {
     if (this.validate(level))
       func()
+  }
+
+  dispatchEvent(type: string, message: string) {
+    const element = document.getElementById(this.DISPATCHELEMENTID)
+
+    if (element) {
+      element.dispatchEvent(new CustomEvent(type, {
+        detail: {
+          error: message
+        }
+      }))
+    }
   }
 }
 

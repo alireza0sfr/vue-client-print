@@ -1,5 +1,5 @@
 <template>
-	<div class="__VCP__" id="VCP">
+	<div @vcp-error="vcpError" class="__VCP__" id="VCP">
 		<TemplateBuilder v-if="locals.appState === locals.AppStates.TEMPLATEBUILDER" ref="TemplateBuilder" :options="settings" />
 		<PrintPreview v-else-if="locals.appState === locals.AppStates.PRINTPREVIEW" ref="printPreview" :options="settings">
 			<template #printDataChild>
@@ -31,6 +31,7 @@
 	const dataSetStore = useDataSetStore()
 
 	export default defineComponent({
+		emits: ['vcp-error'],
 		name: 'VueClientPrint',
 		props: {
 			bindingObject: Object as () => IBindingObject,
@@ -95,6 +96,9 @@
 			}
 		},
 		methods: {
+			vcpError(e: any): void {
+				this.$emit('vcp-error', e.detail.error)
+			},
 			/**
 			 * By Triggering this func template builder modal will be displayed.
 			 * @param {Function} callback - callback function

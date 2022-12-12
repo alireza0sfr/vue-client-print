@@ -62,6 +62,7 @@ export interface ILogger {
   level: LoggerLevels
   levels: typeof LoggerLevels
   logOnBuild: boolean
+  readonly DISPATCHELEMENTID: string
 
   validate(level: LoggerLevels, force: boolean): boolean
   alert(message: any, level?: LoggerLevels, forceAlert?: boolean): void
@@ -76,4 +77,5 @@ export interface ILogger {
   setLevel(level: LoggerLevels): void
   clear(): void
   customHandler(func: () => any, level: LoggerLevels): void
+  dispatchEvent(type: string, message: string): void
 }
