@@ -130,11 +130,11 @@
 									</div>
 									<div class="vcp-toolbar-content-row">
 										<div class="vcp-toolbar-content-label">
-											<label for="pageSizeControl">{{_$t('template-builder.page-size')}}</label>
+											<label for="pageFormatControl">{{_$t('template-builder.page-size')}}</label>
 										</div>
 										<div class="vcp-toolbar-content-field">
-											<select class="vcp-input-form-control" v-model="settings.page.size" @change="syncSizes()" id="pageSizeControl">
-												<option v-for="option in locals.PageSizes" :value="option" :key="option">{{ option }}</option>
+											<select class="vcp-input-form-control" v-model="settings.page.format" @change="syncSizes()" id="pageFormatControl">
+												<option v-for="option in locals.PageFormats" :value="option" :key="option">{{ option }}</option>
 											</select>
 										</div>
 									</div>
@@ -511,7 +511,7 @@
 												<span>{{_$t('template-builder.elements.styles.font-size')}}</span>
 											</div>
 											<div class="vcp-toolbar-content-field">
-												<select class="vcp-input-form-control" v-model="locals.selectedElement.styles.fontSize" id="pageSizeControl">
+												<select class="vcp-input-form-control" v-model="locals.selectedElement.styles.fontSize">
 													<option v-for="option in locals.fontSizes" :key="option" :value="option + 'px'">{{ option }}</option>
 												</select>
 											</div>
@@ -719,7 +719,7 @@
 							<img src="@/assets/images/expand.png" style="width: 16px" @click="fullScreen()" />
 						</div>
 						<div ref="template"
-							:style="{width: '100%', height: locals.templateHeight + 'in', border: settings.page.border, 'min-height': settings.defaultHeightOfPaper + 'in', width: settings.defaultWidthOfPaper + 'in', transform: `scale(${locals.scale})`}"
+							:style="{width: '100%', height: locals.templateHeight + 'in', border: settings.page.border, 'min-height': settings.page.size[0] + 'in', width: settings.page.size[1] + 'in', transform: `scale(${locals.scale})`}"
 							class="vcp-template" @click="deSelectAll">
 							<Section v-for="section in locals.sections" :set="currentSection = settings[section]" :key="section" :section="section" :elements="currentSection.elements"
 								:active="locals.selectedSection === section" :height="currentSection.height" :styles="currentSection.styles" @finishedEditingElement="finishedEditingElement"
@@ -734,7 +734,7 @@
 
 <script lang="ts">
 	import { IElement, IElementStates, IEmptyElement, IVariable, IDataSetLikeElement } from '~/interfaces/elements'
-	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations, PageSizes, Directions } from '~/enums/general'
+	import { fileEntryTypes, TemplateBuilderSections, Tabs, PageOrientations, PageFormats, Directions } from '~/enums/general'
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IFile, ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
@@ -747,6 +747,7 @@
 	import cloneDeep from 'lodash/cloneDeep'
 	import KeyboardHandler from '~/plugins/keyboard-handler'
 	import Logger from '~/plugins/logger'
+	import { PAPERSIZES } from '~/statics/general'
 	import { defineComponent } from 'vue'
 
 	import { useVariablesStore } from '~/stores/variables'
@@ -788,7 +789,7 @@
 				locals: {
 					PageOrientations: PageOrientations,
 					Directions: Directions,
-					PageSizes: PageSizes,
+					PageFormats: PageFormats,
 					tabs: Tabs,
 					sections: Object.values(TemplateBuilderSections),
 					StylesTargets: StylesTargets,
@@ -799,40 +800,10 @@
 					currentVariable: new EmptyElement as IElement | IEmptyElement,
 					selectedSection: null as TemplateBuilderSections | null,
 					fullScreen: false,
-					templateHeight: 11.7,
+					templateHeight: PAPERSIZES.A4[0],
 					langs: fetchLangList(),
 					copiedElement: new EmptyElement as IElement | IEmptyElement,
 					scale: 1,
-					pageSizeDictionary: {
-						landscape: {
-							a3: {
-								width: 16.5,
-								height: 11.7,
-							},
-							a4: {
-								width: 11.7,
-								height: 8.26,
-							},
-							a5: {
-								width: 8.3,
-								height: 5.8,
-							},
-						},
-						portrait: {
-							a3: {
-								width: 11.7,
-								height: 16.5,
-							},
-							a4: {
-								width: 8.26,
-								height: 11.7,
-							},
-							a5: {
-								width: 5.8,
-								height: 8.3,
-							},
-						},
-					},
 					bordersAllDirections: true,
 					activeTab: '',
 					isClicked: false,
@@ -1039,11 +1010,6 @@
 
 				var json: ISettings = cloneDeep(this.settings)
 
-				json.totalHeightOfAPaper = json.defaultHeightOfPaper - json.header.height - json.footer.height
-
-				if (json.totalHeightOfAPaper < 0)
-					json.totalHeightOfAPaper = 1.77
-
 				if (!validateDesign(json))
 					return
 
@@ -1110,12 +1076,8 @@
 			 * @return {void} - void
 			 */
 			syncSizes(): void {
-
-				const errorValue = 0.2 // Subtracting this value to make the pages more accurate
-
-				this.settings.defaultHeightOfPaper = this.locals.pageSizeDictionary[this.settings.page.orientation][this.settings.page.size]["height"] // Gettings the default sizes from the base dic
-				this.settings.totalHeightOfAPaper = this.settings.defaultHeightOfPaper - this.settings.footer.height - this.settings.header.height - errorValue
-				this.settings.defaultWidthOfPaper = this.locals.pageSizeDictionary[this.settings.page.orientation][this.settings.page.size]["width"]
+				this.settings.page.size = this.settings.page.orientation === PageOrientations.PORTRAIT ? PAPERSIZES[this.settings.page.format] : [...PAPERSIZES[this.settings.page.format]].reverse()
+				this.locals.templateHeight = this.settings.page.size[0]
 			},
 
 			/**

@@ -1,5 +1,5 @@
 import { ISettings } from '~/interfaces/general'
-import { TemplateBuilderSections, PageOrientations, PageSizes, Directions } from '~/enums/general'
+import { TemplateBuilderSections, PageOrientations, PageFormats, Directions } from '~/enums/general'
 import { DataSetLikeElement } from '~/plugins/element-utilities'
 import Logger from '~/plugins/logger'
 import i18nInstance from '~/plugins/i18n'
@@ -7,6 +7,7 @@ import i18nInstance from '~/plugins/i18n'
 import piniaInstance from '~/plugins/pinia-instance'
 import { useGeneralStore } from '~/stores/general'
 import { ElementTypes } from '~/enums/element'
+import { PAPERSIZES } from '@/statics/general'
 
 const generalStore = useGeneralStore(piniaInstance)
 
@@ -305,13 +306,11 @@ export function getDefaultSettings(): ISettings {
     },
     page: {
       orientation: PageOrientations.PORTRAIT,
-      size: PageSizes.A4,
+      format: PageFormats.A4,
       direction: Directions.RTL,
       border: '',
+      size: PAPERSIZES[PageFormats.A4]
     },
-    defaultHeightOfPaper: 11.7, // Standard Height of the chosen paper in inch
-    defaultWidthOfPaper: 8.26, // Standard Width of the chosen paper in inch
-    totalHeightOfAPaper: 10.4, // Useable height for body tag
     designName: '',
   }
 }

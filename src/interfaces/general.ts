@@ -1,5 +1,5 @@
 import { IElement, IVariable } from './elements'
-import { LoggerLevels, Directions, PageOrientations, PageSizes } from '~/enums/general'
+import { LoggerLevels, Directions, PageOrientations, PageFormats } from '~/enums/general'
 export interface ISettings {
   header: {
     elements: IElement[],
@@ -28,21 +28,21 @@ export interface ISettings {
     height: number,
     repeatable: boolean,
   },
-  page: pageDetails,
-  defaultHeightOfPaper: number,
-  defaultWidthOfPaper: number
-  totalHeightOfAPaper: number
+  page: IPageDetails,
   designName: string,
 
   callback?(design: ISettings): void
 }
 
-export interface pageDetails {
-  size: PageSizes,
+export interface IPageDetails {
+  format: PageFormats,
   orientation: PageOrientations,
   direction: Directions,
   border: string,
+  size: PaperSizeType
 }
+
+export type PaperSizeType = Readonly<[number, number]> // height, width
 
 export interface IFile {
   variables: IVariable[]

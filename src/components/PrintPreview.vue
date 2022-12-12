@@ -2,7 +2,7 @@
 	<div id="printPage">
 		<!-- Preparing body to create canvas -->
 		<div class="vcp-slot-wrapper">
-			<div :style="{width: settings.defaultWidthOfPaper + 'in'}">
+			<div :style="{width: settings.page.size[1] + 'in'}">
 				<div id="toBeConverted">
 					<div id="componentsParent">
 
@@ -27,7 +27,7 @@
 
 		<!-- Print Preview Modal-->
 		<div id="printModal" class="vcp-modal">
-			<div class="vcp-modal-content" :style="{ width: settings.defaultWidthOfPaper + 0.5 + 'in' }">
+			<div class="vcp-modal-content" :style="{ width: settings.page.size[1] + 0.5 + 'in' }">
 				<div :dir="settings.page.direction" class="vcp-modal-header">
 					<div style="display: flex">
 						<a href="#" @click="printForm()" :title="_$t('print.name')" class="vcp-modal-icon">
@@ -62,7 +62,7 @@
 						</div>
 					</div>
 					<div id="vcp-printForm">
-						<div v-for="index in locals.totalPages" :key="index" class="vcp-main-loop" :style="{height: settings.defaultHeightOfPaper + 'in',width: settings.defaultWidthOfPaper + 'in'}">
+						<div v-for="index in locals.totalPages" :key="index" class="vcp-main-loop" :style="{height: settings.page.size[0] + 'in',width: settings.page.size[1] + 'in'}">
 							<div :style="{width: 'auto', border: settings.page.border}">
 								<div v-if="settings.header.repeatable || index === 1" :style="[{height: locals.pageHeadersSizes[index - 1] + 'in'}, settings.header.styles]" class="vcp-main-header">
 									<component v-for="element in settings.header.elements" :key="element.id" :is="element.type" :instance="prepareElementInstance(element, index -1 )" />
@@ -193,35 +193,30 @@
 
 				const errorValue = 0.01 // Subtractable value to make the pages height more accurate
 
-				let pageHeadersSize = []
-				let pageFootersSize = []
-				let pageBodiesSize = []
-				let remainingHeight = totalPagesHeight
-				let currentTotalPages = 0
-				let totalBodySize
-				let headerHeight
-				let footerHeight
-				let defaultHeightOfPaper
+				let pageHeadersSize = [],
+					pageFootersSize = [],
+					pageBodiesSize = [],
+					remainingHeight = totalPagesHeight,
+					currentTotalPages = 0,
+					totalBodySize,
+					headerHeight,
+					footerHeight,
+					defaultHeightOfPaper
 
 				while (remainingHeight > 0) {
 
-					defaultHeightOfPaper = this.settings.defaultHeightOfPaper
+					defaultHeightOfPaper = this.settings.page.size[0]
 
-					if (this.settings.header.repeatable || pageHeadersSize.length === 0) // if the header is repeatable or its the first page
-						headerHeight = this.settings.header.height
-					else
-						headerHeight = 0
+					// if the header is repeatable or its the first page
+					headerHeight = this.settings.header.repeatable || pageHeadersSize.length === 0 ? this.settings.header.height : 0
 
 					let footerHeightLastPage = this.settings.footer.height
 					let headerHeightLastPage = this.settings.header.repeatable ? headerHeight : 0
 					let pageBodySize = defaultHeightOfPaper - footerHeightLastPage - headerHeightLastPage
 					let isLastPage = remainingHeight - pageBodySize <= 0
 
-
-					if (this.settings.footer.repeatable || isLastPage) // if the header is repeatable or its the last page
-						footerHeight = this.settings.footer.height
-					else
-						footerHeight = 0
+					// if the header is repeatable or its the last page
+					footerHeight = this.settings.footer.repeatable || isLastPage ? this.settings.footer.height : 0
 
 					totalBodySize = defaultHeightOfPaper - headerHeight - footerHeight - errorValue
 
@@ -251,7 +246,7 @@
 				let img = new Image()
 				let canvas = document.createElement("canvas")
 				canvas.height = convert2Pixels(this.locals.pageBodiesSizes[index]) * scale
-				canvas.width = convert2Pixels(this.settings.defaultWidthOfPaper) * scale
+				canvas.width = convert2Pixels(this.settings.page.size[1]) * scale
 				let context = canvas.getContext("2d")
 				img.src = imgBase64
 				img.onload = () => {
@@ -259,11 +254,11 @@
 						img, // img
 						0, // sx
 						sy * scale, // sy
-						convert2Pixels(this.settings.defaultWidthOfPaper) * scale, // sWidth
+						convert2Pixels(this.settings.page.size[1]) * scale, // sWidth
 						convert2Pixels(this.locals.pageBodiesSizes[index]) * scale, // sHeight
 						0, // dx
 						0, // dy
-						convert2Pixels(this.settings.defaultWidthOfPaper) * scale, // dWidth
+						convert2Pixels(this.settings.page.size[1]) * scale, // dWidth
 						convert2Pixels(this.locals.pageBodiesSizes[index] * scale) // dHeight
 					)
 				}
