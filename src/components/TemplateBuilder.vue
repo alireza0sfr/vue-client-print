@@ -351,7 +351,7 @@
 												</div>
 												<div class="vcp-toolbar-content-field">
 													<select class="vcp-input-form-control" v-model="locals.selectedElement.configs.field" id="bindingObjectControl">
-														<option v-for="option in Object.keys(bindingObjectComputed)" :key="option">{{ option }}</option>
+														<option v-for="option in Object.keys(bindingObjectComputed)" :key="option" :value="option">{{ locals.translateFunction(option) }}</option>
 													</select>
 												</div>
 											</div>
@@ -787,6 +787,7 @@
 		data() {
 			return {
 				locals: {
+					translateFunction: null,
 					PageOrientations: PageOrientations,
 					Directions: Directions,
 					PageFormats: PageFormats,
@@ -823,6 +824,7 @@
 			}
 		},
 		mounted() {
+			this.locals.translateFunction = generalStore.getByKey('configurations').translateFunction
 			this.keyboardHandler()
 			this.switchTabs(Tabs.SETTINGS)
 		},

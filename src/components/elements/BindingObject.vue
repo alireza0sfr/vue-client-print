@@ -5,7 +5,7 @@
 		<!-- If its the template builder mode -->
 		<div class="content" v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
 			<span>
-				{{ element.configs.field === "" ? locals.text1 : locals.text + ' ' + element.configs.field }}
+				{{ element.configs.field === "" ? locals.text1 : locals.text + ' ' + locals.translateFunction(element.configs.field) }}
 			</span>
 			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
@@ -24,6 +24,10 @@
 	import { IElement } from '~/interfaces/elements'
 	import { toPersianDigits } from '~/plugins/general-utilities'
 	import { defineComponent } from 'vue'
+
+	import { useGeneralStore } from '~/stores/general'
+	const generalStore = useGeneralStore()
+	
 	export default defineComponent({
 		name: ElementTypes.BINDINGOBJECT,
 		props: {
@@ -33,6 +37,8 @@
 		mounted() {
 			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
 				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
+
+			this.locals.translateFunction = generalStore.getByKey('configurations').translateFunction
 
 		},
 		computed: {
@@ -57,6 +63,7 @@
 		data() {
 			return {
 				locals: {
+					translateFunction: null,
 					ElementGrandParents: ElementGrandParents,
 					text: this._$t('template-builder.elements.bindingobject'),
 					text1: this._$t('template-builder.elements.binding-object-text')

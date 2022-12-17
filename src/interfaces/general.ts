@@ -55,6 +55,7 @@ export interface IConfigs {
   imageSrc: string
   direction: string
   useAlert: boolean
+  translateFunction: (key: string) => string
 }
 
 export interface ILogger {
