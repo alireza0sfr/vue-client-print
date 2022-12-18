@@ -1322,8 +1322,6 @@
 					return
 				}
 
-				elementInstance = this.adjustElementToPage(elementInstance)
-
 				if (isChild && parentElement) { // Element is dropped on another element.
 					elementInstance = cloneDeep(elementInstance) // removing refrence to other instances therefore the modification only affects this instance
 					elementInstance.states.isChild = true
@@ -1385,34 +1383,6 @@
 				}
 
 				return true
-			},
-
-			/** Controls if added element is outside page borders and adjust if so.
-				* @param {Object} element - element object
-				* @return {Object} element - adjusted element
-				*/
-			adjustElementToPage(element: IElement): IElement {
-				var sectionId = `${element.parent}Template`
-				let elementWidth = element.styles.width || '150px'
-				let elementHeight = element.styles.height || '30px'
-				let containerRec = document.getElementById(sectionId)!.getBoundingClientRect()
-				let sectionWidth = containerRec.width
-				let sectionHeight = containerRec.height
-
-				// subtracting repeator title height for child element to make offsetTop accurate.
-				if (element.repeatorId)
-					sectionHeight -= 20
-
-				elementWidth = toFloatVal(elementWidth)
-				elementHeight = toFloatVal(elementHeight)
-
-				if (elementWidth + toFloatVal(element.styles.left) > sectionWidth)
-					element.styles.left = sectionWidth - elementWidth + 'px'
-
-				if (elementHeight + toFloatVal(element.styles.top) > sectionHeight)
-					element.styles.top = sectionHeight - elementHeight + 'px'
-
-				return element
 			},
 
 			/**

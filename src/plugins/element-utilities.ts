@@ -148,80 +148,44 @@ export class Element extends EmptyElement implements IElement {
     }
     const doDrag = (e: any, resizer: HTMLElement): void => {
 
-      if (resizer.className.includes('right')) {
-
-        if (this.validatePos(element, e.clientX - startX, 'width', e))
-          element.style.width = startWidth + e.clientX - startX + "px"
-      }
+      if (resizer.className.includes('right'))
+        element.style.width = startWidth + e.clientX - startX + "px"
 
       else if (resizer.className.includes('top')) {
-
-        if (this.validatePos(element, e.clientY - startHeight, 'height', e))
-          element.style.height = startY - (e.clientY - startHeight) + "px"
-
-        if (this.validatePos(element, e.clientY - startY, 'top', e))
-          element.style.top = originalTop + (e.clientY - startY) + 'px'
+        element.style.height = startY - (e.clientY - startHeight) + "px"
+        element.style.top = originalTop + (e.clientY - startY) + 'px'
       }
 
-      else if (resizer.className.includes('bottom')) {
-        if (this.validatePos(element, e.clientY - startY, 'height', e))
-          element.style.height = startHeight + e.clientY - startY + "px"
-      }
+      else if (resizer.className.includes('bottom'))
+        element.style.height = startHeight + e.clientY - startY + "px"
 
       else if (resizer.className.includes('left')) {
-        if (this.validatePos(element, e.clientX + startX, 'width', e))
-          element.style.width = startWidth - e.clientX + startX + "px"
-
-        if (this.validatePos(element, e.clientX - startX, 'left', e))
-          element.style.left = originalLeft + (e.clientX - startX) + 'px'
+        element.style.width = startWidth - e.clientX + startX + "px"
+        element.style.left = originalLeft + (e.clientX - startX) + 'px'
       }
 
       else if (resizer.className.includes('br')) {
-
-        if (this.validatePos(element, e.clientX - startX, 'width', e))
-          element.style.width = startWidth + e.clientX - startX + "px"
-
-        if (this.validatePos(element, e.clientY - startY, 'height', e))
-          element.style.height = startHeight + e.clientY - startY + "px"
+        element.style.width = startWidth + e.clientX - startX + "px"
+        element.style.height = startHeight + e.clientY - startY + "px"
       }
 
       else if (resizer.className.includes('tr')) {
-
-        if (this.validatePos(element, e.clientX - startX, 'width', e))
-          element.style.width = startWidth + e.clientX - startX + "px"
-
-        if (this.validatePos(element, e.clientY - startHeight, 'height', e))
-          element.style.height = startY - (e.clientY - startHeight) + "px"
-
-        if (this.validatePos(element, e.clientY - startY, 'top', e))
-          element.style.top = originalTop + (e.clientY - startY) + 'px'
+        element.style.width = startWidth + e.clientX - startX + "px"
+        element.style.height = startY - (e.clientY - startHeight) + "px"
+        element.style.top = originalTop + (e.clientY - startY) + 'px'
       }
 
       else if (resizer.className.includes('bl')) {
-
-        if (this.validatePos(element, e.clientX + startX, 'width', e))
-          element.style.width = startWidth - e.clientX + startX + "px"
-
-        if (this.validatePos(element, e.clientY - startY, 'height', e))
-          element.style.height = startHeight + e.clientY - startY + "px"
-
-        if (this.validatePos(element, e.clientX - startX, 'left', e))
-          element.style.left = originalLeft + (e.clientX - startX) + 'px'
+        element.style.width = startWidth - e.clientX + startX + "px"
+        element.style.height = startHeight + e.clientY - startY + "px"
+        element.style.left = originalLeft + (e.clientX - startX) + 'px'
       }
 
       else if (resizer.className.includes('tl')) {
-
-        if (this.validatePos(element, e.clientX + startX, 'width', e))
-          element.style.width = startWidth - e.clientX + startX + "px"
-
-        if (this.validatePos(element, e.clientY - startHeight, 'height', e))
-          element.style.height = startY - (e.clientY - startHeight) + "px"
-
-        if (this.validatePos(element, e.clientX - startX, 'left', e))
-          element.style.left = originalLeft + (e.clientX - startX) + 'px'
-
-        if (this.validatePos(element, e.clientY - startY, 'top', e))
-          element.style.top = originalTop + (e.clientY - startY) + 'px'
+        element.style.width = startWidth - e.clientX + startX + "px"
+        element.style.height = startY - (e.clientY - startHeight) + "px"
+        element.style.left = originalLeft + (e.clientX - startX) + 'px'
+        element.style.top = originalTop + (e.clientY - startY) + 'px'
       }
     }
 
@@ -265,17 +229,16 @@ export class Element extends EmptyElement implements IElement {
       startX = e.clientX
       startY = e.clientY
 
-      if (this.validatePos(element, newLeft, 'left', e))
-        element.style.left = element.offsetLeft - newLeft + "px"
-
-      if (this.validatePos(element, newTop, 'top', e))
-        element.style.top = element.offsetTop - newTop + "px"
-
+      element.style.left = element.offsetLeft - newLeft + "px"
+      element.style.top = element.offsetTop - newTop + "px"
     }
 
     const closeDragElement = (): void => {
       // stop moving when mouse button is released:
       document.onmouseup = null
+
+      this.forceAdjustElementToSection()
+
       document.onmousemove = null
       element.dispatchEvent(new Event("finished-editing-element"))
       element.dispatchEvent(
@@ -366,62 +329,24 @@ export class Element extends EmptyElement implements IElement {
 
   /**
    * validates new position of element
-   * @params {HTMLElement} element to validate
-   * @params {newVal} new val position
-   * @params {pos} position type
-   * @params {e} js event
-   * @returns {boolean} true if valid
+   * @returns {Void}
    */
-  validatePos(element: HTMLElement = this.$el, newVal: number, pos: string, e: any): boolean {
-    return true
-    // var elementSettings = this.element
-    // var pageCoordinates = document.getElementById(`${elementSettings.parent}Template`).getBoundingClientRect()
+  forceAdjustElementToSection(): void {
+    var coordinates = this.getCoordinates('numeric')
+    var pageCoordinates = document.getElementById(`${this.parent}Template`)!.getBoundingClientRect()
 
-    // if (pos === 'top') {
-    //   // if element doesn't go out of page from top
-    //   if (element.offsetTop - newVal > 0)
-    //     // if element doesn't go out of page from bottom
-    //     if (element.offsetTop + element.offsetHeight - newVal < pageCoordinates.height) {
-    //       // if element is on top of element or containg section
-    //       var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-    //       if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-    //         return true
-    //     }
-    // }
+    if (coordinates.top < 0)
+      this.$el.style.top = '0px'
 
-    // else if (pos === 'left') {
-    //   // if element doesn't go out of page from left
-    //   if (element.offsetLeft - newVal > 0)
-    //     // if element doesn't go out of page from right
-    //     if (element.offsetLeft + element.offsetWidth - newVal < pageCoordinates.width) {
-    //       // if element is on top of element or containg section
-    //       var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-    //       if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-    //         return true
-    //     }
-    // }
+    if (coordinates.left < 0)
+      this.$el.style.left = '0px'
 
-    // else if (pos === 'width') {
-    //   // if element doesn't go out of page from right
-    //   if (element.offsetLeft + element.offsetWidth - newVal < pageCoordinates.width) {
-    //     // if element is on top of element or containg section
-    //     var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-    //     if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-    //       return true
+    if (Number(coordinates.top) + Number(coordinates.height) > pageCoordinates.height)
+      this.$el.style.top = pageCoordinates.height - Number(coordinates.height) + 'px'
 
-    //   }
-    // }
+    if (Number(coordinates.left) + Number(coordinates.width) > pageCoordinates.width)
+      this.$el.style.left = pageCoordinates.width - Number(coordinates.width) + 'px'
 
-    // if (pos === 'height') {
-    //   // if element doesn't go out of page from bottom
-    //   if (element.offsetTop + element.offsetHeight - newVal < pageCoordinates.height) {
-    //     // if element is on top of element or containg section
-    //     var fromPoint = document.elementFromPoint(e.clientX, e.clientY)
-    //     if (fromPoint && (fromPoint.id || fromPoint.id === `${elementSettings.parent}Template`))
-    //       return true
-    //   }
-    // }
-    // return false
   }
 }
 

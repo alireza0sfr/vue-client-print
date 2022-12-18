@@ -32,7 +32,7 @@ export interface IElement extends IEmptyElement {
   makeDragable(element: HTMLElement): void
   makeClickable(element: HTMLElement): void
   getCoordinates(returnType: string): IElementCoordinates
-  validatePos(element: HTMLElement, newVal: number, pos: string, e: any): boolean
+  forceAdjustElementToSection(): void
   merge(...sources: any[]): IElement
 }
 export interface IBindingObject {
