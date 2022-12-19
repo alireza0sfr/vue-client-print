@@ -16,9 +16,11 @@ import piniaInstance from './pinia-instance'
 const bindingObjectStore = useBindingObjectStore(piniaInstance)
 const dataSetStore = useDataSetStore(piniaInstance)
 
-export const DEFAULTELEMENTSTATES: IElementStates = {
-  isNew: true,
-  isChild: false
+export const defaultElementStatesGenerator = () => {
+  return {
+    isNew: true,
+    isChild: false
+  }
 }
 
 export class EmptyElement implements IEmptyElement {
@@ -26,7 +28,7 @@ export class EmptyElement implements IEmptyElement {
   id: string = emptyId
   parent: ElementParents = ElementParents.EMPTY
   grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER
-  states: IElementStates = DEFAULTELEMENTSTATES
+  states: IElementStates = defaultElementStatesGenerator()
   styles: any = {}
   configs: any = {}
   repeatorId?: string = ''
@@ -37,7 +39,7 @@ export class Element extends EmptyElement implements IElement {
   protected _$el!: HTMLElement
   protected _resizerQuery!: string
 
-  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, states = DEFAULTELEMENTSTATES, styles: any = {}, configs: any = {}, repeatorId: string = '') {
+  constructor(type: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents, states = defaultElementStatesGenerator(), styles: any = {}, configs: any = {}, repeatorId: string = '') {
     super()
     this.type = type
     this.id = idGenerator()
@@ -370,7 +372,7 @@ export class DataSetLikeElement extends Element {
           value: rows[index][key]
         })
 
-      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINTPREVIEW, DEFAULTELEMENTSTATES, {}, configsRow)
+      preparedRows[index] = createElement(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.PRINTPREVIEW, defaultElementStatesGenerator(), {}, configsRow)
     }
 
     return preparedRows
@@ -408,7 +410,7 @@ export class DataSetLikeElement extends Element {
               columns: col.configs.columns,
             }
 
-            var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, configs)
+            var instance = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, defaultElementStatesGenerator(), {}, configs)
             // this.configs.dataSets[key] = instance
             additional[key] = instance
 
@@ -492,7 +494,7 @@ export function prepareDataSets(sets: IRawDatasets): IDatasets {
       key: thisSet.key
     }
 
-    preparedSets[set] = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, configs)
+    preparedSets[set] = createElement(ElementTypes.DATASET, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, defaultElementStatesGenerator(), {}, configs)
   }
   return preparedSets
 }
@@ -519,7 +521,7 @@ export function prepareDataSetColumns(columns: IRawColumn[]): IColumn[] {
       width: col.styles?.width ? col.styles?.width : DEFAULTCOLUMNWIDTH,
     }
 
-    preparedColumns[index] = createElement(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, styles, configs)
+    preparedColumns[index] = createElement(ElementTypes.COLUMN, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, defaultElementStatesGenerator(), styles, configs)
   }
 
   return preparedColumns
@@ -719,7 +721,7 @@ export function prepareElementInstance(instance: IElement, extraArgs: IPrepareIn
 * @param {Object} configs - element's configs
 * @return {IElement} - returns instance of element class
 */
-export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, states: IElementStates = DEFAULTELEMENTSTATES, styles: any = {}, configs: any = {}, repeatorId: string = ''): IElement {
+export function createElement(elementType: ElementTypes, parent: ElementParents, grandParent: ElementGrandParents = ElementGrandParents.TEMPLATEBUILDER, states: IElementStates = defaultElementStatesGenerator(), styles: any = {}, configs: any = {}, repeatorId: string = ''): IElement {
 
   switch (elementType) {
 
@@ -799,7 +801,7 @@ export function createDataSetDetails(element: IDataSetLikeElement): IDataSetDeta
   }
 }
 
-export const DEFAULTDATASETROW = new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, DEFAULTELEMENTSTATES, {}, {
+export const DEFAULTDATASETROW = new Element(ElementTypes.ROW, ElementParents.EMPTY, ElementGrandParents.TEMPLATEBUILDER, defaultElementStatesGenerator(), {}, {
   cells: {
     empty: {
       type: ElementTypes.CELL,

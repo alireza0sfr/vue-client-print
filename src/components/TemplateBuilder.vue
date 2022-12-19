@@ -738,7 +738,7 @@
 	import { ElementGrandParents, ElementParents, ElementTypes, StylesTargets, VariableTypes } from '~/enums/element'
 	import { IFile, ISettings } from '~/interfaces/general'
 	import { fetchLangList } from '~/translations'
-	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, DEFAULTELEMENTSTATES, findElementsParentInstance, createDataSetDetails, createElementInstanceFromObject, } from '~/plugins/element-utilities'
+	import { BindingObjectLikeElement, DataSetLikeElement, EmptyElement, createElement, defaultElementStatesGenerator, findElementsParentInstance, createDataSetDetails, createElementInstanceFromObject, } from '~/plugins/element-utilities'
 	import { idGenerator, convert2Inches, toFloatVal, merge, encode2Base64, prepareSettings, isEmpty, getDefaultSettings, decodeFromBase64, validateDesign } from '~/plugins/general-utilities'
 
 	//@ts-ignore
@@ -962,7 +962,7 @@
 				if (!this.validateCopy(element))
 					return
 
-				this.locals.copiedElement = cloneDeep(this.createElement(element.type, element.parent, DEFAULTELEMENTSTATES, element.styles, element.configs))
+				this.locals.copiedElement = cloneDeep(this.createElement(element.type, element.parent, defaultElementStatesGenerator(), element.styles, element.configs))
 			},
 			/**
 			 * Paste copied element.
@@ -1218,7 +1218,7 @@
 			 * @param {String} parent - element parent
 			 * @return {IElement} - returns instance of element class
 			 */
-			createElement(elementType: ElementTypes, parent: ElementParents, states: IElementStates = DEFAULTELEMENTSTATES, styles?: any, configs?: any): IElement {
+			createElement(elementType: ElementTypes, parent: ElementParents, states: IElementStates = defaultElementStatesGenerator(), styles?: any, configs?: any): IElement {
 				return createElement(elementType, parent, ElementGrandParents.TEMPLATEBUILDER, states, styles, configs)
 			},
 			/**
@@ -1315,7 +1315,7 @@
 
 				var configs = this.prepareNewElementsConfigs(elementType)
 
-				var elementInstance: IElement = this.createElement(elementType, parent, DEFAULTELEMENTSTATES, baseStyles, configs)
+				var elementInstance: IElement = this.createElement(elementType, parent, defaultElementStatesGenerator(), baseStyles, configs)
 
 				if (!this.elementValidator(elementInstance, isChild, parentElement)) {
 					elementType = ElementTypes.EMPTY
