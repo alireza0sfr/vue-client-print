@@ -288,13 +288,6 @@ export class Element extends EmptyElement implements IElement {
       }
       element.classList.add('selected')
       element.focus()
-      element.dispatchEvent(
-        new CustomEvent('click', {
-          detail: {
-            elementDetails: { $el: element, element: this }
-          }
-        })
-      )
     }
 
     element.addEventListener("mousedown", onClick, false)
