@@ -1,17 +1,7 @@
 <template>
 	<div :id="element.id" ref="element" @click="$emit('clickedOnElement', element)" @finished-editing-element="$emit('finished-editing-element')" :class="element.type + ' vcp-element content-wrapper'"
 		:style="element.styles" tabindex="-1">
-
-		<!-- If its the template builder mode -->
-		<div class="content" v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER">
-			<span>
-				{{ element.configs.field === "" ? locals.text1 : locals.text + ' ' + locals.translateFunction(element.configs.field) }}
-			</span>
-			<Resizers :query="`${element.type}-${element.id}`" />
-		</div>
-
-		<!-- If its the print mode -->
-		<div class="content" v-else>
+		<div class="content">
 			{{ computedValue }}
 			<Resizers :query="`${element.type}-${element.id}`" />
 		</div>
@@ -27,7 +17,7 @@
 
 	import { useGeneralStore } from '~/stores/general'
 	const generalStore = useGeneralStore()
-	
+
 	export default defineComponent({
 		name: ElementTypes.BINDINGOBJECT,
 		props: {
@@ -38,18 +28,27 @@
 			if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
 				this.element.init(this.$refs.element as HTMLElement, `${this.element.type}-${this.element.id}`)
 
-			this.locals.translateFunction = generalStore.getByKey('configurations').translateFunction
-
 		},
 		computed: {
 			computedValue() {
+				
+				var translateFunction = (key: string): string => key
+				const storeFunction = generalStore.getByKey('configurations').translateFunction
 
-				if (this.element.configs.persianNumbers) {
+				if (storeFunction && typeof storeFunction === 'function')
+					translateFunction = storeFunction
 
-					return toPersianDigits(this.element.configs.value)
+				if (this.element.grandParent === ElementGrandParents.TEMPLATEBUILDER)
+					return this.element.configs.field === "" ? this.locals.text1 : this.locals.text + ' ' + translateFunction(this.element.configs.field)
+
+				else {
+
+					if (this.element.configs.persianNumbers)
+						return toPersianDigits(this.element.configs.value)
+
+					return this.element.configs.value
 				}
 
-				return this.element.configs.value
 			}
 		},
 		watch: {
