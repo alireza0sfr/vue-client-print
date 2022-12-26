@@ -1,3 +1,5 @@
+@import './_variables.less';
+
 .element {
   background-color: #ffffff;
   text-align: center;
@@ -23,23 +25,23 @@
     display: flex;
     flex-direction: column;
 
-    .columns {
+    .@{base-name}-columns {
       display: flex;
       direction: ltr;
     }
 
-    .rows {
+    .@{base-name}-rows {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
       direction: ltr;
 
-      .row {
+      .@{base-name}-row {
         border-top: 1px solid #dbdbdb;
         flex-grow: 1;
         display: flex;
 
-        .cell {
+        .@{base-name}-cell {
           overflow: hidden;
         }
       }

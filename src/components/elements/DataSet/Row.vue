@@ -1,6 +1,6 @@
 <template>
-	<div :id="element.id" ref="element" :class="element.type" :style="element.styles" tabindex="-1">
-		<div v-for="cell in element.configs.cells" class="cell" :style="cell.styles" :key="cell">{{cell.value}}</div>
+	<div :id="element.id" ref="element" class="vcp-row" :style="element.styles" tabindex="-1">
+		<div v-for="cell in element.configs.cells" class="vcp-cell" :style="cell.styles" :key="cell">{{cell.value}}</div>
 	</div>
 </template>
 

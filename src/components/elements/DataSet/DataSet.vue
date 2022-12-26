@@ -4,10 +4,10 @@
 		<div v-if="element.grandParent === locals.ElementGrandParents.TEMPLATEBUILDER" class="dataset-name">
 			<span>{{displaySet.configs.title}} <img src="@/assets/images/data-set.png" :alt="_$t('template-builder.elements.dataset')" width="20" height="20" /></span>
 		</div>
-		<div class="columns">
+		<div class="vcp-columns">
 			<column v-for="column in filteredCols" :key="column.id" @width-changed="columnWidthChanged" :instance="column" @click.stop="$emit('clickedOnElement', column)" />
 		</div>
-		<div v-if="element.configs.selectedDataSet" class="rows">
+		<div v-if="element.configs.selectedDataSet" class="vcp-rows">
 			<row v-for="row in filteredRows" :key="row.id" :instance="row" @click.stop="$emit('clickedOnElement', row)" />
 			<!-- Row is only clickable on TB and the default is added -->
 		</div>
