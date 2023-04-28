@@ -24,4 +24,8 @@ pnpm-debug.log*
 .temp
 .cache
 
+# Docs
+docs/.vitepress/dist
+docs/.vitepress/cache
+
 bookmarks.json
