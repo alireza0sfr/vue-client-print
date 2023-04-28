@@ -1,8 +1,10 @@
 import { defineConfig } from 'vitepress'
 
 const BaseGuidePath = '/guide/'
+const BaseURL = '/vue-client-print/'
 
 export default defineConfig({
+  base: BaseURL,
   title: "VCP - Vue Client Print",
   description: "Frontend printing dynamic data made easy!",
   themeConfig: {
