@@ -27,15 +27,3 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run test
-  
-  vuepress-deploy:
-
-    needs: unit-test
-
-    uses: jenkey2011/vuepress-deploy@master
-    env:
-      ACCESS_TOKEN: ${{ secrets.REPO_TOKEN }}
-      TARGET_REPO: alireza0sfr/vue-client-print
-      TARGET_BRANCH: main
-      BUILD_SCRIPT: npm && npm build
-      BUILD_DIR: docs/.vuepress/dist
