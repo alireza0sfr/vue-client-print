@@ -4,22 +4,28 @@ layout: home
 
 hero:
   name: "VCP - Vue Client Print"
-  text: "Frontend printing dynamic data made easy!"
-  tagline: My great project tagline
+  # text: ""
+  tagline: Frontend printing dynamic data made easy!
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Get Started
+      link: /guide/
+    # - theme: alt
+    #   text: API Examples
+    #   link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+- title: Client Side Print
+  details: Light-weight client printing.
+- title: Multilingual
+  details: Multilingual powered by Vuei18n.
+- title: Template Builder
+  details: Powerful Template Builder to customize print template.
+- title: Vue2 Friendly
+  details: Works both on Vue2 & Vue3.
+- title: Easy To Use
+  details: Easy to install, great out of the box experience, simple config file.
+- title: Import & Export
+  details: Export and save your templates for further use.
 ---
 
