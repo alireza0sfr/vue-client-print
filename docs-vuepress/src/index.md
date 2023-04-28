@@ -11,8 +11,8 @@ features:
   details: Multilingual powered by Vuei18n.
 - title: Template Builder
   details: Powerful Template Builder to customize print template.
-- title: Vue2 Friendly
-  details: Works both on Vue2 & Vue3.
+- title: Vue 2 Friendly
+  details: Works both on Vue 2 & Vue 3.
 - title: Easy To Use
   details: Easy to install, great out of the box experience, simple config file.
 - title: Import & Export
