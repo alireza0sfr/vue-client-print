@@ -2,6 +2,9 @@
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+## Important Message
+  Due to busy schedule of maintainer this package is yet to be published to npm
+
 ## Project setup
 ```
 npm install
@@ -19,9 +22,7 @@ npm run build
 
 ### Run documents
 ```
-cd docs
-npm install
-npm run dev
+npm run docs:dev
 ```
 ### Contributing
 1. fork and clone the repo
